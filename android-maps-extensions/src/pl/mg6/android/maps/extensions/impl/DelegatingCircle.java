@@ -100,6 +100,11 @@ class DelegatingCircle implements Circle {
 	}
 
 	@Override
+	public void setData(Object data) {
+		this.data = data;
+	}
+
+	@Override
 	public void setFillColor(int fillColor) {
 		real.setFillColor(fillColor);
 	}
