@@ -27,15 +27,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 class GridClusteringStrategy implements ClusteringStrategy {
 
 	private GoogleMap provider;
-	private float zoom;
 	private List<DelegatingMarker> markers;
+	private double clusterSize;
 
 	private SparseArray<ClusterMarker> clusters;
 
 	public GridClusteringStrategy(GoogleMap provider, List<DelegatingMarker> markers) {
 		this.provider = provider;
 		this.markers = markers;
-		this.zoom = provider.getCameraPosition().zoom;
+		this.clusterSize = calculateClusterSize(provider.getCameraPosition().zoom);
 		recalculate();
 	}
 	
@@ -57,8 +57,11 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	@Override
 	public void onZoomChange(float zoom) {
-		this.zoom = zoom;
-		recalculate();
+		double clusterSize = calculateClusterSize(zoom);
+		if (this.clusterSize != clusterSize) {
+			this.clusterSize = clusterSize;
+			recalculate();
+		}
 	}
 
 	@Override
@@ -92,7 +95,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			}
 			clusters = null;
 		}
-		if (zoom > 4.0f) {
+		if (clusterSize == 0.0) {
 			for (DelegatingMarker marker : markers) {
 				if (marker.isVisible()) {
 					marker.changeVisible(true);
@@ -118,8 +121,22 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	}
 	
 	private int calculateClusterId(LatLng position) {
-		int y = (int) (position.latitude + 180.0) / 180;
-		int x = (int) (position.longitude + 90.0) / 90;
-		return 2 * x + y;
+		int y = (int) ((position.latitude + 180.0) / clusterSize);
+		int x = (int) ((position.longitude + 90.0) / clusterSize);
+		return (y << 16) + x;
+	}
+	
+	private double calculateClusterSize(float zoom) {
+		if (zoom < 3.2f) {
+			return 20.0;
+		} else if (zoom < 3.6f) {
+			return 10.0;
+		} else if (zoom < 4.0f) {
+			return 5.0;
+		} else if (zoom < 5.0f) {
+			return 2.5;
+		} else {
+			return 0.0;
+		}
 	}
 }
