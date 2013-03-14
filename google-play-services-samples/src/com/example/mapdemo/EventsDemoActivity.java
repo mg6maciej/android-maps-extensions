@@ -16,17 +16,17 @@
 
 package com.example.mapdemo;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-
+import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.GoogleMap.OnCameraChangeListener;
+import pl.mg6.android.maps.extensions.GoogleMap.OnMapClickListener;
+import pl.mg6.android.maps.extensions.GoogleMap.OnMapLongClickListener;
+import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * This shows how to listen to some {@link GoogleMap} events.
@@ -58,7 +58,7 @@ public class EventsDemoActivity extends FragmentActivity
     private void setUpMapIfNeeded() {
         if (mMap == null) {
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
+                    .getExtendedMap();
             if (mMap != null) {
                 setUpMap();
             }

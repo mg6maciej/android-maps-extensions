@@ -16,15 +16,15 @@
 
 package com.example.mapdemo;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
-
+import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.UiSettings;
 
 /**
  * This shows how UI settings can be toggled.
@@ -51,7 +51,7 @@ public class UiSettingsDemoActivity extends FragmentActivity {
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
+                    .getExtendedMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();

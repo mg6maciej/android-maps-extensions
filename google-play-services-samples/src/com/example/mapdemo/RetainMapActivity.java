@@ -16,13 +16,13 @@
 
 package com.example.mapdemo;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
+import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * This shows how to retain a map across activity restarts (e.g., from screen rotations), which can
@@ -46,7 +46,7 @@ public class RetainMapActivity extends FragmentActivity {
         } else {
             // Reincarnated activity. The obtained map is the same map instance in the previous
             // activity life cycle. There is no need to reinitialize it.
-            mMap = mapFragment.getMap();
+            mMap = mapFragment.getExtendedMap();
         }
         setUpMapIfNeeded();
     }
@@ -60,7 +60,7 @@ public class RetainMapActivity extends FragmentActivity {
     private void setUpMapIfNeeded() {
         if (mMap == null) {
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
+                    .getExtendedMap();
             if (mMap != null) {
                 setUpMap();
             }

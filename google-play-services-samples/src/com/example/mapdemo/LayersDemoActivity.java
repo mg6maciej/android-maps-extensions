@@ -16,14 +16,8 @@
 
 package com.example.mapdemo;
 
-import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_HYBRID;
-import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
-import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
-import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_TERRAIN;
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-
+import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -76,7 +70,7 @@ public class LayersDemoActivity extends FragmentActivity implements OnItemSelect
     private void setUpMapIfNeeded() {
         if (mMap == null) {
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
+                    .getExtendedMap();
         }
     }
 
@@ -127,13 +121,13 @@ public class LayersDemoActivity extends FragmentActivity implements OnItemSelect
             return;
         }
         if (layerName.equals(getString(R.string.normal))) {
-            mMap.setMapType(MAP_TYPE_NORMAL);
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         } else if (layerName.equals(getString(R.string.hybrid))) {
-            mMap.setMapType(MAP_TYPE_HYBRID);
+            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         } else if (layerName.equals(getString(R.string.satellite))) {
-            mMap.setMapType(MAP_TYPE_SATELLITE);
+            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         } else if (layerName.equals(getString(R.string.terrain))) {
-            mMap.setMapType(MAP_TYPE_TERRAIN);
+            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         } else {
             Log.i("LDA", "Error setting layer with name " + layerName);
         }

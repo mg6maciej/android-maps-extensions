@@ -16,22 +16,22 @@
 
 package com.example.mapdemo;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.PolygonOptions;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.Polygon;
+import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 /**
  * This shows how to draw polygons on a map.
@@ -82,7 +82,7 @@ public class PolygonDemoActivity extends FragmentActivity implements OnSeekBarCh
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
+                    .getExtendedMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();

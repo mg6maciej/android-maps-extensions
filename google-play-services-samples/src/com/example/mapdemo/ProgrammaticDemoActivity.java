@@ -16,14 +16,14 @@
 
 package com.example.mapdemo;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
+import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Demonstrates how to instantiate a SupportMapFragment programmatically and add a marker to it.
@@ -72,7 +72,7 @@ public class ProgrammaticDemoActivity extends FragmentActivity {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = mMapFragment.getMap();
+            mMap = mMapFragment.getExtendedMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();

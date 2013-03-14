@@ -16,13 +16,13 @@
 
 package com.example.mapdemo;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
+import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.MapView;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * This shows how to create a simple activity with a raw MapView and add a marker to it. This
@@ -53,7 +53,7 @@ public class RawMapViewDemoActivity extends FragmentActivity {
 
     private void setUpMapIfNeeded() {
         if (mMap == null) {
-            mMap = ((MapView) findViewById(R.id.map)).getMap();
+            mMap = ((MapView) findViewById(R.id.map)).getExtendedMap();
             if (mMap != null) {
                 setUpMap();
             }
