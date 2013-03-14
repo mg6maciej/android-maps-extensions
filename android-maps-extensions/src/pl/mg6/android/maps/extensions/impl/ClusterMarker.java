@@ -36,6 +36,14 @@ class ClusterMarker implements Marker {
 	void add(DelegatingMarker marker) {
 		markers.add(marker);
 	}
+	
+	void remove(DelegatingMarker marker) {
+		markers.remove(marker);
+	}
+	
+	int getCount() {
+		return markers.size();
+	}
 
 	void fixVisibilityAndPosition() {
 		Object markerOrBounds = getSingleVisibleMarkerOrBounds();

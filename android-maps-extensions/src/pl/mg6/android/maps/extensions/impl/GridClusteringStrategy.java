@@ -15,7 +15,9 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.util.SparseArray;
 
@@ -27,14 +29,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 class GridClusteringStrategy implements ClusteringStrategy {
 
 	private GoogleMap provider;
-	private List<DelegatingMarker> markers;
+	private Map<DelegatingMarker, ClusterMarker> markers;
 	private double clusterSize;
 
 	private SparseArray<ClusterMarker> clusters;
 
 	public GridClusteringStrategy(GoogleMap provider, List<DelegatingMarker> markers) {
 		this.provider = provider;
-		this.markers = markers;
+		this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
+		for (DelegatingMarker m : markers) {
+			this.markers.put(m, null);
+		}
 		this.clusterSize = calculateClusterSize(provider.getCameraPosition().zoom);
 		recalculate();
 	}
@@ -48,7 +53,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			}
 			clusters = null;
 		}
-		for (DelegatingMarker marker : markers) {
+		for (DelegatingMarker marker : markers.keySet()) {
 			if (marker.isVisible()) {
 				marker.changeVisible(true);
 			}
@@ -66,19 +71,63 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	@Override
 	public void onAdd(DelegatingMarker marker) {
-		markers.add(marker);
-		recalculate();
+		LatLng position = marker.getPosition();
+		int clusterId = calculateClusterId(position);
+		ClusterMarker cluster = clusters.get(clusterId);
+		if (cluster == null) {
+			cluster = new ClusterMarker(provider.addMarker(new MarkerOptions().position(position).visible(false)
+					.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))));
+			clusters.put(clusterId, cluster);
+		}
+		cluster.add(marker);
+		markers.put(marker, cluster);
+		if (marker.isVisible()) {
+			cluster.fixVisibilityAndPosition();
+		}
 	}
 
 	@Override
 	public void onRemove(DelegatingMarker marker) {
-		markers.remove(marker);
-		recalculate();
+		ClusterMarker cluster = markers.remove(marker);
+		cluster.remove(marker);
+		if (cluster.getCount() == 0) {
+			cluster.cleanup();
+			clusters.remove(clusters.keyAt(clusters.indexOfValue(cluster)));
+		} else {
+			cluster.fixVisibilityAndPosition();
+		}
 	}
 
 	@Override
 	public void onPositionChange(DelegatingMarker marker) {
-		recalculate();
+		ClusterMarker cluster = markers.get(marker);
+		int clusterId = clusters.keyAt(clusters.indexOfValue(cluster));
+		LatLng position = marker.getPosition();
+		int newClusterId = calculateClusterId(position);
+		if (newClusterId == clusterId) {
+			if (marker.isVisible()) {
+				cluster.fixVisibilityAndPosition();
+			}
+		} else {
+			cluster.remove(marker);
+			if (cluster.getCount() == 0) {
+				cluster.cleanup();
+				clusters.remove(clusters.keyAt(clusters.indexOfValue(cluster)));
+			} else {
+				cluster.fixVisibilityAndPosition();
+			}
+			ClusterMarker newCluster = clusters.get(newClusterId);
+			if (newCluster == null) {
+				newCluster = new ClusterMarker(provider.addMarker(new MarkerOptions().position(position).visible(false)
+						.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))));
+				clusters.put(newClusterId, newCluster);
+			}
+			newCluster.add(marker);
+			markers.put(marker, newCluster);
+			if (marker.isVisible()) {
+				cluster.fixVisibilityAndPosition();
+			}
+		}
 	}
 
 	@Override
@@ -95,14 +144,14 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			clusters = null;
 		}
 		if (clusterSize == 0.0) {
-			for (DelegatingMarker marker : markers) {
+			for (DelegatingMarker marker : markers.keySet()) {
 				if (marker.isVisible()) {
 					marker.changeVisible(true);
 				}
 			}
 		} else {
 			clusters = new SparseArray<ClusterMarker>();
-			for (DelegatingMarker marker : markers) {
+			for (DelegatingMarker marker : markers.keySet()) {
 				LatLng position = marker.getPosition();
 				int clusterId = calculateClusterId(position);
 				ClusterMarker cluster = clusters.get(clusterId);
@@ -127,6 +176,6 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	}
 
 	private double calculateClusterSize(float zoom) {
-		return (1 << ((int) (23.0f - zoom))) / 100000.0;
+		return (1 << ((int) (23.5f - zoom))) / 100000.0;
 	}
 }

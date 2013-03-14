@@ -3,12 +3,15 @@ package pl.mg6.android.maps.extensions.demo;
 import pl.mg6.android.maps.extensions.Circle;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMapClickListener;
+import pl.mg6.android.maps.extensions.GoogleMap.OnMarkerClickListener;
+import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -56,6 +59,25 @@ public class DemoActivity extends FragmentActivity {
 		map.addMarker(new MarkerOptions().position(new LatLng(29.0, -50.0)));
 
 		map.setClusteringEnabled(true);
+		
+		map.setOnMapClickListener(new OnMapClickListener() {
+			
+			@Override
+			public void onMapClick(LatLng position) {
+				map.addMarker(new MarkerOptions().position(position).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+			}
+		});
+		
+		map.setOnMarkerClickListener(new OnMarkerClickListener() {
+			
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				if (marker != null) {
+					marker.remove();
+				}
+				return true;
+			}
+		});
 	}
 
 	private void addCircles() {
