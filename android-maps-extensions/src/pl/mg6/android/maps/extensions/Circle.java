@@ -19,6 +19,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public interface Circle {
 
+	boolean contains(LatLng position);
+
 	LatLng getCenter();
 
 	Object getData();
@@ -35,8 +37,6 @@ public interface Circle {
 	float getStrokeWidth();
 
 	float getZIndex();
-
-	boolean including(LatLng position);
 
 	boolean isVisible();
 

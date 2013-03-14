@@ -34,6 +34,15 @@ class DelegatingCircle implements Circle {
 	}
 
 	@Override
+	public boolean contains(LatLng position) {
+		LatLng center = getCenter();
+		double radius = getRadius();
+		float[] distance = new float[1];
+		Location.distanceBetween(position.latitude, position.longitude, center.latitude, center.longitude, distance);
+		return distance[0] < radius;
+	}
+
+	@Override
 	public LatLng getCenter() {
 		return real.getCenter();
 	}
@@ -72,15 +81,6 @@ class DelegatingCircle implements Circle {
 	@Override
 	public float getZIndex() {
 		return real.getZIndex();
-	}
-
-	@Override
-	public boolean including(LatLng position) {
-		LatLng center = getCenter();
-		double radius = getRadius();
-		float[] distance = new float[1];
-		Location.distanceBetween(position.latitude, position.longitude, center.latitude, center.longitude, distance);
-		return distance[0] < radius;
 	}
 
 	@Override
