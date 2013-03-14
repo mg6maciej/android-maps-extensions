@@ -21,6 +21,8 @@ public interface Circle {
 
 	float getZIndex();
 
+	boolean including(LatLng position);
+
 	boolean isVisible();
 
 	void remove();

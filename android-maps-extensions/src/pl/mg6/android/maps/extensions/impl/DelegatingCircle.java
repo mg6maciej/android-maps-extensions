@@ -2,6 +2,8 @@ package pl.mg6.android.maps.extensions.impl;
 
 import pl.mg6.android.maps.extensions.Circle;
 
+import android.location.Location;
+
 import com.google.android.gms.maps.model.LatLng;
 
 class DelegatingCircle implements Circle {
@@ -55,6 +57,15 @@ class DelegatingCircle implements Circle {
 	@Override
 	public float getZIndex() {
 		return real.getZIndex();
+	}
+
+	@Override
+	public boolean including(LatLng position) {
+		LatLng center = getCenter();
+		double radius = getRadius();
+		float[] distance = new float[1];
+		Location.distanceBetween(position.latitude, position.longitude, center.latitude, center.longitude, distance);
+		return distance[0] < radius;
 	}
 
 	@Override
