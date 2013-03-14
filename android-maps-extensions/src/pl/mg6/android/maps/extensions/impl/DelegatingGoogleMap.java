@@ -42,7 +42,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
-public class DelegatingGoogleMap implements GoogleMap {
+public class DelegatingGoogleMap implements GoogleMap, MarkerStateChangeListener {
 
 	private com.google.android.gms.maps.GoogleMap real;
 
@@ -52,6 +52,8 @@ public class DelegatingGoogleMap implements GoogleMap {
 	private Map<com.google.android.gms.maps.model.Circle, Circle> circles;
 	private Map<com.google.android.gms.maps.model.GroundOverlay, GroundOverlay> groundOverlays;
 	private Map<com.google.android.gms.maps.model.TileOverlay, TileOverlay> tileOverlays;
+
+	private ClusteringStrategy clusteringStrategy = new NoClusteringStrategy();
 
 	public DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
 		this.real = real;
@@ -82,8 +84,9 @@ public class DelegatingGoogleMap implements GoogleMap {
 	@Override
 	public Marker addMarker(MarkerOptions markerOptions) {
 		com.google.android.gms.maps.model.Marker realMarker = real.addMarker(markerOptions);
-		Marker marker = new DelegatingMarker(realMarker, this);
+		DelegatingMarker marker = new DelegatingMarker(realMarker, this);
 		markers.put(realMarker, marker);
+		clusteringStrategy.onAdd(marker);
 		return marker;
 	}
 
@@ -223,6 +226,15 @@ public class DelegatingGoogleMap implements GoogleMap {
 	}
 
 	@Override
+	public void setClusteringEnabled(boolean clusteringEnabled) {
+		if (clusteringEnabled && !(clusteringStrategy instanceof GridClusteringStrategy)) {
+			clusteringStrategy = new GridClusteringStrategy();
+		} else if (!clusteringEnabled && !(clusteringStrategy instanceof NoClusteringStrategy)) {
+			clusteringStrategy = new NoClusteringStrategy();
+		}
+	}
+
+	@Override
 	public boolean setIndoorEnabled(boolean indoorEnabled) {
 		return real.setIndoorEnabled(indoorEnabled);
 	}
@@ -330,10 +342,6 @@ public class DelegatingGoogleMap implements GoogleMap {
 		return real.toString();
 	}
 
-	void remove(com.google.android.gms.maps.model.Marker marker) {
-		markers.remove(marker);
-	}
-
 	void remove(com.google.android.gms.maps.model.Polyline polyline) {
 		polylines.remove(polyline);
 	}
@@ -352,6 +360,22 @@ public class DelegatingGoogleMap implements GoogleMap {
 
 	void remove(com.google.android.gms.maps.model.TileOverlay tileOverlay) {
 		tileOverlays.remove(tileOverlay);
+	}
+
+	@Override
+	public void onRemove(DelegatingMarker marker) {
+		markers.remove(marker.getReal());
+		clusteringStrategy.onRemove(marker);
+	}
+
+	@Override
+	public void onPositionChange(DelegatingMarker marker) {
+		clusteringStrategy.onPositionChange(marker);
+	}
+
+	@Override
+	public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
+		clusteringStrategy.onVisibilityChangeRequest(marker, visible);
 	}
 
 	private class DelegatingInfoWindowAdapter implements com.google.android.gms.maps.GoogleMap.InfoWindowAdapter {

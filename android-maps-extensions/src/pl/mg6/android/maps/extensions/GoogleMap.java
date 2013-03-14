@@ -99,6 +99,8 @@ public interface GoogleMap {
 
 	void moveCamera(CameraUpdate cameraUpdate);
 
+	void setClusteringEnabled(boolean clusteringEnabled);
+
 	boolean setIndoorEnabled(boolean indoorEnabled);
 
 	void setInfoWindowAdapter(InfoWindowAdapter infoWindowAdapter);
