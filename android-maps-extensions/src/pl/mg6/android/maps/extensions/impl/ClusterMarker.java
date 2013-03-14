@@ -19,53 +19,78 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import pl.mg6.android.maps.extensions.Marker;
 
 class ClusterMarker implements Marker {
 
 	private com.google.android.gms.maps.model.Marker virtual;
-	
+
 	private List<DelegatingMarker> markers = new ArrayList<DelegatingMarker>();
-	
+
 	public ClusterMarker(com.google.android.gms.maps.model.Marker virtual) {
 		this.virtual = virtual;
 	}
-	
+
 	void add(DelegatingMarker marker) {
 		markers.add(marker);
 	}
-	
-	void fixVisibility() {
-		DelegatingMarker marker = getSingleVisibleMarker();
-		if (marker != null) {
+
+	void fixVisibilityAndPosition() {
+		Object markerOrBounds = getSingleVisibleMarkerOrBounds();
+		if (markerOrBounds instanceof DelegatingMarker) {
 			virtual.setVisible(false);
-			marker.changeVisible(true);
+			((DelegatingMarker) markerOrBounds).changeVisible(true);
 		} else {
-			virtual.setVisible(true);
+			if (markerOrBounds instanceof LatLngBounds) {
+				virtual.setPosition(calculateCenter((LatLngBounds) markerOrBounds));
+				virtual.setVisible(true);
+			} else {
+				virtual.setVisible(false);
+			}
 			for (DelegatingMarker m : markers) {
 				m.changeVisible(false);
 			}
 		}
 	}
-	
+
+	LatLng calculateCenter(LatLngBounds bounds) {
+		if (bounds.southwest.longitude > bounds.northeast.longitude) {
+			// TODO: incorrect
+			return new LatLng((bounds.southwest.latitude + bounds.northeast.latitude) / 2.0, (bounds.southwest.longitude + bounds.northeast.longitude) / 2.0);
+		} else {
+			return new LatLng((bounds.southwest.latitude + bounds.northeast.latitude) / 2.0, (bounds.southwest.longitude + bounds.northeast.longitude) / 2.0);
+		}
+	}
+
 	void cleanup() {
 		virtual.remove();
 	}
-	
-	private DelegatingMarker getSingleVisibleMarker() {
+
+	private Object getSingleVisibleMarkerOrBounds() {
 		DelegatingMarker marker = null;
+		LatLngBounds.Builder builder = null;
 		for (DelegatingMarker m : markers) {
 			if (m.isVisible()) {
-				if (marker != null) {
-					return null;
+				if (builder != null) {
+					builder.include(m.getPosition());
+				} else if (marker != null) {
+					builder = LatLngBounds.builder();
+					builder.include(marker.getPosition());
+					builder.include(m.getPosition());
+				} else {
+					marker = m;
 				}
-				marker = m;
 			}
 		}
-		return marker;
+		if (builder != null) {
+			return builder.build();
+		} else {
+			return marker;
+		}
 	}
-	
+
 	@Override
 	public Object getData() {
 		return null;

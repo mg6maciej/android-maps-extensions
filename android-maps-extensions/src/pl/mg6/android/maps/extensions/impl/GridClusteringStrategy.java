@@ -38,7 +38,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		this.clusterSize = calculateClusterSize(provider.getCameraPosition().zoom);
 		recalculate();
 	}
-	
+
 	@Override
 	public void cleanup() {
 		if (clusters != null) {
@@ -83,7 +83,6 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	@Override
 	public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
-		marker.changeVisible(visible);
 		recalculate();
 	}
 
@@ -108,35 +107,26 @@ class GridClusteringStrategy implements ClusteringStrategy {
 				int clusterId = calculateClusterId(position);
 				ClusterMarker cluster = clusters.get(clusterId);
 				if (cluster == null) {
-					cluster = new ClusterMarker(provider.addMarker(new MarkerOptions().position(position).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))));
+					cluster = new ClusterMarker(provider.addMarker(new MarkerOptions().position(position).visible(false)
+							.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))));
 					clusters.put(clusterId, cluster);
 				}
 				cluster.add(marker);
 			}
 			for (int i = 0; i < clusters.size(); i++) {
 				ClusterMarker cluster = clusters.valueAt(i);
-				cluster.fixVisibility();
+				cluster.fixVisibilityAndPosition();
 			}
 		}
 	}
-	
+
 	private int calculateClusterId(LatLng position) {
 		int y = (int) ((position.latitude + 180.0) / clusterSize);
 		int x = (int) ((position.longitude + 90.0) / clusterSize);
 		return (y << 16) + x;
 	}
-	
+
 	private double calculateClusterSize(float zoom) {
-		if (zoom < 3.2f) {
-			return 20.0;
-		} else if (zoom < 3.6f) {
-			return 10.0;
-		} else if (zoom < 4.0f) {
-			return 5.0;
-		} else if (zoom < 5.0f) {
-			return 2.5;
-		} else {
-			return 0.0;
-		}
+		return (1 << ((int) (23.0f - zoom))) / 100000.0;
 	}
 }
