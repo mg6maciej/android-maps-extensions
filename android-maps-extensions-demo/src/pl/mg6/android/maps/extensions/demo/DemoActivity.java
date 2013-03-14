@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DemoActivity extends FragmentActivity {
 
@@ -38,6 +39,23 @@ public class DemoActivity extends FragmentActivity {
 				}
 			}
 		});
+		
+		map.addMarker(new MarkerOptions().position(new LatLng(25.0, 0.0)));
+		map.addMarker(new MarkerOptions().position(new LatLng(28.0, 1.0)));
+		map.addMarker(new MarkerOptions().position(new LatLng(26.0, 2.0)));
+		map.addMarker(new MarkerOptions().position(new LatLng(29.0, 5.0)));
+
+		map.addMarker(new MarkerOptions().position(new LatLng(-25.0, 0.0)));
+		map.addMarker(new MarkerOptions().position(new LatLng(-28.0, 1.0)));
+		map.addMarker(new MarkerOptions().position(new LatLng(-26.0, 2.0)));
+		map.addMarker(new MarkerOptions().position(new LatLng(-29.0, 5.0)));
+
+		map.addMarker(new MarkerOptions().position(new LatLng(25.0, -10.0)));
+		map.addMarker(new MarkerOptions().position(new LatLng(28.0, -14.0)));
+		map.addMarker(new MarkerOptions().position(new LatLng(26.0, -20.0)));
+		map.addMarker(new MarkerOptions().position(new LatLng(29.0, -50.0)));
+
+		map.setClusteringEnabled(true);
 	}
 
 	private void addCircles() {

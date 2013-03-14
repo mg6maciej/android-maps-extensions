@@ -46,7 +46,9 @@ public class DelegatingGoogleMap implements GoogleMap, MarkerStateChangeListener
 
 	private com.google.android.gms.maps.GoogleMap real;
 
-	private Map<com.google.android.gms.maps.model.Marker, Marker> markers;
+	private OnCameraChangeListener onCameraChangeListener;
+
+	private Map<com.google.android.gms.maps.model.Marker, DelegatingMarker> markers;
 	private Map<com.google.android.gms.maps.model.Polyline, Polyline> polylines;
 	private Map<com.google.android.gms.maps.model.Polygon, Polygon> polygons;
 	private Map<com.google.android.gms.maps.model.Circle, Circle> circles;
@@ -57,12 +59,22 @@ public class DelegatingGoogleMap implements GoogleMap, MarkerStateChangeListener
 
 	public DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
 		this.real = real;
-		this.markers = new HashMap<com.google.android.gms.maps.model.Marker, Marker>();
+		this.markers = new HashMap<com.google.android.gms.maps.model.Marker, DelegatingMarker>();
 		this.polylines = new HashMap<com.google.android.gms.maps.model.Polyline, Polyline>();
 		this.polygons = new HashMap<com.google.android.gms.maps.model.Polygon, Polygon>();
 		this.circles = new HashMap<com.google.android.gms.maps.model.Circle, Circle>();
 		this.groundOverlays = new HashMap<com.google.android.gms.maps.model.GroundOverlay, GroundOverlay>();
 		this.tileOverlays = new HashMap<com.google.android.gms.maps.model.TileOverlay, TileOverlay>();
+
+		real.setOnCameraChangeListener(new com.google.android.gms.maps.GoogleMap.OnCameraChangeListener() {
+			@Override
+			public void onCameraChange(CameraPosition cameraPosition) {
+				clusteringStrategy.onZoomChange(cameraPosition.zoom);
+				if (onCameraChangeListener != null) {
+					onCameraChangeListener.onCameraChange(cameraPosition);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -227,10 +239,16 @@ public class DelegatingGoogleMap implements GoogleMap, MarkerStateChangeListener
 
 	@Override
 	public void setClusteringEnabled(boolean clusteringEnabled) {
+		ClusteringStrategy newClusteringStrategy = null;
 		if (clusteringEnabled && !(clusteringStrategy instanceof GridClusteringStrategy)) {
-			clusteringStrategy = new GridClusteringStrategy();
+			ArrayList<DelegatingMarker> list = new ArrayList<DelegatingMarker>(markers.values());
+			newClusteringStrategy = new GridClusteringStrategy(real, list);
 		} else if (!clusteringEnabled && !(clusteringStrategy instanceof NoClusteringStrategy)) {
-			clusteringStrategy = new NoClusteringStrategy();
+			newClusteringStrategy = new NoClusteringStrategy();
+		}
+		if (newClusteringStrategy != null) {
+			clusteringStrategy.cleanup();
+			clusteringStrategy = newClusteringStrategy;
 		}
 	}
 
@@ -265,7 +283,7 @@ public class DelegatingGoogleMap implements GoogleMap, MarkerStateChangeListener
 
 	@Override
 	public void setOnCameraChangeListener(OnCameraChangeListener onCameraChangeListener) {
-		real.setOnCameraChangeListener(onCameraChangeListener);
+		this.onCameraChangeListener = onCameraChangeListener;
 	}
 
 	@Override
