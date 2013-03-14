@@ -46,7 +46,7 @@
       map:cameraZoom="8"/>
   </LinearLayout>
   <LinearLayout
-    android:id="@+id/map_container2"
+    android:id="@+id/map_container3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="0.5"
