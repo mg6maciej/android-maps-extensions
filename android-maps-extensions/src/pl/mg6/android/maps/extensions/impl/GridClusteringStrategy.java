@@ -73,12 +73,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	public void onAdd(DelegatingMarker marker) {
 		LatLng position = marker.getPosition();
 		int clusterId = calculateClusterId(position);
-		ClusterMarker cluster = clusters.get(clusterId);
-		if (cluster == null) {
-			cluster = new ClusterMarker(clusterId, provider.addMarker(new MarkerOptions().position(position).visible(false)
-					.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))));
-			clusters.put(clusterId, cluster);
-		}
+		ClusterMarker cluster = findClusterById(clusterId);
 		cluster.add(marker);
 		markers.put(marker, cluster);
 		if (marker.isVisible()) {
@@ -104,18 +99,22 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			}
 		} else {
 			cluster.remove(marker);
-			ClusterMarker newCluster = clusters.get(newClusterId);
-			if (newCluster == null) {
-				newCluster = new ClusterMarker(newClusterId, provider.addMarker(new MarkerOptions().position(position).visible(false)
-						.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))));
-				clusters.put(newClusterId, newCluster);
-			}
+			ClusterMarker newCluster = findClusterById(newClusterId);
 			newCluster.add(marker);
 			markers.put(marker, newCluster);
 			if (marker.isVisible()) {
-				cluster.fixVisibilityAndPosition();
+				newCluster.fixVisibilityAndPosition();
 			}
 		}
+	}
+
+	private ClusterMarker findClusterById(int clusterId) {
+		ClusterMarker cluster = clusters.get(clusterId);
+		if (cluster == null) {
+			cluster = new ClusterMarker(clusterId, provider);
+			clusters.put(clusterId, cluster);
+		}
+		return cluster;
 	}
 
 	@Override
@@ -146,12 +145,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			for (DelegatingMarker marker : markers.keySet()) {
 				LatLng position = marker.getPosition();
 				int clusterId = calculateClusterId(position);
-				ClusterMarker cluster = clusters.get(clusterId);
-				if (cluster == null) {
-					cluster = new ClusterMarker(clusterId, provider.addMarker(new MarkerOptions().position(position).visible(false)
-							.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))));
-					clusters.put(clusterId, cluster);
-				}
+				ClusterMarker cluster = findClusterById(clusterId);
 				cluster.add(marker);
 				markers.put(marker, cluster);
 			}

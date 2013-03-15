@@ -18,8 +18,12 @@ package pl.mg6.android.maps.extensions.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import pl.mg6.android.maps.extensions.Marker;
 
@@ -27,13 +31,15 @@ class ClusterMarker implements Marker {
 
 	private int clusterId;
 
+	private GoogleMap provider;
+
 	private com.google.android.gms.maps.model.Marker virtual;
 
 	private List<DelegatingMarker> markers = new ArrayList<DelegatingMarker>();
 
-	public ClusterMarker(int clusterId, com.google.android.gms.maps.model.Marker virtual) {
+	public ClusterMarker(int clusterId, GoogleMap provider) {
 		this.clusterId = clusterId;
-		this.virtual = virtual;
+		this.provider = provider;
 	}
 
 	public int getClusterId() {
@@ -56,14 +62,24 @@ class ClusterMarker implements Marker {
 	void fixVisibilityAndPosition() {
 		Object markerOrBounds = getSingleVisibleMarkerOrBounds();
 		if (markerOrBounds instanceof DelegatingMarker) {
-			virtual.setVisible(false);
+			if (virtual != null) {
+				virtual.setVisible(false);
+			}
 			((DelegatingMarker) markerOrBounds).changeVisible(true);
 		} else {
 			if (markerOrBounds instanceof LatLngBounds) {
-				virtual.setPosition(calculateCenter((LatLngBounds) markerOrBounds));
-				virtual.setVisible(true);
+				LatLng position = calculateCenter((LatLngBounds) markerOrBounds);
+				if (virtual == null) {
+					BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+					virtual = provider.addMarker(new MarkerOptions().position(position).icon(icon));
+				} else {
+					virtual.setPosition(position);
+					virtual.setVisible(true);
+				}
 			} else {
-				virtual.setVisible(false);
+				if (virtual != null) {
+					virtual.setVisible(false);
+				}
 			}
 			for (DelegatingMarker m : markers) {
 				m.changeVisible(false);
@@ -81,7 +97,9 @@ class ClusterMarker implements Marker {
 	}
 
 	void cleanup() {
-		virtual.remove();
+		if (virtual != null) {
+			virtual.remove();
+		}
 	}
 
 	private Object getSingleVisibleMarkerOrBounds() {
@@ -115,7 +133,7 @@ class ClusterMarker implements Marker {
 	@Deprecated
 	@Override
 	public String getId() {
-		return virtual.getId();
+		return null;
 	}
 
 	@Override
