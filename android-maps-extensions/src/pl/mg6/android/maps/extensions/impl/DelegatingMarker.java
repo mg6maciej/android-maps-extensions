@@ -15,6 +15,8 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import java.util.List;
+
 import pl.mg6.android.maps.extensions.Marker;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -47,6 +49,11 @@ class DelegatingMarker implements Marker {
 	}
 
 	@Override
+	public List<Marker> getMarkers() {
+		return null;
+	}
+
+	@Override
 	public LatLng getPosition() {
 		return real.getPosition();
 	}
@@ -64,6 +71,11 @@ class DelegatingMarker implements Marker {
 	@Override
 	public void hideInfoWindow() {
 		real.hideInfoWindow();
+	}
+
+	@Override
+	public boolean isCluster() {
+		return false;
 	}
 
 	@Override

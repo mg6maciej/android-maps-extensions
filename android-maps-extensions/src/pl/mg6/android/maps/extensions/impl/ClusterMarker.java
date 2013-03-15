@@ -46,6 +46,10 @@ class ClusterMarker implements Marker {
 		return clusterId;
 	}
 
+	com.google.android.gms.maps.model.Marker getVirtual() {
+		return virtual;
+	}
+
 	void add(DelegatingMarker marker) {
 		markers.add(marker);
 	}
@@ -137,6 +141,11 @@ class ClusterMarker implements Marker {
 	}
 
 	@Override
+	public List<Marker> getMarkers() {
+		return new ArrayList<Marker>(markers);
+	}
+
+	@Override
 	public LatLng getPosition() {
 		return null;
 	}
@@ -157,6 +166,11 @@ class ClusterMarker implements Marker {
 	}
 
 	@Override
+	public boolean isCluster() {
+		return true;
+	}
+
+	@Override
 	public boolean isDraggable() {
 		return false;
 	}
@@ -173,7 +187,9 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public void remove() {
-
+		for (int i = markers.size() - 1; i >= 0; i--) {
+			markers.get(i).remove();
+		}
 	}
 
 	@Override

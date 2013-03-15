@@ -74,10 +74,12 @@ public class DemoActivity extends FragmentActivity {
 
 			@Override
 			public boolean onMarkerClick(Marker marker) {
-				if (marker != null) {
-					marker.remove();
+				if (marker.isCluster()) {
+					markers.removeAll(marker.getMarkers());
+				} else {
 					markers.remove(marker);
 				}
+				marker.remove();
 				return true;
 			}
 		});

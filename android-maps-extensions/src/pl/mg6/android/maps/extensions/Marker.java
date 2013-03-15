@@ -15,6 +15,8 @@
  */
 package pl.mg6.android.maps.extensions;
 
+import java.util.List;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public interface Marker {
@@ -31,6 +33,12 @@ public interface Marker {
 	@Deprecated
 	String getId();
 
+	/**
+	 * @return list of marker some of which might not be visible if isCluster()
+	 *         returns true, null if isCluster() returns false
+	 */
+	List<Marker> getMarkers();
+
 	LatLng getPosition();
 
 	String getSnippet();
@@ -38,6 +46,11 @@ public interface Marker {
 	String getTitle();
 
 	void hideInfoWindow();
+
+	/**
+	 * @return true if this marker groups other markers, false otherwise
+	 */
+	boolean isCluster();
 
 	boolean isDraggable();
 

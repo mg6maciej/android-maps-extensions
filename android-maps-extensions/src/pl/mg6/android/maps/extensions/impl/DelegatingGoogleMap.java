@@ -469,6 +469,10 @@ public class DelegatingGoogleMap implements GoogleMap, MarkerStateChangeListener
 	}
 
 	private Marker map(com.google.android.gms.maps.model.Marker marker) {
+		Marker cluster = clusteringStrategy.map(marker);
+		if (cluster != null) {
+			return cluster;
+		}
 		return markers.get(marker);
 	}
 }

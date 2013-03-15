@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import pl.mg6.android.maps.extensions.Marker;
+
 import android.util.SparseArray;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -100,6 +102,19 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			oldCluster.remove(marker);
 			addMarker(marker, true);
 		}
+	}
+
+	@Override
+	public Marker map(com.google.android.gms.maps.model.Marker original) {
+		if (clusters != null) {
+			for (int i = 0; i < clusters.size(); i++) {
+				ClusterMarker cluster = clusters.valueAt(i);
+				if (original.equals(cluster.getVirtual())) {
+					return cluster;
+				}
+			}
+		}
+		return null;
 	}
 
 	private boolean isMarkerInCluster(DelegatingMarker marker, ClusterMarker cluster) {

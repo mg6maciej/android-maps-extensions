@@ -15,6 +15,8 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import pl.mg6.android.maps.extensions.Marker;
+
 interface ClusteringStrategy extends MarkerStateChangeListener {
 
 	void cleanup();
@@ -22,4 +24,6 @@ interface ClusteringStrategy extends MarkerStateChangeListener {
 	void onZoomChange(float zoom);
 
 	void onAdd(DelegatingMarker marker);
+
+	Marker map(com.google.android.gms.maps.model.Marker original);
 }

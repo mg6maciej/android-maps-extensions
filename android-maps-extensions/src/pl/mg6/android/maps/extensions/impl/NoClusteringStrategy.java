@@ -15,6 +15,8 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import pl.mg6.android.maps.extensions.Marker;
+
 class NoClusteringStrategy implements ClusteringStrategy {
 
 	@Override
@@ -45,5 +47,10 @@ class NoClusteringStrategy implements ClusteringStrategy {
 	@Override
 	public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
 		marker.changeVisible(visible);
+	}
+
+	@Override
+	public Marker map(com.google.android.gms.maps.model.Marker original) {
+		return null;
 	}
 }
