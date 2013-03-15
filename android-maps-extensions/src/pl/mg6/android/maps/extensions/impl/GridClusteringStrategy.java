@@ -90,12 +90,6 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	public void onRemove(DelegatingMarker marker) {
 		ClusterMarker cluster = markers.remove(marker);
 		cluster.remove(marker);
-		if (cluster.getCount() == 0) {
-			cluster.cleanup();
-			clusters.remove(cluster.getClusterId());
-		} else {
-			cluster.fixVisibilityAndPosition();
-		}
 	}
 
 	@Override
@@ -110,12 +104,6 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			}
 		} else {
 			cluster.remove(marker);
-			if (cluster.getCount() == 0) {
-				cluster.cleanup();
-				clusters.remove(clusterId);
-			} else {
-				cluster.fixVisibilityAndPosition();
-			}
 			ClusterMarker newCluster = clusters.get(newClusterId);
 			if (newCluster == null) {
 				newCluster = new ClusterMarker(newClusterId, provider.addMarker(new MarkerOptions().position(position).visible(false)

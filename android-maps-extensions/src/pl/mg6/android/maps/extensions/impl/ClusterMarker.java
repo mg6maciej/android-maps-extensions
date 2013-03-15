@@ -46,6 +46,7 @@ class ClusterMarker implements Marker {
 
 	void remove(DelegatingMarker marker) {
 		markers.remove(marker);
+		fixVisibilityAndPosition();
 	}
 
 	int getCount() {
