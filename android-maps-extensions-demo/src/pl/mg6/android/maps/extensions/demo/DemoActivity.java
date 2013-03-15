@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -75,11 +76,11 @@ public class DemoActivity extends FragmentActivity {
 			@Override
 			public boolean onMarkerClick(Marker marker) {
 				if (marker.isCluster()) {
-					markers.removeAll(marker.getMarkers());
+					map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), map.getCameraPosition().zoom + 1.0f), 200, null);
 				} else {
 					markers.remove(marker);
+					marker.remove();
 				}
-				marker.remove();
 				return true;
 			}
 		});
