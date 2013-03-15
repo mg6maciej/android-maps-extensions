@@ -150,6 +150,7 @@ public class DelegatingGoogleMap implements GoogleMap, MarkerStateChangeListener
 		circles.clear();
 		groundOverlays.clear();
 		tileOverlays.clear();
+		clusteringStrategy.cleanup();
 	}
 
 	@Override

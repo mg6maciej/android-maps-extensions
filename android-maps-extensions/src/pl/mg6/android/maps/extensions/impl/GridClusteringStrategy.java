@@ -22,9 +22,7 @@ import java.util.Map;
 import android.util.SparseArray;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 class GridClusteringStrategy implements ClusteringStrategy {
 
@@ -103,7 +101,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			addMarker(marker, true);
 		}
 	}
-	
+
 	private boolean isMarkerInCluster(DelegatingMarker marker, ClusterMarker cluster) {
 		int clusterId = cluster.getClusterId();
 		int markerClusterId = calculateClusterId(marker.getPosition());
