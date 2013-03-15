@@ -131,13 +131,13 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public Object getData() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Deprecated
 	@Override
 	public String getId() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -147,22 +147,28 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public LatLng getPosition() {
-		return null;
+		if (virtual != null && virtual.isVisible()) {
+			return virtual.getPosition();
+		}
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getSnippet() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getTitle() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void hideInfoWindow() {
-
+		if (virtual != null && virtual.isVisible()) {
+			virtual.hideInfoWindow();
+		}
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -172,58 +178,62 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public boolean isDraggable() {
-		return false;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public boolean isInfoWindowShown() {
-		return false;
+		if (virtual != null && virtual.isVisible()) {
+			return virtual.isInfoWindowShown();
+		}
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public boolean isVisible() {
-		return false;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void remove() {
-		for (int i = markers.size() - 1; i >= 0; i--) {
-			markers.get(i).remove();
-		}
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setData(Object data) {
-
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setDraggable(boolean draggable) {
-
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setPosition(LatLng position) {
-
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setSnippet(String snippet) {
-
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setTitle(String title) {
-
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setVisible(boolean visible) {
-
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void showInfoWindow() {
-
+		if (virtual != null && virtual.isVisible()) {
+			virtual.showInfoWindow();
+		}
+		throw new UnsupportedOperationException();
 	}
 }
