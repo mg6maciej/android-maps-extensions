@@ -1,5 +1,7 @@
 package pl.mg6.android.maps.extensions.demo;
 
+import java.util.List;
+
 import pl.mg6.android.maps.extensions.Circle;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMapClickListener;
@@ -7,6 +9,7 @@ import pl.mg6.android.maps.extensions.GoogleMap.OnMarkerClickListener;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
@@ -19,6 +22,24 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class DemoActivity extends FragmentActivity {
 
 	private GoogleMap map;
+
+	private List<Marker> markers;
+
+	private Handler handler = new Handler();
+
+	private Runnable runnable = new Runnable() {
+
+		private boolean visible = true;
+
+		@Override
+		public void run() {
+			visible = !visible;
+			for (Marker marker : markers) {
+				marker.setVisible(visible);
+			}
+			handler.postDelayed(this, 2000);
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +66,38 @@ public class DemoActivity extends FragmentActivity {
 			}
 		});
 
+		addMarkers();
+
+		map.setClusteringEnabled(true);
+
+		map.setOnMarkerClickListener(new OnMarkerClickListener() {
+
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				if (marker != null) {
+					marker.remove();
+					markers.remove(marker);
+				}
+				return true;
+			}
+		});
+
+		markers = map.getMarkers();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		runnable.run();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		handler.removeCallbacks(runnable);
+	}
+
+	private void addMarkers() {
 		map.addMarker(new MarkerOptions().position(new LatLng(25.0, 0.0)));
 		map.addMarker(new MarkerOptions().position(new LatLng(28.0, 1.0)));
 		map.addMarker(new MarkerOptions().position(new LatLng(26.0, 2.0)));
@@ -59,19 +112,6 @@ public class DemoActivity extends FragmentActivity {
 		map.addMarker(new MarkerOptions().position(new LatLng(28.0, -14.0)));
 		map.addMarker(new MarkerOptions().position(new LatLng(26.0, -20.0)));
 		map.addMarker(new MarkerOptions().position(new LatLng(29.0, -50.0)));
-
-		map.setClusteringEnabled(true);
-
-		map.setOnMarkerClickListener(new OnMarkerClickListener() {
-
-			@Override
-			public boolean onMarkerClick(Marker marker) {
-				if (marker != null) {
-					marker.remove();
-				}
-				return true;
-			}
-		});
 	}
 
 	private void addCircles() {
