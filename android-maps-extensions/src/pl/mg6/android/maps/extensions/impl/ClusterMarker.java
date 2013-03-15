@@ -52,14 +52,14 @@ class ClusterMarker implements Marker {
 
 	void remove(DelegatingMarker marker) {
 		markers.remove(marker);
-		fixVisibilityAndPosition();
+		refresh();
 	}
 
 	int getCount() {
 		return markers.size();
 	}
 
-	void fixVisibilityAndPosition() {
+	void refresh() {
 		Object markerOrBounds = getSingleVisibleMarkerOrBounds();
 		if (markerOrBounds instanceof DelegatingMarker) {
 			if (virtual != null) {

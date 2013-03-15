@@ -71,13 +71,17 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	@Override
 	public void onAdd(DelegatingMarker marker) {
+		addMarker(marker, true);
+	}
+
+	private void addMarker(DelegatingMarker marker, boolean refresh) {
 		LatLng position = marker.getPosition();
 		int clusterId = calculateClusterId(position);
 		ClusterMarker cluster = findClusterById(clusterId);
 		cluster.add(marker);
 		markers.put(marker, cluster);
-		if (marker.isVisible()) {
-			cluster.fixVisibilityAndPosition();
+		if (refresh && marker.isVisible()) {
+			cluster.refresh();
 		}
 	}
 
@@ -89,23 +93,21 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	@Override
 	public void onPositionChange(DelegatingMarker marker) {
-		ClusterMarker cluster = markers.get(marker);
-		int clusterId = cluster.getClusterId();
-		LatLng position = marker.getPosition();
-		int newClusterId = calculateClusterId(position);
-		if (newClusterId == clusterId) {
+		ClusterMarker oldCluster = markers.get(marker);
+		if (isMarkerInCluster(marker, oldCluster)) {
 			if (marker.isVisible()) {
-				cluster.fixVisibilityAndPosition();
+				oldCluster.refresh();
 			}
 		} else {
-			cluster.remove(marker);
-			ClusterMarker newCluster = findClusterById(newClusterId);
-			newCluster.add(marker);
-			markers.put(marker, newCluster);
-			if (marker.isVisible()) {
-				newCluster.fixVisibilityAndPosition();
-			}
+			oldCluster.remove(marker);
+			addMarker(marker, true);
 		}
+	}
+	
+	private boolean isMarkerInCluster(DelegatingMarker marker, ClusterMarker cluster) {
+		int clusterId = cluster.getClusterId();
+		int markerClusterId = calculateClusterId(marker.getPosition());
+		return clusterId == markerClusterId;
 	}
 
 	private ClusterMarker findClusterById(int clusterId) {
@@ -120,7 +122,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	@Override
 	public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
 		ClusterMarker cluster = markers.get(marker);
-		cluster.fixVisibilityAndPosition();
+		cluster.refresh();
 	}
 
 	private void recalculate() {
@@ -143,15 +145,11 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		} else {
 			clusters = new SparseArray<ClusterMarker>();
 			for (DelegatingMarker marker : markers.keySet()) {
-				LatLng position = marker.getPosition();
-				int clusterId = calculateClusterId(position);
-				ClusterMarker cluster = findClusterById(clusterId);
-				cluster.add(marker);
-				markers.put(marker, cluster);
+				addMarker(marker, false);
 			}
 			for (int i = 0; i < clusters.size(); i++) {
 				ClusterMarker cluster = clusters.valueAt(i);
-				cluster.fixVisibilityAndPosition();
+				cluster.refresh();
 			}
 		}
 	}
