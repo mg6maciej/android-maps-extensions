@@ -75,7 +75,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		int clusterId = calculateClusterId(position);
 		ClusterMarker cluster = clusters.get(clusterId);
 		if (cluster == null) {
-			cluster = new ClusterMarker(provider.addMarker(new MarkerOptions().position(position).visible(false)
+			cluster = new ClusterMarker(clusterId, provider.addMarker(new MarkerOptions().position(position).visible(false)
 					.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))));
 			clusters.put(clusterId, cluster);
 		}
@@ -92,7 +92,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		cluster.remove(marker);
 		if (cluster.getCount() == 0) {
 			cluster.cleanup();
-			clusters.remove(clusters.keyAt(clusters.indexOfValue(cluster)));
+			clusters.remove(cluster.getClusterId());
 		} else {
 			cluster.fixVisibilityAndPosition();
 		}
@@ -101,7 +101,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	@Override
 	public void onPositionChange(DelegatingMarker marker) {
 		ClusterMarker cluster = markers.get(marker);
-		int clusterId = clusters.keyAt(clusters.indexOfValue(cluster));
+		int clusterId = cluster.getClusterId();
 		LatLng position = marker.getPosition();
 		int newClusterId = calculateClusterId(position);
 		if (newClusterId == clusterId) {
@@ -112,13 +112,13 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			cluster.remove(marker);
 			if (cluster.getCount() == 0) {
 				cluster.cleanup();
-				clusters.remove(clusters.keyAt(clusters.indexOfValue(cluster)));
+				clusters.remove(clusterId);
 			} else {
 				cluster.fixVisibilityAndPosition();
 			}
 			ClusterMarker newCluster = clusters.get(newClusterId);
 			if (newCluster == null) {
-				newCluster = new ClusterMarker(provider.addMarker(new MarkerOptions().position(position).visible(false)
+				newCluster = new ClusterMarker(newClusterId, provider.addMarker(new MarkerOptions().position(position).visible(false)
 						.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))));
 				clusters.put(newClusterId, newCluster);
 			}
@@ -132,7 +132,8 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	@Override
 	public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
-		recalculate();
+		ClusterMarker cluster = markers.get(marker);
+		cluster.fixVisibilityAndPosition();
 	}
 
 	private void recalculate() {
@@ -142,6 +143,9 @@ class GridClusteringStrategy implements ClusteringStrategy {
 				cluster.cleanup();
 			}
 			clusters = null;
+			for (DelegatingMarker marker : markers.keySet()) {
+				markers.put(marker, null);
+			}
 		}
 		if (clusterSize == 0.0) {
 			for (DelegatingMarker marker : markers.keySet()) {
@@ -156,11 +160,12 @@ class GridClusteringStrategy implements ClusteringStrategy {
 				int clusterId = calculateClusterId(position);
 				ClusterMarker cluster = clusters.get(clusterId);
 				if (cluster == null) {
-					cluster = new ClusterMarker(provider.addMarker(new MarkerOptions().position(position).visible(false)
+					cluster = new ClusterMarker(clusterId, provider.addMarker(new MarkerOptions().position(position).visible(false)
 							.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))));
 					clusters.put(clusterId, cluster);
 				}
 				cluster.add(marker);
+				markers.put(marker, cluster);
 			}
 			for (int i = 0; i < clusters.size(); i++) {
 				ClusterMarker cluster = clusters.valueAt(i);

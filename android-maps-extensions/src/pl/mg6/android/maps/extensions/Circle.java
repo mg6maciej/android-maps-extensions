@@ -43,7 +43,7 @@ public interface Circle {
 	void remove();
 
 	void setCenter(LatLng center);
-	
+
 	void setData(Object data);
 
 	void setFillColor(int fillColor);

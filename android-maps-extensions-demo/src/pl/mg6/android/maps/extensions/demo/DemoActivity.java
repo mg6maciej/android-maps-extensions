@@ -38,11 +38,13 @@ public class DemoActivity extends FragmentActivity {
 				for (Circle circle : map.getCircles()) {
 					if (circle.contains(position)) {
 						Toast.makeText(DemoActivity.this, "Clicked " + circle.getData(), Toast.LENGTH_SHORT).show();
+						return;
 					}
 				}
+				map.addMarker(new MarkerOptions().position(position).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
 			}
 		});
-		
+
 		map.addMarker(new MarkerOptions().position(new LatLng(25.0, 0.0)));
 		map.addMarker(new MarkerOptions().position(new LatLng(28.0, 1.0)));
 		map.addMarker(new MarkerOptions().position(new LatLng(26.0, 2.0)));
@@ -59,17 +61,9 @@ public class DemoActivity extends FragmentActivity {
 		map.addMarker(new MarkerOptions().position(new LatLng(29.0, -50.0)));
 
 		map.setClusteringEnabled(true);
-		
-		map.setOnMapClickListener(new OnMapClickListener() {
-			
-			@Override
-			public void onMapClick(LatLng position) {
-				map.addMarker(new MarkerOptions().position(position).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-			}
-		});
-		
+
 		map.setOnMarkerClickListener(new OnMarkerClickListener() {
-			
+
 			@Override
 			public boolean onMarkerClick(Marker marker) {
 				if (marker != null) {

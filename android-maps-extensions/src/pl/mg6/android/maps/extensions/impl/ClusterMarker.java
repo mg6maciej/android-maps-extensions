@@ -25,22 +25,29 @@ import pl.mg6.android.maps.extensions.Marker;
 
 class ClusterMarker implements Marker {
 
+	private int clusterId;
+
 	private com.google.android.gms.maps.model.Marker virtual;
 
 	private List<DelegatingMarker> markers = new ArrayList<DelegatingMarker>();
 
-	public ClusterMarker(com.google.android.gms.maps.model.Marker virtual) {
+	public ClusterMarker(int clusterId, com.google.android.gms.maps.model.Marker virtual) {
+		this.clusterId = clusterId;
 		this.virtual = virtual;
+	}
+
+	public int getClusterId() {
+		return clusterId;
 	}
 
 	void add(DelegatingMarker marker) {
 		markers.add(marker);
 	}
-	
+
 	void remove(DelegatingMarker marker) {
 		markers.remove(marker);
 	}
-	
+
 	int getCount() {
 		return markers.size();
 	}

@@ -16,10 +16,10 @@
 package pl.mg6.android.maps.extensions.impl;
 
 class NoClusteringStrategy implements ClusteringStrategy {
-	
+
 	@Override
 	public void cleanup() {
-		
+
 	}
 
 	@Override
