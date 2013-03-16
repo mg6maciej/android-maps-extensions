@@ -29,6 +29,8 @@ import pl.mg6.android.maps.extensions.Marker;
 
 class ClusterMarker implements Marker {
 
+	private static final MarkerOptions SINGLE_INSTANCE = new MarkerOptions();
+
 	private int clusterId;
 
 	private GoogleMap provider;
@@ -59,10 +61,6 @@ class ClusterMarker implements Marker {
 		refresh();
 	}
 
-	int getCount() {
-		return markers.size();
-	}
-
 	void refresh() {
 		Object markerOrBounds = getSingleVisibleMarkerOrBounds();
 		if (markerOrBounds instanceof DelegatingMarker) {
@@ -75,7 +73,7 @@ class ClusterMarker implements Marker {
 				LatLng position = calculateCenter((LatLngBounds) markerOrBounds);
 				if (virtual == null) {
 					BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
-					virtual = provider.addMarker(new MarkerOptions().position(position).icon(icon));
+					virtual = provider.addMarker(SINGLE_INSTANCE.position(position).icon(icon));
 				} else {
 					virtual.setPosition(position);
 					virtual.setVisible(true);
