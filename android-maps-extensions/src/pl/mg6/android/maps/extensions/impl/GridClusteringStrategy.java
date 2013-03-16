@@ -25,6 +25,7 @@ import android.util.SparseArray;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 class GridClusteringStrategy implements ClusteringStrategy {
 
@@ -81,7 +82,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		cluster.add(marker);
 		markers.put(marker, cluster);
 		if (refresh && marker.isVisible()) {
-			cluster.refresh();
+			refresh(cluster);
 		}
 	}
 
@@ -89,6 +90,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	public void onRemove(DelegatingMarker marker) {
 		ClusterMarker cluster = markers.remove(marker);
 		cluster.remove(marker);
+		refresh(cluster);
 	}
 
 	@Override
@@ -96,10 +98,11 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		ClusterMarker oldCluster = markers.get(marker);
 		if (isMarkerInCluster(marker, oldCluster)) {
 			if (marker.isVisible()) {
-				oldCluster.refresh();
+				refresh(oldCluster);
 			}
 		} else {
 			oldCluster.remove(marker);
+			refresh(oldCluster);
 			addMarker(marker, true);
 		}
 	}
@@ -135,6 +138,10 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	@Override
 	public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
 		ClusterMarker cluster = markers.get(marker);
+		refresh(cluster);
+	}
+
+	private void refresh(ClusterMarker cluster) {
 		cluster.refresh();
 	}
 
@@ -162,7 +169,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			}
 			for (int i = 0; i < clusters.size(); i++) {
 				ClusterMarker cluster = clusters.valueAt(i);
-				cluster.refresh();
+				refresh(cluster);
 			}
 		}
 	}

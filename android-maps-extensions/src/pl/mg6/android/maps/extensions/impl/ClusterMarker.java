@@ -18,14 +18,14 @@ package pl.mg6.android.maps.extensions.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.mg6.android.maps.extensions.Marker;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import pl.mg6.android.maps.extensions.Marker;
 
 class ClusterMarker implements Marker {
 
@@ -58,7 +58,6 @@ class ClusterMarker implements Marker {
 
 	void remove(DelegatingMarker marker) {
 		markers.remove(marker);
-		refresh();
 	}
 
 	void refresh() {
