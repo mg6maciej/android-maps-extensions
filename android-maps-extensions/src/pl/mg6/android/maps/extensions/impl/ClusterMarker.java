@@ -98,15 +98,15 @@ class ClusterMarker implements Marker {
 		}
 	}
 
-	private com.google.android.gms.maps.model.Marker getVirtualByCount(LatLng position, int count) {
+	private com.google.android.gms.maps.model.Marker getVirtualByCount(LatLng position, int markersCount) {
 		com.google.android.gms.maps.model.Marker marker = null;
-		List<com.google.android.gms.maps.model.Marker> c = cache.get(count);
+		List<com.google.android.gms.maps.model.Marker> c = cache.get(markersCount);
 		if (c != null && c.size() > 0) {
 			marker = c.remove(c.size() - 1);
 			marker.setPosition(position);
 			marker.setVisible(true);
 		} else {
-			BitmapDescriptor icon = provider.getIcon(this);
+			BitmapDescriptor icon = provider.getIcon(markersCount);
 			marker = provider.addMarker(SINGLE_INSTANCE.position(position).icon(icon));
 		}
 		return marker;

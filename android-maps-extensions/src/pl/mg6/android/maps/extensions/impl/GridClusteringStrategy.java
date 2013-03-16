@@ -174,10 +174,10 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		return provider.addMarker(options);
 	}
 
-	BitmapDescriptor getIcon(ClusterMarker cluster) {
+	BitmapDescriptor getIcon(int markersCount) {
 		BitmapDescriptor icon = null;
 		if (iconProvider != null) {
-			icon = iconProvider.getIcon(cluster);
+			icon = iconProvider.getIcon(markersCount);
 		}
 		if (icon == null) {
 			icon = defaultIcon;

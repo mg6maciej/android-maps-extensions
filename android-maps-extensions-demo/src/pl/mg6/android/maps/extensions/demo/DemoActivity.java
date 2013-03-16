@@ -62,8 +62,8 @@ public class DemoActivity extends FragmentActivity {
 		IconProvider iconProvider = new IconProvider() {
 
 			@Override
-			public BitmapDescriptor getIcon(Marker cluster) {
-				if (cluster.getMarkers().size() > 10) {
+			public BitmapDescriptor getIcon(int markersCount) {
+				if (markersCount > 10) {
 					return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
 				}
 				return null;
@@ -155,8 +155,8 @@ public class DemoActivity extends FragmentActivity {
 		IconProvider iconProvider = new IconProvider() {
 
 			@Override
-			public BitmapDescriptor getIcon(Marker cluster) {
-				if (cluster.getMarkers().size() > 10) {
+			public BitmapDescriptor getIcon(int markersCount) {
+				if (markersCount > 10) {
 					return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
 				}
 				return null;

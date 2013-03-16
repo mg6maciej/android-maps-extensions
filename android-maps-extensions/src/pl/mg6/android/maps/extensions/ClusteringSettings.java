@@ -54,6 +54,6 @@ public class ClusteringSettings {
 
 	public interface IconProvider {
 
-		BitmapDescriptor getIcon(Marker cluster);
+		BitmapDescriptor getIcon(int markersCount);
 	}
 }
