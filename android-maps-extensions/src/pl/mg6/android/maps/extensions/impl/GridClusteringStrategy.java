@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import pl.mg6.android.maps.extensions.ClusteringSettings;
+import pl.mg6.android.maps.extensions.ClusteringSettings.IconProvider;
 import pl.mg6.android.maps.extensions.Marker;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -28,7 +30,9 @@ import android.os.Message;
 import android.util.SparseArray;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 class GridClusteringStrategy implements ClusteringStrategy {
 
@@ -37,6 +41,9 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	private double clusterSize;
 
 	private SparseArray<ClusterMarker> clusters;
+
+	private BitmapDescriptor defaultIcon;
+	private IconProvider iconProvider;
 
 	private Set<ClusterMarker> refreshQueue = new HashSet<ClusterMarker>();
 	private boolean refreshPending;
@@ -51,7 +58,9 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		}
 	});
 
-	public GridClusteringStrategy(GoogleMap provider, List<DelegatingMarker> markers) {
+	public GridClusteringStrategy(ClusteringSettings settings, GoogleMap provider, List<DelegatingMarker> markers) {
+		this.defaultIcon = settings.getDefaultIcon();
+		this.iconProvider = settings.getIconProvider();
 		this.provider = provider;
 		this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
 		for (DelegatingMarker m : markers) {
@@ -146,7 +155,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	private ClusterMarker findClusterById(int clusterId) {
 		ClusterMarker cluster = clusters.get(clusterId);
 		if (cluster == null) {
-			cluster = new ClusterMarker(clusterId, provider);
+			cluster = new ClusterMarker(clusterId, this);
 			clusters.put(clusterId, cluster);
 		}
 		return cluster;
@@ -156,6 +165,21 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
 		ClusterMarker cluster = markers.get(marker);
 		refresh(cluster);
+	}
+
+	com.google.android.gms.maps.model.Marker addMarker(MarkerOptions options) {
+		return provider.addMarker(options);
+	}
+
+	BitmapDescriptor getIcon(ClusterMarker cluster) {
+		BitmapDescriptor icon = null;
+		if (iconProvider != null) {
+			icon = iconProvider.getIcon(cluster);
+		}
+		if (icon == null) {
+			icon = defaultIcon;
+		}
+		return icon;
 	}
 
 	private void refresh(ClusterMarker cluster) {

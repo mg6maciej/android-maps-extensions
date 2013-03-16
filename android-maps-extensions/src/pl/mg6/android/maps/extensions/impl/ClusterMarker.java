@@ -20,9 +20,7 @@ import java.util.List;
 
 import pl.mg6.android.maps.extensions.Marker;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -33,13 +31,13 @@ class ClusterMarker implements Marker {
 
 	private int clusterId;
 
-	private GoogleMap provider;
+	private GridClusteringStrategy provider;
 
 	private com.google.android.gms.maps.model.Marker virtual;
 
 	private List<DelegatingMarker> markers = new ArrayList<DelegatingMarker>();
 
-	public ClusterMarker(int clusterId, GoogleMap provider) {
+	public ClusterMarker(int clusterId, GridClusteringStrategy provider) {
 		this.clusterId = clusterId;
 		this.provider = provider;
 	}
@@ -71,7 +69,7 @@ class ClusterMarker implements Marker {
 			if (markerOrBounds instanceof LatLngBounds) {
 				LatLng position = calculateCenter((LatLngBounds) markerOrBounds);
 				if (virtual == null) {
-					BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+					BitmapDescriptor icon = provider.getIcon(this);
 					virtual = provider.addMarker(SINGLE_INSTANCE.position(position).icon(icon));
 				} else {
 					virtual.setPosition(position);

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import pl.mg6.android.maps.extensions.Circle;
+import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GroundOverlay;
 import pl.mg6.android.maps.extensions.Marker;
@@ -237,17 +238,18 @@ public class DelegatingGoogleMap implements GoogleMap {
 	}
 
 	@Override
-	public void setClusteringEnabled(boolean clusteringEnabled) {
-		ClusteringStrategy newClusteringStrategy = null;
-		if (clusteringEnabled && !(clusteringStrategy instanceof GridClusteringStrategy)) {
-			ArrayList<DelegatingMarker> list = new ArrayList<DelegatingMarker>(markers.values());
-			newClusteringStrategy = new GridClusteringStrategy(real, list);
-		} else if (!clusteringEnabled && !(clusteringStrategy instanceof NoClusteringStrategy)) {
-			newClusteringStrategy = new NoClusteringStrategy();
-		}
-		if (newClusteringStrategy != null) {
-			clusteringStrategy.cleanup();
-			clusteringStrategy = newClusteringStrategy;
+	public void setClustering(ClusteringSettings clusteringSettings) {
+		if (clusteringSettings != null && clusteringSettings.isEnabled()) {
+			if (!(clusteringStrategy instanceof GridClusteringStrategy)) {
+				clusteringStrategy.cleanup();
+				ArrayList<DelegatingMarker> list = new ArrayList<DelegatingMarker>(markers.values());
+				clusteringStrategy = new GridClusteringStrategy(clusteringSettings, real, list);
+			}
+		} else {
+			if (!(clusteringStrategy instanceof NoClusteringStrategy)) {
+				clusteringStrategy.cleanup();
+				clusteringStrategy = new NoClusteringStrategy();
+			}
 		}
 	}
 

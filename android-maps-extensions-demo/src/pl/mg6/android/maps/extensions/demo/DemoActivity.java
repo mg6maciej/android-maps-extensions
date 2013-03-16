@@ -3,6 +3,8 @@ package pl.mg6.android.maps.extensions.demo;
 import java.util.List;
 
 import pl.mg6.android.maps.extensions.Circle;
+import pl.mg6.android.maps.extensions.ClusteringSettings;
+import pl.mg6.android.maps.extensions.ClusteringSettings.IconProvider;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMapClickListener;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMarkerClickListener;
@@ -15,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -69,7 +72,18 @@ public class DemoActivity extends FragmentActivity {
 
 		addMarkers();
 
-		map.setClusteringEnabled(true);
+		BitmapDescriptor defaultIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+		IconProvider iconProvider = new IconProvider() {
+
+			@Override
+			public BitmapDescriptor getIcon(Marker cluster) {
+				if (cluster.getMarkers().size() > 10) {
+					return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+				}
+				return null;
+			}
+		};
+		map.setClustering(new ClusteringSettings().defaultIcon(defaultIcon).iconProvider(iconProvider));
 
 		map.setOnMarkerClickListener(new OnMarkerClickListener() {
 
@@ -78,8 +92,8 @@ public class DemoActivity extends FragmentActivity {
 				if (marker.isCluster()) {
 					map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), map.getCameraPosition().zoom + 1.0f), 200, null);
 				} else {
-					//markers.remove(marker);
-					//marker.remove();
+					// markers.remove(marker);
+					// marker.remove();
 				}
 				return true;
 			}
@@ -91,7 +105,7 @@ public class DemoActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//runnable.run();
+		// runnable.run();
 	}
 
 	@Override
