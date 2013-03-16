@@ -24,15 +24,15 @@ import com.google.android.gms.maps.model.LatLng;
 class DelegatingMarker implements Marker {
 
 	private com.google.android.gms.maps.model.Marker real;
-	private MarkerStateChangeListener listener;
+	private DelegatingGoogleMap map;
 
 	private Object data;
 
 	private boolean visible;
 
-	DelegatingMarker(com.google.android.gms.maps.model.Marker real, MarkerStateChangeListener listener) {
+	DelegatingMarker(com.google.android.gms.maps.model.Marker real, DelegatingGoogleMap map) {
 		this.real = real;
-		this.listener = listener;
+		this.map = map;
 
 		this.visible = real.isVisible();
 	}
@@ -96,7 +96,7 @@ class DelegatingMarker implements Marker {
 	@Override
 	public void remove() {
 		real.remove();
-		listener.onRemove(this);
+		map.onRemove(this);
 	}
 
 	@Override
@@ -112,7 +112,7 @@ class DelegatingMarker implements Marker {
 	@Override
 	public void setPosition(LatLng position) {
 		real.setPosition(position);
-		listener.onPositionChange(this);
+		map.onPositionChange(this);
 	}
 
 	@Override
@@ -129,7 +129,7 @@ class DelegatingMarker implements Marker {
 	public void setVisible(boolean visible) {
 		if (this.visible != visible) {
 			this.visible = visible;
-			listener.onVisibilityChangeRequest(this, visible);
+			map.onVisibilityChangeRequest(this, visible);
 		}
 	}
 

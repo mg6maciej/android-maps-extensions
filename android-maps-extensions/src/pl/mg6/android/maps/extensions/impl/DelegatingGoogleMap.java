@@ -42,7 +42,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
-public class DelegatingGoogleMap implements GoogleMap, MarkerStateChangeListener {
+public class DelegatingGoogleMap implements GoogleMap {
 
 	private com.google.android.gms.maps.GoogleMap real;
 
@@ -385,19 +385,16 @@ public class DelegatingGoogleMap implements GoogleMap, MarkerStateChangeListener
 		tileOverlays.remove(tileOverlay);
 	}
 
-	@Override
-	public void onRemove(DelegatingMarker marker) {
+	void onRemove(DelegatingMarker marker) {
 		markers.remove(marker.getReal());
 		clusteringStrategy.onRemove(marker);
 	}
 
-	@Override
-	public void onPositionChange(DelegatingMarker marker) {
+	void onPositionChange(DelegatingMarker marker) {
 		clusteringStrategy.onPositionChange(marker);
 	}
 
-	@Override
-	public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
+	void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
 		clusteringStrategy.onVisibilityChangeRequest(marker, visible);
 	}
 

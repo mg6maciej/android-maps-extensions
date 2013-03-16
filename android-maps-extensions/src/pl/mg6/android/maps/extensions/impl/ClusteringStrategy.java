@@ -17,13 +17,19 @@ package pl.mg6.android.maps.extensions.impl;
 
 import pl.mg6.android.maps.extensions.Marker;
 
-interface ClusteringStrategy extends MarkerStateChangeListener {
+interface ClusteringStrategy {
 
 	void cleanup();
 
 	void onZoomChange(float zoom);
 
 	void onAdd(DelegatingMarker marker);
+
+	void onRemove(DelegatingMarker marker);
+
+	void onPositionChange(DelegatingMarker marker);
+
+	void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible);
 
 	Marker map(com.google.android.gms.maps.model.Marker original);
 }

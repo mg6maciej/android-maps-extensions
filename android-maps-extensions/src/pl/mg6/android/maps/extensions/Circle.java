@@ -57,5 +57,4 @@ public interface Circle {
 	void setVisible(boolean visible);
 
 	void setZIndex(float zIndex);
-
 }
