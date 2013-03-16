@@ -67,15 +67,7 @@ public class DelegatingGoogleMap implements GoogleMap {
 		this.groundOverlays = new HashMap<com.google.android.gms.maps.model.GroundOverlay, GroundOverlay>();
 		this.tileOverlays = new HashMap<com.google.android.gms.maps.model.TileOverlay, TileOverlay>();
 
-		real.setOnCameraChangeListener(new com.google.android.gms.maps.GoogleMap.OnCameraChangeListener() {
-			@Override
-			public void onCameraChange(CameraPosition cameraPosition) {
-				clusteringStrategy.onZoomChange(cameraPosition.zoom);
-				if (onCameraChangeListener != null) {
-					onCameraChangeListener.onCameraChange(cameraPosition);
-				}
-			}
-		});
+		real.setOnCameraChangeListener(new DelegatingOnCameraChangeListener());
 		real.setOnMarkerDragListener(new DelegatingOnMarkerDragListener());
 	}
 
@@ -394,6 +386,17 @@ public class DelegatingGoogleMap implements GoogleMap {
 
 	void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
 		clusteringStrategy.onVisibilityChangeRequest(marker, visible);
+	}
+
+	private class DelegatingOnCameraChangeListener implements com.google.android.gms.maps.GoogleMap.OnCameraChangeListener {
+
+		@Override
+		public void onCameraChange(CameraPosition cameraPosition) {
+			clusteringStrategy.onZoomChange(cameraPosition.zoom);
+			if (onCameraChangeListener != null) {
+				onCameraChangeListener.onCameraChange(cameraPosition);
+			}
+		}
 	}
 
 	private class DelegatingInfoWindowAdapter implements com.google.android.gms.maps.GoogleMap.InfoWindowAdapter {
