@@ -95,10 +95,14 @@ public class DelegatingGoogleMap implements GoogleMap, MarkerStateChangeListener
 
 	@Override
 	public Marker addMarker(MarkerOptions markerOptions) {
+		boolean visible = markerOptions.isVisible();
+		markerOptions.visible(false);
 		com.google.android.gms.maps.model.Marker realMarker = real.addMarker(markerOptions);
+		markerOptions.visible(visible);
 		DelegatingMarker marker = new DelegatingMarker(realMarker, this);
 		markers.put(realMarker, marker);
 		clusteringStrategy.onAdd(marker);
+		marker.setVisible(visible);
 		return marker;
 	}
 
