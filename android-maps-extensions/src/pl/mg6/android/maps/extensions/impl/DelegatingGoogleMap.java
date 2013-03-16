@@ -47,6 +47,7 @@ public class DelegatingGoogleMap implements GoogleMap {
 	private com.google.android.gms.maps.GoogleMap real;
 
 	private OnCameraChangeListener onCameraChangeListener;
+	private OnMarkerDragListener onMarkerDragListener;
 
 	private Map<com.google.android.gms.maps.model.Marker, DelegatingMarker> markers;
 	private Map<com.google.android.gms.maps.model.Polyline, Polyline> polylines;
@@ -75,6 +76,7 @@ public class DelegatingGoogleMap implements GoogleMap {
 				}
 			}
 		});
+		real.setOnMarkerDragListener(new DelegatingOnMarkerDragListener());
 	}
 
 	@Override
@@ -321,11 +323,7 @@ public class DelegatingGoogleMap implements GoogleMap {
 
 	@Override
 	public void setOnMarkerDragListener(OnMarkerDragListener onMarkerDragListener) {
-		com.google.android.gms.maps.GoogleMap.OnMarkerDragListener realOnMarkerDragListener = null;
-		if (onMarkerDragListener != null) {
-			realOnMarkerDragListener = new DelegatingOnMarkerDragListener(onMarkerDragListener);
-		}
-		real.setOnMarkerDragListener(realOnMarkerDragListener);
+		this.onMarkerDragListener = onMarkerDragListener;
 	}
 
 	@Override
@@ -447,25 +445,26 @@ public class DelegatingGoogleMap implements GoogleMap {
 
 	private class DelegatingOnMarkerDragListener implements com.google.android.gms.maps.GoogleMap.OnMarkerDragListener {
 
-		private OnMarkerDragListener onMarkerDragListener;
-
-		private DelegatingOnMarkerDragListener(OnMarkerDragListener onMarkerDragListener) {
-			this.onMarkerDragListener = onMarkerDragListener;
-		}
-
 		@Override
 		public void onMarkerDragStart(com.google.android.gms.maps.model.Marker marker) {
-			onMarkerDragListener.onMarkerDragStart(map(marker));
+			if (onMarkerDragListener != null) {
+				onMarkerDragListener.onMarkerDragStart(map(marker));
+			}
 		}
 
 		@Override
 		public void onMarkerDrag(com.google.android.gms.maps.model.Marker marker) {
-			onMarkerDragListener.onMarkerDrag(map(marker));
+			if (onMarkerDragListener != null) {
+				onMarkerDragListener.onMarkerDrag(map(marker));
+			}
 		}
 
 		@Override
 		public void onMarkerDragEnd(com.google.android.gms.maps.model.Marker marker) {
-			onMarkerDragListener.onMarkerDragEnd(map(marker));
+			clusteringStrategy.onPositionChange(markers.get(marker));
+			if (onMarkerDragListener != null) {
+				onMarkerDragListener.onMarkerDragEnd(map(marker));
+			}
 		}
 	}
 

@@ -78,8 +78,8 @@ public class DemoActivity extends FragmentActivity {
 				if (marker.isCluster()) {
 					map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), map.getCameraPosition().zoom + 1.0f), 200, null);
 				} else {
-					markers.remove(marker);
-					marker.remove();
+					//markers.remove(marker);
+					//marker.remove();
 				}
 				return true;
 			}
@@ -91,7 +91,7 @@ public class DemoActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		runnable.run();
+		//runnable.run();
 	}
 
 	@Override
@@ -101,10 +101,10 @@ public class DemoActivity extends FragmentActivity {
 	}
 
 	private void addMarkers() {
-		map.addMarker(new MarkerOptions().position(new LatLng(25.0, 0.0)));
-		map.addMarker(new MarkerOptions().position(new LatLng(28.0, 1.0)));
-		map.addMarker(new MarkerOptions().position(new LatLng(26.0, 2.0)));
-		map.addMarker(new MarkerOptions().position(new LatLng(29.0, 5.0)));
+		map.addMarker(new MarkerOptions().position(new LatLng(25.0, 0.0)).draggable(true));
+		map.addMarker(new MarkerOptions().position(new LatLng(28.0, 1.0)).draggable(true));
+		map.addMarker(new MarkerOptions().position(new LatLng(26.0, 2.0)).draggable(true));
+		map.addMarker(new MarkerOptions().position(new LatLng(29.0, 5.0)).draggable(true));
 
 		map.addMarker(new MarkerOptions().position(new LatLng(-25.0, 0.0)));
 		map.addMarker(new MarkerOptions().position(new LatLng(-28.0, 1.0)));
