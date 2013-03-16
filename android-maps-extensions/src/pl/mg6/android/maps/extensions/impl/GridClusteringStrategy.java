@@ -37,12 +37,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 class GridClusteringStrategy implements ClusteringStrategy {
 
+	private MarkerOptions markerOptions = new MarkerOptions();
+
 	private GoogleMap provider;
 	private Map<DelegatingMarker, ClusterMarker> markers;
 	private double clusterSize;
 
 	private SparseArray<ClusterMarker> clusters = new SparseArray<ClusterMarker>();
 	private List<ClusterMarker> cache = new ArrayList<ClusterMarker>();
+	private SparseArray<List<com.google.android.gms.maps.model.Marker>> virualMarkersCache = new SparseArray<List<com.google.android.gms.maps.model.Marker>>();
 
 	private BitmapDescriptor defaultIcon;
 	private IconProvider iconProvider;
@@ -78,7 +81,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			ClusterMarker cluster = clusters.valueAt(i);
 			cluster.cleanup();
 		}
-		ClusterMarker.clearCache();
+		clearCache();
 		for (DelegatingMarker marker : markers.keySet()) {
 			if (marker.isVisible()) {
 				marker.changeVisible(true);
@@ -226,5 +229,41 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	private double calculateClusterSize(float zoom) {
 		return (1 << ((int) (23.5f - zoom))) / 100000.0;
+	}
+
+	com.google.android.gms.maps.model.Marker getVirtualByCount(LatLng position, int markersCount) {
+		com.google.android.gms.maps.model.Marker marker = null;
+		List<com.google.android.gms.maps.model.Marker> c = virualMarkersCache.get(markersCount);
+		if (c != null && c.size() > 0) {
+			marker = c.remove(c.size() - 1);
+			marker.setPosition(position);
+			marker.setVisible(true);
+		} else {
+			BitmapDescriptor icon = getIcon(markersCount);
+			marker = provider.addMarker(markerOptions.position(position).icon(icon));
+		}
+		return marker;
+	}
+
+	void cacheVirtual(com.google.android.gms.maps.model.Marker virtual, int markersCount) {
+		if (virtual != null) {
+			virtual.setVisible(false);
+			List<com.google.android.gms.maps.model.Marker> c = virualMarkersCache.get(markersCount);
+			if (c == null) {
+				c = new ArrayList<com.google.android.gms.maps.model.Marker>();
+				virualMarkersCache.put(markersCount, c);
+			}
+			c.add(virtual);
+		}
+	}
+
+	private void clearCache() {
+		for (int i = 0; i < virualMarkersCache.size(); i++) {
+			List<com.google.android.gms.maps.model.Marker> c = virualMarkersCache.valueAt(i);
+			for (com.google.android.gms.maps.model.Marker v : c) {
+				v.remove();
+			}
+		}
+		virualMarkersCache.clear();
 	}
 }

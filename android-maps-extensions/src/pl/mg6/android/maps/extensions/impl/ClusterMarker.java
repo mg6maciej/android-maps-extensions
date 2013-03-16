@@ -19,18 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.mg6.android.maps.extensions.Marker;
-import android.util.SparseArray;
 
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 class ClusterMarker implements Marker {
-
-	private static final MarkerOptions SINGLE_INSTANCE = new MarkerOptions();
-
-	private static final SparseArray<List<com.google.android.gms.maps.model.Marker>> cache = new SparseArray<List<com.google.android.gms.maps.model.Marker>>();
 
 	private int clusterId;
 
@@ -84,7 +77,7 @@ class ClusterMarker implements Marker {
 				if (virtual == null || lastCount != count) {
 					cacheVirtual();
 					lastCount = count;
-					virtual = getVirtualByCount(position, count);
+					virtual = provider.getVirtualByCount(position, count);
 				} else {
 					virtual.setPosition(position);
 					virtual.setVisible(true);
@@ -98,41 +91,9 @@ class ClusterMarker implements Marker {
 		}
 	}
 
-	private com.google.android.gms.maps.model.Marker getVirtualByCount(LatLng position, int markersCount) {
-		com.google.android.gms.maps.model.Marker marker = null;
-		List<com.google.android.gms.maps.model.Marker> c = cache.get(markersCount);
-		if (c != null && c.size() > 0) {
-			marker = c.remove(c.size() - 1);
-			marker.setPosition(position);
-			marker.setVisible(true);
-		} else {
-			BitmapDescriptor icon = provider.getIcon(markersCount);
-			marker = provider.addMarker(SINGLE_INSTANCE.position(position).icon(icon));
-		}
-		return marker;
-	}
-
 	private void cacheVirtual() {
-		if (virtual != null) {
-			virtual.setVisible(false);
-			List<com.google.android.gms.maps.model.Marker> c = cache.get(lastCount);
-			if (c == null) {
-				c = new ArrayList<com.google.android.gms.maps.model.Marker>();
-				cache.put(lastCount, c);
-			}
-			c.add(virtual);
-			virtual = null;
-		}
-	}
-
-	static void clearCache() {
-		for (int i = 0; i < cache.size(); i++) {
-			List<com.google.android.gms.maps.model.Marker> c = cache.valueAt(i);
-			for (com.google.android.gms.maps.model.Marker v : c) {
-				v.remove();
-			}
-		}
-		cache.clear();
+		provider.cacheVirtual(virtual, lastCount);
+		virtual = null;
 	}
 
 	LatLng calculateCenter(LatLngBounds bounds) {

@@ -151,13 +151,13 @@ public class DemoActivity extends FragmentActivity {
 	}
 
 	public void onClusterClick(View view) {
-		BitmapDescriptor defaultIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+		BitmapDescriptor defaultIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
 		IconProvider iconProvider = new IconProvider() {
 
 			@Override
 			public BitmapDescriptor getIcon(int markersCount) {
 				if (markersCount > 10) {
-					return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+					return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
 				}
 				return null;
 			}
