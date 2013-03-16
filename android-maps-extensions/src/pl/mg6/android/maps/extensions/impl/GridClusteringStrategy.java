@@ -16,16 +16,19 @@
 package pl.mg6.android.maps.extensions.impl;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import pl.mg6.android.maps.extensions.Marker;
-
+import android.os.Handler;
+import android.os.Handler.Callback;
+import android.os.Message;
 import android.util.SparseArray;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 class GridClusteringStrategy implements ClusteringStrategy {
 
@@ -34,6 +37,19 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	private double clusterSize;
 
 	private SparseArray<ClusterMarker> clusters;
+
+	private Set<ClusterMarker> refreshQueue = new HashSet<ClusterMarker>();
+	private boolean refreshPending;
+	private Handler refresher = new Handler(new Callback() {
+		public boolean handleMessage(Message msg) {
+			for (ClusterMarker cluster : refreshQueue) {
+				cluster.refresh();
+			}
+			refreshQueue.clear();
+			refreshPending = false;
+			return true;
+		}
+	});
 
 	public GridClusteringStrategy(GoogleMap provider, List<DelegatingMarker> markers) {
 		this.provider = provider;
@@ -59,6 +75,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 				marker.changeVisible(true);
 			}
 		}
+		refresher.removeMessages(0);
 	}
 
 	@Override
@@ -142,7 +159,11 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	}
 
 	private void refresh(ClusterMarker cluster) {
-		cluster.refresh();
+		refreshQueue.add(cluster);
+		if (!refreshPending) {
+			refresher.sendEmptyMessage(0);
+			refreshPending = true;
+		}
 	}
 
 	private void recalculate() {
