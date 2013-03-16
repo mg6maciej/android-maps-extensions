@@ -1,19 +1,25 @@
 package pl.mg6.android.maps.extensions.demo;
 
+import java.text.Collator;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import pl.mg6.android.maps.extensions.Circle;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings.IconProvider;
 import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.GoogleMap.InfoWindowAdapter;
+import pl.mg6.android.maps.extensions.GoogleMap.OnInfoWindowClickListener;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMapClickListener;
-import pl.mg6.android.maps.extensions.GoogleMap.OnMarkerClickListener;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,29 +27,13 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.LatLngBounds.Builder;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DemoActivity extends FragmentActivity {
 
 	private GoogleMap map;
-
-	private List<Marker> markers;
-
-	private Handler handler = new Handler();
-
-	private Runnable runnable = new Runnable() {
-
-		private boolean visible = true;
-
-		@Override
-		public void run() {
-			visible = !visible;
-			for (Marker marker : markers) {
-				marker.setVisible(visible);
-			}
-			handler.postDelayed(this, 2000);
-		}
-	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +56,8 @@ public class DemoActivity extends FragmentActivity {
 						return;
 					}
 				}
-				map.addMarker(new MarkerOptions().position(position).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
 			}
 		});
-
-		addMarkers();
 
 		BitmapDescriptor defaultIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
 		IconProvider iconProvider = new IconProvider() {
@@ -85,50 +72,75 @@ public class DemoActivity extends FragmentActivity {
 		};
 		map.setClustering(new ClusteringSettings().defaultIcon(defaultIcon).iconProvider(iconProvider));
 
-		map.setOnMarkerClickListener(new OnMarkerClickListener() {
+		map.setInfoWindowAdapter(new InfoWindowAdapter() {
+
+			private TextView tv = new TextView(DemoActivity.this);
+
+			private Collator collator = Collator.getInstance();
+			private Comparator<Marker> comparator = new Comparator<Marker>() {
+				public int compare(Marker lhs, Marker rhs) {
+					String leftTitle = lhs.getTitle();
+					String rightTitle = rhs.getTitle();
+					if (leftTitle == null && rightTitle == null) {
+						return 0;
+					}
+					if (leftTitle == null) {
+						return 1;
+					}
+					if (rightTitle == null) {
+						return -1;
+					}
+					return collator.compare(leftTitle, rightTitle);
+				}
+			};
 
 			@Override
-			public boolean onMarkerClick(Marker marker) {
+			public View getInfoWindow(Marker marker) {
+				return null;
+			}
+
+			@Override
+			public View getInfoContents(Marker marker) {
 				if (marker.isCluster()) {
-					map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), map.getCameraPosition().zoom + 1.0f), 200, null);
-				} else {
-					// markers.remove(marker);
-					// marker.remove();
+					List<Marker> markers = marker.getMarkers();
+					int i = 0;
+					String text = "";
+					while (i < 3 && markers.size() > 0) {
+						Marker m = Collections.min(markers, comparator);
+						text += m.getTitle() + "\n";
+						markers.remove(m);
+						i++;
+					}
+					if (markers.size() > 0) {
+						text += "and " + markers.size() + " more...";
+					} else {
+						text = text.substring(0, text.length() - 1);
+					}
+					tv.setTextColor(Color.BLACK);
+					tv.setText(text);
+					return tv;
 				}
-				return true;
+				return null;
 			}
 		});
 
-		markers = map.getMarkers();
-	}
+		map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		// runnable.run();
-	}
+			@Override
+			public void onInfoWindowClick(Marker marker) {
+				if (marker.isCluster()) {
+					List<Marker> markers = marker.getMarkers();
+					Builder builder = LatLngBounds.builder();
+					for (Marker m : markers) {
+						builder.include(m.getPosition());
+					}
+					LatLngBounds bounds = builder.build();
+					map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, getResources().getDimensionPixelSize(R.dimen.padding)));
+				}
+			}
+		});
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		handler.removeCallbacks(runnable);
-	}
-
-	private void addMarkers() {
-		map.addMarker(new MarkerOptions().position(new LatLng(25.0, 0.0)).draggable(true));
-		map.addMarker(new MarkerOptions().position(new LatLng(28.0, 1.0)).draggable(true));
-		map.addMarker(new MarkerOptions().position(new LatLng(26.0, 2.0)).draggable(true));
-		map.addMarker(new MarkerOptions().position(new LatLng(29.0, 5.0)).draggable(true));
-
-		map.addMarker(new MarkerOptions().position(new LatLng(-25.0, 0.0)));
-		map.addMarker(new MarkerOptions().position(new LatLng(-28.0, 1.0)));
-		map.addMarker(new MarkerOptions().position(new LatLng(-26.0, 2.0)));
-		map.addMarker(new MarkerOptions().position(new LatLng(-29.0, 5.0)));
-
-		map.addMarker(new MarkerOptions().position(new LatLng(25.0, -10.0)));
-		map.addMarker(new MarkerOptions().position(new LatLng(28.0, -14.0)));
-		map.addMarker(new MarkerOptions().position(new LatLng(26.0, -20.0)));
-		map.addMarker(new MarkerOptions().position(new LatLng(29.0, -50.0)));
+		MarkerGenerator.addMarkersInPoland(map);
 	}
 
 	private void addCircles() {
