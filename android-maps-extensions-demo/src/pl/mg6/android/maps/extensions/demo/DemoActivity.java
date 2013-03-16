@@ -29,7 +29,6 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.LatLngBounds.Builder;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DemoActivity extends FragmentActivity {
 
@@ -149,5 +148,24 @@ public class DemoActivity extends FragmentActivity {
 		circle.setData("first circle");
 		circle = map.addCircle(new CircleOptions().center(new LatLng(30.0, 30.0)).radius(1000000));
 		circle.setData("second circle");
+	}
+
+	public void onClusterClick(View view) {
+		BitmapDescriptor defaultIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+		IconProvider iconProvider = new IconProvider() {
+
+			@Override
+			public BitmapDescriptor getIcon(Marker cluster) {
+				if (cluster.getMarkers().size() > 10) {
+					return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+				}
+				return null;
+			}
+		};
+		map.setClustering(new ClusteringSettings().defaultIcon(defaultIcon).iconProvider(iconProvider));
+	}
+
+	public void onNormalClick(View view) {
+		map.setClustering(new ClusteringSettings().enabled(false));
 	}
 }

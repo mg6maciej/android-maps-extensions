@@ -15,6 +15,7 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -40,7 +41,8 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	private Map<DelegatingMarker, ClusterMarker> markers;
 	private double clusterSize;
 
-	private SparseArray<ClusterMarker> clusters;
+	private SparseArray<ClusterMarker> clusters = new SparseArray<ClusterMarker>();
+	private List<ClusterMarker> cache = new ArrayList<ClusterMarker>();
 
 	private BitmapDescriptor defaultIcon;
 	private IconProvider iconProvider;
@@ -72,13 +74,11 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	@Override
 	public void cleanup() {
-		if (clusters != null) {
-			for (int i = 0; i < clusters.size(); i++) {
-				ClusterMarker cluster = clusters.valueAt(i);
-				cluster.cleanup();
-			}
-			clusters = null;
+		for (int i = 0; i < clusters.size(); i++) {
+			ClusterMarker cluster = clusters.valueAt(i);
+			cluster.cleanup();
 		}
+		ClusterMarker.clearCache();
 		for (DelegatingMarker marker : markers.keySet()) {
 			if (marker.isVisible()) {
 				marker.changeVisible(true);
@@ -135,12 +135,10 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	@Override
 	public Marker map(com.google.android.gms.maps.model.Marker original) {
-		if (clusters != null) {
-			for (int i = 0; i < clusters.size(); i++) {
-				ClusterMarker cluster = clusters.valueAt(i);
-				if (original.equals(cluster.getVirtual())) {
-					return cluster;
-				}
+		for (int i = 0; i < clusters.size(); i++) {
+			ClusterMarker cluster = clusters.valueAt(i);
+			if (original.equals(cluster.getVirtual())) {
+				return cluster;
 			}
 		}
 		return null;
@@ -155,7 +153,12 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	private ClusterMarker findClusterById(int clusterId) {
 		ClusterMarker cluster = clusters.get(clusterId);
 		if (cluster == null) {
-			cluster = new ClusterMarker(clusterId, this);
+			if (cache.size() > 0) {
+				cluster = cache.remove(cache.size() - 1);
+				cluster.setClusterId(clusterId);
+			} else {
+				cluster = new ClusterMarker(clusterId, this);
+			}
 			clusters.put(clusterId, cluster);
 		}
 		return cluster;
@@ -191,24 +194,20 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	}
 
 	private void recalculate() {
-		if (clusters != null) {
-			for (int i = 0; i < clusters.size(); i++) {
-				ClusterMarker cluster = clusters.valueAt(i);
-				cluster.cleanup();
-			}
-			clusters = null;
-			for (DelegatingMarker marker : markers.keySet()) {
-				markers.put(marker, null);
-			}
+		for (int i = 0; i < clusters.size(); i++) {
+			ClusterMarker cluster = clusters.valueAt(i);
+			cluster.reset();
+			cache.add(cluster);
 		}
+		clusters.clear();
 		if (clusterSize == 0.0) {
 			for (DelegatingMarker marker : markers.keySet()) {
+				markers.put(marker, null);
 				if (marker.isVisible()) {
 					marker.changeVisible(true);
 				}
 			}
 		} else {
-			clusters = new SparseArray<ClusterMarker>();
 			for (DelegatingMarker marker : markers.keySet()) {
 				addMarker(marker, false);
 			}

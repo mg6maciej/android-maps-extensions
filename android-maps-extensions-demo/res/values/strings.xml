@@ -1,5 +1,7 @@
 <resources>
 
     <string name="app_name">Android Maps Extensions Demo</string>
+    <string name="cluster">Cluster</string>
+    <string name="normal">Normal</string>
 
 </resources>

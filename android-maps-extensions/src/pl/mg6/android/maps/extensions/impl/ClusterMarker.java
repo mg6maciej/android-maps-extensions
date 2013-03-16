@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.mg6.android.maps.extensions.Marker;
+import android.util.SparseArray;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
@@ -29,7 +30,11 @@ class ClusterMarker implements Marker {
 
 	private static final MarkerOptions SINGLE_INSTANCE = new MarkerOptions();
 
+	private static final SparseArray<List<com.google.android.gms.maps.model.Marker>> cache = new SparseArray<List<com.google.android.gms.maps.model.Marker>>();
+
 	private int clusterId;
+
+	private int lastCount = -1;
 
 	private GridClusteringStrategy provider;
 
@@ -42,8 +47,12 @@ class ClusterMarker implements Marker {
 		this.provider = provider;
 	}
 
-	public int getClusterId() {
+	int getClusterId() {
 		return clusterId;
+	}
+
+	void setClusterId(int clusterId) {
+		this.clusterId = clusterId;
 	}
 
 	com.google.android.gms.maps.model.Marker getVirtual() {
@@ -61,29 +70,69 @@ class ClusterMarker implements Marker {
 	void refresh() {
 		Object markerOrBounds = getSingleVisibleMarkerOrBounds();
 		if (markerOrBounds instanceof DelegatingMarker) {
-			if (virtual != null) {
-				virtual.setVisible(false);
-			}
+			cacheVirtual();
 			((DelegatingMarker) markerOrBounds).changeVisible(true);
 		} else {
 			if (markerOrBounds instanceof LatLngBounds) {
 				LatLng position = calculateCenter((LatLngBounds) markerOrBounds);
-				if (virtual == null) {
-					BitmapDescriptor icon = provider.getIcon(this);
-					virtual = provider.addMarker(SINGLE_INSTANCE.position(position).icon(icon));
+				int count = 0;
+				for (DelegatingMarker m : markers) {
+					if (m.isVisible()) {
+						count++;
+					}
+				}
+				if (virtual == null || lastCount != count) {
+					cacheVirtual();
+					lastCount = count;
+					virtual = getVirtualByCount(position, count);
 				} else {
 					virtual.setPosition(position);
 					virtual.setVisible(true);
 				}
 			} else {
-				if (virtual != null) {
-					virtual.setVisible(false);
-				}
+				cacheVirtual();
 			}
 			for (DelegatingMarker m : markers) {
 				m.changeVisible(false);
 			}
 		}
+	}
+
+	private com.google.android.gms.maps.model.Marker getVirtualByCount(LatLng position, int count) {
+		com.google.android.gms.maps.model.Marker marker = null;
+		List<com.google.android.gms.maps.model.Marker> c = cache.get(count);
+		if (c != null && c.size() > 0) {
+			marker = c.remove(c.size() - 1);
+			marker.setPosition(position);
+			marker.setVisible(true);
+		} else {
+			BitmapDescriptor icon = provider.getIcon(this);
+			marker = provider.addMarker(SINGLE_INSTANCE.position(position).icon(icon));
+		}
+		return marker;
+	}
+
+	private void cacheVirtual() {
+		if (virtual != null) {
+			virtual.setVisible(false);
+			List<com.google.android.gms.maps.model.Marker> c = cache.get(lastCount);
+			if (c == null) {
+				c = new ArrayList<com.google.android.gms.maps.model.Marker>();
+				cache.put(lastCount, c);
+			}
+			c.add(virtual);
+			virtual = null;
+		}
+	}
+
+	static void clearCache() {
+		for (int i = 0; i < cache.size(); i++) {
+			List<com.google.android.gms.maps.model.Marker> c = cache.valueAt(i);
+			for (com.google.android.gms.maps.model.Marker v : c) {
+				v.remove();
+			}
+		}
+		cache.clear();
 	}
 
 	LatLng calculateCenter(LatLngBounds bounds) {
@@ -99,6 +148,11 @@ class ClusterMarker implements Marker {
 		if (virtual != null) {
 			virtual.remove();
 		}
+	}
+
+	void reset() {
+		markers.clear();
+		cacheVirtual();
 	}
 
 	private Object getSingleVisibleMarkerOrBounds() {
