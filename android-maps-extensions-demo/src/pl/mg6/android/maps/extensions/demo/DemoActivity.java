@@ -7,7 +7,6 @@ import java.util.List;
 
 import pl.mg6.android.maps.extensions.Circle;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
-import pl.mg6.android.maps.extensions.ClusteringSettings.IconProvider;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GoogleMap.InfoWindowAdapter;
 import pl.mg6.android.maps.extensions.GoogleMap.OnInfoWindowClickListener;
@@ -23,8 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -58,18 +55,7 @@ public class DemoActivity extends FragmentActivity {
 			}
 		});
 
-		BitmapDescriptor defaultIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
-		IconProvider iconProvider = new IconProvider() {
-
-			@Override
-			public BitmapDescriptor getIcon(int markersCount) {
-				if (markersCount > 10) {
-					return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
-				}
-				return null;
-			}
-		};
-		map.setClustering(new ClusteringSettings().defaultIcon(defaultIcon).iconProvider(iconProvider));
+		map.setClustering(new ClusteringSettings().iconProvider(new DemoIconProvider(getResources())));
 
 		map.setInfoWindowAdapter(new InfoWindowAdapter() {
 
@@ -140,6 +126,7 @@ public class DemoActivity extends FragmentActivity {
 		});
 
 		MarkerGenerator.addMarkersInPoland(map);
+		MarkerGenerator.addMarkersInWorld(map);
 	}
 
 	private void addCircles() {
@@ -151,18 +138,7 @@ public class DemoActivity extends FragmentActivity {
 	}
 
 	public void onClusterClick(View view) {
-		BitmapDescriptor defaultIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-		IconProvider iconProvider = new IconProvider() {
-
-			@Override
-			public BitmapDescriptor getIcon(int markersCount) {
-				if (markersCount > 10) {
-					return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-				}
-				return null;
-			}
-		};
-		map.setClustering(new ClusteringSettings().defaultIcon(defaultIcon).iconProvider(iconProvider));
+		map.setClustering(new ClusteringSettings().iconProvider(new DemoIconProvider(getResources())));
 	}
 
 	public void onNormalClick(View view) {
