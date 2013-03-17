@@ -50,6 +50,8 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	private BitmapDescriptor defaultIcon;
 	private IconProvider iconProvider;
 
+	private SparseArray<BitmapDescriptor> iconCache = new SparseArray<BitmapDescriptor>();
+
 	private Set<ClusterMarker> refreshQueue = new HashSet<ClusterMarker>();
 	private boolean refreshPending;
 	private Handler refresher = new Handler(new Callback() {
@@ -178,12 +180,15 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	}
 
 	BitmapDescriptor getIcon(int markersCount) {
-		BitmapDescriptor icon = null;
-		if (iconProvider != null) {
-			icon = iconProvider.getIcon(markersCount);
-		}
+		BitmapDescriptor icon = iconCache.get(markersCount);
 		if (icon == null) {
-			icon = defaultIcon;
+			if (iconProvider != null) {
+				icon = iconProvider.getIcon(markersCount);
+			}
+			if (icon == null) {
+				icon = defaultIcon;
+			}
+			iconCache.put(markersCount, icon);
 		}
 		return icon;
 	}
@@ -240,7 +245,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			marker.setVisible(true);
 		} else {
 			BitmapDescriptor icon = getIcon(markersCount);
-			marker = provider.addMarker(markerOptions.position(position).icon(icon));
+			marker = provider.addMarker(markerOptions.position(position).icon(icon).anchor(0.5f, 0.5f));
 		}
 		return marker;
 	}
