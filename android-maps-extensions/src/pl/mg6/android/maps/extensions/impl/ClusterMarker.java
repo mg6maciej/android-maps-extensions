@@ -29,15 +29,14 @@ class ClusterMarker implements Marker {
 
 	private int lastCount = -1;
 
-	private GridClusteringStrategy provider;
+	private BaseClusteringStrategy strategy;
 
 	private com.google.android.gms.maps.model.Marker virtual;
 
 	private List<DelegatingMarker> markers = new ArrayList<DelegatingMarker>();
 
-	public ClusterMarker(int clusterId, GridClusteringStrategy provider) {
-		this.clusterId = clusterId;
-		this.provider = provider;
+	public ClusterMarker(BaseClusteringStrategy strategy) {
+		this.strategy = strategy;
 	}
 
 	int getClusterId() {
@@ -77,7 +76,7 @@ class ClusterMarker implements Marker {
 				if (virtual == null || lastCount != count) {
 					cacheVirtual();
 					lastCount = count;
-					virtual = provider.getVirtualByCount(position, count);
+					virtual = strategy.getFromCacheOrCreate(count, position);
 				} else {
 					virtual.setPosition(position);
 					virtual.setVisible(true);
@@ -92,8 +91,10 @@ class ClusterMarker implements Marker {
 	}
 
 	private void cacheVirtual() {
-		provider.cacheVirtual(virtual, lastCount);
-		virtual = null;
+		if (virtual != null) {
+			strategy.putInCache(virtual, lastCount);
+			virtual = null;
+		}
 	}
 
 	LatLng calculateCenter(LatLngBounds bounds) {

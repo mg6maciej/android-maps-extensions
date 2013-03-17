@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Set;
 
 import pl.mg6.android.maps.extensions.ClusteringSettings;
-import pl.mg6.android.maps.extensions.ClusteringSettings.IconProvider;
 import pl.mg6.android.maps.extensions.Marker;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -31,26 +30,15 @@ import android.os.Message;
 import android.util.SparseArray;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-class GridClusteringStrategy implements ClusteringStrategy {
+class GridClusteringStrategy extends BaseClusteringStrategy {
 
-	private MarkerOptions markerOptions = new MarkerOptions();
-
-	private GoogleMap provider;
 	private Map<DelegatingMarker, ClusterMarker> markers;
 	private double clusterSize;
 
 	private SparseArray<ClusterMarker> clusters = new SparseArray<ClusterMarker>();
 	private List<ClusterMarker> cache = new ArrayList<ClusterMarker>();
-	private SparseArray<List<com.google.android.gms.maps.model.Marker>> virualMarkersCache = new SparseArray<List<com.google.android.gms.maps.model.Marker>>();
-
-	private BitmapDescriptor defaultIcon;
-	private IconProvider iconProvider;
-
-	private SparseArray<BitmapDescriptor> iconCache = new SparseArray<BitmapDescriptor>();
 
 	private Set<ClusterMarker> refreshQueue = new HashSet<ClusterMarker>();
 	private boolean refreshPending;
@@ -65,15 +53,13 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		}
 	});
 
-	public GridClusteringStrategy(ClusteringSettings settings, GoogleMap provider, List<DelegatingMarker> markers) {
-		this.defaultIcon = settings.getDefaultIcon();
-		this.iconProvider = settings.getIconProvider();
-		this.provider = provider;
+	public GridClusteringStrategy(ClusteringSettings settings, GoogleMap realMap, List<DelegatingMarker> markers) {
+		super(settings, realMap);
 		this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
 		for (DelegatingMarker m : markers) {
 			this.markers.put(m, null);
 		}
-		this.clusterSize = calculateClusterSize(provider.getCameraPosition().zoom);
+		this.clusterSize = calculateClusterSize(realMap.getCameraPosition().zoom);
 		recalculate();
 	}
 
@@ -83,13 +69,13 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			ClusterMarker cluster = clusters.valueAt(i);
 			cluster.cleanup();
 		}
-		clearCache();
 		for (DelegatingMarker marker : markers.keySet()) {
 			if (marker.isVisible()) {
 				marker.changeVisible(true);
 			}
 		}
 		refresher.removeMessages(0);
+		super.cleanup();
 	}
 
 	@Override
@@ -160,10 +146,10 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		if (cluster == null) {
 			if (cache.size() > 0) {
 				cluster = cache.remove(cache.size() - 1);
-				cluster.setClusterId(clusterId);
 			} else {
-				cluster = new ClusterMarker(clusterId, this);
+				cluster = new ClusterMarker(this);
 			}
+			cluster.setClusterId(clusterId);
 			clusters.put(clusterId, cluster);
 		}
 		return cluster;
@@ -173,24 +159,6 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
 		ClusterMarker cluster = markers.get(marker);
 		refresh(cluster);
-	}
-
-	com.google.android.gms.maps.model.Marker addMarker(MarkerOptions options) {
-		return provider.addMarker(options);
-	}
-
-	BitmapDescriptor getIcon(int markersCount) {
-		BitmapDescriptor icon = iconCache.get(markersCount);
-		if (icon == null) {
-			if (iconProvider != null) {
-				icon = iconProvider.getIcon(markersCount);
-			}
-			if (icon == null) {
-				icon = defaultIcon;
-			}
-			iconCache.put(markersCount, icon);
-		}
-		return icon;
 	}
 
 	private void refresh(ClusterMarker cluster) {
@@ -234,41 +202,5 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	private double calculateClusterSize(float zoom) {
 		return (1 << ((int) (23.5f - zoom))) / 100000.0;
-	}
-
-	com.google.android.gms.maps.model.Marker getVirtualByCount(LatLng position, int markersCount) {
-		com.google.android.gms.maps.model.Marker marker = null;
-		List<com.google.android.gms.maps.model.Marker> c = virualMarkersCache.get(markersCount);
-		if (c != null && c.size() > 0) {
-			marker = c.remove(c.size() - 1);
-			marker.setPosition(position);
-			marker.setVisible(true);
-		} else {
-			BitmapDescriptor icon = getIcon(markersCount);
-			marker = provider.addMarker(markerOptions.position(position).icon(icon).anchor(0.5f, 0.5f));
-		}
-		return marker;
-	}
-
-	void cacheVirtual(com.google.android.gms.maps.model.Marker virtual, int markersCount) {
-		if (virtual != null) {
-			virtual.setVisible(false);
-			List<com.google.android.gms.maps.model.Marker> c = virualMarkersCache.get(markersCount);
-			if (c == null) {
-				c = new ArrayList<com.google.android.gms.maps.model.Marker>();
-				virualMarkersCache.put(markersCount, c);
-			}
-			c.add(virtual);
-		}
-	}
-
-	private void clearCache() {
-		for (int i = 0; i < virualMarkersCache.size(); i++) {
-			List<com.google.android.gms.maps.model.Marker> c = virualMarkersCache.valueAt(i);
-			for (com.google.android.gms.maps.model.Marker v : c) {
-				v.remove();
-			}
-		}
-		virualMarkersCache.clear();
 	}
 }
