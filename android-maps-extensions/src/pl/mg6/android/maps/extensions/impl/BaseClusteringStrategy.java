@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.mg6.android.maps.extensions.ClusteringSettings;
-import pl.mg6.android.maps.extensions.ClusteringSettings.IconProvider;
+import pl.mg6.android.maps.extensions.ClusteringSettings.IconDataProvider;
 import android.util.SparseArray;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -34,15 +34,13 @@ abstract class BaseClusteringStrategy implements ClusteringStrategy {
 
 	private SparseArray<List<Marker>> markersCache = new SparseArray<List<Marker>>();
 
-	private BitmapDescriptor defaultIcon;
-	private IconProvider iconProvider;
-	private SparseArray<BitmapDescriptor> iconCache = new SparseArray<BitmapDescriptor>();
+	private IconDataProvider iconDataProvider;
+	private SparseArray<IconData> iconDataCache = new SparseArray<IconData>();
 
 	private GoogleMap provider;
 
 	public BaseClusteringStrategy(ClusteringSettings settings, GoogleMap realMap) {
-		this.defaultIcon = settings.getDefaultIcon();
-		this.iconProvider = settings.getIconProvider();
+		this.iconDataProvider = settings.getIconDataProvider();
 		this.provider = realMap;
 	}
 
@@ -59,24 +57,20 @@ abstract class BaseClusteringStrategy implements ClusteringStrategy {
 			marker.setPosition(position);
 			marker.setVisible(true);
 		} else {
-			BitmapDescriptor icon = getIcon(markersCount);
-			marker = provider.addMarker(markerOptions.position(position).icon(icon).anchor(0.5f, 0.5f));
+			IconData iconData = getIconData(markersCount);
+			marker = provider.addMarker(markerOptions.position(position).icon(iconData.icon).anchor(iconData.horizAnchor, iconData.vertAnchor));
 		}
 		return marker;
 	}
 
-	private BitmapDescriptor getIcon(int markersCount) {
-		BitmapDescriptor icon = iconCache.get(markersCount);
-		if (icon == null) {
-			if (iconProvider != null) {
-				icon = iconProvider.getIcon(markersCount);
-			}
-			if (icon == null) {
-				icon = defaultIcon;
-			}
-			iconCache.put(markersCount, icon);
+	private IconData getIconData(int markersCount) {
+		IconData iconData = iconDataCache.get(markersCount);
+		if (iconData == null) {
+			MarkerOptions markerOptions = iconDataProvider.getIconData(markersCount);
+			iconData = new IconData(markerOptions);
+			iconDataCache.put(markersCount, iconData);
 		}
-		return icon;
+		return iconData;
 	}
 
 	void putInCache(Marker virtual, int markersCount) {
@@ -97,5 +91,20 @@ abstract class BaseClusteringStrategy implements ClusteringStrategy {
 			}
 		}
 		markersCache.clear();
+	}
+
+	private static class IconData {
+
+		private BitmapDescriptor icon;
+
+		private float horizAnchor;
+
+		private float vertAnchor;
+
+		private IconData(MarkerOptions markerOptions) {
+			icon = markerOptions.getIcon();
+			horizAnchor = markerOptions.getAnchorU();
+			vertAnchor = markerOptions.getAnchorV();
+		}
 	}
 }

@@ -1,6 +1,6 @@
 package pl.mg6.android.maps.extensions.demo;
 
-import pl.mg6.android.maps.extensions.ClusteringSettings.IconProvider;
+import pl.mg6.android.maps.extensions.ClusteringSettings.IconDataProvider;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -13,8 +13,9 @@ import android.graphics.Rect;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class DemoIconProvider implements IconProvider {
+public class DemoIconProvider implements IconDataProvider {
 
 	private static final int[] res = { R.drawable.m1, R.drawable.m2, R.drawable.m3, R.drawable.m4, R.drawable.m5 };
 
@@ -22,23 +23,23 @@ public class DemoIconProvider implements IconProvider {
 
 	private Bitmap[] baseBitmaps;
 
-	private Paint paint;
+	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private Rect bounds = new Rect();
+
+	private MarkerOptions markerOptions = new MarkerOptions().anchor(0.5f, 0.5f);
 
 	public DemoIconProvider(Resources resources) {
 		baseBitmaps = new Bitmap[res.length];
 		for (int i = 0; i < res.length; i++) {
 			baseBitmaps[i] = BitmapFactory.decodeResource(resources, res[i]);
 		}
-		paint = new Paint();
-		paint.setAntiAlias(true);
 		paint.setColor(Color.WHITE);
 		paint.setTextAlign(Align.CENTER);
 		paint.setTextSize(resources.getDimension(R.dimen.text_size));
 	}
 
 	@Override
-	public BitmapDescriptor getIcon(int markersCount) {
+	public MarkerOptions getIconData(int markersCount) {
 		Bitmap base;
 		int i = 0;
 		do {
@@ -55,6 +56,7 @@ public class DemoIconProvider implements IconProvider {
 		Canvas canvas = new Canvas(bitmap);
 		canvas.drawText(text, x, y, paint);
 
-		return BitmapDescriptorFactory.fromBitmap(bitmap);
+		BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
+		return markerOptions.icon(icon);
 	}
 }

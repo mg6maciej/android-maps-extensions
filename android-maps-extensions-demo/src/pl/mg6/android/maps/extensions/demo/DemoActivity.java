@@ -55,7 +55,7 @@ public class DemoActivity extends FragmentActivity {
 			}
 		});
 
-		map.setClustering(new ClusteringSettings().iconProvider(new DemoIconProvider(getResources())));
+		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())));
 
 		map.setInfoWindowAdapter(new InfoWindowAdapter() {
 
@@ -138,7 +138,7 @@ public class DemoActivity extends FragmentActivity {
 	}
 
 	public void onClusterClick(View view) {
-		map.setClustering(new ClusteringSettings().iconProvider(new DemoIconProvider(getResources())));
+		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())));
 	}
 
 	public void onNormalClick(View view) {

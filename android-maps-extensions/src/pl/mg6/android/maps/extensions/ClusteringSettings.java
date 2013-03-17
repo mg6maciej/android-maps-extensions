@@ -15,36 +15,25 @@
  */
 package pl.mg6.android.maps.extensions;
 
-import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ClusteringSettings {
 
 	private boolean enabled = true;
 
-	private BitmapDescriptor defaultIcon;
-
-	private IconProvider iconProvider;
-
-	public ClusteringSettings defaultIcon(BitmapDescriptor defaultIcon) {
-		this.defaultIcon = defaultIcon;
-		return this;
-	}
+	private IconDataProvider iconDataProvider;
 
 	public ClusteringSettings enabled(boolean enabled) {
 		this.enabled = enabled;
 		return this;
 	}
 
-	public BitmapDescriptor getDefaultIcon() {
-		return defaultIcon;
+	public IconDataProvider getIconDataProvider() {
+		return iconDataProvider;
 	}
 
-	public IconProvider getIconProvider() {
-		return iconProvider;
-	}
-
-	public ClusteringSettings iconProvider(IconProvider iconProvider) {
-		this.iconProvider = iconProvider;
+	public ClusteringSettings iconDataProvider(IconDataProvider iconDataProvider) {
+		this.iconDataProvider = iconDataProvider;
 		return this;
 	}
 
@@ -52,8 +41,8 @@ public class ClusteringSettings {
 		return enabled;
 	}
 
-	public interface IconProvider {
+	public interface IconDataProvider {
 
-		BitmapDescriptor getIcon(int markersCount);
+		MarkerOptions getIconData(int markersCount);
 	}
 }
