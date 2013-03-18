@@ -46,6 +46,7 @@ public class LazyMarker {
 		}
 	}
 
+	@Deprecated
 	public String getId() {
 		createMarker();
 		return marker.getId();
