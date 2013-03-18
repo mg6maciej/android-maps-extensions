@@ -20,31 +20,39 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-class LazyMarker {
-	
-	Marker marker;
+public class LazyMarker {
+
+	public interface OnMarkerCreateListener {
+
+		void onMarkerCreate(LazyMarker marker);
+	}
+
+	private Marker marker;
 	private GoogleMap map;
 	private MarkerOptions markerOptions;
+	private OnMarkerCreateListener listener;
 
 	public LazyMarker(GoogleMap map, MarkerOptions options) {
+		this(map, options, null);
+	}
+
+	public LazyMarker(GoogleMap map, MarkerOptions options, OnMarkerCreateListener listener) {
 		if (options.isVisible()) {
-			marker = map.addMarker(options);
+			createMarker(map, options, listener);
 		} else {
 			this.map = map;
-			this.markerOptions = new MarkerOptions();
-			this.markerOptions.anchor(options.getAnchorU(), options.getAnchorV());
-			this.markerOptions.draggable(options.isDraggable());
-			this.markerOptions.icon(options.getIcon());
-			this.markerOptions.position(options.getPosition());
-			this.markerOptions.snippet(options.getSnippet());
-			this.markerOptions.title(options.getTitle());
-			this.markerOptions.visible(false);
+			this.markerOptions = copy(options);
+			this.listener = listener;
 		}
 	}
 
 	public String getId() {
 		createMarker();
 		return marker.getId();
+	}
+
+	public Marker getMarker() {
+		return marker;
 	}
 
 	public LatLng getPosition() {
@@ -108,6 +116,7 @@ class LazyMarker {
 		} else {
 			map = null;
 			markerOptions = null;
+			listener = null;
 		}
 	}
 
@@ -157,12 +166,32 @@ class LazyMarker {
 			marker.showInfoWindow();
 		}
 	}
-	
+
 	private void createMarker() {
 		if (marker == null) {
-			marker = map.addMarker(markerOptions);
+			createMarker(map, markerOptions, listener);
 			map = null;
 			markerOptions = null;
+			listener = null;
 		}
+	}
+
+	private void createMarker(GoogleMap map, MarkerOptions options, OnMarkerCreateListener listener) {
+		marker = map.addMarker(options);
+		if (listener != null) {
+			listener.onMarkerCreate(this);
+		}
+	}
+
+	private MarkerOptions copy(MarkerOptions options) {
+		MarkerOptions copy = new MarkerOptions();
+		copy.anchor(options.getAnchorU(), options.getAnchorV());
+		copy.draggable(options.isDraggable());
+		copy.icon(options.getIcon());
+		copy.position(options.getPosition());
+		copy.snippet(options.getSnippet());
+		copy.title(options.getTitle());
+		copy.visible(options.isVisible());
+		return copy;
 	}
 }

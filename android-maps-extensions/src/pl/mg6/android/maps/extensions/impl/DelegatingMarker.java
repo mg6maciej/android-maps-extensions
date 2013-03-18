@@ -166,6 +166,5 @@ class DelegatingMarker implements Marker {
 
 	void changeVisible(boolean visible) {
 		real.setVisible(this.visible && visible);
-		map.onVisibilityChange(this, visible);
 	}
 }
