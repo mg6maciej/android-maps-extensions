@@ -476,7 +476,9 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 		@Override
 		public void onMarkerDragEnd(com.google.android.gms.maps.model.Marker marker) {
-			clusteringStrategy.onPositionChange(markers.get(marker));
+			LazyMarker lazy = createdMarkers.get(marker);
+			DelegatingMarker delegating = markers.get(lazy);
+			clusteringStrategy.onPositionChange(delegating);
 			if (onMarkerDragListener != null) {
 				onMarkerDragListener.onMarkerDragEnd(map(marker));
 			}
