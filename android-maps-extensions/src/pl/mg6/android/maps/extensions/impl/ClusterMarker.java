@@ -60,32 +60,26 @@ class ClusterMarker implements Marker {
 	}
 
 	void refresh() {
-		Object markerOrBounds = getSingleVisibleMarkerOrBounds();
-		if (markerOrBounds instanceof DelegatingMarker) {
+		int count = markers.size();
+		if (count == 0) {
 			cacheVirtual();
-			((DelegatingMarker) markerOrBounds).changeVisible(true);
+		} else if (count == 1) {
+			cacheVirtual();
+			markers.get(0).changeVisible(true);
 		} else {
-			if (markerOrBounds instanceof LatLngBounds) {
-				LatLng position = calculateCenter((LatLngBounds) markerOrBounds);
-				int count = 0;
-				for (DelegatingMarker m : markers) {
-					if (m.isVisible()) {
-						count++;
-					}
-				}
-				if (virtual == null || lastCount != count) {
-					cacheVirtual();
-					lastCount = count;
-					virtual = strategy.getFromCacheOrCreate(count, position);
-				} else {
-					virtual.setPosition(position);
-					virtual.setVisible(true);
-				}
-			} else {
-				cacheVirtual();
-			}
+			LatLngBounds.Builder builder = LatLngBounds.builder();
 			for (DelegatingMarker m : markers) {
+				builder.include(m.getPosition());
 				m.changeVisible(false);
+			}
+			LatLng position = calculateCenter(builder.build());
+			if (virtual == null || lastCount != count) {
+				cacheVirtual();
+				lastCount = count;
+				virtual = strategy.getFromCacheOrCreate(count, position);
+			} else {
+				virtual.setPosition(position);
+				virtual.setVisible(true);
 			}
 		}
 	}
@@ -115,29 +109,6 @@ class ClusterMarker implements Marker {
 	void reset() {
 		markers.clear();
 		cacheVirtual();
-	}
-
-	private Object getSingleVisibleMarkerOrBounds() {
-		DelegatingMarker marker = null;
-		LatLngBounds.Builder builder = null;
-		for (DelegatingMarker m : markers) {
-			if (m.isVisible()) {
-				if (builder != null) {
-					builder.include(m.getPosition());
-				} else if (marker != null) {
-					builder = LatLngBounds.builder();
-					builder.include(marker.getPosition());
-					builder.include(m.getPosition());
-				} else {
-					marker = m;
-				}
-			}
-		}
-		if (builder != null) {
-			return builder.build();
-		} else {
-			return marker;
-		}
 	}
 
 	@Override

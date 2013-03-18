@@ -34,8 +34,8 @@ public interface Marker {
 	String getId();
 
 	/**
-	 * @return list of marker some of which might not be visible if isCluster()
-	 *         returns true, null if isCluster() returns false
+	 * @return list of markers inside cluster when isCluster() returns true,
+	 *         null otherwise
 	 */
 	List<Marker> getMarkers();
 

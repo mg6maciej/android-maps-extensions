@@ -57,7 +57,9 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		super(settings, realMap);
 		this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
 		for (DelegatingMarker m : markers) {
-			this.markers.put(m, null);
+			if (m.isVisible()) {
+				this.markers.put(m, null);
+			}
 		}
 		this.clusterSize = calculateClusterSize(realMap.getCameraPosition().zoom);
 		recalculate();
@@ -89,6 +91,9 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	@Override
 	public void onAdd(DelegatingMarker marker) {
+		if (!marker.isVisible()) {
+			return;
+		}
 		addMarker(marker, true);
 	}
 
@@ -105,6 +110,9 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	@Override
 	public void onRemove(DelegatingMarker marker) {
+		if (!marker.isVisible()) {
+			return;
+		}
 		ClusterMarker cluster = markers.remove(marker);
 		cluster.remove(marker);
 		refresh(cluster);
@@ -112,6 +120,9 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	@Override
 	public void onPositionChange(DelegatingMarker marker) {
+		if (!marker.isVisible()) {
+			return;
+		}
 		ClusterMarker oldCluster = markers.get(marker);
 		if (isMarkerInCluster(marker, oldCluster)) {
 			if (marker.isVisible()) {
@@ -157,8 +168,14 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	@Override
 	public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
-		ClusterMarker cluster = markers.get(marker);
-		refresh(cluster);
+		if (visible) {
+			addMarker(marker, true);
+		} else {
+			ClusterMarker cluster = markers.remove(marker);
+			cluster.remove(marker);
+			refresh(cluster);
+			marker.changeVisible(false);
+		}
 	}
 
 	private void refresh(ClusterMarker cluster) {
