@@ -83,9 +83,6 @@
       android:name=".RawMapViewDemoActivity"
       android:label="@string/raw_mapview_demo"/>
     <activity
-      android:name=".RetainMapActivity"
-      android:label="@string/retain_map"/>
-    <activity
       android:name=".MultiMapDemoActivity"
       android:label="@string/multi_map_demo"/>
   </application>

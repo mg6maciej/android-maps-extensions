@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2012 The Android Open Source Project
+ * Original work Copyright (C) 2012 The Android Open Source Project
+ * Modifications Copyright (C) 2013 Maciej Górski
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2012 The Android Open Source Project
+     Original work Copyright (C) 2012 The Android Open Source Project
+     Modifications Copyright (C) 2013 Maciej Górski
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -78,8 +79,6 @@
   <string name="raw_mapview_demo">Raw MapView</string>
   <string name="raw_mapview_description">Demonstrates how to use a raw MapView.</string>
   <string name="reset_map">Reset</string>
-  <string name="retain_map">Retain map</string>
-  <string name="retain_map_description">Demonstrates how to reuse a MapFragment.</string>
   <string name="right_arrow">\u2192</string>
   <string name="satellite">Satellite</string>
   <string name="scroll">Scroll Gestures</string>

@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2012 The Android Open Source Project
+ * Original work Copyright (C) 2012 The Android Open Source Project
+ * Modifications Copyright (C) 2013 Maciej Górski
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -123,8 +124,6 @@ public final class MainActivity extends ListActivity {
                     OptionsDemoActivity.class),
             new DemoDetails(R.string.multi_map_demo, R.string.multi_map_description,
                     MultiMapDemoActivity.class),
-            new DemoDetails(R.string.retain_map, R.string.retain_map_description,
-                    RetainMapActivity.class),
             new DemoDetails(R.string.raw_mapview_demo, R.string.raw_mapview_description,
                     RawMapViewDemoActivity.class),
             new DemoDetails(R.string.programmatic_demo, R.string.programmatic_description,
