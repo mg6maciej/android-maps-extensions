@@ -50,7 +50,8 @@ public class DelegatingGoogleMap implements GoogleMap {
 	private OnCameraChangeListener onCameraChangeListener;
 	private OnMarkerDragListener onMarkerDragListener;
 
-	private Map<com.google.android.gms.maps.model.Marker, DelegatingMarker> markers;
+	private Map<LazyMarker, DelegatingMarker> markers;
+	private Map<com.google.android.gms.maps.model.Marker, DelegatingMarker> createdMarkers;
 	private Map<com.google.android.gms.maps.model.Polyline, Polyline> polylines;
 	private Map<com.google.android.gms.maps.model.Polygon, Polygon> polygons;
 	private Map<com.google.android.gms.maps.model.Circle, Circle> circles;
@@ -61,7 +62,8 @@ public class DelegatingGoogleMap implements GoogleMap {
 
 	public DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
 		this.real = real;
-		this.markers = new HashMap<com.google.android.gms.maps.model.Marker, DelegatingMarker>();
+		this.markers = new HashMap<LazyMarker, DelegatingMarker>();
+		this.createdMarkers = new HashMap<com.google.android.gms.maps.model.Marker, DelegatingMarker>();
 		this.polylines = new HashMap<com.google.android.gms.maps.model.Polyline, Polyline>();
 		this.polygons = new HashMap<com.google.android.gms.maps.model.Polygon, Polygon>();
 		this.circles = new HashMap<com.google.android.gms.maps.model.Circle, Circle>();
@@ -92,7 +94,7 @@ public class DelegatingGoogleMap implements GoogleMap {
 	public Marker addMarker(MarkerOptions markerOptions) {
 		boolean visible = markerOptions.isVisible();
 		markerOptions.visible(false);
-		com.google.android.gms.maps.model.Marker realMarker = real.addMarker(markerOptions);
+		LazyMarker realMarker = new LazyMarker(real, markerOptions);
 		markerOptions.visible(visible);
 		DelegatingMarker marker = new DelegatingMarker(realMarker, this);
 		markers.put(realMarker, marker);
@@ -389,6 +391,10 @@ public class DelegatingGoogleMap implements GoogleMap {
 	void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
 		clusteringStrategy.onVisibilityChangeRequest(marker, visible);
 	}
+	
+	void onVisibilityChange(DelegatingMarker marker, boolean visible) {
+		createdMarkers.put(marker.getReal().marker, marker);
+	}
 
 	private class DelegatingOnCameraChangeListener implements com.google.android.gms.maps.GoogleMap.OnCameraChangeListener {
 
@@ -478,6 +484,6 @@ public class DelegatingGoogleMap implements GoogleMap {
 		if (cluster != null) {
 			return cluster;
 		}
-		return markers.get(marker);
+		return createdMarkers.get(marker);
 	}
 }

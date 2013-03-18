@@ -23,14 +23,14 @@ import com.google.android.gms.maps.model.LatLng;
 
 class DelegatingMarker implements Marker {
 
-	private com.google.android.gms.maps.model.Marker real;
+	private LazyMarker real;
 	private DelegatingGoogleMap map;
 
 	private Object data;
 
 	private boolean visible;
 
-	DelegatingMarker(com.google.android.gms.maps.model.Marker real, DelegatingGoogleMap map) {
+	DelegatingMarker(LazyMarker real, DelegatingGoogleMap map) {
 		this.real = real;
 		this.map = map;
 
@@ -160,11 +160,12 @@ class DelegatingMarker implements Marker {
 		return real.toString();
 	}
 
-	com.google.android.gms.maps.model.Marker getReal() {
+	LazyMarker getReal() {
 		return real;
 	}
 
 	void changeVisible(boolean visible) {
 		real.setVisible(this.visible && visible);
+		map.onVisibilityChange(this, visible);
 	}
 }
