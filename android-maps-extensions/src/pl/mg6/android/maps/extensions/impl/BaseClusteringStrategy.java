@@ -37,11 +37,11 @@ abstract class BaseClusteringStrategy implements ClusteringStrategy {
 	private IconDataProvider iconDataProvider;
 	private SparseArray<IconData> iconDataCache = new SparseArray<IconData>();
 
-	private GoogleMap provider;
+	private GoogleMap map;
 
-	public BaseClusteringStrategy(ClusteringSettings settings, GoogleMap realMap) {
+	public BaseClusteringStrategy(ClusteringSettings settings, GoogleMap map) {
 		this.iconDataProvider = settings.getIconDataProvider();
-		this.provider = realMap;
+		this.map = map;
 	}
 
 	@Override
@@ -51,14 +51,14 @@ abstract class BaseClusteringStrategy implements ClusteringStrategy {
 
 	Marker getFromCacheOrCreate(int markersCount, LatLng position) {
 		Marker marker = null;
-		List<Marker> c = markersCache.get(markersCount);
-		if (c != null && c.size() > 0) {
-			marker = c.remove(c.size() - 1);
+		List<Marker> cacheEntry = markersCache.get(markersCount);
+		if (cacheEntry != null && cacheEntry.size() > 0) {
+			marker = cacheEntry.remove(cacheEntry.size() - 1);
 			marker.setPosition(position);
 			marker.setVisible(true);
 		} else {
 			IconData iconData = getIconData(markersCount);
-			marker = provider.addMarker(markerOptions.position(position).icon(iconData.icon).anchor(iconData.horizAnchor, iconData.vertAnchor));
+			marker = map.addMarker(markerOptions.position(position).icon(iconData.icon).anchor(iconData.horizAnchor, iconData.vertAnchor));
 		}
 		return marker;
 	}
@@ -73,21 +73,21 @@ abstract class BaseClusteringStrategy implements ClusteringStrategy {
 		return iconData;
 	}
 
-	void putInCache(Marker virtual, int markersCount) {
-		virtual.setVisible(false);
-		List<Marker> c = markersCache.get(markersCount);
-		if (c == null) {
-			c = new ArrayList<Marker>();
-			markersCache.put(markersCount, c);
+	void putInCache(Marker marker, int markersCount) {
+		marker.setVisible(false);
+		List<Marker> cacheEntry = markersCache.get(markersCount);
+		if (cacheEntry == null) {
+			cacheEntry = new ArrayList<Marker>();
+			markersCache.put(markersCount, cacheEntry);
 		}
-		c.add(virtual);
+		cacheEntry.add(marker);
 	}
 
 	private void clearCache() {
 		for (int i = 0; i < markersCache.size(); i++) {
-			List<com.google.android.gms.maps.model.Marker> c = markersCache.valueAt(i);
-			for (com.google.android.gms.maps.model.Marker v : c) {
-				v.remove();
+			List<Marker> cacheEntry = markersCache.valueAt(i);
+			for (Marker marker : cacheEntry) {
+				marker.remove();
 			}
 		}
 		markersCache.clear();

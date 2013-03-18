@@ -28,7 +28,8 @@ import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.Polygon;
 import pl.mg6.android.maps.extensions.Polyline;
 import pl.mg6.android.maps.extensions.TileOverlay;
-import pl.mg6.android.maps.extensions.impl.LazyMarker.OnMarkerCreateListener;
+import pl.mg6.android.maps.extensions.lazy.LazyMarker;
+import pl.mg6.android.maps.extensions.lazy.LazyMarker.OnMarkerCreateListener;
 import android.location.Location;
 import android.view.View;
 

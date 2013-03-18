@@ -18,6 +18,7 @@ package pl.mg6.android.maps.extensions.impl;
 import java.util.List;
 
 import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.lazy.LazyMarker;
 
 import com.google.android.gms.maps.model.LatLng;
 
