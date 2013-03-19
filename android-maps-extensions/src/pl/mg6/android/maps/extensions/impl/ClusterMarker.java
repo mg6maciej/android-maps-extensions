@@ -137,12 +137,12 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public String getSnippet() {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 	@Override
 	public String getTitle() {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 	@Override
@@ -160,7 +160,7 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public boolean isDraggable() {
-		throw new UnsupportedOperationException();
+		return false;
 	}
 
 	@Override
@@ -173,7 +173,10 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public boolean isVisible() {
-		throw new UnsupportedOperationException();
+		if (virtual != null) {
+			return virtual.isVisible();
+		}
+		return false;
 	}
 
 	@Override
