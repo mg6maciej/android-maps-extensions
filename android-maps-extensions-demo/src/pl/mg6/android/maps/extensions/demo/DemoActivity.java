@@ -30,6 +30,7 @@ import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -37,14 +38,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.LatLngBounds.Builder;
 
 public class DemoActivity extends FragmentActivity {
 
 	private GoogleMap map;
+
+	private MutableData[] dataArray = { new MutableData(6, new LatLng(-50, 0)), new MutableData(28, new LatLng(-52, 1)),
+			new MutableData(496, new LatLng(-51, -2)), };
+	private Handler handler = new Handler();
+	private Runnable dataUpdater = new Runnable() {
+
+		@Override
+		public void run() {
+			for (MutableData data : dataArray) {
+				data.value = 7 + 3 * data.value;
+			}
+			onDataUpdate();
+			handler.postDelayed(this, 1000);
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +93,11 @@ public class DemoActivity extends FragmentActivity {
 
 		map.setInfoWindowAdapter(new InfoWindowAdapter() {
 
-			private TextView tv = new TextView(DemoActivity.this);
+			private TextView tv;
+			{
+				tv = new TextView(DemoActivity.this);
+				tv.setTextColor(Color.BLACK);
+			}
 
 			private Collator collator = Collator.getInstance();
 			private Comparator<Marker> comparator = new Comparator<Marker>() {
@@ -107,19 +130,32 @@ public class DemoActivity extends FragmentActivity {
 					String text = "";
 					while (i < 3 && markers.size() > 0) {
 						Marker m = Collections.min(markers, comparator);
-						text += m.getTitle() + "\n";
+						String title = m.getTitle();
+						if (title == null) {
+							break;
+						}
+						text += title + "\n";
 						markers.remove(m);
 						i++;
 					}
-					if (markers.size() > 0) {
+					if (text.length() == 0) {
+						text = "Markers with mutable data";
+					} else if (markers.size() > 0) {
 						text += "and " + markers.size() + " more...";
 					} else {
 						text = text.substring(0, text.length() - 1);
 					}
-					tv.setTextColor(Color.BLACK);
 					tv.setText(text);
 					return tv;
+				} else {
+					Object data = marker.getData();
+					if (data instanceof MutableData) {
+						MutableData mutableData = (MutableData) data;
+						tv.setText("Value: " + mutableData.value);
+						return tv;
+					}
 				}
+
 				return null;
 			}
 		});
@@ -142,6 +178,31 @@ public class DemoActivity extends FragmentActivity {
 
 		MarkerGenerator.addMarkersInPoland(map);
 		MarkerGenerator.addMarkersInWorld(map);
+
+		BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+		for (MutableData data : dataArray) {
+			Marker m = map.addMarker(new MarkerOptions().position(data.position).icon(icon));
+			m.setData(data);
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		handler.post(dataUpdater);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		handler.removeCallbacks(dataUpdater);
+	}
+
+	private void onDataUpdate() {
+		Marker m = map.getMarkerShowingInfoWindow();
+		if (m != null && !m.isCluster() && m.getData() instanceof MutableData) {
+			m.showInfoWindow();
+		}
 	}
 
 	private void addCircles() {
@@ -158,5 +219,17 @@ public class DemoActivity extends FragmentActivity {
 
 	public void onNormalClick(View view) {
 		map.setClustering(new ClusteringSettings().enabled(false));
+	}
+
+	private static class MutableData {
+
+		private int value;
+
+		private LatLng position;
+
+		public MutableData(int value, LatLng position) {
+			this.value = value;
+			this.position = position;
+		}
 	}
 }
