@@ -49,6 +49,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	private com.google.android.gms.maps.GoogleMap real;
 
+	private InfoWindowAdapter infoWindowAdapter;
 	private OnCameraChangeListener onCameraChangeListener;
 	private OnMarkerDragListener onMarkerDragListener;
 
@@ -59,6 +60,8 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 	private Map<com.google.android.gms.maps.model.Circle, Circle> circles;
 	private Map<com.google.android.gms.maps.model.GroundOverlay, GroundOverlay> groundOverlays;
 	private Map<com.google.android.gms.maps.model.TileOverlay, TileOverlay> tileOverlays;
+
+	private Marker markerShowingInfoWindow;
 
 	private ClusteringStrategy clusteringStrategy = new NoClusteringStrategy();
 
@@ -72,6 +75,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 		this.groundOverlays = new HashMap<com.google.android.gms.maps.model.GroundOverlay, GroundOverlay>();
 		this.tileOverlays = new HashMap<com.google.android.gms.maps.model.TileOverlay, TileOverlay>();
 
+		real.setInfoWindowAdapter(new DelegatingInfoWindowAdapter());
 		real.setOnCameraChangeListener(new DelegatingOnCameraChangeListener());
 		real.setOnMarkerDragListener(new DelegatingOnMarkerDragListener());
 	}
@@ -182,6 +186,14 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 	}
 
 	@Override
+	public Marker getMarkerShowingInfoWindow() {
+		if (markerShowingInfoWindow != null && !markerShowingInfoWindow.isInfoWindowShown()) {
+			markerShowingInfoWindow = null;
+		}
+		return markerShowingInfoWindow;
+	}
+
+	@Override
 	public List<Polygon> getPolygons() {
 		return new ArrayList<Polygon>(polygons.values());
 	}
@@ -264,11 +276,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public void setInfoWindowAdapter(final InfoWindowAdapter infoWindowAdapter) {
-		com.google.android.gms.maps.GoogleMap.InfoWindowAdapter realInfoWindowAdapter = null;
-		if (infoWindowAdapter != null) {
-			realInfoWindowAdapter = new DelegatingInfoWindowAdapter(infoWindowAdapter);
-		}
-		real.setInfoWindowAdapter(realInfoWindowAdapter);
+		this.infoWindowAdapter = infoWindowAdapter;
 	}
 
 	@Override
@@ -413,20 +421,21 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	private class DelegatingInfoWindowAdapter implements com.google.android.gms.maps.GoogleMap.InfoWindowAdapter {
 
-		private InfoWindowAdapter infoWindowAdapter;
-
-		private DelegatingInfoWindowAdapter(InfoWindowAdapter infoWindowAdapter) {
-			this.infoWindowAdapter = infoWindowAdapter;
-		}
-
 		@Override
 		public View getInfoWindow(com.google.android.gms.maps.model.Marker marker) {
-			return infoWindowAdapter.getInfoWindow(map(marker));
+			markerShowingInfoWindow = map(marker);
+			if (infoWindowAdapter != null) {
+				return infoWindowAdapter.getInfoWindow(markerShowingInfoWindow);
+			}
+			return null;
 		}
 
 		@Override
 		public View getInfoContents(com.google.android.gms.maps.model.Marker marker) {
-			return infoWindowAdapter.getInfoContents(map(marker));
+			if (infoWindowAdapter != null) {
+				return infoWindowAdapter.getInfoContents(map(marker));
+			}
+			return null;
 		}
 	}
 

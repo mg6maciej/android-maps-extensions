@@ -113,7 +113,7 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public Object getData() {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 	@Deprecated
@@ -168,7 +168,7 @@ class ClusterMarker implements Marker {
 		if (virtual != null && virtual.isVisible()) {
 			return virtual.isInfoWindowShown();
 		}
-		throw new UnsupportedOperationException();
+		return false;
 	}
 
 	@Override

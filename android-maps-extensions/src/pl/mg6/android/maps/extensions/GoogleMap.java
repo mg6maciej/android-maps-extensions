@@ -75,6 +75,8 @@ public interface GoogleMap {
 
 	List<Marker> getMarkers();
 
+	Marker getMarkerShowingInfoWindow();
+
 	List<Polygon> getPolygons();
 
 	List<Polyline> getPolylines();
