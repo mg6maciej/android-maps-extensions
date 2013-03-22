@@ -28,7 +28,6 @@ import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
 import android.support.v4.util.LongSparseArray;
-import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
@@ -38,7 +37,7 @@ import com.google.android.gms.maps.model.VisibleRegion;
 
 class GridClusteringStrategy extends BaseClusteringStrategy {
 
-	private boolean addMarkersOutsideVisibleRegion;
+	private boolean addMarkersDynamically;
 	private GoogleMap map;
 	private Map<DelegatingMarker, ClusterMarker> markers;
 	private double clusterSize;
@@ -61,7 +60,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	public GridClusteringStrategy(ClusteringSettings settings, GoogleMap map, List<DelegatingMarker> markers) {
 		super(settings, map);
-		this.addMarkersOutsideVisibleRegion = settings.isAddMarkersOutsideVisibleRegion();
+		this.addMarkersDynamically = settings.isAddMarkersDynamically();
 		this.map = map;
 		this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
 		for (DelegatingMarker m : markers) {
@@ -89,7 +88,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		if (this.clusterSize != clusterSize) {
 			this.clusterSize = clusterSize;
 			recalculate();
-		} else if (!addMarkersOutsideVisibleRegion) {
+		} else if (addMarkersDynamically) {
 			addMarkersInVisibleRegion();
 		}
 	}
@@ -213,7 +212,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 			}
 		} else {
 			int[] bounds = null;
-			if (!addMarkersOutsideVisibleRegion) {
+			if (addMarkersDynamically) {
 				bounds = calculateVisibleRegion();
 			}
 			for (DelegatingMarker marker : markers.keySet()) {
@@ -222,7 +221,8 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 					LatLng position = marker.getPosition();
 					int y = (int) ((position.latitude + 90.0) / clusterSize);
 					int x = (int) ((position.longitude + 180.0) / clusterSize);
-					inVisibleRegion = bounds[0] <= y && y <= bounds[2] && (bounds[1] <= x && x <= bounds[3] || bounds[1] > bounds[3] && (bounds[1] <= x || x <= bounds[3]));
+					inVisibleRegion = bounds[0] <= y && y <= bounds[2]
+							&& (bounds[1] <= x && x <= bounds[3] || bounds[1] > bounds[3] && (bounds[1] <= x || x <= bounds[3]));
 				}
 				if (bounds == null || inVisibleRegion) {
 					addMarker(marker, false);

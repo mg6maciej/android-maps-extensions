@@ -19,19 +19,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ClusteringSettings {
 
-	private boolean addMarkersOutsideVisibleRegion;
+	private boolean addMarkersDynamically;
 
 	private boolean enabled = true;
 
 	private IconDataProvider iconDataProvider;
 
-	/**
-	 * use this setting only when there are not too many Markers (less than
-	 * 1000) and you want a better user experience; this will slow down
-	 * application greatly when used with 10000+ markers
-	 */
-	public ClusteringSettings addMarkersOutsideVisibleRegion(boolean addMarkersOutsideVisibleRegion) {
-		this.addMarkersOutsideVisibleRegion = addMarkersOutsideVisibleRegion;
+	public ClusteringSettings addMarkersDynamically(boolean addMarkersDynamically) {
+		this.addMarkersDynamically = addMarkersDynamically;
 		return this;
 	}
 
@@ -49,8 +44,8 @@ public class ClusteringSettings {
 		return this;
 	}
 
-	public boolean isAddMarkersOutsideVisibleRegion() {
-		return addMarkersOutsideVisibleRegion;
+	public boolean isAddMarkersDynamically() {
+		return addMarkersDynamically;
 	}
 
 	public boolean isEnabled() {
@@ -69,7 +64,7 @@ public class ClusteringSettings {
 		if (enabled != other.enabled) {
 			return false;
 		}
-		if (addMarkersOutsideVisibleRegion != other.addMarkersOutsideVisibleRegion) {
+		if (addMarkersDynamically != other.addMarkersDynamically) {
 			return false;
 		}
 		if (enabled == false && other.enabled == false) {
