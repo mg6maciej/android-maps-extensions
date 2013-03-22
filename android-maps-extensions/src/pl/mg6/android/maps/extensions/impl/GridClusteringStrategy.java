@@ -245,7 +245,6 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 				LatLng position = marker.getPosition();
 				int y = (int) ((position.latitude + 90.0) / clusterSize);
 				int x = (int) ((position.longitude + 180.0) / clusterSize);
-				Log.i("visible", "position: " + y + " " + x);
 				if (bounds[0] <= y && y <= bounds[2] && (bounds[1] <= x && x <= bounds[3] || bounds[1] > bounds[3] && (bounds[1] <= x || x <= bounds[3]))) {
 					addMarker(marker, true);
 				}
@@ -261,7 +260,6 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		int x1 = (int) ((bounds.southwest.longitude + 180.0) / clusterSize);
 		int y2 = (int) ((bounds.northeast.latitude + 90.0) / clusterSize);
 		int x2 = (int) ((bounds.northeast.longitude + 180.0) / clusterSize);
-		Log.i("visible", "region: " + y1 + " " + y2 + " " + x1 + " " + x2);
 		return new int[] { y1, x1, y2, x2 };
 	}
 
