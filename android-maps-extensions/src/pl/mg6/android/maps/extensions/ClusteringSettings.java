@@ -19,9 +19,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ClusteringSettings {
 
+	private boolean addMarkersOutsideVisibleRegion;
+
 	private boolean enabled = true;
 
 	private IconDataProvider iconDataProvider;
+
+	/**
+	 * use this setting only when there are not too many Markers (less than
+	 * 1000) and you want a better user experience; this will slow down
+	 * application greatly when used with 10000+ markers
+	 */
+	public ClusteringSettings addMarkersOutsideVisibleRegion(boolean addMarkersOutsideVisibleRegion) {
+		this.addMarkersOutsideVisibleRegion = addMarkersOutsideVisibleRegion;
+		return this;
+	}
 
 	public ClusteringSettings enabled(boolean enabled) {
 		this.enabled = enabled;
@@ -37,10 +49,14 @@ public class ClusteringSettings {
 		return this;
 	}
 
+	public boolean isAddMarkersOutsideVisibleRegion() {
+		return addMarkersOutsideVisibleRegion;
+	}
+
 	public boolean isEnabled() {
 		return enabled;
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -58,7 +74,7 @@ public class ClusteringSettings {
 		}
 		return iconDataProvider.equals(other.iconDataProvider);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		// TODO: implement, low priority
