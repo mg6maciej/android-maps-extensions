@@ -69,6 +69,9 @@ public class ClusteringSettings {
 		if (enabled != other.enabled) {
 			return false;
 		}
+		if (addMarkersOutsideVisibleRegion != other.addMarkersOutsideVisibleRegion) {
+			return false;
+		}
 		if (enabled == false && other.enabled == false) {
 			return true;
 		}
