@@ -89,7 +89,7 @@ public class DemoActivity extends FragmentActivity {
 			}
 		});
 
-		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())));
+		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())).addMarkersDynamically(true));
 
 		map.setInfoWindowAdapter(new InfoWindowAdapter() {
 
@@ -214,7 +214,7 @@ public class DemoActivity extends FragmentActivity {
 	}
 
 	public void onClusterClick(View view) {
-		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())));
+		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())).addMarkersDynamically(true));
 	}
 
 	public void onNormalClick(View view) {
