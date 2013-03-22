@@ -40,6 +40,30 @@ public class ClusteringSettings {
 	public boolean isEnabled() {
 		return enabled;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof ClusteringSettings)) {
+			return false;
+		}
+		ClusteringSettings other = (ClusteringSettings) o;
+		if (enabled != other.enabled) {
+			return false;
+		}
+		if (enabled == false && other.enabled == false) {
+			return true;
+		}
+		return iconDataProvider.equals(other.iconDataProvider);
+	}
+	
+	@Override
+	public int hashCode() {
+		// TODO: implement, low priority
+		return super.hashCode();
+	}
 
 	public interface IconDataProvider {
 

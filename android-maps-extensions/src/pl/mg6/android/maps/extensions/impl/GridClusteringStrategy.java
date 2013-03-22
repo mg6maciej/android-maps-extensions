@@ -71,11 +71,6 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 			ClusterMarker cluster = clusters.valueAt(i);
 			cluster.cleanup();
 		}
-		for (DelegatingMarker marker : markers.keySet()) {
-			if (marker.isVisible()) {
-				marker.changeVisible(true);
-			}
-		}
 		refresher.removeMessages(0);
 		super.cleanup();
 	}

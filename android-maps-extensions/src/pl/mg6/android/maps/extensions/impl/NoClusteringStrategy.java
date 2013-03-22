@@ -15,9 +15,19 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import java.util.List;
+
 import pl.mg6.android.maps.extensions.Marker;
 
 class NoClusteringStrategy implements ClusteringStrategy {
+
+	public NoClusteringStrategy(List<DelegatingMarker> markers) {
+		for (DelegatingMarker marker : markers) {
+			if (marker.isVisible()) {
+				marker.changeVisible(true);
+			}
+		}
+	}
 
 	@Override
 	public void cleanup() {

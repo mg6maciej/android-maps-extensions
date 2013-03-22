@@ -63,7 +63,8 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	private Marker markerShowingInfoWindow;
 
-	private ClusteringStrategy clusteringStrategy = new NoClusteringStrategy();
+	private ClusteringSettings clusteringSettings = new ClusteringSettings().enabled(false);
+	private ClusteringStrategy clusteringStrategy = new NoClusteringStrategy(new ArrayList<DelegatingMarker>());
 
 	public DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
 		this.real = real;
@@ -255,16 +256,17 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public void setClustering(ClusteringSettings clusteringSettings) {
-		if (clusteringSettings != null && clusteringSettings.isEnabled()) {
-			if (!(clusteringStrategy instanceof GridClusteringStrategy)) {
-				clusteringStrategy.cleanup();
-				ArrayList<DelegatingMarker> list = new ArrayList<DelegatingMarker>(markers.values());
+		if (clusteringSettings == null) {
+			clusteringSettings = new ClusteringSettings().enabled(false);
+		}
+		if (!this.clusteringSettings.equals(clusteringSettings)) {
+			this.clusteringSettings = clusteringSettings;
+			clusteringStrategy.cleanup();
+			ArrayList<DelegatingMarker> list = new ArrayList<DelegatingMarker>(markers.values());
+			if (clusteringSettings.isEnabled()) {
 				clusteringStrategy = new GridClusteringStrategy(clusteringSettings, real, list);
-			}
-		} else {
-			if (!(clusteringStrategy instanceof NoClusteringStrategy)) {
-				clusteringStrategy.cleanup();
-				clusteringStrategy = new NoClusteringStrategy();
+			} else {
+				clusteringStrategy = new NoClusteringStrategy(list);
 			}
 		}
 	}
