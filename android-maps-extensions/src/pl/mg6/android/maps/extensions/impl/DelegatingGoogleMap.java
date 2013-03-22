@@ -153,6 +153,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 	public void clear() {
 		real.clear();
 		markers.clear();
+		createdMarkers.clear();
 		polylines.clear();
 		polygons.clear();
 		circles.clear();
