@@ -27,17 +27,23 @@ import pl.mg6.android.maps.extensions.Marker;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
-import android.util.SparseArray;
+import android.support.v4.util.LongSparseArray;
+import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.VisibleRegion;
 
 class GridClusteringStrategy extends BaseClusteringStrategy {
 
+	private boolean addMarkersOutsideVisibleRegion;
+	private GoogleMap map;
 	private Map<DelegatingMarker, ClusterMarker> markers;
 	private double clusterSize;
 
-	private SparseArray<ClusterMarker> clusters = new SparseArray<ClusterMarker>();
+	private LongSparseArray<ClusterMarker> clusters = new LongSparseArray<ClusterMarker>();
 	private List<ClusterMarker> cache = new ArrayList<ClusterMarker>();
 
 	private Set<ClusterMarker> refreshQueue = new HashSet<ClusterMarker>();
@@ -53,15 +59,17 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		}
 	});
 
-	public GridClusteringStrategy(ClusteringSettings settings, GoogleMap realMap, List<DelegatingMarker> markers) {
-		super(settings, realMap);
+	public GridClusteringStrategy(ClusteringSettings settings, GoogleMap map, List<DelegatingMarker> markers) {
+		super(settings, map);
+		this.addMarkersOutsideVisibleRegion = settings.isAddMarkersOutsideVisibleRegion();
+		this.map = map;
 		this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
 		for (DelegatingMarker m : markers) {
 			if (m.isVisible()) {
 				this.markers.put(m, null);
 			}
 		}
-		this.clusterSize = calculateClusterSize(realMap.getCameraPosition().zoom);
+		this.clusterSize = calculateClusterSize(map.getCameraPosition().zoom);
 		recalculate();
 	}
 
@@ -81,6 +89,8 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		if (this.clusterSize != clusterSize) {
 			this.clusterSize = clusterSize;
 			recalculate();
+		} else if (!addMarkersOutsideVisibleRegion) {
+			addMarkersInVisibleRegion();
 		}
 	}
 
@@ -94,7 +104,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	private void addMarker(DelegatingMarker marker, boolean refresh) {
 		LatLng position = marker.getPosition();
-		int clusterId = calculateClusterId(position);
+		long clusterId = calculateClusterId(position);
 		ClusterMarker cluster = findClusterById(clusterId);
 		cluster.add(marker);
 		markers.put(marker, cluster);
@@ -108,9 +118,15 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		if (!marker.isVisible()) {
 			return;
 		}
+		removeMarker(marker);
+	}
+
+	private void removeMarker(DelegatingMarker marker) {
 		ClusterMarker cluster = markers.remove(marker);
-		cluster.remove(marker);
-		refresh(cluster);
+		if (cluster != null) {
+			cluster.remove(marker);
+			refresh(cluster);
+		}
 	}
 
 	@Override
@@ -119,13 +135,15 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 			return;
 		}
 		ClusterMarker oldCluster = markers.get(marker);
-		if (isMarkerInCluster(marker, oldCluster)) {
+		if (oldCluster != null && isMarkerInCluster(marker, oldCluster)) {
 			if (marker.isVisible()) {
 				refresh(oldCluster);
 			}
 		} else {
-			oldCluster.remove(marker);
-			refresh(oldCluster);
+			if (oldCluster != null) {
+				oldCluster.remove(marker);
+				refresh(oldCluster);
+			}
 			addMarker(marker, true);
 		}
 	}
@@ -142,12 +160,12 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	}
 
 	private boolean isMarkerInCluster(DelegatingMarker marker, ClusterMarker cluster) {
-		int clusterId = cluster.getClusterId();
-		int markerClusterId = calculateClusterId(marker.getPosition());
+		long clusterId = cluster.getClusterId();
+		long markerClusterId = calculateClusterId(marker.getPosition());
 		return clusterId == markerClusterId;
 	}
 
-	private ClusterMarker findClusterById(int clusterId) {
+	private ClusterMarker findClusterById(long clusterId) {
 		ClusterMarker cluster = clusters.get(clusterId);
 		if (cluster == null) {
 			if (cache.size() > 0) {
@@ -166,9 +184,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		if (visible) {
 			addMarker(marker, true);
 		} else {
-			ClusterMarker cluster = markers.remove(marker);
-			cluster.remove(marker);
-			refresh(cluster);
+			removeMarker(marker);
 			marker.changeVisible(false);
 		}
 	}
@@ -196,8 +212,23 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 				}
 			}
 		} else {
+			int[] bounds = null;
+			if (!addMarkersOutsideVisibleRegion) {
+				bounds = calculateVisibleRegion();
+			}
 			for (DelegatingMarker marker : markers.keySet()) {
-				addMarker(marker, false);
+				boolean inVisibleRegion = false;
+				if (bounds != null) {
+					LatLng position = marker.getPosition();
+					int y = (int) ((position.latitude + 90.0) / clusterSize);
+					int x = (int) ((position.longitude + 180.0) / clusterSize);
+					inVisibleRegion = bounds[0] <= y && y <= bounds[2] && (bounds[1] <= x && x <= bounds[3] || bounds[1] > bounds[3] && (bounds[1] <= x || x <= bounds[3]));
+				}
+				if (bounds == null || inVisibleRegion) {
+					addMarker(marker, false);
+				} else {
+					markers.put(marker, null);
+				}
 			}
 			for (int i = 0; i < clusters.size(); i++) {
 				ClusterMarker cluster = clusters.valueAt(i);
@@ -206,10 +237,39 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		}
 	}
 
-	private int calculateClusterId(LatLng position) {
-		int y = (int) ((position.latitude + 180.0) / clusterSize);
-		int x = (int) ((position.longitude + 90.0) / clusterSize);
-		return (y << 16) + x;
+	private void addMarkersInVisibleRegion() {
+		int[] bounds = calculateVisibleRegion();
+		for (DelegatingMarker marker : markers.keySet()) {
+			boolean notInCluster = markers.get(marker) == null;
+			if (notInCluster) {
+				LatLng position = marker.getPosition();
+				int y = (int) ((position.latitude + 90.0) / clusterSize);
+				int x = (int) ((position.longitude + 180.0) / clusterSize);
+				Log.i("visible", "position: " + y + " " + x);
+				if (bounds[0] <= y && y <= bounds[2] && (bounds[1] <= x && x <= bounds[3] || bounds[1] > bounds[3] && (bounds[1] <= x || x <= bounds[3]))) {
+					addMarker(marker, true);
+				}
+			}
+		}
+	}
+
+	private int[] calculateVisibleRegion() {
+		Projection projection = map.getProjection();
+		VisibleRegion visibleRegion = projection.getVisibleRegion();
+		LatLngBounds bounds = visibleRegion.latLngBounds;
+		int y1 = (int) ((bounds.southwest.latitude + 90.0) / clusterSize);
+		int x1 = (int) ((bounds.southwest.longitude + 180.0) / clusterSize);
+		int y2 = (int) ((bounds.northeast.latitude + 90.0) / clusterSize);
+		int x2 = (int) ((bounds.northeast.longitude + 180.0) / clusterSize);
+		Log.i("visible", "region: " + y1 + " " + y2 + " " + x1 + " " + x2);
+		return new int[] { y1, x1, y2, x2 };
+	}
+
+	private long calculateClusterId(LatLng position) {
+		long y = (int) ((position.latitude + 90.0) / clusterSize);
+		long x = (int) ((position.longitude + 180.0) / clusterSize);
+		long ret = (y << 32) + x;
+		return ret;
 	}
 
 	private double calculateClusterSize(float zoom) {
