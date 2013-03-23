@@ -102,18 +102,16 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		if (!marker.isVisible()) {
 			return;
 		}
-		addMarker(marker, true);
+		addMarker(marker);
 	}
 
-	private void addMarker(DelegatingMarker marker, boolean refresh) {
+	private void addMarker(DelegatingMarker marker) {
 		LatLng position = marker.getPosition();
 		long clusterId = calculateClusterId(position);
 		ClusterMarker cluster = findClusterById(clusterId);
 		cluster.add(marker);
 		markers.put(marker, cluster);
-		if (refresh && marker.isVisible()) {
-			refresh(cluster);
-		}
+		refresh(cluster);
 	}
 
 	@Override
@@ -147,7 +145,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 				oldCluster.remove(marker);
 				refresh(oldCluster);
 			}
-			addMarker(marker, true);
+			addMarker(marker);
 		}
 	}
 
@@ -185,7 +183,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	@Override
 	public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
 		if (visible) {
-			addMarker(marker, true);
+			addMarker(marker);
 		} else {
 			removeMarker(marker);
 			marker.changeVisible(false);
@@ -229,7 +227,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 							&& (bounds[1] <= x && x <= bounds[3] || bounds[1] > bounds[3] && (bounds[1] <= x || x <= bounds[3]));
 				}
 				if (bounds == null || inVisibleRegion) {
-					addMarker(marker, false);
+					addMarker(marker);
 				} else {
 					markers.put(marker, null);
 				}
@@ -250,7 +248,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 				int y = (int) ((position.latitude + 90.0) / clusterSize);
 				int x = (int) ((position.longitude + 180.0) / clusterSize);
 				if (bounds[0] <= y && y <= bounds[2] && (bounds[1] <= x && x <= bounds[3] || bounds[1] > bounds[3] && (bounds[1] <= x || x <= bounds[3]))) {
-					addMarker(marker, true);
+					addMarker(marker);
 				}
 			}
 		}
