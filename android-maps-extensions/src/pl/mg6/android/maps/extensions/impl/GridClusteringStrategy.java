@@ -17,16 +17,11 @@ package pl.mg6.android.maps.extensions.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.Marker;
-import android.os.Handler;
-import android.os.Handler.Callback;
-import android.os.Message;
 import android.support.v4.util.LongSparseArray;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -44,19 +39,8 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	private LongSparseArray<ClusterMarker> clusters = new LongSparseArray<ClusterMarker>();
 	private List<ClusterMarker> cache = new ArrayList<ClusterMarker>();
-
-	private Set<ClusterMarker> refreshQueue = new HashSet<ClusterMarker>();
-	private boolean refreshPending;
-	private Handler refresher = new Handler(new Callback() {
-		public boolean handleMessage(Message msg) {
-			for (ClusterMarker cluster : refreshQueue) {
-				cluster.refresh();
-			}
-			refreshQueue.clear();
-			refreshPending = false;
-			return true;
-		}
-	});
+	
+	private ClusterRefresher refresher = new ClusterRefresher();
 
 	public GridClusteringStrategy(ClusteringSettings settings, GoogleMap map, List<DelegatingMarker> markers) {
 		super(settings, map);
@@ -80,9 +64,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		}
 		clusters.clear();
 		markers.clear();
-		refreshQueue.clear();
-		refreshPending = false;
-		refresher.removeMessages(0);
+		refresher.cleanup();
 		super.cleanup();
 	}
 
@@ -191,11 +173,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	}
 
 	private void refresh(ClusterMarker cluster) {
-		refreshQueue.add(cluster);
-		if (!refreshPending) {
-			refresher.sendEmptyMessage(0);
-			refreshPending = true;
-		}
+		refresher.refresh(cluster);
 	}
 
 	private void recalculate() {
