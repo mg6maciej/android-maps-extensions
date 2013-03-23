@@ -78,6 +78,10 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 			ClusterMarker cluster = clusters.valueAt(i);
 			cluster.cleanup();
 		}
+		clusters.clear();
+		markers.clear();
+		refreshQueue.clear();
+		refreshPending = false;
 		refresher.removeMessages(0);
 		super.cleanup();
 	}
