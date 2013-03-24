@@ -28,11 +28,7 @@ class ClusterRefresher {
 	private boolean refreshPending;
 	private Handler refresher = new Handler(new Callback() {
 		public boolean handleMessage(Message msg) {
-			for (ClusterMarker cluster : refreshQueue) {
-				cluster.refresh();
-			}
-			refreshQueue.clear();
-			refreshPending = false;
+			refreshAll();
 			return true;
 		}
 	});
@@ -49,5 +45,12 @@ class ClusterRefresher {
 		refreshQueue.clear();
 		refreshPending = false;
 		refresher.removeMessages(0);
+	}
+
+	void refreshAll() {
+		for (ClusterMarker cluster : refreshQueue) {
+			cluster.refresh();
+		}
+		cleanup();
 	}
 }
