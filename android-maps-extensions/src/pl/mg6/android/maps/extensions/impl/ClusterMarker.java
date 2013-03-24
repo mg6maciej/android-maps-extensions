@@ -79,7 +79,6 @@ class ClusterMarker implements Marker {
 				virtual = strategy.getFromCacheOrCreate(count, position);
 			} else {
 				virtual.setPosition(position);
-				virtual.setVisible(true);
 			}
 		}
 	}
@@ -129,7 +128,7 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public LatLng getPosition() {
-		if (virtual != null && virtual.isVisible()) {
+		if (virtual != null) {
 			return virtual.getPosition();
 		}
 		throw new UnsupportedOperationException();
@@ -147,7 +146,7 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public void hideInfoWindow() {
-		if (virtual != null && virtual.isVisible()) {
+		if (virtual != null) {
 			virtual.hideInfoWindow();
 		}
 		throw new UnsupportedOperationException();
@@ -165,7 +164,7 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public boolean isInfoWindowShown() {
-		if (virtual != null && virtual.isVisible()) {
+		if (virtual != null) {
 			return virtual.isInfoWindowShown();
 		}
 		return false;
@@ -216,7 +215,7 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public void showInfoWindow() {
-		if (virtual != null && virtual.isVisible()) {
+		if (virtual != null) {
 			virtual.showInfoWindow();
 		}
 		throw new UnsupportedOperationException();
