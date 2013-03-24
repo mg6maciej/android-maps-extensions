@@ -15,13 +15,15 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import com.google.android.gms.maps.model.CameraPosition;
+
 import pl.mg6.android.maps.extensions.Marker;
 
 interface ClusteringStrategy {
 
 	void cleanup();
 
-	void onZoomChange(float zoom);
+	void onCameraChange(CameraPosition cameraPosition);
 
 	void onAdd(DelegatingMarker marker);
 

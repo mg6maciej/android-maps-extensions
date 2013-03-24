@@ -415,7 +415,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 		@Override
 		public void onCameraChange(CameraPosition cameraPosition) {
-			clusteringStrategy.onZoomChange(cameraPosition.zoom);
+			clusteringStrategy.onCameraChange(cameraPosition);
 			if (onCameraChangeListener != null) {
 				onCameraChangeListener.onCameraChange(cameraPosition);
 			}

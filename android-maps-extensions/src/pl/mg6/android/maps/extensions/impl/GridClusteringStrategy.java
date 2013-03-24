@@ -26,6 +26,7 @@ import android.support.v4.util.LongSparseArray;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.VisibleRegion;
@@ -39,7 +40,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	private LongSparseArray<ClusterMarker> clusters = new LongSparseArray<ClusterMarker>();
 	private List<ClusterMarker> cache = new ArrayList<ClusterMarker>();
-	
+
 	private ClusterRefresher refresher = new ClusterRefresher();
 
 	public GridClusteringStrategy(ClusteringSettings settings, GoogleMap map, List<DelegatingMarker> markers) {
@@ -69,8 +70,8 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	}
 
 	@Override
-	public void onZoomChange(float zoom) {
-		double clusterSize = calculateClusterSize(zoom);
+	public void onCameraChange(CameraPosition cameraPosition) {
+		double clusterSize = calculateClusterSize(cameraPosition.zoom);
 		if (this.clusterSize != clusterSize) {
 			this.clusterSize = clusterSize;
 			recalculate();
