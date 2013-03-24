@@ -120,9 +120,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		}
 		ClusterMarker oldCluster = markers.get(marker);
 		if (oldCluster != null && isMarkerInCluster(marker, oldCluster)) {
-			if (marker.isVisible()) {
-				refresh(oldCluster);
-			}
+			refresh(oldCluster);
 		} else {
 			if (oldCluster != null) {
 				oldCluster.remove(marker);
@@ -184,36 +182,23 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 			cache.add(cluster);
 		}
 		clusters.clear();
-		if (clusterSize == 0.0) {
-			for (DelegatingMarker marker : markers.keySet()) {
+		int[] bounds = null;
+		if (addMarkersDynamically) {
+			bounds = calculateVisibleRegion();
+		}
+		for (DelegatingMarker marker : markers.keySet()) {
+			boolean inVisibleRegion = false;
+			if (bounds != null) {
+				LatLng position = marker.getPosition();
+				int y = (int) ((position.latitude + 90.0) / clusterSize);
+				int x = (int) ((position.longitude + 180.0) / clusterSize);
+				inVisibleRegion = bounds[0] <= y && y <= bounds[2]
+						&& (bounds[1] <= x && x <= bounds[3] || bounds[1] > bounds[3] && (bounds[1] <= x || x <= bounds[3]));
+			}
+			if (bounds == null || inVisibleRegion) {
+				addMarker(marker);
+			} else {
 				markers.put(marker, null);
-				if (marker.isVisible()) {
-					marker.changeVisible(true);
-				}
-			}
-		} else {
-			int[] bounds = null;
-			if (addMarkersDynamically) {
-				bounds = calculateVisibleRegion();
-			}
-			for (DelegatingMarker marker : markers.keySet()) {
-				boolean inVisibleRegion = false;
-				if (bounds != null) {
-					LatLng position = marker.getPosition();
-					int y = (int) ((position.latitude + 90.0) / clusterSize);
-					int x = (int) ((position.longitude + 180.0) / clusterSize);
-					inVisibleRegion = bounds[0] <= y && y <= bounds[2]
-							&& (bounds[1] <= x && x <= bounds[3] || bounds[1] > bounds[3] && (bounds[1] <= x || x <= bounds[3]));
-				}
-				if (bounds == null || inVisibleRegion) {
-					addMarker(marker);
-				} else {
-					markers.put(marker, null);
-				}
-			}
-			for (int i = 0; i < clusters.size(); i++) {
-				ClusterMarker cluster = clusters.valueAt(i);
-				refresh(cluster);
 			}
 		}
 	}
