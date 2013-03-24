@@ -266,6 +266,8 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 			ArrayList<DelegatingMarker> list = new ArrayList<DelegatingMarker>(markers.values());
 			if (clusteringSettings.isEnabled()) {
 				clusteringStrategy = new GridClusteringStrategy(clusteringSettings, real, list);
+			} else if (clusteringSettings.isAddMarkersDynamically()) {
+				clusteringStrategy = new DynamicNoClusteringStrategy(real, list);
 			} else {
 				clusteringStrategy = new NoClusteringStrategy(list);
 			}

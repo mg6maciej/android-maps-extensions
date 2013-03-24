@@ -218,7 +218,7 @@ public class DemoActivity extends FragmentActivity {
 	}
 
 	public void onNormalClick(View view) {
-		map.setClustering(new ClusteringSettings().enabled(false));
+		map.setClustering(new ClusteringSettings().enabled(false).addMarkersDynamically(true));
 	}
 
 	private static class MutableData {
