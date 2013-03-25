@@ -32,6 +32,12 @@ public class ClusteringSettings {
 		return this;
 	}
 
+	/**
+	 * Consider using value of 180, 160, 144, 120 or 96 for 8x8, 9x9, 10x10, 12x12 and 15x15 grids respectively on zoom level 2.
+	 * 
+	 * @param clusterSize
+	 *            cluster size in degrees of longitude on zoom level 0.
+	 */
 	public ClusteringSettings clusterSize(double clusterSize) {
 		this.clusterSize = clusterSize;
 		return this;
