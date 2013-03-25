@@ -50,6 +50,8 @@ public class DemoActivity extends FragmentActivity {
 
 	private GoogleMap map;
 
+	private double clusterSize = 180.0;
+
 	private MutableData[] dataArray = { new MutableData(6, new LatLng(-50, 0)), new MutableData(28, new LatLng(-52, 1)),
 			new MutableData(496, new LatLng(-51, -2)), };
 	private Handler handler = new Handler();
@@ -214,10 +216,18 @@ public class DemoActivity extends FragmentActivity {
 	}
 
 	public void onClusterClick(View view) {
-		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())).addMarkersDynamically(true));
+		ClusteringSettings clusteringSettings = new ClusteringSettings();
+		clusteringSettings.iconDataProvider(new DemoIconProvider(getResources()));
+		clusteringSettings.addMarkersDynamically(true);
+		clusteringSettings.clusterSize(clusterSize);
+		if (clusterSize > 100.0) {
+			clusterSize -= 10.0;
+		}
+		map.setClustering(clusteringSettings);
 	}
 
 	public void onNormalClick(View view) {
+		clusterSize = 180.0;
 		map.setClustering(new ClusteringSettings().enabled(false).addMarkersDynamically(true));
 	}
 
