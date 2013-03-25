@@ -22,8 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 public interface Marker {
 
 	/**
-	 * WARNING: may be changed in future API when this is fixed:
-	 * http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650
+	 * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650
 	 */
 	Object getData();
 
@@ -34,8 +33,7 @@ public interface Marker {
 	String getId();
 
 	/**
-	 * @return list of markers inside cluster when isCluster() returns true,
-	 *         null otherwise
+	 * @return list of markers inside cluster when isCluster() returns true, null otherwise
 	 */
 	List<Marker> getMarkers();
 
@@ -61,8 +59,7 @@ public interface Marker {
 	void remove();
 
 	/**
-	 * WARNING: may be changed in future API when this is fixed:
-	 * http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650
+	 * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650
 	 */
 	void setData(Object data);
 

@@ -66,8 +66,7 @@ public interface GoogleMap {
 	int getMapType();
 
 	/**
-	 * WARNING: may be changed in future API when this is fixed:
-	 * http://code.google.com/p/gmaps-api-issues/issues/detail?id=5106
+	 * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=5106
 	 */
 	List<Circle> getCircles();
 
