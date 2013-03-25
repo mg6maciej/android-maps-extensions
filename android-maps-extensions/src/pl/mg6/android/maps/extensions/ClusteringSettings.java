@@ -19,20 +19,31 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ClusteringSettings {
 
-	private boolean addMarkersDynamically;
+	private boolean addMarkersDynamically = false;
+
+	private double clusterSize = 180.0;
 
 	private boolean enabled = true;
 
-	private IconDataProvider iconDataProvider;
+	private IconDataProvider iconDataProvider = null;
 
 	public ClusteringSettings addMarkersDynamically(boolean addMarkersDynamically) {
 		this.addMarkersDynamically = addMarkersDynamically;
 		return this;
 	}
 
+	public ClusteringSettings clusterSize(double clusterSize) {
+		this.clusterSize = clusterSize;
+		return this;
+	}
+
 	public ClusteringSettings enabled(boolean enabled) {
 		this.enabled = enabled;
 		return this;
+	}
+
+	public double getClusterSize() {
+		return clusterSize;
 	}
 
 	public IconDataProvider getIconDataProvider() {
@@ -69,6 +80,9 @@ public class ClusteringSettings {
 		}
 		if (enabled == false && other.enabled == false) {
 			return true;
+		}
+		if (clusterSize != other.clusterSize) {
+			return false;
 		}
 		return iconDataProvider.equals(other.iconDataProvider);
 	}

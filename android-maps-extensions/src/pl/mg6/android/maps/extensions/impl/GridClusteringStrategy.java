@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.VisibleRegion;
 class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	private boolean addMarkersDynamically;
+	private double baseClusterSize;
 	private GoogleMap map;
 	private Map<DelegatingMarker, ClusterMarker> markers;
 	private double clusterSize;
@@ -48,6 +49,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	public GridClusteringStrategy(ClusteringSettings settings, GoogleMap map, List<DelegatingMarker> markers) {
 		super(settings, map);
 		this.addMarkersDynamically = settings.isAddMarkersDynamically();
+		this.baseClusterSize = settings.getClusterSize();
 		this.map = map;
 		this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
 		for (DelegatingMarker m : markers) {
@@ -231,21 +233,21 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		long ret = (y << 32) + x;
 		return ret;
 	}
-	
+
 	private static double convLat(double lat) {
-		if (lat < -85.0) {
-			lat = -85.0;
-		} else if (lat > 85.0) {
-			lat = 85.0;
+		if (lat < -85.0511287798) {
+			lat = -85.0511287798;
+		} else if (lat > 85.0511287798) {
+			lat = 85.0511287798;
 		}
 		return SphericalMercator.fromLatitude(lat) + 180.0;
 	}
-	
+
 	private static double convLng(double lng) {
 		return lng + 180.0;
 	}
 
 	private double calculateClusterSize(float zoom) {
-		return (1 << ((int) (23.5f - zoom))) / 66666.66666;
+		return baseClusterSize / (1 << Math.round(zoom));
 	}
 }
