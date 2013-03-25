@@ -22,6 +22,7 @@ import java.util.Map;
 
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.utils.SphericalMercator;
 import android.support.v4.util.LongSparseArray;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -103,8 +104,8 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	}
 
 	private boolean isPositionInVisibleClusters(LatLng position) {
-		int y = (int) ((position.latitude + 90.0) / clusterSize);
-		int x = (int) ((position.longitude + 180.0) / clusterSize);
+		int y = (int) (convLat(position.latitude) / clusterSize);
+		int x = (int) (convLng(position.longitude) / clusterSize);
 		int[] b = visibleClusters;
 		return b[0] <= y && y <= b[2] && (b[1] <= x && x <= b[3] || b[1] > b[3] && (b[1] <= x || x <= b[3]));
 	}
@@ -218,20 +219,33 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		Projection projection = map.getProjection();
 		VisibleRegion visibleRegion = projection.getVisibleRegion();
 		LatLngBounds bounds = visibleRegion.latLngBounds;
-		visibleClusters[0] = (int) ((bounds.southwest.latitude + 90.0) / clusterSize);
-		visibleClusters[1] = (int) ((bounds.southwest.longitude + 180.0) / clusterSize);
-		visibleClusters[2] = (int) ((bounds.northeast.latitude + 90.0) / clusterSize);
-		visibleClusters[3] = (int) ((bounds.northeast.longitude + 180.0) / clusterSize);
+		visibleClusters[0] = (int) (convLat(bounds.southwest.latitude) / clusterSize);
+		visibleClusters[1] = (int) (convLng(bounds.southwest.longitude) / clusterSize);
+		visibleClusters[2] = (int) (convLat(bounds.northeast.latitude) / clusterSize);
+		visibleClusters[3] = (int) (convLng(bounds.northeast.longitude) / clusterSize);
 	}
 
 	private long calculateClusterId(LatLng position) {
-		long y = (int) ((position.latitude + 90.0) / clusterSize);
-		long x = (int) ((position.longitude + 180.0) / clusterSize);
+		long y = (int) (convLat(position.latitude) / clusterSize);
+		long x = (int) (convLng(position.longitude) / clusterSize);
 		long ret = (y << 32) + x;
 		return ret;
 	}
+	
+	private static double convLat(double lat) {
+		if (lat < -85.0) {
+			lat = -85.0;
+		} else if (lat > 85.0) {
+			lat = 85.0;
+		}
+		return SphericalMercator.fromLatitude(lat) + 180.0;
+	}
+	
+	private static double convLng(double lng) {
+		return lng + 180.0;
+	}
 
 	private double calculateClusterSize(float zoom) {
-		return (1 << ((int) (23.5f - zoom))) / 100000.0;
+		return (1 << ((int) (23.5f - zoom))) / 66666.66666;
 	}
 }
