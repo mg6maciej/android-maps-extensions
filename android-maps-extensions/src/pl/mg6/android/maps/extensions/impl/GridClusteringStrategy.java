@@ -34,6 +34,9 @@ import com.google.android.gms.maps.model.VisibleRegion;
 
 class GridClusteringStrategy extends BaseClusteringStrategy {
 
+	private static final boolean DEBUG_GRID = false;
+	private DebugHelper debugHelper;
+
 	private boolean addMarkersDynamically;
 	private double baseClusterSize;
 	private GoogleMap map;
@@ -70,6 +73,11 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		clusters.clear();
 		markers.clear();
 		refresher.cleanup();
+		if (DEBUG_GRID) {
+			if (debugHelper != null) {
+				debugHelper.cleanup();
+			}
+		}
 		super.cleanup();
 	}
 
@@ -81,6 +89,12 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 			recalculate();
 		} else if (addMarkersDynamically) {
 			addMarkersInVisibleRegion();
+		}
+		if (DEBUG_GRID) {
+			if (debugHelper == null) {
+				debugHelper = new DebugHelper();
+			}
+			debugHelper.drawDebugGrid(map, clusterSize);
 		}
 	}
 
@@ -235,16 +249,11 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	}
 
 	private static double convLat(double lat) {
-		if (lat < -85.0511287798) {
-			lat = -85.0511287798;
-		} else if (lat > 85.0511287798) {
-			lat = 85.0511287798;
-		}
-		return SphericalMercator.fromLatitude(lat) + 180.0;
+		return SphericalMercator.scaleLatitude(lat);
 	}
 
 	private static double convLng(double lng) {
-		return lng + 180.0;
+		return SphericalMercator.scaleLongitude(lng);
 	}
 
 	private double calculateClusterSize(float zoom) {
