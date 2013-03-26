@@ -120,8 +120,8 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	}
 
 	private boolean isPositionInVisibleClusters(LatLng position) {
-		int y = (int) (convLat(position.latitude) / clusterSize);
-		int x = (int) (convLng(position.longitude) / clusterSize);
+		int y = convLat(position.latitude);
+		int x = convLng(position.longitude);
 		int[] b = visibleClusters;
 		return b[0] <= y && y <= b[2] && (b[1] <= x && x <= b[3] || b[1] > b[3] && (b[1] <= x || x <= b[3]));
 	}
@@ -235,25 +235,25 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		Projection projection = map.getProjection();
 		VisibleRegion visibleRegion = projection.getVisibleRegion();
 		LatLngBounds bounds = visibleRegion.latLngBounds;
-		visibleClusters[0] = (int) (convLat(bounds.southwest.latitude) / clusterSize);
-		visibleClusters[1] = (int) (convLng(bounds.southwest.longitude) / clusterSize);
-		visibleClusters[2] = (int) (convLat(bounds.northeast.latitude) / clusterSize);
-		visibleClusters[3] = (int) (convLng(bounds.northeast.longitude) / clusterSize);
+		visibleClusters[0] = convLat(bounds.southwest.latitude);
+		visibleClusters[1] = convLng(bounds.southwest.longitude);
+		visibleClusters[2] = convLat(bounds.northeast.latitude);
+		visibleClusters[3] = convLng(bounds.northeast.longitude);
 	}
 
 	private long calculateClusterId(LatLng position) {
-		long y = (int) (convLat(position.latitude) / clusterSize);
-		long x = (int) (convLng(position.longitude) / clusterSize);
+		long y = convLat(position.latitude);
+		long x = convLng(position.longitude);
 		long ret = (y << 32) + x;
 		return ret;
 	}
 
-	private static double convLat(double lat) {
-		return SphericalMercator.scaleLatitude(lat);
+	private int convLat(double lat) {
+		return (int) (SphericalMercator.scaleLatitude(lat) / clusterSize);
 	}
 
-	private static double convLng(double lng) {
-		return SphericalMercator.scaleLongitude(lng);
+	private int convLng(double lng) {
+		return (int) (SphericalMercator.scaleLongitude(lng) / clusterSize);
 	}
 
 	private double calculateClusterSize(float zoom) {
