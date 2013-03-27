@@ -35,28 +35,28 @@ class DebugHelper {
 		cleanup();
 		Projection projection = map.getProjection();
 		LatLngBounds bounds = projection.getVisibleRegion().latLngBounds;
-		double minX = -180 + clusterSize * (int) (SphericalMercator.scaleLatitude(bounds.southwest.latitude) / clusterSize);
-		double minY = -180 + clusterSize * (int) (SphericalMercator.scaleLongitude(bounds.southwest.longitude) / clusterSize);
-		double maxX = -180 + clusterSize * (int) (SphericalMercator.scaleLatitude(bounds.northeast.latitude) / clusterSize);
-		double maxY = -180 + clusterSize * (int) (SphericalMercator.scaleLongitude(bounds.northeast.longitude) / clusterSize);
+		double minY = -180 + clusterSize * (int) (SphericalMercator.scaleLatitude(bounds.southwest.latitude) / clusterSize);
+		double minX = -180 + clusterSize * (int) (SphericalMercator.scaleLongitude(bounds.southwest.longitude) / clusterSize);
+		double maxY = -180 + clusterSize * (int) (SphericalMercator.scaleLatitude(bounds.northeast.latitude) / clusterSize);
+		double maxX = -180 + clusterSize * (int) (SphericalMercator.scaleLongitude(bounds.northeast.longitude) / clusterSize);
 
-		for (double x = minX; x <= maxX; x += clusterSize) {
-			gridLines.add(map.addPolyline(new PolylineOptions().width(1.0f).add(new LatLng(SphericalMercator.toLatitude(x), bounds.southwest.longitude),
-					new LatLng(SphericalMercator.toLatitude(x), bounds.northeast.longitude))));
+		for (double y = minY; y <= maxY; y += clusterSize) {
+			gridLines.add(map.addPolyline(new PolylineOptions().width(1.0f).add(new LatLng(SphericalMercator.toLatitude(y), bounds.southwest.longitude),
+					new LatLng(SphericalMercator.toLatitude(y), bounds.northeast.longitude))));
 		}
-		if (minY <= maxY) {
-			for (double y = minY; y <= maxY; y += clusterSize) {
-				gridLines.add(map.addPolyline(new PolylineOptions().width(1.0f).add(new LatLng(bounds.southwest.latitude, y),
-						new LatLng(bounds.northeast.latitude, y))));
+		if (minX <= maxX) {
+			for (double x = minX; x <= maxX; x += clusterSize) {
+				gridLines.add(map.addPolyline(new PolylineOptions().width(1.0f).add(new LatLng(bounds.southwest.latitude, x),
+						new LatLng(bounds.northeast.latitude, x))));
 			}
 		} else {
-			for (double y = -180; y <= minY; y += clusterSize) {
-				gridLines.add(map.addPolyline(new PolylineOptions().width(1.0f).add(new LatLng(bounds.southwest.latitude, y),
-						new LatLng(bounds.northeast.latitude, y))));
+			for (double x = -180; x <= minX; x += clusterSize) {
+				gridLines.add(map.addPolyline(new PolylineOptions().width(1.0f).add(new LatLng(bounds.southwest.latitude, x),
+						new LatLng(bounds.northeast.latitude, x))));
 			}
-			for (double y = maxY; y < 180; y += clusterSize) {
-				gridLines.add(map.addPolyline(new PolylineOptions().width(1.0f).add(new LatLng(bounds.southwest.latitude, y),
-						new LatLng(bounds.northeast.latitude, y))));
+			for (double x = maxX; x < 180; x += clusterSize) {
+				gridLines.add(map.addPolyline(new PolylineOptions().width(1.0f).add(new LatLng(bounds.southwest.latitude, x),
+						new LatLng(bounds.northeast.latitude, x))));
 			}
 		}
 	}
