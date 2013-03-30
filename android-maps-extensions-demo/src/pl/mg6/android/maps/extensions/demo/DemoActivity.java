@@ -208,10 +208,12 @@ public class DemoActivity extends FragmentActivity {
 	}
 
 	private void addCircles() {
+		float strokeWidth = getResources().getDimension(R.dimen.circle_stroke_width);
+		CircleOptions options = new CircleOptions().strokeWidth(strokeWidth);
 		Circle circle;
-		circle = map.addCircle(new CircleOptions().center(new LatLng(0.0, 0.0)).radius(2000000));
+		circle = map.addCircle(options.center(new LatLng(0.0, 0.0)).radius(2000000));
 		circle.setData("first circle");
-		circle = map.addCircle(new CircleOptions().center(new LatLng(30.0, 30.0)).radius(1000000));
+		circle = map.addCircle(options.center(new LatLng(30.0, 30.0)).radius(1000000));
 		circle.setData("second circle");
 	}
 
