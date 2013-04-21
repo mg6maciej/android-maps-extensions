@@ -107,4 +107,78 @@ public class GridClusteringStrategyTest {
 		Assert.assertEquals(1, markers.size());
 		Assert.assertTrue(markers.get(0) instanceof ClusterMarker);
 	}
+
+	@Test
+	public void whenAddedTwoCloseMarkersAndZoomedInShouldDisplayTwoMarkers() {
+
+		strategy.onAdd(marker1);
+		strategy.onAdd(marker3);
+
+		strategy.onCameraChange(new CameraPosition(new LatLng(0, 0), 21, 0, 0));
+
+		List<Marker> markers = strategy.getDisplayedMarkers();
+
+		Assert.assertNotNull(markers);
+		Assert.assertEquals(2, markers.size());
+		Assert.assertTrue(markers.contains(marker1));
+		Assert.assertTrue(markers.contains(marker3));
+	}
+
+	@Test
+	public void whenAddedTwoCloseMarkersAndRemovedThemShouldDisplayZeroMarkers() {
+
+		strategy.onAdd(marker1);
+		strategy.onAdd(marker2);
+
+		strategy.onRemove(marker1);
+		strategy.onRemove(marker2);
+
+		List<Marker> markers = strategy.getDisplayedMarkers();
+
+		Assert.assertNotNull(markers);
+		Assert.assertEquals(0, markers.size());
+	}
+
+	@Test
+	public void whenAddedMarkerAndHideItShouldDisplayZeroMarkers() {
+
+		strategy.onAdd(marker1);
+
+		strategy.onVisibilityChangeRequest(marker1, false);
+
+		List<Marker> markers = strategy.getDisplayedMarkers();
+
+		Assert.assertNotNull(markers);
+		Assert.assertEquals(0, markers.size());
+	}
+
+	@Test
+	public void whenAddedHiddenMarkerShouldDisplayZeroMarkers() {
+
+		Mockito.when(marker1.isVisible()).thenReturn(false);
+
+		strategy.onAdd(marker1);
+
+		List<Marker> markers = strategy.getDisplayedMarkers();
+
+		Assert.assertNotNull(markers);
+		Assert.assertEquals(0, markers.size());
+	}
+
+	@Test
+	public void whenAddedTwoMarkersAndChangedPositionShouldDisplayOnClusterMarker() {
+
+		strategy.onAdd(marker1);
+		strategy.onAdd(marker2);
+
+		Mockito.when(marker2.getPosition()).thenReturn(new LatLng(0.1, 0.1));
+
+		strategy.onPositionChange(marker2);
+
+		List<Marker> markers = strategy.getDisplayedMarkers();
+
+		Assert.assertNotNull(markers);
+		Assert.assertEquals(1, markers.size());
+		Assert.assertTrue(markers.get(0) instanceof ClusterMarker);
+	}
 }
