@@ -83,7 +83,7 @@ class ClusterMarker implements Marker {
 		}
 	}
 
-	Marker getDisplauedMarker() {
+	Marker getDisplayedMarker() {
 		int count = markers.size();
 		if (count == 0) {
 			return null;

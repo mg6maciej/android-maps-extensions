@@ -173,7 +173,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		List<Marker> displayedMarkers = new ArrayList<Marker>();
 		for (int i = 0; i < clusters.size(); i++) {
 			ClusterMarker cluster = clusters.valueAt(i);
-			Marker displayedMarker = cluster.getDisplauedMarker();
+			Marker displayedMarker = cluster.getDisplayedMarker();
 			if (displayedMarker != null) {
 				displayedMarkers.add(displayedMarker);
 			}
