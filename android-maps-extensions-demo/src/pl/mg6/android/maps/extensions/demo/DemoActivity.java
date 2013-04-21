@@ -16,6 +16,7 @@
 package pl.mg6.android.maps.extensions.demo;
 
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -24,6 +25,7 @@ import pl.mg6.android.maps.extensions.Circle;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GoogleMap.InfoWindowAdapter;
+import pl.mg6.android.maps.extensions.GoogleMap.OnCameraChangeListener;
 import pl.mg6.android.maps.extensions.GoogleMap.OnInfoWindowClickListener;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMapClickListener;
 import pl.mg6.android.maps.extensions.Marker;
@@ -33,6 +35,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,11 +43,12 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.LatLngBounds.Builder;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DemoActivity extends FragmentActivity {
 
@@ -186,6 +190,39 @@ public class DemoActivity extends FragmentActivity {
 			Marker m = map.addMarker(new MarkerOptions().position(data.position).icon(icon));
 			m.setData(data);
 		}
+
+		final List<Circle> mutableDataMarkerCircles = new ArrayList<Circle>();
+		Log.i("tag", "markers count: " + map.getMarkers().size() + " " + map.getDisplayedMarkers().size());
+		map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).icon(BitmapDescriptorFactory.defaultMarker(90)));
+
+		map.setOnCameraChangeListener(new OnCameraChangeListener() {
+
+			@Override
+			public void onCameraChange(CameraPosition cameraPosition) {
+				for (Circle c : mutableDataMarkerCircles) {
+					c.remove();
+				}
+				mutableDataMarkerCircles.clear();
+				List<Marker> displayedMarkers = map.getDisplayedMarkers();
+				Log.i("tag", "markers count: " + displayedMarkers.size());
+				for (Marker m : displayedMarkers) {
+					if (m.isCluster()) {
+						for (Marker m2 : m.getMarkers()) {
+							if (m2.getData() instanceof MutableData) {
+								Log.i("tag", "adding circle: " + m.getPosition());
+								mutableDataMarkerCircles.add(map.addCircle(new CircleOptions().center(m.getPosition()).radius(1000000)));
+								break;
+							}
+						}
+					} else {
+						if (m.getData() instanceof MutableData) {
+							Log.i("tag", "adding circle: " + m.getPosition());
+							mutableDataMarkerCircles.add(map.addCircle(new CircleOptions().center(m.getPosition()).radius(1000000)));
+						}
+					}
+				}
+			}
+		});
 	}
 
 	@Override

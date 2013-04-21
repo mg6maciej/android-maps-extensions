@@ -142,7 +142,12 @@ class ClusterMarker implements Marker {
 		if (virtual != null) {
 			return virtual.getPosition();
 		}
-		throw new UnsupportedOperationException();
+		LatLngBounds.Builder builder = LatLngBounds.builder();
+		for (DelegatingMarker m : markers) {
+			builder.include(m.getPosition());
+		}
+		LatLng position = calculateCenter(builder.build());
+		return position;
 	}
 
 	@Override

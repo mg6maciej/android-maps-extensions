@@ -108,14 +108,12 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	private void addMarker(DelegatingMarker marker) {
 		LatLng position = marker.getPosition();
+		long clusterId = calculateClusterId(position);
+		ClusterMarker cluster = findClusterById(clusterId);
+		cluster.add(marker);
+		markers.put(marker, cluster);
 		if (!addMarkersDynamically || isPositionInVisibleClusters(position)) {
-			long clusterId = calculateClusterId(position);
-			ClusterMarker cluster = findClusterById(clusterId);
-			cluster.add(marker);
-			markers.put(marker, cluster);
 			refresh(cluster);
-		} else {
-			markers.put(marker, null);
 		}
 	}
 
@@ -236,9 +234,10 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	private void addMarkersInVisibleRegion() {
 		calculateVisibleClusters();
 		for (DelegatingMarker marker : markers.keySet()) {
-			boolean notInCluster = markers.get(marker) == null;
-			if (notInCluster) {
-				addMarker(marker);
+			LatLng position = marker.getPosition();
+			if (isPositionInVisibleClusters(position)) {
+				ClusterMarker cluster = markers.get(marker);
+				refresh(cluster);
 			}
 		}
 		refresher.refreshAll();
