@@ -63,6 +63,8 @@ public interface GoogleMap {
 
 	CameraPosition getCameraPosition();
 
+	List<Marker> getDisplayedMarkers();
+
 	int getMapType();
 
 	/**

@@ -17,6 +17,7 @@ package pl.mg6.android.maps.extensions.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -165,6 +166,22 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 	@Override
 	public CameraPosition getCameraPosition() {
 		return real.getCameraPosition();
+	}
+
+	@Override
+	public List<Marker> getDisplayedMarkers() {
+		List<Marker> displayedMarkers = clusteringStrategy.getDisplayedMarkers();
+		if (displayedMarkers == null) {
+			displayedMarkers = getMarkers();
+			Iterator<Marker> iterator = displayedMarkers.iterator();
+			while (iterator.hasNext()) {
+				Marker m = iterator.next();
+				if (!m.isVisible()) {
+					iterator.remove();
+				}
+			}
+		}
+		return displayedMarkers;
 	}
 
 	@Override
