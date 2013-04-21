@@ -88,6 +88,8 @@ public interface GoogleMap {
 
 	float getMinZoomLevel();
 
+	float getMinZoomLevelNotClustered(Marker marker);
+
 	Location getMyLocation();
 
 	Projection getProjection();

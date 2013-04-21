@@ -238,6 +238,11 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 	}
 
 	@Override
+	public float getMinZoomLevelNotClustered(Marker marker) {
+		return clusteringStrategy.getMinZoomLevelNotClustered(marker);
+	}
+
+	@Override
 	public Location getMyLocation() {
 		return real.getMyLocation();
 	}

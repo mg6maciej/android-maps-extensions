@@ -102,6 +102,11 @@ class DynamicNoClusteringStrategy implements ClusteringStrategy {
 		return null;
 	}
 
+	@Override
+	public float getMinZoomLevelNotClustered(Marker marker) {
+		return 0.0f;
+	}
+
 	private void showMarkersInVisibleRegion() {
 		Projection projection = map.getProjection();
 		VisibleRegion visibleRegion = projection.getVisibleRegion();

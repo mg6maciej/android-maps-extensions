@@ -38,4 +38,6 @@ interface ClusteringStrategy {
 	Marker map(com.google.android.gms.maps.model.Marker original);
 
 	List<Marker> getDisplayedMarkers();
+
+	float getMinZoomLevelNotClustered(Marker marker);
 }

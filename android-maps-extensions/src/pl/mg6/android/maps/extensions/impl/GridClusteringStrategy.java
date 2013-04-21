@@ -181,6 +181,11 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		return displayedMarkers;
 	}
 
+	@Override
+	public float getMinZoomLevelNotClustered(Marker marker) {
+		throw new UnsupportedOperationException();
+	}
+
 	private boolean isMarkerInCluster(DelegatingMarker marker, ClusterMarker cluster) {
 		long clusterId = cluster.getClusterId();
 		long markerClusterId = calculateClusterId(marker.getPosition());
