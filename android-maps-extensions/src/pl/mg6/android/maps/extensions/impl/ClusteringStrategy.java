@@ -15,6 +15,8 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import java.util.List;
+
 import com.google.android.gms.maps.model.CameraPosition;
 
 import pl.mg6.android.maps.extensions.Marker;
@@ -34,4 +36,6 @@ interface ClusteringStrategy {
 	void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible);
 
 	Marker map(com.google.android.gms.maps.model.Marker original);
+
+	List<Marker> getDisplayedMarkers();
 }

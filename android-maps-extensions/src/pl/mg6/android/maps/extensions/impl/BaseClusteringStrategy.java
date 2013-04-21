@@ -20,9 +20,9 @@ import java.util.List;
 
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings.IconDataProvider;
-import android.util.SparseArray;
 
-import com.google.android.gms.maps.GoogleMap;
+import android.support.v4.util.SparseArrayCompat;
+
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -32,14 +32,14 @@ abstract class BaseClusteringStrategy implements ClusteringStrategy {
 
 	private final MarkerOptions markerOptions = new MarkerOptions();
 
-	private SparseArray<List<Marker>> markersCache = new SparseArray<List<Marker>>();
+	private SparseArrayCompat<List<Marker>> markersCache = new SparseArrayCompat<List<Marker>>();
 
 	private IconDataProvider iconDataProvider;
-	private SparseArray<IconData> iconDataCache = new SparseArray<IconData>();
+	private SparseArrayCompat<IconData> iconDataCache = new SparseArrayCompat<IconData>();
 
-	private GoogleMap map;
+	private IGoogleMap map;
 
-	public BaseClusteringStrategy(ClusteringSettings settings, GoogleMap map) {
+	public BaseClusteringStrategy(ClusteringSettings settings, IGoogleMap map) {
 		this.iconDataProvider = settings.getIconDataProvider();
 		this.map = map;
 	}

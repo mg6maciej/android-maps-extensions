@@ -83,6 +83,17 @@ class ClusterMarker implements Marker {
 		}
 	}
 
+	Marker getDisplauedMarker() {
+		int count = markers.size();
+		if (count == 0) {
+			return null;
+		} else if (count == 1) {
+			return markers.get(0);
+		} else {
+			return this;
+		}
+	}
+
 	private void cacheVirtual() {
 		if (virtual != null) {
 			strategy.putInCache(virtual, lastCount);

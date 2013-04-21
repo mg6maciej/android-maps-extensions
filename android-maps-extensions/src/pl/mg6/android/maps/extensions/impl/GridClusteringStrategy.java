@@ -25,7 +25,6 @@ import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.utils.SphericalMercator;
 import android.support.v4.util.LongSparseArray;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -39,7 +38,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	private boolean addMarkersDynamically;
 	private double baseClusterSize;
-	private GoogleMap map;
+	private IGoogleMap map;
 	private Map<DelegatingMarker, ClusterMarker> markers;
 	private double clusterSize;
 	private int[] visibleClusters = new int[4];
@@ -47,9 +46,9 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	private LongSparseArray<ClusterMarker> clusters = new LongSparseArray<ClusterMarker>();
 	private List<ClusterMarker> cache = new ArrayList<ClusterMarker>();
 
-	private ClusterRefresher refresher = new ClusterRefresher();
+	private ClusterRefresher refresher;
 
-	public GridClusteringStrategy(ClusteringSettings settings, GoogleMap map, List<DelegatingMarker> markers) {
+	public GridClusteringStrategy(ClusteringSettings settings, IGoogleMap map, List<DelegatingMarker> markers, ClusterRefresher refresher) {
 		super(settings, map);
 		this.addMarkersDynamically = settings.isAddMarkersDynamically();
 		this.baseClusterSize = settings.getClusterSize();
@@ -60,6 +59,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 				this.markers.put(m, null);
 			}
 		}
+		this.refresher = refresher;
 		this.clusterSize = calculateClusterSize(map.getCameraPosition().zoom);
 		recalculate();
 	}
@@ -168,6 +168,19 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public List<Marker> getDisplayedMarkers() {
+		List<Marker> displayedMarkers = new ArrayList<Marker>();
+		for (int i = 0; i < clusters.size(); i++) {
+			ClusterMarker cluster = clusters.valueAt(i);
+			Marker displayedMarker = cluster.getDisplauedMarker();
+			if (displayedMarker != null) {
+				displayedMarkers.add(displayedMarker);
+			}
+		}
+		return displayedMarkers;
 	}
 
 	private boolean isMarkerInCluster(DelegatingMarker marker, ClusterMarker cluster) {

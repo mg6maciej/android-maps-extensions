@@ -22,7 +22,6 @@ import java.util.Set;
 
 import pl.mg6.android.maps.extensions.Marker;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -30,11 +29,11 @@ import com.google.android.gms.maps.model.VisibleRegion;
 
 class DynamicNoClusteringStrategy implements ClusteringStrategy {
 
-	private GoogleMap map;
+	private IGoogleMap map;
 	private Set<DelegatingMarker> markers = new HashSet<DelegatingMarker>();
 	private LatLngBounds visibleRegionBounds;
 
-	public DynamicNoClusteringStrategy(GoogleMap map, List<DelegatingMarker> markers) {
+	public DynamicNoClusteringStrategy(IGoogleMap map, List<DelegatingMarker> markers) {
 		this.map = map;
 		for (DelegatingMarker marker : markers) {
 			if (marker.isVisible()) {
@@ -95,6 +94,11 @@ class DynamicNoClusteringStrategy implements ClusteringStrategy {
 
 	@Override
 	public Marker map(com.google.android.gms.maps.model.Marker original) {
+		return null;
+	}
+
+	@Override
+	public List<Marker> getDisplayedMarkers() {
 		return null;
 	}
 

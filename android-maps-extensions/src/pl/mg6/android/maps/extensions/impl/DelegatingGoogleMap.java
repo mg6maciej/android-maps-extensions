@@ -47,7 +47,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
-	private com.google.android.gms.maps.GoogleMap real;
+	private IGoogleMap real;
 
 	private InfoWindowAdapter infoWindowAdapter;
 	private OnCameraChangeListener onCameraChangeListener;
@@ -67,7 +67,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 	private ClusteringStrategy clusteringStrategy = new NoClusteringStrategy(new ArrayList<DelegatingMarker>());
 
 	public DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
-		this.real = real;
+		this.real = new GoogleMapWrapper(real);
 		this.markers = new HashMap<LazyMarker, DelegatingMarker>();
 		this.createdMarkers = new HashMap<com.google.android.gms.maps.model.Marker, LazyMarker>();
 		this.polylines = new HashMap<com.google.android.gms.maps.model.Polyline, Polyline>();
@@ -101,7 +101,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 	public Marker addMarker(MarkerOptions markerOptions) {
 		boolean visible = markerOptions.isVisible();
 		markerOptions.visible(false);
-		LazyMarker realMarker = new LazyMarker(real, markerOptions, this);
+		LazyMarker realMarker = new LazyMarker(real.getMap(), markerOptions, this);
 		markerOptions.visible(visible);
 		DelegatingMarker marker = new DelegatingMarker(realMarker, this);
 		markers.put(realMarker, marker);
@@ -265,7 +265,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 			clusteringStrategy.cleanup();
 			ArrayList<DelegatingMarker> list = new ArrayList<DelegatingMarker>(markers.values());
 			if (clusteringSettings.isEnabled()) {
-				clusteringStrategy = new GridClusteringStrategy(clusteringSettings, real, list);
+				clusteringStrategy = new GridClusteringStrategy(clusteringSettings, real, list, new ClusterRefresher());
 			} else if (clusteringSettings.isAddMarkersDynamically()) {
 				clusteringStrategy = new DynamicNoClusteringStrategy(real, list);
 			} else {

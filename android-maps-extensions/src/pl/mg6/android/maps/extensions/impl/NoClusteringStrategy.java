@@ -65,4 +65,9 @@ class NoClusteringStrategy implements ClusteringStrategy {
 	public Marker map(com.google.android.gms.maps.model.Marker original) {
 		return null;
 	}
+
+	@Override
+	public List<Marker> getDisplayedMarkers() {
+		return null;
+	}
 }
