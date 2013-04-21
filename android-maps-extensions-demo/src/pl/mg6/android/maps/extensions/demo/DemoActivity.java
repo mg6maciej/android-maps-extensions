@@ -16,7 +16,6 @@
 package pl.mg6.android.maps.extensions.demo;
 
 import java.text.Collator;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -25,7 +24,6 @@ import pl.mg6.android.maps.extensions.Circle;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GoogleMap.InfoWindowAdapter;
-import pl.mg6.android.maps.extensions.GoogleMap.OnCameraChangeListener;
 import pl.mg6.android.maps.extensions.GoogleMap.OnInfoWindowClickListener;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMapClickListener;
 import pl.mg6.android.maps.extensions.Marker;
@@ -35,15 +33,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -52,9 +53,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DemoActivity extends FragmentActivity {
 
-	private GoogleMap map;
+	private static final double[] CLUSTER_SIZES = new double[] { 180, 160, 144, 120, 96 };
 
-	private double clusterSize = 180.0;
+	private GoogleMap map;
 
 	private MutableData[] dataArray = { new MutableData(6, new LatLng(-50, 0)), new MutableData(28, new LatLng(-52, 1)),
 			new MutableData(496, new LatLng(-51, -2)), };
@@ -191,38 +192,7 @@ public class DemoActivity extends FragmentActivity {
 			m.setData(data);
 		}
 
-		final List<Circle> mutableDataMarkerCircles = new ArrayList<Circle>();
-		Log.i("tag", "markers count: " + map.getMarkers().size() + " " + map.getDisplayedMarkers().size());
-		map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).icon(BitmapDescriptorFactory.defaultMarker(90)));
-
-		map.setOnCameraChangeListener(new OnCameraChangeListener() {
-
-			@Override
-			public void onCameraChange(CameraPosition cameraPosition) {
-				for (Circle c : mutableDataMarkerCircles) {
-					c.remove();
-				}
-				mutableDataMarkerCircles.clear();
-				List<Marker> displayedMarkers = map.getDisplayedMarkers();
-				Log.i("tag", "markers count: " + displayedMarkers.size());
-				for (Marker m : displayedMarkers) {
-					if (m.isCluster()) {
-						for (Marker m2 : m.getMarkers()) {
-							if (m2.getData() instanceof MutableData) {
-								Log.i("tag", "adding circle: " + m.getPosition());
-								mutableDataMarkerCircles.add(map.addCircle(new CircleOptions().center(m.getPosition()).radius(1000000)));
-								break;
-							}
-						}
-					} else {
-						if (m.getData() instanceof MutableData) {
-							Log.i("tag", "adding circle: " + m.getPosition());
-							mutableDataMarkerCircles.add(map.addCircle(new CircleOptions().center(m.getPosition()).radius(1000000)));
-						}
-					}
-				}
-			}
-		});
+		setUpClusteringViews();
 	}
 
 	@Override
@@ -254,20 +224,48 @@ public class DemoActivity extends FragmentActivity {
 		circle.setData("second circle");
 	}
 
-	public void onClusterClick(View view) {
-		ClusteringSettings clusteringSettings = new ClusteringSettings();
-		clusteringSettings.iconDataProvider(new DemoIconProvider(getResources()));
-		clusteringSettings.addMarkersDynamically(true);
-		clusteringSettings.clusterSize(clusterSize);
-		if (clusterSize > 100.0) {
-			clusterSize -= 10.0;
-		}
-		map.setClustering(clusteringSettings);
+	private void setUpClusteringViews() {
+		CheckBox clusterCheckbox = (CheckBox) findViewById(R.id.checkbox_cluster);
+		final SeekBar clusterSizeSeekbar = (SeekBar) findViewById(R.id.seekbar_cluster_size);
+		clusterCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				clusterSizeSeekbar.setEnabled(isChecked);
+
+				updateClustering(clusterSizeSeekbar.getProgress(), isChecked);
+			}
+		});
+		clusterSizeSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				updateClustering(progress, true);
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+		});
 	}
 
-	public void onNormalClick(View view) {
-		clusterSize = 180.0;
-		map.setClustering(new ClusteringSettings().enabled(false).addMarkersDynamically(true));
+	void updateClustering(int clusterSizeIndex, boolean enabled) {
+		ClusteringSettings clusteringSettings = new ClusteringSettings();
+		clusteringSettings.addMarkersDynamically(true);
+
+		if (enabled) {
+			clusteringSettings.iconDataProvider(new DemoIconProvider(getResources()));
+
+			double clusterSize = CLUSTER_SIZES[clusterSizeIndex];
+			clusteringSettings.clusterSize(clusterSize);
+		} else {
+			clusteringSettings.enabled(false);
+		}
+		map.setClustering(clusteringSettings);
 	}
 
 	private static class MutableData {
