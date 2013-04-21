@@ -63,6 +63,11 @@ public interface GoogleMap {
 
 	CameraPosition getCameraPosition();
 
+	/**
+	 * Get a list of markers that could be clicked by user. This is a mix of normal (only visible) and cluster markers.
+	 * 
+	 * @return list of markers that are displayed at current zoom level
+	 */
 	List<Marker> getDisplayedMarkers();
 
 	int getMapType();
@@ -88,6 +93,18 @@ public interface GoogleMap {
 
 	float getMinZoomLevel();
 
+	/**
+	 * Get the minimum zoom level at which marker will be displayed. This function can take as a parameter only markers added via GoogleMap.addMarker and
+	 * visible. When clustering is not used, it will always return 0.
+	 * 
+	 * <code>
+	 * float zoom = map.getMinZoomLevelNotClustered(marker);
+	 * map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), zoom));
+	 * </code>
+	 * 
+	 * @param marker
+	 * @return value in range [0, 25] inclusive or Float.POSITIVE_INFINITY when this marker is very near another visible marker
+	 */
 	float getMinZoomLevelNotClustered(Marker marker);
 
 	Location getMyLocation();
