@@ -183,7 +183,36 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	@Override
 	public float getMinZoomLevelNotClustered(Marker marker) {
-		throw new UnsupportedOperationException();
+		if (!markers.containsKey(marker)) {
+			throw new UnsupportedOperationException("marker is not visible or is a cluster");
+		}
+		float zoom = 0.0f;
+		while (hasCollision(marker, zoom)) {
+			zoom += 1.0f;
+		}
+		return zoom;
+	}
+
+	private boolean hasCollision(Marker marker, float zoom) {
+		double clusterSize = calculateClusterSize(zoom);
+		LatLng position = marker.getPosition();
+		int x = (int) (SphericalMercator.scaleLongitude(position.longitude) / clusterSize);
+		int y = (int) (SphericalMercator.scaleLatitude(position.latitude) / clusterSize);
+		for (DelegatingMarker m : markers.keySet()) {
+			if (m.equals(marker)) {
+				continue;
+			}
+			LatLng mPosition = m.getPosition();
+			int mX = (int) (SphericalMercator.scaleLongitude(mPosition.longitude) / clusterSize);
+			if (x != mX) {
+				continue;
+			}
+			int mY = (int) (SphericalMercator.scaleLatitude(mPosition.latitude) / clusterSize);
+			if (y == mY) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private boolean isMarkerInCluster(DelegatingMarker marker, ClusterMarker cluster) {

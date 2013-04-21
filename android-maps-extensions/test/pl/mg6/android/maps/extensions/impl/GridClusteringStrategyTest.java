@@ -187,31 +187,31 @@ public class GridClusteringStrategyTest {
 
 		strategy.getMinZoomLevelNotClustered(marker1);
 	}
-	
+
 	@Test
 	public void whenSingleMarkerAddedShouldReturnZero() {
-		
+
 		strategy.onAdd(marker1);
-		
+
 		Assert.assertEquals(0.0f, strategy.getMinZoomLevelNotClustered(marker1), 0.001f);
 	}
-	
+
 	@Test
 	public void whenAddedMarkersAreFarFromEachOtherShouldReturnSmallZoom() {
-		
+
 		strategy.onAdd(marker1);
 		strategy.onAdd(marker2);
-		
+
 		Assert.assertEquals(2.0f, strategy.getMinZoomLevelNotClustered(marker1), 0.0001f);
 		Assert.assertEquals(2.0f, strategy.getMinZoomLevelNotClustered(marker2), 0.0001f);
 	}
-	
+
 	@Test
 	public void whenAddedMarkersAreCloseToEachOtherShouldReturnBigZoom() {
-		
+
 		strategy.onAdd(marker1);
 		strategy.onAdd(marker3);
-		
+
 		Assert.assertEquals(11.0f, strategy.getMinZoomLevelNotClustered(marker1), 0.0001f);
 		Assert.assertEquals(11.0f, strategy.getMinZoomLevelNotClustered(marker3), 0.0001f);
 	}
