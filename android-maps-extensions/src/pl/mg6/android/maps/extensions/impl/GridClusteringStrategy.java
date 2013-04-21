@@ -187,8 +187,11 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 			throw new UnsupportedOperationException("marker is not visible or is a cluster");
 		}
 		float zoom = 0.0f;
-		while (hasCollision(marker, zoom)) {
+		while (zoom < 25.5f && hasCollision(marker, zoom)) {
 			zoom += 1.0f;
+		}
+		if (zoom > 25.5f) {
+			zoom = Float.POSITIVE_INFINITY;
 		}
 		return zoom;
 	}
