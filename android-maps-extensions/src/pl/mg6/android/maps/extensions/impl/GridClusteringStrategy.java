@@ -40,6 +40,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	private IGoogleMap map;
 	private Map<DelegatingMarker, ClusterMarker> markers;
 	private double clusterSize;
+	private int oldZoom, zoom;
 	private int[] visibleClusters = new int[4];
 
 	private LongSparseArray<ClusterMarker> clusters = new LongSparseArray<ClusterMarker>();
@@ -59,7 +60,9 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 			}
 		}
 		this.refresher = refresher;
-		this.clusterSize = calculateClusterSize(map.getCameraPosition().zoom);
+		this.oldZoom = -1;
+		this.zoom = Math.round(map.getCameraPosition().zoom);
+		this.clusterSize = calculateClusterSize(zoom);
 		recalculate();
 	}
 
@@ -82,7 +85,9 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	@Override
 	public void onCameraChange(CameraPosition cameraPosition) {
-		double clusterSize = calculateClusterSize(cameraPosition.zoom);
+		oldZoom = zoom;
+		zoom = Math.round(cameraPosition.zoom);
+		double clusterSize = calculateClusterSize(zoom);
 		if (this.clusterSize != clusterSize) {
 			this.clusterSize = clusterSize;
 			recalculate();
@@ -185,17 +190,17 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		if (!markers.containsKey(marker)) {
 			throw new UnsupportedOperationException("marker is not visible or is a cluster");
 		}
-		float zoom = 0.0f;
-		while (zoom < 25.5f && hasCollision(marker, zoom)) {
-			zoom += 1.0f;
+		int zoom = 0;
+		while (zoom <= 25 && hasCollision(marker, zoom)) {
+			zoom++;
 		}
-		if (zoom > 25.5f) {
-			zoom = Float.POSITIVE_INFINITY;
+		if (zoom > 25) {
+			return Float.POSITIVE_INFINITY;
 		}
 		return zoom;
 	}
 
-	private boolean hasCollision(Marker marker, float zoom) {
+	private boolean hasCollision(Marker marker, int zoom) {
 		double clusterSize = calculateClusterSize(zoom);
 		LatLng position = marker.getPosition();
 		int x = (int) (SphericalMercator.scaleLongitude(position.longitude) / clusterSize);
@@ -304,7 +309,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		return (int) (SphericalMercator.scaleLongitude(lng) / clusterSize);
 	}
 
-	private double calculateClusterSize(float zoom) {
-		return baseClusterSize / (1 << Math.round(zoom));
+	private double calculateClusterSize(int zoom) {
+		return baseClusterSize / (1 << zoom);
 	}
 }
