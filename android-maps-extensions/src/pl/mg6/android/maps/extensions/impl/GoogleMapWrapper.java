@@ -29,7 +29,6 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.LocationSource;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
@@ -130,8 +129,8 @@ class GoogleMapWrapper implements IGoogleMap {
 	}
 
 	@Override
-	public final Projection getProjection() {
-		return map.getProjection();
+	public final ProjectionWrapper getProjection() {
+		return new ProjectionWrapper(map.getProjection());
 	}
 
 	@Override

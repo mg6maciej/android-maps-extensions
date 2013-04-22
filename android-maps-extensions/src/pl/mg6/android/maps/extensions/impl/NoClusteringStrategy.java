@@ -17,9 +17,9 @@ package pl.mg6.android.maps.extensions.impl;
 
 import java.util.List;
 
-import com.google.android.gms.maps.model.CameraPosition;
-
 import pl.mg6.android.maps.extensions.Marker;
+
+import com.google.android.gms.maps.model.CameraPosition;
 
 class NoClusteringStrategy implements ClusteringStrategy {
 

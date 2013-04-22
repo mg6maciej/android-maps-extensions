@@ -19,8 +19,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import android.os.Handler;
-import android.os.Message;
 import android.os.Handler.Callback;
+import android.os.Message;
 
 class ClusterRefresher {
 

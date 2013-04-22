@@ -48,7 +48,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
-	private IGoogleMap real;
+	private GoogleMapWrapper real;
 
 	private InfoWindowAdapter infoWindowAdapter;
 	private OnCameraChangeListener onCameraChangeListener;
@@ -249,7 +249,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public Projection getProjection() {
-		return real.getProjection();
+		return real.getProjection().getProjection();
 	}
 
 	@Override

@@ -22,7 +22,6 @@ import java.util.Set;
 
 import pl.mg6.android.maps.extensions.Marker;
 
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.VisibleRegion;
@@ -108,7 +107,7 @@ class DynamicNoClusteringStrategy implements ClusteringStrategy {
 	}
 
 	private void showMarkersInVisibleRegion() {
-		Projection projection = map.getProjection();
+		IProjection projection = map.getProjection();
 		VisibleRegion visibleRegion = projection.getVisibleRegion();
 		visibleRegionBounds = visibleRegion.latLngBounds;
 		Iterator<DelegatingMarker> iterator = markers.iterator();

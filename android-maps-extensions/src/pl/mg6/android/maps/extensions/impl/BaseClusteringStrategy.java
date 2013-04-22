@@ -20,7 +20,6 @@ import java.util.List;
 
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings.IconDataProvider;
-
 import android.support.v4.util.SparseArrayCompat;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;

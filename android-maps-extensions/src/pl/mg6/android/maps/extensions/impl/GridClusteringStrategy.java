@@ -25,7 +25,6 @@ import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.utils.SphericalMercator;
 import android.support.v4.util.LongSparseArray;
 
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -281,7 +280,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	}
 
 	private void calculateVisibleClusters() {
-		Projection projection = map.getProjection();
+		IProjection projection = map.getProjection();
 		VisibleRegion visibleRegion = projection.getVisibleRegion();
 		LatLngBounds bounds = visibleRegion.latLngBounds;
 		visibleClusters[0] = convLat(bounds.southwest.latitude);

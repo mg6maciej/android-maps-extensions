@@ -20,7 +20,6 @@ import java.util.List;
 
 import pl.mg6.android.maps.extensions.utils.SphericalMercator;
 
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polyline;
@@ -32,7 +31,7 @@ class DebugHelper {
 
 	void drawDebugGrid(IGoogleMap map, double clusterSize) {
 		cleanup();
-		Projection projection = map.getProjection();
+		IProjection projection = map.getProjection();
 		LatLngBounds bounds = projection.getVisibleRegion().latLngBounds;
 		double minY = -180 + clusterSize * (int) (SphericalMercator.scaleLatitude(bounds.southwest.latitude) / clusterSize);
 		double minX = -180 + clusterSize * (int) (SphericalMercator.scaleLongitude(bounds.southwest.longitude) / clusterSize);
