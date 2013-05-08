@@ -94,7 +94,7 @@ class ClusterMarker implements Marker {
 		}
 	}
 
-	private void cacheVirtual() {
+	void cacheVirtual() {
 		if (virtual != null) {
 			strategy.putInCache(virtual, lastCount);
 			virtual = null;
@@ -118,7 +118,10 @@ class ClusterMarker implements Marker {
 
 	void reset() {
 		markers.clear();
-		cacheVirtual();
+	}
+
+	List<DelegatingMarker> getMarkersInternal() {
+		return new ArrayList<DelegatingMarker>(markers);
 	}
 
 	@Override

@@ -44,7 +44,6 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	private int[] visibleClusters = new int[4];
 
 	private LongSparseArray<ClusterMarker> clusters = new LongSparseArray<ClusterMarker>();
-	private List<ClusterMarker> cache = new ArrayList<ClusterMarker>();
 
 	private ClusterRefresher refresher;
 
@@ -231,11 +230,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	private ClusterMarker findClusterById(long clusterId) {
 		ClusterMarker cluster = clusters.get(clusterId);
 		if (cluster == null) {
-			if (cache.size() > 0) {
-				cluster = cache.remove(cache.size() - 1);
-			} else {
-				cluster = new ClusterMarker(this);
-			}
+			cluster = new ClusterMarker(this);
 			cluster.setClusterId(clusterId);
 			clusters.put(clusterId, cluster);
 		}
@@ -257,17 +252,60 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	}
 
 	private void recalculate() {
-		for (int i = 0; i < clusters.size(); i++) {
-			ClusterMarker cluster = clusters.valueAt(i);
-			cluster.reset();
-			cache.add(cluster);
-		}
-		clusters.clear();
 		if (addMarkersDynamically) {
 			calculateVisibleClusters();
 		}
-		for (DelegatingMarker marker : markers.keySet()) {
-			addMarker(marker);
+		if (oldZoom == -1) {
+			for (DelegatingMarker marker : markers.keySet()) {
+				addMarker(marker);
+			}
+		} else {
+			// TODO: refactor
+			LongSparseArray<ClusterMarker> newClusters = new LongSparseArray<ClusterMarker>();
+			for (int i = 0; i < clusters.size(); i++) {
+				ClusterMarker cluster = clusters.valueAt(i);
+				List<DelegatingMarker> ms = cluster.getMarkersInternal();
+				DelegatingMarker first = ms.get(0);
+				LatLng firstPosition = first.getPosition();
+				long firstClusterId = calculateClusterId(firstPosition);
+				if (newClusters.get(firstClusterId) != null) {
+					cluster.cacheVirtual();
+					cluster = newClusters.get(firstClusterId);
+				} else {
+					cluster.reset();
+					cluster.setClusterId(firstClusterId);
+				}
+				cluster.add(first);
+				markers.put(first, cluster);
+				if (!addMarkersDynamically || isPositionInVisibleClusters(firstPosition)) {
+					refresh(cluster);
+				} else {
+					cluster.cacheVirtual();
+				}
+				newClusters.put(firstClusterId, cluster);
+				for (int j = 1; j < ms.size(); j++) {
+					DelegatingMarker m = ms.get(j);
+					LatLng position = m.getPosition();
+					long clusterId = calculateClusterId(position);
+					if (clusterId == firstClusterId) {
+						cluster.add(m);
+						markers.put(m, cluster);
+					} else {
+						ClusterMarker newCluster = newClusters.get(clusterId);
+						if (newCluster == null) {
+							newCluster = new ClusterMarker(this);
+							newCluster.setClusterId(clusterId);
+							newClusters.put(clusterId, newCluster);
+							if (!addMarkersDynamically || isPositionInVisibleClusters(position)) {
+								refresh(newCluster);
+							}
+						}
+						newCluster.add(m);
+						markers.put(m, newCluster);
+					}
+				}
+			}
+			clusters = newClusters;
 		}
 		refresher.refreshAll();
 	}
