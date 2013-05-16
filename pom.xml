@@ -25,11 +25,11 @@
 
 		<support.v4.groupId>com.google.android</support.v4.groupId>
 		<support.v4.artifactId>support-v4</support.v4.artifactId>
-		<support.v4.version>r12</support.v4.version>
+		<support.v4.version>r13</support.v4.version>
 
 		<google.play.services.groupId>com.google.android.gms</google.play.services.groupId>
 		<google.play.services.artifactId>google-play-services</google.play.services.artifactId>
-		<google.play.services.version>r6</google.play.services.version>
+		<google.play.services.version>r7</google.play.services.version>
 	</properties>
 
 	<dependencyManagement>
