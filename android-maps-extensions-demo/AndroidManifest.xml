@@ -36,6 +36,10 @@
         </activity>
         <activity android:name=".DemoActivity" />
         <activity android:name=".LaunchTimeTestActivity" />
+        <activity android:name=".Issue14InfoWindowNotShowingExampleActivity" />
+        <activity android:name=".Issue14InfoWindowNotShowingClusterExampleActivity" />
+        <activity android:name=".Issue15InfoWindowNotShowingExampleActivity" />
+        <activity android:name=".Issue15InfoWindowNotShowingClusterExampleActivity" />
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
