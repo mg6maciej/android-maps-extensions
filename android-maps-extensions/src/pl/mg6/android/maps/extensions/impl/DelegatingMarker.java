@@ -136,7 +136,7 @@ class DelegatingMarker implements Marker {
 
 	@Override
 	public void showInfoWindow() {
-		real.showInfoWindow();
+		map.onShowInfoWindow(this);
 	}
 
 	@Override
@@ -167,5 +167,9 @@ class DelegatingMarker implements Marker {
 
 	void changeVisible(boolean visible) {
 		real.setVisible(this.visible && visible);
+	}
+
+	void forceShowInfoWindow() {
+		real.showInfoWindow();
 	}
 }

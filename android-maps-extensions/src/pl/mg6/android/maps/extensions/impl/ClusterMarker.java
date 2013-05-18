@@ -168,7 +168,6 @@ class ClusterMarker implements Marker {
 		if (virtual != null) {
 			virtual.hideInfoWindow();
 		}
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -234,9 +233,11 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public void showInfoWindow() {
+		if (virtual == null && markers.size() > 1) {
+			refresh();
+		}
 		if (virtual != null) {
 			virtual.showInfoWindow();
 		}
-		throw new UnsupportedOperationException();
 	}
 }

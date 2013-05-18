@@ -430,6 +430,10 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 		clusteringStrategy.onVisibilityChangeRequest(marker, visible);
 	}
 
+	void onShowInfoWindow(DelegatingMarker marker) {
+		clusteringStrategy.onShowInfoWindow(marker);
+	}
+
 	@Override
 	public void onMarkerCreate(LazyMarker marker) {
 		createdMarkers.put(marker.getMarker(), marker);

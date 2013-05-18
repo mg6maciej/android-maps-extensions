@@ -247,6 +247,18 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 		}
 	}
 
+	@Override
+	public void onShowInfoWindow(DelegatingMarker marker) {
+		if (!marker.isVisible()) {
+			return;
+		}
+		ClusterMarker cluster = markers.get(marker);
+		if (cluster.getMarkersInternal().size() == 1) {
+			cluster.refresh();
+			marker.forceShowInfoWindow();
+		}
+	}
+
 	private void refresh(ClusterMarker cluster) {
 		refresher.refresh(cluster);
 	}
@@ -280,6 +292,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 				if (!addMarkersDynamically || isPositionInVisibleClusters(firstPosition)) {
 					refresh(cluster);
 				} else {
+					// TODO: don't cacheVirtual when showing info window and markers count doesn't change
 					cluster.cacheVirtual();
 				}
 				newClusters.put(firstClusterId, cluster);

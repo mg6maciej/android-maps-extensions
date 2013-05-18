@@ -92,6 +92,17 @@ class DynamicNoClusteringStrategy implements ClusteringStrategy {
 	}
 
 	@Override
+	public void onShowInfoWindow(DelegatingMarker marker) {
+		if (!marker.isVisible()) {
+			return;
+		}
+		if (markers.remove(marker)) {
+			marker.changeVisible(true);
+		}
+		marker.forceShowInfoWindow();
+	}
+
+	@Override
 	public Marker map(com.google.android.gms.maps.model.Marker original) {
 		return null;
 	}

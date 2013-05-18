@@ -62,6 +62,11 @@ class NoClusteringStrategy implements ClusteringStrategy {
 	}
 
 	@Override
+	public void onShowInfoWindow(DelegatingMarker marker) {
+		marker.forceShowInfoWindow();
+	}
+
+	@Override
 	public Marker map(com.google.android.gms.maps.model.Marker original) {
 		return null;
 	}

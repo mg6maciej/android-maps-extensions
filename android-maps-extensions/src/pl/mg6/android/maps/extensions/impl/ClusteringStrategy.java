@@ -35,6 +35,8 @@ interface ClusteringStrategy {
 
 	void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible);
 
+	void onShowInfoWindow(DelegatingMarker marker);
+
 	Marker map(com.google.android.gms.maps.model.Marker original);
 
 	List<Marker> getDisplayedMarkers();
