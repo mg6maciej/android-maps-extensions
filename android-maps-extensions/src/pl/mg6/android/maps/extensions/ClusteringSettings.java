@@ -21,6 +21,8 @@ public class ClusteringSettings {
 
 	private boolean addMarkersDynamically = false;
 
+	private AnimationSettings animation = null;
+
 	private double clusterSize = 180.0;
 
 	private boolean enabled = true;
@@ -29,6 +31,11 @@ public class ClusteringSettings {
 
 	public ClusteringSettings addMarkersDynamically(boolean addMarkersDynamically) {
 		this.addMarkersDynamically = addMarkersDynamically;
+		return this;
+	}
+
+	public ClusteringSettings animation(AnimationSettings animation) {
+		this.animation = animation;
 		return this;
 	}
 
@@ -46,6 +53,10 @@ public class ClusteringSettings {
 	public ClusteringSettings enabled(boolean enabled) {
 		this.enabled = enabled;
 		return this;
+	}
+
+	public AnimationSettings getAnimation() {
+		return animation;
 	}
 
 	public double getClusterSize() {
@@ -88,6 +99,9 @@ public class ClusteringSettings {
 			return true;
 		}
 		if (clusterSize != other.clusterSize) {
+			return false;
+		}
+		if (animation == null ? other.animation != null : animation.equals(other.animation)) {
 			return false;
 		}
 		return iconDataProvider.equals(other.iconDataProvider);
