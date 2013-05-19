@@ -277,6 +277,10 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 			for (int i = 0; i < clusters.size(); i++) {
 				ClusterMarker cluster = clusters.valueAt(i);
 				List<DelegatingMarker> ms = cluster.getMarkersInternal();
+				if (ms.isEmpty()) {
+					cluster.cacheVirtual();
+					continue;
+				}
 				DelegatingMarker first = ms.get(0);
 				LatLng firstPosition = first.getPosition();
 				long firstClusterId = calculateClusterId(firstPosition);
