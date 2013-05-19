@@ -18,7 +18,9 @@ package pl.mg6.android.maps.extensions.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.mg6.android.maps.extensions.AnimationSettings;
 import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.GoogleMap.CancelableCallback;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
@@ -123,6 +125,26 @@ class ClusterMarker implements Marker {
 
 	List<DelegatingMarker> getMarkersInternal() {
 		return new ArrayList<DelegatingMarker>(markers);
+	}
+	
+	@Override
+	public void animatePosition(LatLng target) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void animatePosition(LatLng target, AnimationSettings settings) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void animatePosition(LatLng target, AnimationSettings settings, CancelableCallback callback) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void animatePosition(LatLng target, CancelableCallback callback) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

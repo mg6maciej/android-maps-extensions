@@ -15,16 +15,23 @@
  */
 package pl.mg6.android.maps.extensions;
 
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 
 public class AnimationSettings {
 
-	private long duration = 500L;
+	public static final long DEFAULT_DURATION = 500L;
 
-	private Interpolator interpolator = new DecelerateInterpolator();
+	public static final Interpolator DEFAULT_INTERPOLATOR = new LinearInterpolator();
+
+	private long duration = DEFAULT_DURATION;
+
+	private Interpolator interpolator = DEFAULT_INTERPOLATOR;
 
 	public AnimationSettings duration(long duration) {
+		if (duration <= 0L) {
+			throw new IllegalArgumentException();
+		}
 		this.duration = duration;
 		return this;
 	}
@@ -38,6 +45,9 @@ public class AnimationSettings {
 	}
 
 	public AnimationSettings interpolator(Interpolator interpolator) {
+		if (interpolator == null) {
+			throw new NullPointerException();
+		}
 		this.interpolator = interpolator;
 		return this;
 	}
