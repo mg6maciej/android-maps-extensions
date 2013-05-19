@@ -56,6 +56,7 @@ class DelegatingMarker implements Marker {
 		if (target == null || settings == null) {
 			throw new NullPointerException();
 		}
+		map.onAnimateMarkerPosition(this, target, settings, callback);
 	}
 
 	@Override

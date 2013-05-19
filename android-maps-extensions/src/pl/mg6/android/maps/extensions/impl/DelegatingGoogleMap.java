@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import pl.mg6.android.maps.extensions.AnimationSettings;
 import pl.mg6.android.maps.extensions.Circle;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
@@ -32,6 +33,7 @@ import pl.mg6.android.maps.extensions.TileOverlay;
 import pl.mg6.android.maps.extensions.lazy.LazyMarker;
 import pl.mg6.android.maps.extensions.lazy.LazyMarker.OnMarkerCreateListener;
 import android.location.Location;
+import android.os.SystemClock;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -41,6 +43,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -66,6 +69,8 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	private ClusteringSettings clusteringSettings = new ClusteringSettings().enabled(false);
 	private ClusteringStrategy clusteringStrategy = new NoClusteringStrategy(new ArrayList<DelegatingMarker>());
+
+	private MarkerAnimator markerAnimator = new MarkerAnimator();
 
 	public DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
 		this.real = new GoogleMapWrapper(real);
@@ -432,6 +437,10 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	void onShowInfoWindow(DelegatingMarker marker) {
 		clusteringStrategy.onShowInfoWindow(marker);
+	}
+
+	void onAnimateMarkerPosition(DelegatingMarker marker, LatLng target, AnimationSettings settings, CancelableCallback callback) {
+		markerAnimator.animate(marker, marker.getPosition(), target, SystemClock.uptimeMillis(), settings);
 	}
 
 	@Override

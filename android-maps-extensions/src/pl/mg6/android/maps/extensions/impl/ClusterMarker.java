@@ -126,22 +126,22 @@ class ClusterMarker implements Marker {
 	List<DelegatingMarker> getMarkersInternal() {
 		return new ArrayList<DelegatingMarker>(markers);
 	}
-	
+
 	@Override
 	public void animatePosition(LatLng target) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public void animatePosition(LatLng target, AnimationSettings settings) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public void animatePosition(LatLng target, AnimationSettings settings, CancelableCallback callback) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	@Override
 	public void animatePosition(LatLng target, CancelableCallback callback) {
 		throw new UnsupportedOperationException();
