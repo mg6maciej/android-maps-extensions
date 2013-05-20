@@ -439,7 +439,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 		clusteringStrategy.onShowInfoWindow(marker);
 	}
 
-	void onAnimateMarkerPosition(DelegatingMarker marker, LatLng target, AnimationSettings settings, CancelableCallback callback) {
+	void onAnimateMarkerPosition(DelegatingMarker marker, LatLng target, AnimationSettings settings) {
 		markerAnimator.animate(marker, marker.getPosition(), target, SystemClock.uptimeMillis(), settings);
 	}
 

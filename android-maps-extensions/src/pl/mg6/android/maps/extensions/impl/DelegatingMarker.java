@@ -19,7 +19,6 @@ import java.util.List;
 
 import pl.mg6.android.maps.extensions.AnimationSettings;
 import pl.mg6.android.maps.extensions.Marker;
-import pl.mg6.android.maps.extensions.GoogleMap.CancelableCallback;
 import pl.mg6.android.maps.extensions.lazy.LazyMarker;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -43,25 +42,15 @@ class DelegatingMarker implements Marker {
 
 	@Override
 	public void animatePosition(LatLng target) {
-		animatePosition(target, new AnimationSettings(), null);
+		animatePosition(target, new AnimationSettings());
 	}
 
 	@Override
 	public void animatePosition(LatLng target, AnimationSettings settings) {
-		animatePosition(target, settings, null);
-	}
-
-	@Override
-	public void animatePosition(LatLng target, AnimationSettings settings, CancelableCallback callback) {
 		if (target == null || settings == null) {
 			throw new NullPointerException();
 		}
-		map.onAnimateMarkerPosition(this, target, settings, callback);
-	}
-
-	@Override
-	public void animatePosition(LatLng target, CancelableCallback callback) {
-		animatePosition(target, new AnimationSettings(), callback);
+		map.onAnimateMarkerPosition(this, target, settings);
 	}
 
 	@Override

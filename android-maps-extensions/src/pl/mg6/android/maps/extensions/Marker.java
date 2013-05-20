@@ -17,8 +17,6 @@ package pl.mg6.android.maps.extensions;
 
 import java.util.List;
 
-import pl.mg6.android.maps.extensions.GoogleMap.CancelableCallback;
-
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -27,10 +25,6 @@ public interface Marker {
 	void animatePosition(LatLng target);
 
 	void animatePosition(LatLng target, AnimationSettings settings);
-
-	void animatePosition(LatLng target, AnimationSettings settings, CancelableCallback callback);
-
-	void animatePosition(LatLng target, CancelableCallback callback);
 
 	/**
 	 * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650
