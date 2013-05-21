@@ -17,6 +17,7 @@ package pl.mg6.android.maps.extensions;
 
 import java.util.List;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 
 public interface Marker {
@@ -58,12 +59,16 @@ public interface Marker {
 
 	void remove();
 
+	void setAnchor(float anchorU, float anchorV);
+
 	/**
 	 * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650
 	 */
 	void setData(Object data);
 
 	void setDraggable(boolean draggable);
+
+	void setIcon(BitmapDescriptor icon);
 
 	void setPosition(LatLng position);
 

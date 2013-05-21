@@ -20,6 +20,7 @@ import java.util.List;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.lazy.LazyMarker;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 
 class DelegatingMarker implements Marker {
@@ -101,6 +102,11 @@ class DelegatingMarker implements Marker {
 	}
 
 	@Override
+	public void setAnchor(float anchorU, float anchorV) {
+		real.setAnchor(anchorU, anchorV);
+	}
+
+	@Override
 	public void setData(Object data) {
 		this.data = data;
 	}
@@ -108,6 +114,11 @@ class DelegatingMarker implements Marker {
 	@Override
 	public void setDraggable(boolean draggable) {
 		real.setDraggable(draggable);
+	}
+
+	@Override
+	public void setIcon(BitmapDescriptor icon) {
+		real.setIcon(icon);
 	}
 
 	@Override

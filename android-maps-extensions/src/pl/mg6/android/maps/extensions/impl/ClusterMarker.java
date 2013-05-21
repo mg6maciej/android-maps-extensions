@@ -20,6 +20,7 @@ import java.util.List;
 
 import pl.mg6.android.maps.extensions.Marker;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -202,12 +203,22 @@ class ClusterMarker implements Marker {
 	}
 
 	@Override
+	public void setAnchor(float anchorU, float anchorV) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public void setData(Object data) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setDraggable(boolean draggable) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void setIcon(BitmapDescriptor icon) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -16,6 +16,7 @@
 package pl.mg6.android.maps.extensions.lazy;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -121,11 +122,27 @@ public class LazyMarker {
 		}
 	}
 
+	public void setAnchor(float anchorU, float anchorV) {
+		if (marker != null) {
+			marker.setAnchor(anchorU, anchorV);
+		} else {
+			markerOptions.anchor(anchorU, anchorV);
+		}
+	}
+
 	public void setDraggable(boolean draggable) {
 		if (marker != null) {
 			marker.setDraggable(draggable);
 		} else {
 			markerOptions.draggable(draggable);
+		}
+	}
+
+	public void setIcon(BitmapDescriptor icon) {
+		if (marker != null) {
+			marker.setIcon(icon);
+		} else {
+			markerOptions.icon(icon);
 		}
 	}
 
