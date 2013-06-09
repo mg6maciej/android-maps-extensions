@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import pl.mg6.android.maps.extensions.AnimationSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.utils.SphericalMercator;
@@ -37,6 +38,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	private boolean addMarkersDynamically;
 	private double baseClusterSize;
+	private AnimationSettings animation;
 	private IGoogleMap map;
 	private Map<DelegatingMarker, ClusterMarker> markers;
 	private double clusterSize;
@@ -46,11 +48,16 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	private LongSparseArray<ClusterMarker> clusters = new LongSparseArray<ClusterMarker>();
 
 	private ClusterRefresher refresher;
+	private MarkerAnimator markerAnimator;
 
-	public GridClusteringStrategy(ClusteringSettings settings, IGoogleMap map, List<DelegatingMarker> markers, ClusterRefresher refresher) {
+	public GridClusteringStrategy(ClusteringSettings settings, IGoogleMap map, List<DelegatingMarker> markers, ClusterRefresher refresher, MarkerAnimator markerAnimator) {
 		super(settings, map);
 		this.addMarkersDynamically = settings.isAddMarkersDynamically();
 		this.baseClusterSize = settings.getClusterSize();
+		AnimationSettings as = settings.getAnimation();
+		if (as != null) {
+			this.animation = new AnimationSettings().duration(as.getDuration()).interpolator(as.getInterpolator());
+		}
 		this.map = map;
 		this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
 		for (DelegatingMarker m : markers) {
@@ -59,6 +66,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 			}
 		}
 		this.refresher = refresher;
+		this.markerAnimator = markerAnimator;
 		this.oldZoom = -1;
 		this.zoom = Math.round(map.getCameraPosition().zoom);
 		this.clusterSize = calculateClusterSize(zoom);

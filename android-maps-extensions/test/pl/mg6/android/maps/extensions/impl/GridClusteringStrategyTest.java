@@ -42,6 +42,9 @@ public class GridClusteringStrategyTest {
 	private ClusterRefresher refresher;
 
 	@Mock
+	private MarkerAnimator markerAnimator;
+
+	@Mock
 	private DelegatingMarker marker1;
 
 	@Mock
@@ -66,7 +69,7 @@ public class GridClusteringStrategyTest {
 		Mockito.when(marker3.getPosition()).thenReturn(new LatLng(0.1, 0.1));
 
 		ClusteringSettings settings = new ClusteringSettings();
-		strategy = new GridClusteringStrategy(settings, map, new ArrayList<DelegatingMarker>(), refresher);
+		strategy = new GridClusteringStrategy(settings, map, new ArrayList<DelegatingMarker>(), refresher, markerAnimator);
 	}
 
 	@Test
