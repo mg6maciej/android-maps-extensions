@@ -33,7 +33,7 @@ class ClusterMarker implements Marker {
 
 	private BaseClusteringStrategy strategy;
 
-	private com.google.android.gms.maps.model.Marker virtual;
+	private MarkerAdapter virtual;
 
 	private List<DelegatingMarker> markers = new ArrayList<DelegatingMarker>();
 
@@ -50,7 +50,7 @@ class ClusterMarker implements Marker {
 	}
 
 	com.google.android.gms.maps.model.Marker getVirtual() {
-		return virtual;
+		return virtual.getMarker();
 	}
 
 	void add(DelegatingMarker marker) {
@@ -78,7 +78,7 @@ class ClusterMarker implements Marker {
 			if (virtual == null || lastCount != count) {
 				cacheVirtual();
 				lastCount = count;
-				virtual = strategy.getFromCacheOrCreate(count, position);
+				virtual = new MarkerAdapter(strategy.getFromCacheOrCreate(count, position));
 			} else {
 				virtual.setPosition(position);
 			}
@@ -98,7 +98,7 @@ class ClusterMarker implements Marker {
 
 	void cacheVirtual() {
 		if (virtual != null) {
-			strategy.putInCache(virtual, lastCount);
+			strategy.putInCache(virtual.getMarker(), lastCount);
 			virtual = null;
 		}
 	}

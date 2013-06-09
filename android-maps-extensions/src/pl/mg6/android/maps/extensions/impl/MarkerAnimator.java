@@ -49,7 +49,7 @@ class MarkerAnimator {
 			Marker marker = iterator.next();
 			AnimationData data = queue.get(marker);
 			long time = now - data.start;
-			if (time < 0) {
+			if (time <= 0) {
 				marker.setPosition(data.from);
 			} else if (time >= data.duration) {
 				marker.setPosition(data.to);
