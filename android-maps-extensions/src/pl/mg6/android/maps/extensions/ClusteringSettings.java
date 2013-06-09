@@ -101,7 +101,7 @@ public class ClusteringSettings {
 		if (clusterSize != other.clusterSize) {
 			return false;
 		}
-		if (animation == null ? other.animation != null : animation.equals(other.animation)) {
+		if (animation == null ? other.animation != null : !animation.equals(other.animation)) {
 			return false;
 		}
 		return iconDataProvider.equals(other.iconDataProvider);
