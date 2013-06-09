@@ -50,6 +50,9 @@ class ClusterMarker implements Marker {
 	}
 
 	com.google.android.gms.maps.model.Marker getVirtual() {
+		if (virtual == null) {
+			return null;
+		}
 		return virtual.getMarker();
 	}
 
