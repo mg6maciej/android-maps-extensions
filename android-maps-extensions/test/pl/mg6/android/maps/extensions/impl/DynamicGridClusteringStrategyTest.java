@@ -192,6 +192,24 @@ public class DynamicGridClusteringStrategyTest {
 		Assert.assertTrue(markers.get(0) instanceof ClusterMarker);
 	}
 
+	@Test
+	public void whenChangingPositionAndCameraZoomShouldNotCrashBadly() {
+		strategy.onAdd(marker1);
+		strategy.onAdd(marker2);
+
+		strategy.onCameraChange(new CameraPosition(new LatLng(0, 0), 21, 0, 0));
+
+		Mockito.when(marker2.getPosition()).thenReturn(new LatLng(0.1, 0.1));
+		strategy.onPositionChange(marker2);
+
+		strategy.onCameraChange(new CameraPosition(new LatLng(0, 0), 8, 0, 0));
+
+		Mockito.when(marker2.getPosition()).thenReturn(new LatLng(50, 50));
+		strategy.onPositionChange(marker2);
+
+		strategy.onCameraChange(new CameraPosition(new LatLng(0, 0), 21, 0, 0));
+	}
+
 	@Test(expected = UnsupportedOperationException.class)
 	public void whenNotAddedShouldThrowException() {
 
