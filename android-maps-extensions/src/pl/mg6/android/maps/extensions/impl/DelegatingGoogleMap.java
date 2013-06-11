@@ -511,25 +511,29 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 		@Override
 		public void onMarkerDragStart(com.google.android.gms.maps.model.Marker marker) {
+			DelegatingMarker delegating = mapToDelegatingMarker(marker);
+			delegating.clearCachedPosition();
 			if (onMarkerDragListener != null) {
-				onMarkerDragListener.onMarkerDragStart(map(marker));
+				onMarkerDragListener.onMarkerDragStart(delegating);
 			}
 		}
 
 		@Override
 		public void onMarkerDrag(com.google.android.gms.maps.model.Marker marker) {
+			DelegatingMarker delegating = mapToDelegatingMarker(marker);
+			delegating.clearCachedPosition();
 			if (onMarkerDragListener != null) {
-				onMarkerDragListener.onMarkerDrag(map(marker));
+				onMarkerDragListener.onMarkerDrag(delegating);
 			}
 		}
 
 		@Override
 		public void onMarkerDragEnd(com.google.android.gms.maps.model.Marker marker) {
-			LazyMarker lazy = createdMarkers.get(marker);
-			DelegatingMarker delegating = markers.get(lazy);
+			DelegatingMarker delegating = mapToDelegatingMarker(marker);
+			delegating.clearCachedPosition();
 			clusteringStrategy.onPositionChange(delegating);
 			if (onMarkerDragListener != null) {
-				onMarkerDragListener.onMarkerDragEnd(map(marker));
+				onMarkerDragListener.onMarkerDragEnd(delegating);
 			}
 		}
 	}
@@ -539,6 +543,10 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 		if (cluster != null) {
 			return cluster;
 		}
+		return mapToDelegatingMarker(marker);
+	}
+
+	private DelegatingMarker mapToDelegatingMarker(com.google.android.gms.maps.model.Marker marker) {
 		LazyMarker lazy = createdMarkers.get(marker);
 		DelegatingMarker delegating = markers.get(lazy);
 		return delegating;

@@ -31,12 +31,14 @@ class DelegatingMarker implements Marker {
 
 	private Object data;
 
+	private LatLng position;
 	private boolean visible;
 
 	DelegatingMarker(LazyMarker real, DelegatingGoogleMap map) {
 		this.real = real;
 		this.map = map;
 
+		this.position = real.getPosition();
 		this.visible = real.isVisible();
 	}
 
@@ -71,7 +73,10 @@ class DelegatingMarker implements Marker {
 
 	@Override
 	public LatLng getPosition() {
-		return real.getPosition();
+		if (position == null) {
+			position = real.getPosition();
+		}
+		return position;
 	}
 
 	@Override
@@ -137,6 +142,7 @@ class DelegatingMarker implements Marker {
 
 	@Override
 	public void setPosition(LatLng position) {
+		this.position = position;
 		real.setPosition(position);
 		map.onPositionChange(this);
 	}
@@ -192,6 +198,10 @@ class DelegatingMarker implements Marker {
 
 	void changeVisible(boolean visible) {
 		real.setVisible(this.visible && visible);
+	}
+
+	void clearCachedPosition() {
+		position = null;
 	}
 
 	void forceShowInfoWindow() {
