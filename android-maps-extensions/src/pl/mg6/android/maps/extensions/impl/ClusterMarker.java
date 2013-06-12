@@ -25,7 +25,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-class ClusterMarker implements Marker {
+class ClusterMarker implements Marker2 {
 
 	private long clusterId;
 
@@ -33,7 +33,7 @@ class ClusterMarker implements Marker {
 
 	private BaseClusteringStrategy strategy;
 
-	private MarkerAdapter virtual;
+	private com.google.android.gms.maps.model.Marker virtual;
 
 	private List<DelegatingMarker> markers = new ArrayList<DelegatingMarker>();
 
@@ -50,10 +50,7 @@ class ClusterMarker implements Marker {
 	}
 
 	com.google.android.gms.maps.model.Marker getVirtual() {
-		if (virtual == null) {
-			return null;
-		}
-		return virtual.getMarker();
+		return virtual;
 	}
 
 	void add(DelegatingMarker marker) {
@@ -81,7 +78,7 @@ class ClusterMarker implements Marker {
 			if (virtual == null || lastCount != count) {
 				cacheVirtual();
 				lastCount = count;
-				virtual = new MarkerAdapter(strategy.getFromCacheOrCreate(count, position));
+				virtual = strategy.getFromCacheOrCreate(count, position);
 			} else {
 				virtual.setPosition(position);
 			}
@@ -101,7 +98,7 @@ class ClusterMarker implements Marker {
 
 	void cacheVirtual() {
 		if (virtual != null) {
-			strategy.putInCache(virtual.getMarker(), lastCount);
+			strategy.putInCache(virtual, lastCount);
 			virtual = null;
 		}
 	}
@@ -263,6 +260,18 @@ class ClusterMarker implements Marker {
 		}
 		if (virtual != null) {
 			virtual.showInfoWindow();
+		}
+	}
+
+	@Override
+	public void setVirtualPosition(LatLng position) {
+		int count = markers.size();
+		if (count == 0) {
+			// no op
+		} else if (count == 1) {
+			markers.get(0).setVirtualPosition(position);
+		} else {
+			virtual.setPosition(position);
 		}
 	}
 }
