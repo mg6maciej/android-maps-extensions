@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import pl.mg6.android.maps.extensions.AnimationSettings;
-import pl.mg6.android.maps.extensions.Marker;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;

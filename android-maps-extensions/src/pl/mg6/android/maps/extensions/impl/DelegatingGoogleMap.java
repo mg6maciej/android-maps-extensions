@@ -292,7 +292,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 			clusteringStrategy.cleanup();
 			ArrayList<DelegatingMarker> list = new ArrayList<DelegatingMarker>(markers.values());
 			if (clusteringSettings.isEnabled()) {
-				clusteringStrategy = new GridClusteringStrategy(clusteringSettings, real, list, new ClusterRefresher(), markerAnimator);
+				clusteringStrategy = new GridClusteringStrategy(clusteringSettings, real, list, new ClusterRefresher(), new ClusterAnimator());
 			} else if (clusteringSettings.isAddMarkersDynamically()) {
 				clusteringStrategy = new DynamicNoClusteringStrategy(real, list);
 			} else {

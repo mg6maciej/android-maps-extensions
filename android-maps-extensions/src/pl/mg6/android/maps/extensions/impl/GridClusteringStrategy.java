@@ -48,9 +48,9 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 	private LongSparseArray<ClusterMarker> clusters = new LongSparseArray<ClusterMarker>();
 
 	private ClusterRefresher refresher;
-	private MarkerAnimator markerAnimator;
+	private ClusterAnimator clusterAnimator;
 
-	public GridClusteringStrategy(ClusteringSettings settings, IGoogleMap map, List<DelegatingMarker> markers, ClusterRefresher refresher, MarkerAnimator markerAnimator) {
+	public GridClusteringStrategy(ClusteringSettings settings, IGoogleMap map, List<DelegatingMarker> markers, ClusterRefresher refresher, ClusterAnimator clusterAnimator) {
 		super(settings, map);
 		this.addMarkersDynamically = settings.isAddMarkersDynamically();
 		this.baseClusterSize = settings.getClusterSize();
@@ -66,7 +66,7 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 			}
 		}
 		this.refresher = refresher;
-		this.markerAnimator = markerAnimator;
+		this.clusterAnimator = clusterAnimator;
 		this.oldZoom = -1;
 		this.zoom = Math.round(map.getCameraPosition().zoom);
 		this.clusterSize = calculateClusterSize(zoom);
