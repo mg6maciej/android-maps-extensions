@@ -97,8 +97,8 @@ class DelegatingMarker implements Marker {
 
 	@Override
 	public void remove() {
-		real.remove();
 		map.onRemove(this);
+		real.remove();
 	}
 
 	@Override
