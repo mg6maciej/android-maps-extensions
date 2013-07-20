@@ -24,13 +24,13 @@ import com.google.android.gms.maps.model.LatLng;
 class DelegatingPolygon implements Polygon {
 
 	private com.google.android.gms.maps.model.Polygon real;
-	private DelegatingGoogleMap map;
+	private PolygonManager manager;
 
 	private Object data;
 
-	DelegatingPolygon(com.google.android.gms.maps.model.Polygon real, DelegatingGoogleMap map) {
+	DelegatingPolygon(com.google.android.gms.maps.model.Polygon real, PolygonManager manager) {
 		this.real = real;
-		this.map = map;
+		this.manager = manager;
 	}
 
 	@Override
@@ -86,8 +86,8 @@ class DelegatingPolygon implements Polygon {
 
 	@Override
 	public void remove() {
+		manager.onRemove(real);
 		real.remove();
-		map.remove(real);
 	}
 
 	@Override

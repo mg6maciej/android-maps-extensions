@@ -59,11 +59,11 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	private Map<LazyMarker, DelegatingMarker> markers;
 	private Map<com.google.android.gms.maps.model.Marker, LazyMarker> createdMarkers;
-	private Map<com.google.android.gms.maps.model.Polyline, Polyline> polylines;
-	private Map<com.google.android.gms.maps.model.Polygon, Polygon> polygons;
-	private Map<com.google.android.gms.maps.model.Circle, Circle> circles;
-	private Map<com.google.android.gms.maps.model.GroundOverlay, GroundOverlay> groundOverlays;
-	private Map<com.google.android.gms.maps.model.TileOverlay, TileOverlay> tileOverlays;
+	private PolylineManager polylineManager;
+	private PolygonManager polygonManager;
+	private CircleManager circleManager;
+	private GroundOverlayManager groundOverlayManager;
+	private TileOverlayManager tileOverlayManager;
 
 	private Marker markerShowingInfoWindow;
 
@@ -76,11 +76,11 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 		this.real = new GoogleMapWrapper(real);
 		this.markers = new HashMap<LazyMarker, DelegatingMarker>();
 		this.createdMarkers = new HashMap<com.google.android.gms.maps.model.Marker, LazyMarker>();
-		this.polylines = new HashMap<com.google.android.gms.maps.model.Polyline, Polyline>();
-		this.polygons = new HashMap<com.google.android.gms.maps.model.Polygon, Polygon>();
-		this.circles = new HashMap<com.google.android.gms.maps.model.Circle, Circle>();
-		this.groundOverlays = new HashMap<com.google.android.gms.maps.model.GroundOverlay, GroundOverlay>();
-		this.tileOverlays = new HashMap<com.google.android.gms.maps.model.TileOverlay, TileOverlay>();
+		this.polylineManager = new PolylineManager(this.real);
+		this.polygonManager = new PolygonManager(this.real);
+		this.circleManager = new CircleManager(this.real);
+		this.groundOverlayManager = new GroundOverlayManager(this.real);
+		this.tileOverlayManager = new TileOverlayManager(this.real);
 
 		real.setInfoWindowAdapter(new DelegatingInfoWindowAdapter());
 		real.setOnCameraChangeListener(new DelegatingOnCameraChangeListener());
@@ -89,18 +89,12 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public Circle addCircle(CircleOptions circleOptions) {
-		com.google.android.gms.maps.model.Circle realCircle = real.addCircle(circleOptions);
-		Circle circle = new DelegatingCircle(realCircle, this);
-		circles.put(realCircle, circle);
-		return circle;
+		return circleManager.addCircle(circleOptions);
 	}
 
 	@Override
 	public GroundOverlay addGroundOverlay(GroundOverlayOptions groundOverlayOptions) {
-		com.google.android.gms.maps.model.GroundOverlay realGroundOverlay = real.addGroundOverlay(groundOverlayOptions);
-		GroundOverlay groundOverlay = new DelegatingGroundOverlay(realGroundOverlay, this);
-		groundOverlays.put(realGroundOverlay, groundOverlay);
-		return groundOverlay;
+		return groundOverlayManager.addGroundOverlay(groundOverlayOptions);
 	}
 
 	@Override
@@ -118,26 +112,17 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public Polygon addPolygon(PolygonOptions polygonOptions) {
-		com.google.android.gms.maps.model.Polygon realPolygon = real.addPolygon(polygonOptions);
-		Polygon polygon = new DelegatingPolygon(realPolygon, this);
-		polygons.put(realPolygon, polygon);
-		return polygon;
+		return polygonManager.addPolygon(polygonOptions);
 	}
 
 	@Override
 	public Polyline addPolyline(PolylineOptions polylineOptions) {
-		com.google.android.gms.maps.model.Polyline realPolyline = real.addPolyline(polylineOptions);
-		Polyline polyline = new DelegatingPolyline(realPolyline, this);
-		polylines.put(realPolyline, polyline);
-		return polyline;
+		return polylineManager.addPolyline(polylineOptions);
 	}
 
 	@Override
 	public TileOverlay addTileOverlay(TileOverlayOptions tileOverlayOptions) {
-		com.google.android.gms.maps.model.TileOverlay realTileOverlay = real.addTileOverlay(tileOverlayOptions);
-		TileOverlay tileOverlay = new DelegatingTileOverlay(realTileOverlay, this);
-		tileOverlays.put(realTileOverlay, tileOverlay);
-		return tileOverlay;
+		return tileOverlayManager.addTileOverlay(tileOverlayOptions);
 	}
 
 	@Override
@@ -160,11 +145,11 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 		real.clear();
 		markers.clear();
 		createdMarkers.clear();
-		polylines.clear();
-		polygons.clear();
-		circles.clear();
-		groundOverlays.clear();
-		tileOverlays.clear();
+		polylineManager.clear();
+		polygonManager.clear();
+		circleManager.clear();
+		groundOverlayManager.clear();
+		tileOverlayManager.clear();
 		clusteringStrategy.cleanup();
 	}
 
@@ -196,12 +181,12 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public List<Circle> getCircles() {
-		return new ArrayList<Circle>(circles.values());
+		return circleManager.getCircles();
 	}
 
 	@Override
 	public List<GroundOverlay> getGroundOverlays() {
-		return new ArrayList<GroundOverlay>(groundOverlays.values());
+		return groundOverlayManager.getGroundOverlays();
 	}
 
 	@Override
@@ -219,17 +204,17 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public List<Polygon> getPolygons() {
-		return new ArrayList<Polygon>(polygons.values());
+		return polygonManager.getPolygons();
 	}
 
 	@Override
 	public List<Polyline> getPolylines() {
-		return new ArrayList<Polyline>(polylines.values());
+		return polylineManager.getPolylines();
 	}
 
 	@Override
 	public List<TileOverlay> getTileOverlays() {
-		return new ArrayList<TileOverlay>(tileOverlays.values());
+		return tileOverlayManager.getTileOverlays();
 	}
 
 	@Override
@@ -399,26 +384,6 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 	@Override
 	public String toString() {
 		return real.toString();
-	}
-
-	void remove(com.google.android.gms.maps.model.Polyline polyline) {
-		polylines.remove(polyline);
-	}
-
-	void remove(com.google.android.gms.maps.model.Polygon polygon) {
-		polygons.remove(polygon);
-	}
-
-	void remove(com.google.android.gms.maps.model.Circle circle) {
-		circles.remove(circle);
-	}
-
-	void remove(com.google.android.gms.maps.model.GroundOverlay groundOverlay) {
-		groundOverlays.remove(groundOverlay);
-	}
-
-	void remove(com.google.android.gms.maps.model.TileOverlay tileOverlay) {
-		tileOverlays.remove(tileOverlay);
 	}
 
 	void onRemove(DelegatingMarker marker) {

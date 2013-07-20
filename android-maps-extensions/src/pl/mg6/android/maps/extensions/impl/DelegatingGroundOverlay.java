@@ -23,13 +23,13 @@ import com.google.android.gms.maps.model.LatLngBounds;
 class DelegatingGroundOverlay implements GroundOverlay {
 
 	private com.google.android.gms.maps.model.GroundOverlay real;
-	private DelegatingGoogleMap map;
+	private GroundOverlayManager manager;
 
 	private Object data;
 
-	DelegatingGroundOverlay(com.google.android.gms.maps.model.GroundOverlay real, DelegatingGoogleMap map) {
+	DelegatingGroundOverlay(com.google.android.gms.maps.model.GroundOverlay real, GroundOverlayManager manager) {
 		this.real = real;
-		this.map = map;
+		this.manager = manager;
 	}
 
 	@Override
@@ -85,8 +85,8 @@ class DelegatingGroundOverlay implements GroundOverlay {
 
 	@Override
 	public void remove() {
+		manager.onRemove(real);
 		real.remove();
-		map.remove(real);
 	}
 
 	@Override

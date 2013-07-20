@@ -20,13 +20,13 @@ import pl.mg6.android.maps.extensions.TileOverlay;
 class DelegatingTileOverlay implements TileOverlay {
 
 	private com.google.android.gms.maps.model.TileOverlay real;
-	private DelegatingGoogleMap map;
+	private TileOverlayManager manager;
 
 	private Object data;
 
-	DelegatingTileOverlay(com.google.android.gms.maps.model.TileOverlay real, DelegatingGoogleMap map) {
+	DelegatingTileOverlay(com.google.android.gms.maps.model.TileOverlay real, TileOverlayManager manager) {
 		this.real = real;
-		this.map = map;
+		this.manager = manager;
 	}
 
 	@Override
@@ -57,8 +57,8 @@ class DelegatingTileOverlay implements TileOverlay {
 
 	@Override
 	public void remove() {
+		manager.onRemove(real);
 		real.remove();
-		map.remove(real);
 	}
 
 	@Override

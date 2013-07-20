@@ -24,13 +24,13 @@ import com.google.android.gms.maps.model.LatLng;
 class DelegatingPolyline implements Polyline {
 
 	private com.google.android.gms.maps.model.Polyline real;
-	private DelegatingGoogleMap map;
+	private PolylineManager manager;
 
 	private Object data;
 
-	DelegatingPolyline(com.google.android.gms.maps.model.Polyline real, DelegatingGoogleMap map) {
+	DelegatingPolyline(com.google.android.gms.maps.model.Polyline real, PolylineManager manager) {
 		this.real = real;
-		this.map = map;
+		this.manager = manager;
 	}
 
 	@Override
@@ -76,8 +76,8 @@ class DelegatingPolyline implements Polyline {
 
 	@Override
 	public void remove() {
+		manager.onRemove(real);
 		real.remove();
-		map.remove(real);
 	}
 
 	@Override

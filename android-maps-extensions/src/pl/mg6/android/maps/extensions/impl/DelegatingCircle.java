@@ -23,13 +23,13 @@ import com.google.android.gms.maps.model.LatLng;
 class DelegatingCircle implements Circle {
 
 	private com.google.android.gms.maps.model.Circle real;
-	private DelegatingGoogleMap map;
+	private CircleManager manager;
 
 	private Object data;
 
-	DelegatingCircle(com.google.android.gms.maps.model.Circle real, DelegatingGoogleMap map) {
+	DelegatingCircle(com.google.android.gms.maps.model.Circle real, CircleManager manager) {
 		this.real = real;
-		this.map = map;
+		this.manager = manager;
 	}
 
 	@Override
@@ -89,8 +89,8 @@ class DelegatingCircle implements Circle {
 
 	@Override
 	public void remove() {
+		manager.onRemove(real);
 		real.remove();
-		map.remove(real);
 	}
 
 	@Override
