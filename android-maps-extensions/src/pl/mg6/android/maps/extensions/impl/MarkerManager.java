@@ -39,6 +39,8 @@ class MarkerManager implements OnMarkerCreateListener {
 	private final Map<LazyMarker, DelegatingMarker> markers;
 	private final Map<com.google.android.gms.maps.model.Marker, LazyMarker> createdMarkers;
 
+	private Marker markerShowingInfoWindow;
+
 	private ClusteringSettings clusteringSettings = new ClusteringSettings().enabled(false);
 	private ClusteringStrategy clusteringStrategy = new NoClusteringStrategy(new ArrayList<DelegatingMarker>());
 
@@ -87,6 +89,13 @@ class MarkerManager implements OnMarkerCreateListener {
 		return new ArrayList<Marker>(markers.values());
 	}
 
+	public Marker getMarkerShowingInfoWindow() {
+		if (markerShowingInfoWindow != null && !markerShowingInfoWindow.isInfoWindowShown()) {
+			markerShowingInfoWindow = null;
+		}
+		return markerShowingInfoWindow;
+	}
+
 	public float getMinZoomLevelNotClustered(Marker marker) {
 		return clusteringStrategy.getMinZoomLevelNotClustered(marker);
 	}
@@ -133,6 +142,10 @@ class MarkerManager implements OnMarkerCreateListener {
 				clusteringStrategy = new NoClusteringStrategy(list);
 			}
 		}
+	}
+
+	public void setMarkerShowingInfoWindow(Marker marker) {
+		this.markerShowingInfoWindow = marker;
 	}
 
 	@Override

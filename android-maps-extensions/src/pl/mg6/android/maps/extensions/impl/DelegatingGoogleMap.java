@@ -55,8 +55,6 @@ public class DelegatingGoogleMap implements GoogleMap {
 	private GroundOverlayManager groundOverlayManager;
 	private TileOverlayManager tileOverlayManager;
 
-	private Marker markerShowingInfoWindow;
-
 	public DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
 		this.real = new GoogleMapWrapper(real);
 		createManagers();
@@ -146,10 +144,7 @@ public class DelegatingGoogleMap implements GoogleMap {
 
 	@Override
 	public Marker getMarkerShowingInfoWindow() {
-		if (markerShowingInfoWindow != null && !markerShowingInfoWindow.isInfoWindowShown()) {
-			markerShowingInfoWindow = null;
-		}
-		return markerShowingInfoWindow;
+		return markerManager.getMarkerShowingInfoWindow();
 	}
 
 	@Override
@@ -361,9 +356,10 @@ public class DelegatingGoogleMap implements GoogleMap {
 
 		@Override
 		public View getInfoWindow(com.google.android.gms.maps.model.Marker marker) {
-			markerShowingInfoWindow = markerManager.map(marker);
+			Marker mapped = markerManager.map(marker);
+			markerManager.setMarkerShowingInfoWindow(mapped);
 			if (infoWindowAdapter != null) {
-				return infoWindowAdapter.getInfoWindow(markerShowingInfoWindow);
+				return infoWindowAdapter.getInfoWindow(mapped);
 			}
 			return null;
 		}
