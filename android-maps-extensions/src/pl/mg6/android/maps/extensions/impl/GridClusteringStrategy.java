@@ -22,6 +22,7 @@ import java.util.Map;
 
 import pl.mg6.android.maps.extensions.AnimationSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
+import pl.mg6.android.maps.extensions.ClusteringSettings.IconDataProvider;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.utils.SphericalMercator;
 import android.support.v4.util.LongSparseArray;
@@ -29,12 +30,15 @@ import android.support.v4.util.LongSparseArray;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 
-class GridClusteringStrategy extends BaseClusteringStrategy {
+class GridClusteringStrategy implements ClusteringStrategy {
 
 	private static final boolean DEBUG_GRID = false;
 	private DebugHelper debugHelper;
+	
+	private final MarkerOptions markerOptions = new MarkerOptions();
 
 	private boolean addMarkersDynamically;
 	private double baseClusterSize;
@@ -49,9 +53,10 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	private ClusterRefresher refresher;
 	private ClusterAnimator clusterAnimator;
+	private IconDataProvider iconDataProvider;
 
 	public GridClusteringStrategy(ClusteringSettings settings, IGoogleMap map, List<DelegatingMarker> markers, ClusterRefresher refresher, ClusterAnimator clusterAnimator) {
-		super(settings, map);
+		this.iconDataProvider = settings.getIconDataProvider();
 		this.addMarkersDynamically = settings.isAddMarkersDynamically();
 		this.baseClusterSize = settings.getClusterSize();
 		AnimationSettings as = settings.getAnimation();
@@ -87,7 +92,6 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 				debugHelper.cleanup();
 			}
 		}
-		super.cleanup();
 	}
 
 	@Override
@@ -286,14 +290,14 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 				ClusterMarker cluster = clusters.valueAt(i);
 				List<DelegatingMarker> ms = cluster.getMarkersInternal();
 				if (ms.isEmpty()) {
-					cluster.cacheVirtual();
+					cluster.removeVirtual();
 					continue;
 				}
 				DelegatingMarker first = ms.get(0);
 				LatLng firstPosition = first.getPosition();
 				long firstClusterId = calculateClusterId(firstPosition);
 				if (newClusters.get(firstClusterId) != null) {
-					cluster.cacheVirtual();
+					cluster.removeVirtual();
 					cluster = newClusters.get(firstClusterId);
 				} else {
 					cluster.reset();
@@ -304,8 +308,8 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 				if (!addMarkersDynamically || isPositionInVisibleClusters(firstPosition)) {
 					refresh(cluster);
 				} else {
-					// TODO: don't cacheVirtual when showing info window and markers count doesn't change
-					cluster.cacheVirtual();
+					// TODO: don't removeVirtual when showing info window and markers count doesn't change
+					cluster.removeVirtual();
 				}
 				newClusters.put(firstClusterId, cluster);
 				for (int j = 1; j < ms.size(); j++) {
@@ -374,5 +378,10 @@ class GridClusteringStrategy extends BaseClusteringStrategy {
 
 	private double calculateClusterSize(int zoom) {
 		return baseClusterSize / (1 << zoom);
+	}
+
+	com.google.android.gms.maps.model.Marker createMarker(int markersCount, LatLng position) {
+		MarkerOptions mo = iconDataProvider.getIconData(markersCount);
+		return map.addMarker(markerOptions.position(position).icon(mo.getIcon()).anchor(mo.getAnchorU(), mo.getAnchorV()));
 	}
 }
