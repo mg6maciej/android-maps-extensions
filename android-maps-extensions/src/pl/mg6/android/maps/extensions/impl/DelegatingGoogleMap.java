@@ -59,16 +59,8 @@ public class DelegatingGoogleMap implements GoogleMap {
 
 	public DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
 		this.real = new GoogleMapWrapper(real);
-		this.markerManager = new MarkerManager(this.real);
-		this.polylineManager = new PolylineManager(this.real);
-		this.polygonManager = new PolygonManager(this.real);
-		this.circleManager = new CircleManager(this.real);
-		this.groundOverlayManager = new GroundOverlayManager(this.real);
-		this.tileOverlayManager = new TileOverlayManager(this.real);
-
-		real.setInfoWindowAdapter(new DelegatingInfoWindowAdapter());
-		real.setOnCameraChangeListener(new DelegatingOnCameraChangeListener());
-		real.setOnMarkerDragListener(new DelegatingOnMarkerDragListener());
+		createManagers();
+		assignMapListeners(real);
 	}
 
 	@Override
@@ -119,12 +111,7 @@ public class DelegatingGoogleMap implements GoogleMap {
 	@Override
 	public void clear() {
 		real.clear();
-		markerManager.clear();
-		polylineManager.clear();
-		polygonManager.clear();
-		circleManager.clear();
-		groundOverlayManager.clear();
-		tileOverlayManager.clear();
+		clearManagers();
 	}
 
 	@Override
@@ -333,6 +320,30 @@ public class DelegatingGoogleMap implements GoogleMap {
 	@Override
 	public String toString() {
 		return real.toString();
+	}
+
+	private void createManagers() {
+		markerManager = new MarkerManager(this.real);
+		polylineManager = new PolylineManager(this.real);
+		polygonManager = new PolygonManager(this.real);
+		circleManager = new CircleManager(this.real);
+		groundOverlayManager = new GroundOverlayManager(this.real);
+		tileOverlayManager = new TileOverlayManager(this.real);
+	}
+
+	private void clearManagers() {
+		markerManager.clear();
+		polylineManager.clear();
+		polygonManager.clear();
+		circleManager.clear();
+		groundOverlayManager.clear();
+		tileOverlayManager.clear();
+	}
+
+	private void assignMapListeners(com.google.android.gms.maps.GoogleMap real) {
+		real.setInfoWindowAdapter(new DelegatingInfoWindowAdapter());
+		real.setOnCameraChangeListener(new DelegatingOnCameraChangeListener());
+		real.setOnMarkerDragListener(new DelegatingOnMarkerDragListener());
 	}
 
 	private class DelegatingOnCameraChangeListener implements com.google.android.gms.maps.GoogleMap.OnCameraChangeListener {
