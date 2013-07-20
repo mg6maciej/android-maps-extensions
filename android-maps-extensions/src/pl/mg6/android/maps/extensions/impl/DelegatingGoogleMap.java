@@ -15,13 +15,8 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import pl.mg6.android.maps.extensions.AnimationSettings;
 import pl.mg6.android.maps.extensions.Circle;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
@@ -30,10 +25,7 @@ import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.Polygon;
 import pl.mg6.android.maps.extensions.Polyline;
 import pl.mg6.android.maps.extensions.TileOverlay;
-import pl.mg6.android.maps.extensions.lazy.LazyMarker;
-import pl.mg6.android.maps.extensions.lazy.LazyMarker.OnMarkerCreateListener;
 import android.location.Location;
-import android.os.SystemClock;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -43,13 +35,12 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
-public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
+public class DelegatingGoogleMap implements GoogleMap {
 
 	private GoogleMapWrapper real;
 
@@ -57,8 +48,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 	private OnCameraChangeListener onCameraChangeListener;
 	private OnMarkerDragListener onMarkerDragListener;
 
-	private Map<LazyMarker, DelegatingMarker> markers;
-	private Map<com.google.android.gms.maps.model.Marker, LazyMarker> createdMarkers;
+	private MarkerManager markerManager;
 	private PolylineManager polylineManager;
 	private PolygonManager polygonManager;
 	private CircleManager circleManager;
@@ -67,15 +57,9 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	private Marker markerShowingInfoWindow;
 
-	private ClusteringSettings clusteringSettings = new ClusteringSettings().enabled(false);
-	private ClusteringStrategy clusteringStrategy = new NoClusteringStrategy(new ArrayList<DelegatingMarker>());
-
-	private MarkerAnimator markerAnimator = new MarkerAnimator();
-
 	public DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
 		this.real = new GoogleMapWrapper(real);
-		this.markers = new HashMap<LazyMarker, DelegatingMarker>();
-		this.createdMarkers = new HashMap<com.google.android.gms.maps.model.Marker, LazyMarker>();
+		this.markerManager = new MarkerManager(this.real);
 		this.polylineManager = new PolylineManager(this.real);
 		this.polygonManager = new PolygonManager(this.real);
 		this.circleManager = new CircleManager(this.real);
@@ -99,15 +83,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public Marker addMarker(MarkerOptions markerOptions) {
-		boolean visible = markerOptions.isVisible();
-		markerOptions.visible(false);
-		LazyMarker realMarker = new LazyMarker(real.getMap(), markerOptions, this);
-		markerOptions.visible(visible);
-		DelegatingMarker marker = new DelegatingMarker(realMarker, this);
-		markers.put(realMarker, marker);
-		clusteringStrategy.onAdd(marker);
-		marker.setVisible(visible);
-		return marker;
+		return markerManager.addMarker(markerOptions);
 	}
 
 	@Override
@@ -143,14 +119,12 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 	@Override
 	public void clear() {
 		real.clear();
-		markers.clear();
-		createdMarkers.clear();
+		markerManager.clear();
 		polylineManager.clear();
 		polygonManager.clear();
 		circleManager.clear();
 		groundOverlayManager.clear();
 		tileOverlayManager.clear();
-		clusteringStrategy.cleanup();
 	}
 
 	@Override
@@ -160,18 +134,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public List<Marker> getDisplayedMarkers() {
-		List<Marker> displayedMarkers = clusteringStrategy.getDisplayedMarkers();
-		if (displayedMarkers == null) {
-			displayedMarkers = getMarkers();
-			Iterator<Marker> iterator = displayedMarkers.iterator();
-			while (iterator.hasNext()) {
-				Marker m = iterator.next();
-				if (!m.isVisible()) {
-					iterator.remove();
-				}
-			}
-		}
-		return displayedMarkers;
+		return markerManager.getDisplayedMarkers();
 	}
 
 	@Override
@@ -191,7 +154,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public List<Marker> getMarkers() {
-		return new ArrayList<Marker>(markers.values());
+		return markerManager.getMarkers();
 	}
 
 	@Override
@@ -229,7 +192,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public float getMinZoomLevelNotClustered(Marker marker) {
-		return clusteringStrategy.getMinZoomLevelNotClustered(marker);
+		return markerManager.getMinZoomLevelNotClustered(marker);
 	}
 
 	@Override
@@ -269,21 +232,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public void setClustering(ClusteringSettings clusteringSettings) {
-		if (clusteringSettings == null) {
-			clusteringSettings = new ClusteringSettings().enabled(false);
-		}
-		if (!this.clusteringSettings.equals(clusteringSettings)) {
-			this.clusteringSettings = clusteringSettings;
-			clusteringStrategy.cleanup();
-			ArrayList<DelegatingMarker> list = new ArrayList<DelegatingMarker>(markers.values());
-			if (clusteringSettings.isEnabled()) {
-				clusteringStrategy = new GridClusteringStrategy(clusteringSettings, real, list, new ClusterRefresher(), new ClusterAnimator());
-			} else if (clusteringSettings.isAddMarkersDynamically()) {
-				clusteringStrategy = new DynamicNoClusteringStrategy(real, list);
-			} else {
-				clusteringStrategy = new NoClusteringStrategy(list);
-			}
-		}
+		markerManager.setClustering(clusteringSettings);
 	}
 
 	@Override
@@ -386,38 +335,11 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 		return real.toString();
 	}
 
-	void onRemove(DelegatingMarker marker) {
-		markers.remove(marker.getReal());
-		createdMarkers.remove(marker.getReal().getMarker());
-		clusteringStrategy.onRemove(marker);
-	}
-
-	void onPositionChange(DelegatingMarker marker) {
-		clusteringStrategy.onPositionChange(marker);
-	}
-
-	void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
-		clusteringStrategy.onVisibilityChangeRequest(marker, visible);
-	}
-
-	void onShowInfoWindow(DelegatingMarker marker) {
-		clusteringStrategy.onShowInfoWindow(marker);
-	}
-
-	void onAnimateMarkerPosition(DelegatingMarker marker, LatLng target, AnimationSettings settings) {
-		markerAnimator.animate(marker, marker.getPosition(), target, SystemClock.uptimeMillis(), settings);
-	}
-
-	@Override
-	public void onMarkerCreate(LazyMarker marker) {
-		createdMarkers.put(marker.getMarker(), marker);
-	}
-
 	private class DelegatingOnCameraChangeListener implements com.google.android.gms.maps.GoogleMap.OnCameraChangeListener {
 
 		@Override
 		public void onCameraChange(CameraPosition cameraPosition) {
-			clusteringStrategy.onCameraChange(cameraPosition);
+			markerManager.onCameraChange(cameraPosition);
 			if (onCameraChangeListener != null) {
 				onCameraChangeListener.onCameraChange(cameraPosition);
 			}
@@ -428,7 +350,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 		@Override
 		public View getInfoWindow(com.google.android.gms.maps.model.Marker marker) {
-			markerShowingInfoWindow = map(marker);
+			markerShowingInfoWindow = markerManager.map(marker);
 			if (infoWindowAdapter != null) {
 				return infoWindowAdapter.getInfoWindow(markerShowingInfoWindow);
 			}
@@ -438,7 +360,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 		@Override
 		public View getInfoContents(com.google.android.gms.maps.model.Marker marker) {
 			if (infoWindowAdapter != null) {
-				return infoWindowAdapter.getInfoContents(map(marker));
+				return infoWindowAdapter.getInfoContents(markerManager.map(marker));
 			}
 			return null;
 		}
@@ -454,7 +376,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 		@Override
 		public void onInfoWindowClick(com.google.android.gms.maps.model.Marker marker) {
-			onInfoWindowClickListener.onInfoWindowClick(map(marker));
+			onInfoWindowClickListener.onInfoWindowClick(markerManager.map(marker));
 		}
 	}
 
@@ -468,7 +390,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 		@Override
 		public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
-			return onMarkerClickListener.onMarkerClick(map(marker));
+			return onMarkerClickListener.onMarkerClick(markerManager.map(marker));
 		}
 	}
 
@@ -476,7 +398,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 		@Override
 		public void onMarkerDragStart(com.google.android.gms.maps.model.Marker marker) {
-			DelegatingMarker delegating = mapToDelegatingMarker(marker);
+			DelegatingMarker delegating = markerManager.mapToDelegatingMarker(marker);
 			delegating.clearCachedPosition();
 			if (onMarkerDragListener != null) {
 				onMarkerDragListener.onMarkerDragStart(delegating);
@@ -485,7 +407,7 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 		@Override
 		public void onMarkerDrag(com.google.android.gms.maps.model.Marker marker) {
-			DelegatingMarker delegating = mapToDelegatingMarker(marker);
+			DelegatingMarker delegating = markerManager.mapToDelegatingMarker(marker);
 			delegating.clearCachedPosition();
 			if (onMarkerDragListener != null) {
 				onMarkerDragListener.onMarkerDrag(delegating);
@@ -494,26 +416,12 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 		@Override
 		public void onMarkerDragEnd(com.google.android.gms.maps.model.Marker marker) {
-			DelegatingMarker delegating = mapToDelegatingMarker(marker);
+			DelegatingMarker delegating = markerManager.mapToDelegatingMarker(marker);
 			delegating.clearCachedPosition();
-			clusteringStrategy.onPositionChange(delegating);
+			markerManager.onPositionChange(delegating);
 			if (onMarkerDragListener != null) {
 				onMarkerDragListener.onMarkerDragEnd(delegating);
 			}
 		}
-	}
-
-	private Marker map(com.google.android.gms.maps.model.Marker marker) {
-		Marker cluster = clusteringStrategy.map(marker);
-		if (cluster != null) {
-			return cluster;
-		}
-		return mapToDelegatingMarker(marker);
-	}
-
-	private DelegatingMarker mapToDelegatingMarker(com.google.android.gms.maps.model.Marker marker) {
-		LazyMarker lazy = createdMarkers.get(marker);
-		DelegatingMarker delegating = markers.get(lazy);
-		return delegating;
 	}
 }

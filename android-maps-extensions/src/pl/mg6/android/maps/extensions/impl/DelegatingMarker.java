@@ -27,16 +27,16 @@ import com.google.android.gms.maps.model.LatLng;
 class DelegatingMarker implements Marker2 {
 
 	private LazyMarker real;
-	private DelegatingGoogleMap map;
+	private MarkerManager manager;
 
 	private Object data;
 
 	private LatLng position;
 	private boolean visible;
 
-	DelegatingMarker(LazyMarker real, DelegatingGoogleMap map) {
+	DelegatingMarker(LazyMarker real, MarkerManager manager) {
 		this.real = real;
-		this.map = map;
+		this.manager = manager;
 
 		this.position = real.getPosition();
 		this.visible = real.isVisible();
@@ -52,7 +52,7 @@ class DelegatingMarker implements Marker2 {
 		if (target == null || settings == null) {
 			throw new NullPointerException();
 		}
-		map.onAnimateMarkerPosition(this, target, settings);
+		manager.onAnimateMarkerPosition(this, target, settings);
 	}
 
 	@Override
@@ -116,7 +116,7 @@ class DelegatingMarker implements Marker2 {
 
 	@Override
 	public void remove() {
-		map.onRemove(this);
+		manager.onRemove(this);
 		real.remove();
 	}
 
@@ -144,7 +144,7 @@ class DelegatingMarker implements Marker2 {
 	public void setPosition(LatLng position) {
 		this.position = position;
 		real.setPosition(position);
-		map.onPositionChange(this);
+		manager.onPositionChange(this);
 	}
 
 	@Override
@@ -161,13 +161,13 @@ class DelegatingMarker implements Marker2 {
 	public void setVisible(boolean visible) {
 		if (this.visible != visible) {
 			this.visible = visible;
-			map.onVisibilityChangeRequest(this, visible);
+			manager.onVisibilityChangeRequest(this, visible);
 		}
 	}
 
 	@Override
 	public void showInfoWindow() {
-		map.onShowInfoWindow(this);
+		manager.onShowInfoWindow(this);
 	}
 
 	@Override
