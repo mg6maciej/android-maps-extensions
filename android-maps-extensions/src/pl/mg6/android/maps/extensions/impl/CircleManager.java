@@ -26,9 +26,9 @@ import com.google.android.gms.maps.model.CircleOptions;
 
 class CircleManager {
 
-	private IGoogleMap factory;
+	private final IGoogleMap factory;
 
-	private Map<com.google.android.gms.maps.model.Circle, Circle> circles;
+	private final Map<com.google.android.gms.maps.model.Circle, Circle> circles;
 
 	public CircleManager(IGoogleMap factory) {
 		this.factory = factory;

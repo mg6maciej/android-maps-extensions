@@ -26,9 +26,9 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 class PolygonManager {
 
-	private IGoogleMap factory;
+	private final IGoogleMap factory;
 
-	private Map<com.google.android.gms.maps.model.Polygon, Polygon> polygons;
+	private final Map<com.google.android.gms.maps.model.Polygon, Polygon> polygons;
 
 	public PolygonManager(IGoogleMap factory) {
 		this.factory = factory;

@@ -26,9 +26,9 @@ import com.google.android.gms.maps.model.GroundOverlayOptions;
 
 class GroundOverlayManager {
 
-	private IGoogleMap factory;
+	private final IGoogleMap factory;
 
-	private Map<com.google.android.gms.maps.model.GroundOverlay, GroundOverlay> groundOverlays;
+	private final Map<com.google.android.gms.maps.model.GroundOverlay, GroundOverlay> groundOverlays;
 
 	public GroundOverlayManager(IGoogleMap factory) {
 		this.factory = factory;
