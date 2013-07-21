@@ -37,7 +37,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	private static final boolean DEBUG_GRID = false;
 	private DebugHelper debugHelper;
-	
+
 	private final MarkerOptions markerOptions = new MarkerOptions();
 
 	private boolean addMarkersDynamically;
@@ -292,7 +292,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		}
 		refresher.refreshAll();
 	}
-	
+
 	private void splitClusters() {
 		LongSparseArray<ClusterMarker> newClusters = new LongSparseArray<ClusterMarker>();
 		for (int i = 0; i < clusters.size(); i++) {
@@ -332,10 +332,10 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		}
 		clusters = newClusters;
 	}
-	
+
 	private void joinClusters() {
 		LongSparseArray<ClusterMarker> newClusters = new LongSparseArray<ClusterMarker>();
-		Long[] clusterIds = new Long[clusters.size()];
+		LongSparseArray<List<ClusterMarker>> oldClusters = new LongSparseArray<List<ClusterMarker>>();
 		for (int i = 0; i < clusters.size(); i++) {
 			ClusterMarker cluster = clusters.valueAt(i);
 			List<DelegatingMarker> ms = cluster.getMarkersInternal();
@@ -343,40 +343,34 @@ class GridClusteringStrategy implements ClusteringStrategy {
 				cluster.removeVirtual();
 				continue;
 			}
-			clusterIds[i] = calculateClusterId(ms.get(0).getPosition());
+			long clusterId = calculateClusterId(ms.get(0).getPosition());
+			List<ClusterMarker> clusterList = oldClusters.get(clusterId);
+			if (clusterList == null) {
+				clusterList = new ArrayList<ClusterMarker>();
+				oldClusters.put(clusterId, clusterList);
+			}
+			clusterList.add(cluster);
 		}
-		for (int i = 0; i < clusters.size(); i++) {
-			if (clusterIds[i] == null) {
-				continue;
-			}
-			boolean join = false;
-			for (int j = i + 1; j < clusters.size(); j++) {
-				if (clusterIds[j] != null && clusterIds[j].equals(clusterIds[i])) {
-					join = true;
-					break;
-				}
-			}
-			if (!join) {
-				ClusterMarker cluster = clusters.valueAt(i);
-				cluster.setClusterId(clusterIds[i]);
-				newClusters.put(clusterIds[i], cluster);
+		for (int i = 0; i < oldClusters.size(); i++) {
+			long clusterId = oldClusters.keyAt(i);
+			List<ClusterMarker> clusterList = oldClusters.valueAt(i);
+			if (clusterList.size() == 1) {
+				ClusterMarker cluster = clusterList.get(0);
+				cluster.setClusterId(clusterId);
+				newClusters.put(clusterId, cluster);
 			} else {
 				ClusterMarker cluster = new ClusterMarker(this);
-				cluster.setClusterId(clusterIds[i]);
-				newClusters.put(clusterIds[i], cluster);
-				if (!addMarkersDynamically || isPositionInVisibleClusters(clusters.valueAt(i).getMarkersInternal().get(0).getPosition())) {
+				cluster.setClusterId(clusterId);
+				newClusters.put(clusterId, cluster);
+				if (!addMarkersDynamically || isPositionInVisibleClusters(clusterList.get(0).getMarkersInternal().get(0).getPosition())) {
 					refresh(cluster);
 				}
-				for (int j = i; j < clusters.size(); j++) {
-					if (clusterIds[j] != null && clusterIds[j].equals(cluster.getClusterId())) {
-						clusterIds[j] = null;
-						ClusterMarker old = clusters.valueAt(j);
-						old.removeVirtual();
-						List<DelegatingMarker> ms = old.getMarkersInternal();
-						for (DelegatingMarker m : ms) {
-							cluster.add(m);
-							markers.put(m, cluster);
-						}
+				for (ClusterMarker old : clusterList) {
+					old.removeVirtual();
+					List<DelegatingMarker> ms = old.getMarkersInternal();
+					for (DelegatingMarker m : ms) {
+						cluster.add(m);
+						markers.put(m, cluster);
 					}
 				}
 			}
