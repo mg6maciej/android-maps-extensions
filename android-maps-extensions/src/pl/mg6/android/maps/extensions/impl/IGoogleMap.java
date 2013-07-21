@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Maciej GÃ³rski
+ * Copyright (C) 2013 Maciej Górski
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,23 +47,23 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 //TODO: to be deleted when com.google.android.gms.maps.GoogleMap becomes an interface
 interface IGoogleMap {
 
-	Circle addCircle(CircleOptions arg0);
+	Circle addCircle(CircleOptions options);
 
-	GroundOverlay addGroundOverlay(GroundOverlayOptions arg0);
+	GroundOverlay addGroundOverlay(GroundOverlayOptions options);
 
-	Marker addMarker(MarkerOptions arg0);
+	Marker addMarker(MarkerOptions options);
 
-	Polygon addPolygon(PolygonOptions arg0);
+	Polygon addPolygon(PolygonOptions options);
 
-	Polyline addPolyline(PolylineOptions arg0);
+	Polyline addPolyline(PolylineOptions options);
 
-	TileOverlay addTileOverlay(TileOverlayOptions arg0);
+	TileOverlay addTileOverlay(TileOverlayOptions options);
 
-	void animateCamera(CameraUpdate arg0, CancelableCallback arg1);
+	void animateCamera(CameraUpdate update, CancelableCallback callback);
 
-	void animateCamera(CameraUpdate arg0, int arg1, CancelableCallback arg2);
+	void animateCamera(CameraUpdate update, int durationMs, CancelableCallback callback);
 
-	void animateCamera(CameraUpdate arg0);
+	void animateCamera(CameraUpdate update);
 
 	void clear();
 
@@ -87,33 +87,33 @@ interface IGoogleMap {
 
 	boolean isTrafficEnabled();
 
-	void moveCamera(CameraUpdate arg0);
+	void moveCamera(CameraUpdate update);
 
-	boolean setIndoorEnabled(boolean arg0);
+	boolean setIndoorEnabled(boolean enabled);
 
-	void setInfoWindowAdapter(InfoWindowAdapter arg0);
+	void setInfoWindowAdapter(InfoWindowAdapter adapter);
 
-	void setLocationSource(LocationSource arg0);
+	void setLocationSource(LocationSource source);
 
-	void setMapType(int arg0);
+	void setMapType(int type);
 
-	void setMyLocationEnabled(boolean arg0);
+	void setMyLocationEnabled(boolean enabled);
 
-	void setOnCameraChangeListener(OnCameraChangeListener arg0);
+	void setOnCameraChangeListener(OnCameraChangeListener listener);
 
-	void setOnInfoWindowClickListener(OnInfoWindowClickListener arg0);
+	void setOnInfoWindowClickListener(OnInfoWindowClickListener listener);
 
-	void setOnMapClickListener(OnMapClickListener arg0);
+	void setOnMapClickListener(OnMapClickListener listener);
 
-	void setOnMapLongClickListener(OnMapLongClickListener arg0);
+	void setOnMapLongClickListener(OnMapLongClickListener listener);
 
-	void setOnMarkerClickListener(OnMarkerClickListener arg0);
+	void setOnMarkerClickListener(OnMarkerClickListener listener);
 
-	void setOnMarkerDragListener(OnMarkerDragListener arg0);
+	void setOnMarkerDragListener(OnMarkerDragListener listener);
 
-	void setOnMyLocationChangeListener(OnMyLocationChangeListener arg0);
+	void setOnMyLocationChangeListener(OnMyLocationChangeListener listener);
 
-	void setTrafficEnabled(boolean arg0);
+	void setTrafficEnabled(boolean enabled);
 
 	void stopAnimation();
 

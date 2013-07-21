@@ -31,8 +31,8 @@ class ProjectionWrapper implements IProjection {
 	}
 
 	@Override
-	public LatLng fromScreenLocation(Point arg0) {
-		return projection.fromScreenLocation(arg0);
+	public LatLng fromScreenLocation(Point point) {
+		return projection.fromScreenLocation(point);
 	}
 
 	@Override
@@ -41,8 +41,8 @@ class ProjectionWrapper implements IProjection {
 	}
 
 	@Override
-	public Point toScreenLocation(LatLng arg0) {
-		return projection.toScreenLocation(arg0);
+	public Point toScreenLocation(LatLng location) {
+		return projection.toScreenLocation(location);
 	}
 
 	@Override

@@ -54,48 +54,48 @@ class GoogleMapWrapper implements IGoogleMap {
 	}
 
 	@Override
-	public final Circle addCircle(CircleOptions arg0) {
-		return map.addCircle(arg0);
+	public final Circle addCircle(CircleOptions options) {
+		return map.addCircle(options);
 	}
 
 	@Override
-	public final GroundOverlay addGroundOverlay(GroundOverlayOptions arg0) {
-		return map.addGroundOverlay(arg0);
+	public final GroundOverlay addGroundOverlay(GroundOverlayOptions options) {
+		return map.addGroundOverlay(options);
 	}
 
 	@Override
-	public final Marker addMarker(MarkerOptions arg0) {
-		return map.addMarker(arg0);
+	public final Marker addMarker(MarkerOptions options) {
+		return map.addMarker(options);
 	}
 
 	@Override
-	public final Polygon addPolygon(PolygonOptions arg0) {
-		return map.addPolygon(arg0);
+	public final Polygon addPolygon(PolygonOptions options) {
+		return map.addPolygon(options);
 	}
 
 	@Override
-	public final Polyline addPolyline(PolylineOptions arg0) {
-		return map.addPolyline(arg0);
+	public final Polyline addPolyline(PolylineOptions options) {
+		return map.addPolyline(options);
 	}
 
 	@Override
-	public final TileOverlay addTileOverlay(TileOverlayOptions arg0) {
-		return map.addTileOverlay(arg0);
+	public final TileOverlay addTileOverlay(TileOverlayOptions options) {
+		return map.addTileOverlay(options);
 	}
 
 	@Override
-	public final void animateCamera(CameraUpdate arg0, CancelableCallback arg1) {
-		map.animateCamera(arg0, arg1);
+	public final void animateCamera(CameraUpdate update, CancelableCallback callback) {
+		map.animateCamera(update, callback);
 	}
 
 	@Override
-	public final void animateCamera(CameraUpdate arg0, int arg1, CancelableCallback arg2) {
-		map.animateCamera(arg0, arg1, arg2);
+	public final void animateCamera(CameraUpdate update, int durationMs, CancelableCallback callback) {
+		map.animateCamera(update, durationMs, callback);
 	}
 
 	@Override
-	public final void animateCamera(CameraUpdate arg0) {
-		map.animateCamera(arg0);
+	public final void animateCamera(CameraUpdate update) {
+		map.animateCamera(update);
 	}
 
 	@Override
@@ -154,73 +154,73 @@ class GoogleMapWrapper implements IGoogleMap {
 	}
 
 	@Override
-	public final void moveCamera(CameraUpdate arg0) {
-		map.moveCamera(arg0);
+	public final void moveCamera(CameraUpdate update) {
+		map.moveCamera(update);
 	}
 
 	@Override
-	public final boolean setIndoorEnabled(boolean arg0) {
-		return map.setIndoorEnabled(arg0);
+	public final boolean setIndoorEnabled(boolean enabled) {
+		return map.setIndoorEnabled(enabled);
 	}
 
 	@Override
-	public final void setInfoWindowAdapter(InfoWindowAdapter arg0) {
-		map.setInfoWindowAdapter(arg0);
+	public final void setInfoWindowAdapter(InfoWindowAdapter adapter) {
+		map.setInfoWindowAdapter(adapter);
 	}
 
 	@Override
-	public final void setLocationSource(LocationSource arg0) {
-		map.setLocationSource(arg0);
+	public final void setLocationSource(LocationSource source) {
+		map.setLocationSource(source);
 	}
 
 	@Override
-	public final void setMapType(int arg0) {
-		map.setMapType(arg0);
+	public final void setMapType(int type) {
+		map.setMapType(type);
 	}
 
 	@Override
-	public final void setMyLocationEnabled(boolean arg0) {
-		map.setMyLocationEnabled(arg0);
+	public final void setMyLocationEnabled(boolean enabled) {
+		map.setMyLocationEnabled(enabled);
 	}
 
 	@Override
-	public final void setOnCameraChangeListener(OnCameraChangeListener arg0) {
-		map.setOnCameraChangeListener(arg0);
+	public final void setOnCameraChangeListener(OnCameraChangeListener listener) {
+		map.setOnCameraChangeListener(listener);
 	}
 
 	@Override
-	public final void setOnInfoWindowClickListener(OnInfoWindowClickListener arg0) {
-		map.setOnInfoWindowClickListener(arg0);
+	public final void setOnInfoWindowClickListener(OnInfoWindowClickListener listener) {
+		map.setOnInfoWindowClickListener(listener);
 	}
 
 	@Override
-	public final void setOnMapClickListener(OnMapClickListener arg0) {
-		map.setOnMapClickListener(arg0);
+	public final void setOnMapClickListener(OnMapClickListener listener) {
+		map.setOnMapClickListener(listener);
 	}
 
 	@Override
-	public final void setOnMapLongClickListener(OnMapLongClickListener arg0) {
-		map.setOnMapLongClickListener(arg0);
+	public final void setOnMapLongClickListener(OnMapLongClickListener listener) {
+		map.setOnMapLongClickListener(listener);
 	}
 
 	@Override
-	public final void setOnMarkerClickListener(OnMarkerClickListener arg0) {
-		map.setOnMarkerClickListener(arg0);
+	public final void setOnMarkerClickListener(OnMarkerClickListener listener) {
+		map.setOnMarkerClickListener(listener);
 	}
 
 	@Override
-	public final void setOnMarkerDragListener(OnMarkerDragListener arg0) {
-		map.setOnMarkerDragListener(arg0);
+	public final void setOnMarkerDragListener(OnMarkerDragListener listener) {
+		map.setOnMarkerDragListener(listener);
 	}
 
 	@Override
-	public final void setOnMyLocationChangeListener(OnMyLocationChangeListener arg0) {
-		map.setOnMyLocationChangeListener(arg0);
+	public final void setOnMyLocationChangeListener(OnMyLocationChangeListener listener) {
+		map.setOnMyLocationChangeListener(listener);
 	}
 
 	@Override
-	public final void setTrafficEnabled(boolean arg0) {
-		map.setTrafficEnabled(arg0);
+	public final void setTrafficEnabled(boolean enabled) {
+		map.setTrafficEnabled(enabled);
 	}
 
 	@Override
