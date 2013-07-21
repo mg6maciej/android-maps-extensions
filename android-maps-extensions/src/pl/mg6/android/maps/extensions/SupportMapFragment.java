@@ -15,7 +15,7 @@
  */
 package pl.mg6.android.maps.extensions;
 
-import pl.mg6.android.maps.extensions.impl.DelegatingGoogleMap;
+import pl.mg6.android.maps.extensions.impl.ExtendedMapFactory;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -44,7 +44,7 @@ public class SupportMapFragment extends com.google.android.gms.maps.SupportMapFr
 		if (map == null) {
 			com.google.android.gms.maps.GoogleMap realMap = super.getMap();
 			if (realMap != null) {
-				map = new DelegatingGoogleMap(realMap);
+				map = ExtendedMapFactory.create(realMap);
 			}
 		}
 		return map;

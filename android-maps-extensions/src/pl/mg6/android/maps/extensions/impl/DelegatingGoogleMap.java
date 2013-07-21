@@ -40,7 +40,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
-public class DelegatingGoogleMap implements GoogleMap {
+class DelegatingGoogleMap implements GoogleMap {
 
 	private IGoogleMap real;
 
@@ -55,7 +55,7 @@ public class DelegatingGoogleMap implements GoogleMap {
 	private GroundOverlayManager groundOverlayManager;
 	private TileOverlayManager tileOverlayManager;
 
-	public DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
+	DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
 		this.real = new GoogleMapWrapper(real);
 		createManagers();
 		assignMapListeners();
