@@ -284,59 +284,104 @@ class GridClusteringStrategy implements ClusteringStrategy {
 				addMarker(marker);
 			}
 		} else {
-			// TODO: refactor
-			LongSparseArray<ClusterMarker> newClusters = new LongSparseArray<ClusterMarker>();
-			for (int i = 0; i < clusters.size(); i++) {
-				ClusterMarker cluster = clusters.valueAt(i);
-				List<DelegatingMarker> ms = cluster.getMarkersInternal();
-				if (ms.isEmpty()) {
-					cluster.removeVirtual();
-					continue;
+			if (zoom > oldZoom) {
+				splitClusters();
+			} else {
+				joinClusters();
+			}
+		}
+		refresher.refreshAll();
+	}
+	
+	private void splitClusters() {
+		LongSparseArray<ClusterMarker> newClusters = new LongSparseArray<ClusterMarker>();
+		for (int i = 0; i < clusters.size(); i++) {
+			ClusterMarker cluster = clusters.valueAt(i);
+			List<DelegatingMarker> ms = cluster.getMarkersInternal();
+			if (ms.isEmpty()) {
+				cluster.removeVirtual();
+				continue;
+			}
+			long[] clusterIds = new long[ms.size()];
+			boolean allSame = true;
+			for (int j = 0; j < ms.size(); j++) {
+				clusterIds[j] = calculateClusterId(ms.get(j).getPosition());
+				if (clusterIds[j] != clusterIds[0]) {
+					allSame = false;
 				}
-				DelegatingMarker first = ms.get(0);
-				LatLng firstPosition = first.getPosition();
-				long firstClusterId = calculateClusterId(firstPosition);
-				if (newClusters.get(firstClusterId) != null) {
-					cluster.removeVirtual();
-					cluster = newClusters.get(firstClusterId);
-				} else {
-					cluster.reset();
-					cluster.setClusterId(firstClusterId);
-				}
-				cluster.add(first);
-				markers.put(first, cluster);
-				if (!addMarkersDynamically || isPositionInVisibleClusters(firstPosition)) {
-					refresh(cluster);
-				} else {
-					// TODO: don't removeVirtual when showing info window and markers count doesn't change
-					cluster.removeVirtual();
-				}
-				newClusters.put(firstClusterId, cluster);
-				for (int j = 1; j < ms.size(); j++) {
-					DelegatingMarker m = ms.get(j);
-					LatLng position = m.getPosition();
-					long clusterId = calculateClusterId(position);
-					if (clusterId == firstClusterId) {
-						cluster.add(m);
-						markers.put(m, cluster);
-					} else {
-						ClusterMarker newCluster = newClusters.get(clusterId);
-						if (newCluster == null) {
-							newCluster = new ClusterMarker(this);
-							newCluster.setClusterId(clusterId);
-							newClusters.put(clusterId, newCluster);
-							if (!addMarkersDynamically || isPositionInVisibleClusters(position)) {
-								refresh(newCluster);
-							}
+			}
+			if (allSame) {
+				cluster.setClusterId(clusterIds[0]);
+				newClusters.put(clusterIds[0], cluster);
+			} else {
+				cluster.removeVirtual();
+				for (int j = 0; j < ms.size(); j++) {
+					cluster = newClusters.get(clusterIds[j]);
+					if (cluster == null) {
+						cluster = new ClusterMarker(this);
+						cluster.setClusterId(clusterIds[j]);
+						newClusters.put(clusterIds[j], cluster);
+						if (!addMarkersDynamically || isPositionInVisibleClusters(ms.get(j).getPosition())) {
+							refresh(cluster);
 						}
-						newCluster.add(m);
-						markers.put(m, newCluster);
+					}
+					cluster.add(ms.get(j));
+					markers.put(ms.get(j), cluster);
+				}
+			}
+		}
+		clusters = newClusters;
+	}
+	
+	private void joinClusters() {
+		LongSparseArray<ClusterMarker> newClusters = new LongSparseArray<ClusterMarker>();
+		Long[] clusterIds = new Long[clusters.size()];
+		for (int i = 0; i < clusters.size(); i++) {
+			ClusterMarker cluster = clusters.valueAt(i);
+			List<DelegatingMarker> ms = cluster.getMarkersInternal();
+			if (ms.isEmpty()) {
+				cluster.removeVirtual();
+				continue;
+			}
+			clusterIds[i] = calculateClusterId(ms.get(0).getPosition());
+		}
+		for (int i = 0; i < clusters.size(); i++) {
+			if (clusterIds[i] == null) {
+				continue;
+			}
+			boolean join = false;
+			for (int j = i + 1; j < clusters.size(); j++) {
+				if (clusterIds[j] != null && clusterIds[j].equals(clusterIds[i])) {
+					join = true;
+					break;
+				}
+			}
+			if (!join) {
+				ClusterMarker cluster = clusters.valueAt(i);
+				cluster.setClusterId(clusterIds[i]);
+				newClusters.put(clusterIds[i], cluster);
+			} else {
+				ClusterMarker cluster = new ClusterMarker(this);
+				cluster.setClusterId(clusterIds[i]);
+				newClusters.put(clusterIds[i], cluster);
+				if (!addMarkersDynamically || isPositionInVisibleClusters(clusters.valueAt(i).getMarkersInternal().get(0).getPosition())) {
+					refresh(cluster);
+				}
+				for (int j = i; j < clusters.size(); j++) {
+					if (clusterIds[j] != null && clusterIds[j].equals(cluster.getClusterId())) {
+						clusterIds[j] = null;
+						ClusterMarker old = clusters.valueAt(j);
+						old.removeVirtual();
+						List<DelegatingMarker> ms = old.getMarkersInternal();
+						for (DelegatingMarker m : ms) {
+							cluster.add(m);
+							markers.put(m, cluster);
+						}
 					}
 				}
 			}
-			clusters = newClusters;
 		}
-		refresher.refreshAll();
+		clusters = newClusters;
 	}
 
 	private void addMarkersInVisibleRegion() {
