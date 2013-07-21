@@ -42,7 +42,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 public class DelegatingGoogleMap implements GoogleMap {
 
-	private GoogleMapWrapper real;
+	private IGoogleMap real;
 
 	private InfoWindowAdapter infoWindowAdapter;
 	private OnCameraChangeListener onCameraChangeListener;
@@ -58,7 +58,7 @@ public class DelegatingGoogleMap implements GoogleMap {
 	public DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
 		this.real = new GoogleMapWrapper(real);
 		createManagers();
-		assignMapListeners(real);
+		assignMapListeners();
 	}
 
 	@Override
@@ -335,7 +335,7 @@ public class DelegatingGoogleMap implements GoogleMap {
 		tileOverlayManager.clear();
 	}
 
-	private void assignMapListeners(com.google.android.gms.maps.GoogleMap real) {
+	private void assignMapListeners() {
 		real.setInfoWindowAdapter(new DelegatingInfoWindowAdapter());
 		real.setOnCameraChangeListener(new DelegatingOnCameraChangeListener());
 		real.setOnMarkerDragListener(new DelegatingOnMarkerDragListener());

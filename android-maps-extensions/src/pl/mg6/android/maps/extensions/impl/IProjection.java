@@ -17,6 +17,7 @@ package pl.mg6.android.maps.extensions.impl;
 
 import android.graphics.Point;
 
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
 
@@ -28,4 +29,6 @@ interface IProjection {
 	VisibleRegion getVisibleRegion();
 
 	Point toScreenLocation(LatLng arg0);
+
+	Projection getProjection();
 }

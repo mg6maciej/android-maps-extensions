@@ -45,6 +45,7 @@ class ProjectionWrapper implements IProjection {
 		return projection.toScreenLocation(arg0);
 	}
 
+	@Override
 	public Projection getProjection() {
 		return projection;
 	}
