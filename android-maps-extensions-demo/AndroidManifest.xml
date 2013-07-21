@@ -36,6 +36,7 @@
         <activity android:name=".Issue14InfoWindowNotShowingClusterExampleActivity" />
         <activity android:name=".Issue15InfoWindowNotShowingExampleActivity" />
         <activity android:name=".Issue15InfoWindowNotShowingClusterExampleActivity" />
+        <activity android:name=".SimpleMapActivity" />
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
