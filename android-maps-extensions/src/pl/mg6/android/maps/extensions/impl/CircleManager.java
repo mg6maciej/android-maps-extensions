@@ -42,15 +42,15 @@ class CircleManager {
 		return circle;
 	}
 
+	public void clear() {
+		circles.clear();
+	}
+
 	public List<Circle> getCircles() {
 		return new ArrayList<Circle>(circles.values());
 	}
 
 	public void onRemove(com.google.android.gms.maps.model.Circle real) {
 		circles.remove(real);
-	}
-
-	public void clear() {
-		circles.clear();
 	}
 }
