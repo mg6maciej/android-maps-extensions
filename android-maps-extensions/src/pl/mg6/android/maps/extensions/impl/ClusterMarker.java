@@ -25,7 +25,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-class ClusterMarker implements Marker2 {
+class ClusterMarker implements Marker {
 
 	private long clusterId;
 
@@ -263,8 +263,7 @@ class ClusterMarker implements Marker2 {
 		}
 	}
 
-	@Override
-	public void setVirtualPosition(LatLng position) {
+	void setVirtualPosition(LatLng position) {
 		int count = markers.size();
 		if (count == 0) {
 			// no op

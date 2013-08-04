@@ -24,7 +24,7 @@ import pl.mg6.android.maps.extensions.lazy.LazyMarker;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 
-class DelegatingMarker implements Marker2 {
+class DelegatingMarker implements Marker {
 
 	private LazyMarker real;
 	private MarkerManager manager;
@@ -208,8 +208,7 @@ class DelegatingMarker implements Marker2 {
 		real.showInfoWindow();
 	}
 
-	@Override
-	public void setVirtualPosition(LatLng position) {
+	void setVirtualPosition(LatLng position) {
 		real.setPosition(position);
 	}
 }

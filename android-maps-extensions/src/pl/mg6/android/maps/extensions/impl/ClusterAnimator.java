@@ -39,19 +39,19 @@ class ClusterAnimator {
 		}
 	});
 
-	private Map<Marker2, AnimationData> queue = new HashMap<Marker2, AnimationData>();
+	private Map<ClusterMarker, AnimationData> queue = new HashMap<ClusterMarker, AnimationData>();
 
 	private void calculatePositions() {
 		long now = SystemClock.uptimeMillis();
-		Iterator<Marker2> iterator = queue.keySet().iterator();
+		Iterator<ClusterMarker> iterator = queue.keySet().iterator();
 		while (iterator.hasNext()) {
-			Marker2 marker = iterator.next();
+			ClusterMarker marker = iterator.next();
 			AnimationData data = queue.get(marker);
 			long time = now - data.start;
 			if (time <= 0) {
 				marker.setVirtualPosition(data.from);
 			} else if (time >= data.duration) {
-				marker.setVirtualPosition(data.to);
+				marker.removeVirtual();
 				iterator.remove();
 			} else {
 				float t = ((float) time) / data.duration;
@@ -66,7 +66,7 @@ class ClusterAnimator {
 		}
 	}
 
-	public void animate(Marker2 marker, LatLng from, LatLng to, long start, AnimationSettings settings) {
+	public void animate(ClusterMarker marker, LatLng from, LatLng to, long start, AnimationSettings settings) {
 		AnimationData data = new AnimationData();
 		data.from = from;
 		data.to = to;
