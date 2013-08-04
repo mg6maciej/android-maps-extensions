@@ -284,13 +284,17 @@ class GridClusteringStrategy implements ClusteringStrategy {
 				addMarker(marker);
 			}
 		} else {
-			if (zoom > oldZoom) {
+			if (zoomedIn()) {
 				splitClusters();
 			} else {
 				joinClusters();
 			}
 		}
 		refresher.refreshAll();
+	}
+
+	private boolean zoomedIn() {
+		return zoom > oldZoom;
 	}
 
 	private void splitClusters() {
