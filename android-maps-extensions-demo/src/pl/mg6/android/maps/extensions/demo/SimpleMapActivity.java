@@ -52,7 +52,7 @@ public class SimpleMapActivity extends FragmentActivity {
 				return new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 			}
 		};
-		map.setClustering(new ClusteringSettings().animation(anim).iconDataProvider(provider));
+		map.setClustering(new ClusteringSettings().iconDataProvider(provider));
 
 		map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 

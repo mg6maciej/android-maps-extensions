@@ -97,7 +97,7 @@ public class DemoActivity extends FragmentActivity {
 			}
 		});
 
-		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())).addMarkersDynamically(true).animation(new AnimationSettings()));
+		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())).addMarkersDynamically(true));
 
 		map.setInfoWindowAdapter(new InfoWindowAdapter() {
 
@@ -263,7 +263,6 @@ public class DemoActivity extends FragmentActivity {
 
 			double clusterSize = CLUSTER_SIZES[clusterSizeIndex];
 			clusteringSettings.clusterSize(clusterSize);
-			clusteringSettings.animation(new AnimationSettings());
 		} else {
 			clusteringSettings.enabled(false);
 		}

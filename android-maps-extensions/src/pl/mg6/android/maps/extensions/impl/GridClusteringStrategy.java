@@ -42,7 +42,6 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	private boolean addMarkersDynamically;
 	private double baseClusterSize;
-	private AnimationSettings animation;
 	private IGoogleMap map;
 	private Map<DelegatingMarker, ClusterMarker> markers;
 	private double clusterSize;
@@ -52,17 +51,12 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	private LongSparseArray<ClusterMarker> clusters = new LongSparseArray<ClusterMarker>();
 
 	private ClusterRefresher refresher;
-	private ClusterAnimator clusterAnimator;
 	private IconDataProvider iconDataProvider;
 
-	public GridClusteringStrategy(ClusteringSettings settings, IGoogleMap map, List<DelegatingMarker> markers, ClusterRefresher refresher, ClusterAnimator clusterAnimator) {
+	public GridClusteringStrategy(ClusteringSettings settings, IGoogleMap map, List<DelegatingMarker> markers, ClusterRefresher refresher) {
 		this.iconDataProvider = settings.getIconDataProvider();
 		this.addMarkersDynamically = settings.isAddMarkersDynamically();
 		this.baseClusterSize = settings.getClusterSize();
-		AnimationSettings as = settings.getAnimation();
-		if (as != null) {
-			this.animation = new AnimationSettings().duration(as.getDuration()).interpolator(as.getInterpolator());
-		}
 		this.map = map;
 		this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
 		for (DelegatingMarker m : markers) {
@@ -71,7 +65,6 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			}
 		}
 		this.refresher = refresher;
-		this.clusterAnimator = clusterAnimator;
 		this.oldZoom = -1;
 		this.zoom = Math.round(map.getCameraPosition().zoom);
 		this.clusterSize = calculateClusterSize(zoom);

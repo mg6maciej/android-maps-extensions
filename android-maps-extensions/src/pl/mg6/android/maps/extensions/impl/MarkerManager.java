@@ -135,7 +135,7 @@ class MarkerManager implements OnMarkerCreateListener {
 			clusteringStrategy.cleanup();
 			ArrayList<DelegatingMarker> list = new ArrayList<DelegatingMarker>(markers.values());
 			if (clusteringSettings.isEnabled()) {
-				clusteringStrategy = new GridClusteringStrategy(clusteringSettings, factory, list, new ClusterRefresher(), new ClusterAnimator());
+				clusteringStrategy = new GridClusteringStrategy(clusteringSettings, factory, list, new ClusterRefresher());
 			} else if (clusteringSettings.isAddMarkersDynamically()) {
 				clusteringStrategy = new DynamicNoClusteringStrategy(factory, list);
 			} else {
