@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
+import android.support.v4.util.LruCache;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -37,6 +38,7 @@ public class DemoIconProvider implements IconDataProvider {
 	private static final int[] forCounts = { 10, 100, 1000, 10000, Integer.MAX_VALUE };
 
 	private Bitmap[] baseBitmaps;
+	private LruCache<Integer, BitmapDescriptor> cache = new LruCache<Integer, BitmapDescriptor>(128);
 
 	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private Rect bounds = new Rect();
@@ -55,6 +57,12 @@ public class DemoIconProvider implements IconDataProvider {
 
 	@Override
 	public MarkerOptions getIconData(int markersCount) {
+
+		BitmapDescriptor cachedIcon = cache.get(markersCount);
+		if (cachedIcon != null) {
+			return markerOptions.icon(cachedIcon);
+		}
+
 		Bitmap base;
 		int i = 0;
 		do {
@@ -72,6 +80,8 @@ public class DemoIconProvider implements IconDataProvider {
 		canvas.drawText(text, x, y, paint);
 
 		BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
+		cache.put(markersCount, icon);
+
 		return markerOptions.icon(icon);
 	}
 }
