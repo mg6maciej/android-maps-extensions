@@ -42,6 +42,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class AnimateMarkersActivity extends FragmentActivity {
 
+	private Random random = new Random();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,29 +62,35 @@ public class AnimateMarkersActivity extends FragmentActivity {
 
 			@Override
 			public boolean onMarkerClick(Marker marker) {
-				Random r = new Random();
 				LatLng position = marker.getPosition();
-				double lat;
-				double lng;
-				if (position.latitude < 0) {
-					lat = r.nextDouble() * 10 + 10;
-				} else {
-					lat = r.nextDouble() * 10 - 20;
-				}
-				if (position.longitude < 0) {
-					lng = r.nextDouble() * 10 + 10;
-				} else {
-					lng = r.nextDouble() * 10 - 20;
-				}
-				AnimationSettings settings = new AnimationSettings().duration(r.nextInt(2500) + 500).interpolator(randomInterpolator(r));
-				marker.animatePosition(new LatLng(lat, lng), settings);
+				LatLng targetPosition = randomPositionAcrossTheOcean(position);
+				long duration = random.nextInt(1500) + 1500;
+				Interpolator interpolator = randomInterpolator();
+				AnimationSettings settings = new AnimationSettings().duration(duration).interpolator(interpolator);
+				marker.animatePosition(targetPosition, settings);
 				return true;
 			}
 		});
 	}
 
-	private static Interpolator randomInterpolator(Random r) {
-		int val = r.nextInt(14);
+	private LatLng randomPositionAcrossTheOcean(LatLng position) {
+		double lat;
+		double lng;
+		if (position.latitude < 0) {
+			lat = random.nextDouble() * 10 + 10;
+		} else {
+			lat = random.nextDouble() * 10 - 20;
+		}
+		if (position.longitude < 0) {
+			lng = random.nextDouble() * 10 + 10;
+		} else {
+			lng = random.nextDouble() * 10 - 20;
+		}
+		return new LatLng(lat, lng);
+	}
+
+	private Interpolator randomInterpolator() {
+		int val = random.nextInt(14);
 		switch (val) {
 			case 0:
 				return new LinearInterpolator();
