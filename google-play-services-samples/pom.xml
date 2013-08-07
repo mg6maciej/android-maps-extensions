@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>pl.mg6.android.maps.extensions</groupId>
 		<artifactId>android-maps-extensions-parent</artifactId>
-		<version>1.4</version>
+		<version>1.5-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
