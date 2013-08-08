@@ -15,6 +15,7 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import android.graphics.Bitmap;
 import android.location.Location;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.UiSettings;
@@ -111,9 +113,15 @@ interface IGoogleMap {
 
 	void setOnMarkerDragListener(OnMarkerDragListener listener);
 
+	void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
+
 	void setOnMyLocationChangeListener(OnMyLocationChangeListener listener);
 
 	void setTrafficEnabled(boolean enabled);
+
+	void snapshot(GoogleMap.SnapshotReadyCallback callback);
+
+	void snapshot(GoogleMap.SnapshotReadyCallback callback, Bitmap bitmap);
 
 	void stopAnimation();
 

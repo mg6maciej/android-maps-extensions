@@ -17,6 +17,7 @@ package pl.mg6.android.maps.extensions;
 
 import java.util.List;
 
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.view.View;
 
@@ -145,9 +146,15 @@ public interface GoogleMap {
 
 	void setOnMarkerDragListener(OnMarkerDragListener onMarkerDragListener);
 
+	void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
+
 	void setOnMyLocationChangeListener(OnMyLocationChangeListener onMyLocationChangeListener);
 
 	void setTrafficEnabled(boolean trafficEnabled);
+
+	void snapshot(SnapshotReadyCallback callback);
+
+	void snapshot(SnapshotReadyCallback callback, Bitmap bitmap);
 
 	void stopAnimation();
 
@@ -204,9 +211,21 @@ public interface GoogleMap {
 		void onMarkerDragEnd(Marker marker);
 	}
 
+	interface OnMyLocationButtonClickListener extends com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener {
+
+		@Override
+		boolean onMyLocationButtonClick();
+	}
+
 	interface OnMyLocationChangeListener extends com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener {
 
 		@Override
-		public void onMyLocationChange(Location location);
+		void onMyLocationChange(Location location);
+	}
+
+	interface SnapshotReadyCallback extends com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback {
+
+		@Override
+		void onSnapshotReady(Bitmap snapshot);
 	}
 }

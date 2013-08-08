@@ -6,7 +6,7 @@
 	<name>Android Maps Extensions Parent</name>
 	<groupId>pl.mg6.android.maps.extensions</groupId>
 	<artifactId>android-maps-extensions-parent</artifactId>
-	<version>1.4</version>
+	<version>1.4.1</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -29,7 +29,7 @@
 
 		<google.play.services.groupId>com.google.android.gms</google.play.services.groupId>
 		<google.play.services.artifactId>google-play-services</google.play.services.artifactId>
-		<google.play.services.version>r9</google.play.services.version>
+		<google.play.services.version>r10</google.play.services.version>
 	</properties>
 
 	<dependencyManagement>
