@@ -146,6 +146,8 @@ public interface GoogleMap {
 
 	void setOnMarkerDragListener(OnMarkerDragListener onMarkerDragListener);
 
+	void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
+
 	void setOnMyLocationChangeListener(OnMyLocationChangeListener onMyLocationChangeListener);
 
 	void setTrafficEnabled(boolean trafficEnabled);
@@ -207,6 +209,12 @@ public interface GoogleMap {
 		void onMarkerDrag(Marker marker);
 
 		void onMarkerDragEnd(Marker marker);
+	}
+
+	interface OnMyLocationButtonClickListener extends com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener {
+
+		@Override
+		boolean onMyLocationButtonClick();
 	}
 
 	interface OnMyLocationChangeListener extends com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener {

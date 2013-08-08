@@ -283,6 +283,11 @@ class DelegatingGoogleMap implements GoogleMap {
 	}
 
 	@Override
+	public void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener) {
+		real.setOnMyLocationButtonClickListener(listener);
+	}
+
+	@Override
 	public void setOnMyLocationChangeListener(OnMyLocationChangeListener onMyLocationChangeListener) {
 		real.setOnMyLocationChangeListener(onMyLocationChangeListener);
 	}

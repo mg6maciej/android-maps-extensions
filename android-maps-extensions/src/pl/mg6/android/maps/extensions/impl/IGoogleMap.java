@@ -28,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.UiSettings;
@@ -111,6 +112,8 @@ interface IGoogleMap {
 	void setOnMarkerClickListener(OnMarkerClickListener listener);
 
 	void setOnMarkerDragListener(OnMarkerDragListener listener);
+
+	void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
 
 	void setOnMyLocationChangeListener(OnMyLocationChangeListener listener);
 
