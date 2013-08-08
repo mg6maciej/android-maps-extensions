@@ -15,6 +15,7 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import android.graphics.Bitmap;
 import android.location.Location;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
+import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -221,6 +223,16 @@ class GoogleMapWrapper implements IGoogleMap {
 	@Override
 	public final void setTrafficEnabled(boolean enabled) {
 		map.setTrafficEnabled(enabled);
+	}
+
+	@Override
+	public void snapshot(SnapshotReadyCallback callback) {
+		map.snapshot(callback);
+	}
+
+	@Override
+	public void snapshot(SnapshotReadyCallback callback, Bitmap bitmap) {
+		map.snapshot(callback, bitmap);
 	}
 
 	@Override

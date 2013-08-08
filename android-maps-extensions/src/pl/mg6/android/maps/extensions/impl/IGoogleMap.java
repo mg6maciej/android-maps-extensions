@@ -15,6 +15,7 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import android.graphics.Bitmap;
 import android.location.Location;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -114,6 +115,10 @@ interface IGoogleMap {
 	void setOnMyLocationChangeListener(OnMyLocationChangeListener listener);
 
 	void setTrafficEnabled(boolean enabled);
+
+	void snapshot(GoogleMap.SnapshotReadyCallback callback);
+
+	void snapshot(GoogleMap.SnapshotReadyCallback callback, Bitmap bitmap);
 
 	void stopAnimation();
 

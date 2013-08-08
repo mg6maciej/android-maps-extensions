@@ -25,6 +25,8 @@ import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.Polygon;
 import pl.mg6.android.maps.extensions.Polyline;
 import pl.mg6.android.maps.extensions.TileOverlay;
+
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.view.View;
 
@@ -288,6 +290,16 @@ class DelegatingGoogleMap implements GoogleMap {
 	@Override
 	public void setTrafficEnabled(boolean trafficEnabled) {
 		real.setTrafficEnabled(trafficEnabled);
+	}
+
+	@Override
+	public void snapshot(SnapshotReadyCallback callback) {
+		real.snapshot(callback);
+	}
+
+	@Override
+	public void snapshot(SnapshotReadyCallback callback, Bitmap bitmap) {
+		real.snapshot(callback, bitmap);
 	}
 
 	@Override

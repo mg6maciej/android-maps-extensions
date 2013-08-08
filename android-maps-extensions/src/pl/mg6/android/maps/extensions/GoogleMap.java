@@ -17,6 +17,7 @@ package pl.mg6.android.maps.extensions;
 
 import java.util.List;
 
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.view.View;
 
@@ -149,6 +150,10 @@ public interface GoogleMap {
 
 	void setTrafficEnabled(boolean trafficEnabled);
 
+	void snapshot(SnapshotReadyCallback callback);
+
+	void snapshot(SnapshotReadyCallback callback, Bitmap bitmap);
+
 	void stopAnimation();
 
 	interface CancelableCallback extends com.google.android.gms.maps.GoogleMap.CancelableCallback {
@@ -207,6 +212,12 @@ public interface GoogleMap {
 	interface OnMyLocationChangeListener extends com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener {
 
 		@Override
-		public void onMyLocationChange(Location location);
+		void onMyLocationChange(Location location);
+	}
+
+	interface SnapshotReadyCallback extends com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback {
+
+		@Override
+		void onSnapshotReady(Bitmap snapshot);
 	}
 }
