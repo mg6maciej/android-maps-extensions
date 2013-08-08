@@ -15,7 +15,6 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import pl.mg6.android.maps.extensions.AnimationSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.Marker;
@@ -44,7 +43,6 @@ public class SimpleMapActivity extends FragmentActivity {
 		map.addMarker(new MarkerOptions().position(new LatLng(15, 3)));
 		map.addMarker(new MarkerOptions().position(new LatLng(15, 3)));
 
-		AnimationSettings anim = new AnimationSettings().duration(2000L);
 		ClusteringSettings.IconDataProvider provider = new ClusteringSettings.IconDataProvider() {
 
 			@Override

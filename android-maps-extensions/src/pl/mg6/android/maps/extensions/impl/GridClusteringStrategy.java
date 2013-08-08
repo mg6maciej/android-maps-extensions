@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import pl.mg6.android.maps.extensions.AnimationSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings.IconDataProvider;
 import pl.mg6.android.maps.extensions.Marker;
