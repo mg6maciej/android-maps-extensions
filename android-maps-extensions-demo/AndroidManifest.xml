@@ -31,6 +31,7 @@
         </activity>
         <activity android:name=".DemoActivity" />
         <activity android:name=".AnimateMarkersActivity" />
+        <activity android:name=".ClusterGroupsActivity" />
         <activity android:name=".LaunchTimeTestActivity" />
         <activity android:name=".Issue14InfoWindowNotShowingExampleActivity" />
         <activity android:name=".Issue14InfoWindowNotShowingClusterExampleActivity" />
