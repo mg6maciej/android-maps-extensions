@@ -109,6 +109,7 @@ class MarkerManager implements OnMarkerCreateListener {
 	}
 
 	public void onClusterGroupChange(DelegatingMarker marker) {
+		clusteringStrategy.onClusterGroupChange(marker);
 	}
 
 	public void onPositionChange(DelegatingMarker marker) {

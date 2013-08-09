@@ -27,6 +27,8 @@ interface ClusteringStrategy {
 
 	void onCameraChange(CameraPosition cameraPosition);
 
+	void onClusterGroupChange(DelegatingMarker marker);
+
 	void onAdd(DelegatingMarker marker);
 
 	void onRemove(DelegatingMarker marker);
