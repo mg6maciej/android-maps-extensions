@@ -137,6 +137,14 @@ class ClusterMarker implements Marker {
 	}
 
 	@Override
+	public int getClusterGroup() {
+		if (markers.size() > 0) {
+			return markers.get(0).getClusterGroup();
+		}
+		throw new IllegalStateException();
+	}
+
+	@Override
 	public Object getData() {
 		return null;
 	}
@@ -215,6 +223,11 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public void setAnchor(float anchorU, float anchorV) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void setClusterGroup(int clusterGroup) {
 		throw new UnsupportedOperationException();
 	}
 
