@@ -48,7 +48,7 @@ public class MainActivity extends Activity {
 				} else {
 					intent = new Intent(MainActivity.this, LaunchTimeTestActivity.class);
 					// normally: int clusteringType = LaunchTimeTestActivity.CLUSTERING_ENABLED;
-					int clusteringType = position - 2;
+					int clusteringType = position - 3;
 					intent.putExtra(LaunchTimeTestActivity.EXTRA_CLUSTERING_TYPE, clusteringType);
 				}
 				startActivity(intent);
