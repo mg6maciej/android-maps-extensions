@@ -27,8 +27,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 class ClusterMarker implements Marker {
 
-	private long clusterId;
-
 	private int lastCount = -1;
 
 	private GridClusteringStrategy strategy;
@@ -39,14 +37,6 @@ class ClusterMarker implements Marker {
 
 	public ClusterMarker(GridClusteringStrategy strategy) {
 		this.strategy = strategy;
-	}
-
-	long getClusterId() {
-		return clusterId;
-	}
-
-	void setClusterId(long clusterId) {
-		this.clusterId = clusterId;
 	}
 
 	com.google.android.gms.maps.model.Marker getVirtual() {
@@ -116,10 +106,6 @@ class ClusterMarker implements Marker {
 		if (virtual != null) {
 			virtual.remove();
 		}
-	}
-
-	void reset() {
-		markers.clear();
 	}
 
 	List<DelegatingMarker> getMarkersInternal() {
