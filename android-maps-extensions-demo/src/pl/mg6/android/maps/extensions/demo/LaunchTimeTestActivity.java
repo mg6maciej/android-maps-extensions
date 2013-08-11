@@ -59,10 +59,10 @@ public class LaunchTimeTestActivity extends FragmentActivity {
 				settings.enabled(false).addMarkersDynamically(true);
 				break;
 			case CLUSTERING_ENABLED:
-				settings.iconDataProvider(new DemoIconProvider(getResources()));
+				settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
 				break;
 			case CLUSTERING_ENABLED_DYNAMIC:
-				settings.iconDataProvider(new DemoIconProvider(getResources())).addMarkersDynamically(true);
+				settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources())).addMarkersDynamically(true);
 				break;
 			default:
 				settings.enabled(false);

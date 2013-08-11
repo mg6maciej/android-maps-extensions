@@ -37,7 +37,7 @@ public class Issue14InfoWindowNotShowingExampleActivity extends FragmentActivity
 		GoogleMap map = f.getExtendedMap();
 
 		ClusteringSettings settings = new ClusteringSettings();
-		settings.iconDataProvider(new DemoIconProvider(getResources()));
+		settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
 		map.setClustering(settings);
 
 		MarkerOptions options = new MarkerOptions().position(new LatLng(0, 0)).title("title");
