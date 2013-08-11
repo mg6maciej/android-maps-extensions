@@ -68,7 +68,7 @@ class ClusterMarker implements Marker {
 			if (virtual == null || lastCount != count) {
 				removeVirtual();
 				lastCount = count;
-				virtual = strategy.createMarker(count, position);
+				virtual = strategy.createMarker(new ArrayList<Marker>(markers), position);
 			} else {
 				virtual.setPosition(position);
 			}
