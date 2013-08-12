@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import pl.mg6.android.maps.extensions.AnimationSettings;
 import pl.mg6.android.maps.extensions.Circle;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
@@ -97,7 +96,7 @@ public class DemoActivity extends FragmentActivity {
 			}
 		});
 
-		map.setClustering(new ClusteringSettings().iconDataProvider(new DemoIconProvider(getResources())).addMarkersDynamically(true));
+		map.setClustering(new ClusteringSettings().clusterOptionsProvider(new DemoClusterOptionsProvider(getResources())).addMarkersDynamically(true));
 
 		map.setInfoWindowAdapter(new InfoWindowAdapter() {
 
@@ -259,7 +258,7 @@ public class DemoActivity extends FragmentActivity {
 		clusteringSettings.addMarkersDynamically(true);
 
 		if (enabled) {
-			clusteringSettings.iconDataProvider(new DemoIconProvider(getResources()));
+			clusteringSettings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
 
 			double clusterSize = CLUSTER_SIZES[clusterSizeIndex];
 			clusteringSettings.clusterSize(clusterSize);

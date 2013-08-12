@@ -15,7 +15,8 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import pl.mg6.android.maps.extensions.AnimationSettings;
+import pl.mg6.android.maps.extensions.ClusterOptions;
+import pl.mg6.android.maps.extensions.ClusterOptionsProvider;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.Marker;
@@ -28,6 +29,8 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
 
 public class SimpleMapActivity extends FragmentActivity {
 
@@ -44,15 +47,14 @@ public class SimpleMapActivity extends FragmentActivity {
 		map.addMarker(new MarkerOptions().position(new LatLng(15, 3)));
 		map.addMarker(new MarkerOptions().position(new LatLng(15, 3)));
 
-		AnimationSettings anim = new AnimationSettings().duration(2000L);
-		ClusteringSettings.IconDataProvider provider = new ClusteringSettings.IconDataProvider() {
+		ClusterOptionsProvider provider = new ClusterOptionsProvider() {
 
 			@Override
-			public MarkerOptions getIconData(int markersCount) {
-				return new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+			public ClusterOptions getClusterOptions(List<Marker> markers) {
+				return new ClusterOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 			}
 		};
-		map.setClustering(new ClusteringSettings().iconDataProvider(provider));
+		map.setClustering(new ClusteringSettings().clusterOptionsProvider(provider));
 
 		map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 

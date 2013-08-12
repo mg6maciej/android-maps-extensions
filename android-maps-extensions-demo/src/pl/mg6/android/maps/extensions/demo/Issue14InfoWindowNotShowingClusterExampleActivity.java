@@ -41,7 +41,7 @@ public class Issue14InfoWindowNotShowingClusterExampleActivity extends FragmentA
 		GoogleMap map = f.getExtendedMap();
 
 		ClusteringSettings settings = new ClusteringSettings();
-		settings.iconDataProvider(new DemoIconProvider(getResources()));
+		settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
 		map.setClustering(settings);
 
 		map.setInfoWindowAdapter(new InfoWindowAdapter() {

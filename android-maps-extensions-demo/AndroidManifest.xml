@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.mg6.android.maps.extensions.demo"
-    android:versionCode="2"
-    android:versionName="1.1" >
+    android:versionCode="4"
+    android:versionName="1.2" >
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -31,6 +31,7 @@
         </activity>
         <activity android:name=".DemoActivity" />
         <activity android:name=".AnimateMarkersActivity" />
+        <activity android:name=".ClusterGroupsActivity" />
         <activity android:name=".LaunchTimeTestActivity" />
         <activity android:name=".Issue14InfoWindowNotShowingExampleActivity" />
         <activity android:name=".Issue14InfoWindowNotShowingClusterExampleActivity" />

@@ -15,7 +15,10 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import pl.mg6.android.maps.extensions.ClusteringSettings.IconDataProvider;
+import pl.mg6.android.maps.extensions.ClusterOptions;
+import pl.mg6.android.maps.extensions.ClusterOptionsProvider;
+import pl.mg6.android.maps.extensions.Marker;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -29,9 +32,10 @@ import android.support.v4.util.LruCache;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-public class DemoIconProvider implements IconDataProvider {
+import java.util.List;
+
+public class DemoClusterOptionsProvider implements ClusterOptionsProvider {
 
 	private static final int[] res = { R.drawable.m1, R.drawable.m2, R.drawable.m3, R.drawable.m4, R.drawable.m5 };
 
@@ -43,9 +47,9 @@ public class DemoIconProvider implements IconDataProvider {
 	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private Rect bounds = new Rect();
 
-	private MarkerOptions markerOptions = new MarkerOptions().anchor(0.5f, 0.5f);
+	private ClusterOptions clusterOptions = new ClusterOptions().anchor(0.5f, 0.5f);
 
-	public DemoIconProvider(Resources resources) {
+	public DemoClusterOptionsProvider(Resources resources) {
 		baseBitmaps = new Bitmap[res.length];
 		for (int i = 0; i < res.length; i++) {
 			baseBitmaps[i] = BitmapFactory.decodeResource(resources, res[i]);
@@ -56,11 +60,12 @@ public class DemoIconProvider implements IconDataProvider {
 	}
 
 	@Override
-	public MarkerOptions getIconData(int markersCount) {
+	public ClusterOptions getClusterOptions(List<Marker> markers) {
 
+		int markersCount = markers.size();
 		BitmapDescriptor cachedIcon = cache.get(markersCount);
 		if (cachedIcon != null) {
-			return markerOptions.icon(cachedIcon);
+			return clusterOptions.icon(cachedIcon);
 		}
 
 		Bitmap base;
@@ -82,6 +87,6 @@ public class DemoIconProvider implements IconDataProvider {
 		BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(bitmap);
 		cache.put(markersCount, icon);
 
-		return markerOptions.icon(icon);
+		return clusterOptions.icon(icon);
 	}
 }

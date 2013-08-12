@@ -29,6 +29,7 @@ class DelegatingMarker implements Marker {
 	private LazyMarker real;
 	private MarkerManager manager;
 
+	private int clusterGroup;
 	private Object data;
 
 	private LatLng position;
@@ -53,6 +54,11 @@ class DelegatingMarker implements Marker {
 			throw new NullPointerException();
 		}
 		manager.onAnimateMarkerPosition(this, target, settings);
+	}
+
+	@Override
+	public int getClusterGroup() {
+		return clusterGroup;
 	}
 
 	@Override
@@ -123,6 +129,14 @@ class DelegatingMarker implements Marker {
 	@Override
 	public void setAnchor(float anchorU, float anchorV) {
 		real.setAnchor(anchorU, anchorV);
+	}
+
+	@Override
+	public void setClusterGroup(int clusterGroup) {
+		if (this.clusterGroup != clusterGroup) {
+			this.clusterGroup = clusterGroup;
+			manager.onClusterGroupChange(this);
+		}
 	}
 
 	@Override

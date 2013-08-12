@@ -21,6 +21,8 @@ public class ClusteringSettings {
 
 	private boolean addMarkersDynamically = false;
 
+	private ClusterOptionsProvider clusterOptionsProvider = null;
+
 	private double clusterSize = 180.0;
 
 	private boolean enabled = true;
@@ -29,6 +31,11 @@ public class ClusteringSettings {
 
 	public ClusteringSettings addMarkersDynamically(boolean addMarkersDynamically) {
 		this.addMarkersDynamically = addMarkersDynamically;
+		return this;
+	}
+
+	public ClusteringSettings clusterOptionsProvider(ClusterOptionsProvider clusterOptionsProvider) {
+		this.clusterOptionsProvider = clusterOptionsProvider;
 		return this;
 	}
 
@@ -48,14 +55,20 @@ public class ClusteringSettings {
 		return this;
 	}
 
+	public ClusterOptionsProvider getClusterOptionsProvider() {
+		return clusterOptionsProvider;
+	}
+
 	public double getClusterSize() {
 		return clusterSize;
 	}
 
+	@Deprecated
 	public IconDataProvider getIconDataProvider() {
 		return iconDataProvider;
 	}
 
+	@Deprecated
 	public ClusteringSettings iconDataProvider(IconDataProvider iconDataProvider) {
 		this.iconDataProvider = iconDataProvider;
 		return this;
@@ -90,7 +103,25 @@ public class ClusteringSettings {
 		if (clusterSize != other.clusterSize) {
 			return false;
 		}
-		return iconDataProvider.equals(other.iconDataProvider);
+		if (clusterOptionsProvider == null) {
+			if (other.clusterOptionsProvider != null) {
+				return false;
+			}
+		} else {
+			if (!clusterOptionsProvider.equals(other.clusterOptionsProvider)) {
+				return false;
+			}
+		}
+		if (iconDataProvider == null) {
+			if (other.iconDataProvider != null) {
+				return false;
+			}
+		} else {
+			if (!iconDataProvider.equals(other.iconDataProvider)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -99,6 +130,7 @@ public class ClusteringSettings {
 		return super.hashCode();
 	}
 
+	@Deprecated
 	public interface IconDataProvider {
 
 		MarkerOptions getIconData(int markersCount);

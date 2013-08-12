@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import pl.mg6.android.maps.extensions.AnimationSettings;
+import pl.mg6.android.maps.extensions.ClusterOptions;
+import pl.mg6.android.maps.extensions.ClusterOptionsProvider;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings.IconDataProvider;
 import pl.mg6.android.maps.extensions.Marker;
@@ -48,12 +49,14 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	private int oldZoom, zoom;
 	private int[] visibleClusters = new int[4];
 
-	private LongSparseArray<ClusterMarker> clusters = new LongSparseArray<ClusterMarker>();
+	private Map<ClusterKey, ClusterMarker> clusters = new HashMap<ClusterKey, ClusterMarker>();
 
 	private ClusterRefresher refresher;
+	private ClusterOptionsProvider clusterOptionsProvider;
 	private IconDataProvider iconDataProvider;
 
 	public GridClusteringStrategy(ClusteringSettings settings, IGoogleMap map, List<DelegatingMarker> markers, ClusterRefresher refresher) {
+		this.clusterOptionsProvider = settings.getClusterOptionsProvider();
 		this.iconDataProvider = settings.getIconDataProvider();
 		this.addMarkersDynamically = settings.isAddMarkersDynamically();
 		this.baseClusterSize = settings.getClusterSize();
@@ -73,8 +76,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	@Override
 	public void cleanup() {
-		for (int i = 0; i < clusters.size(); i++) {
-			ClusterMarker cluster = clusters.valueAt(i);
+		for (ClusterMarker cluster : clusters.values()) {
 			cluster.cleanup();
 		}
 		clusters.clear();
@@ -107,6 +109,19 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	}
 
 	@Override
+	public void onClusterGroupChange(DelegatingMarker marker) {
+		if (!marker.isVisible()) {
+			return;
+		}
+		ClusterMarker oldCluster = markers.get(marker);
+		if (oldCluster != null) {
+			oldCluster.remove(marker);
+			refresh(oldCluster);
+		}
+		addMarker(marker);
+	}
+
+	@Override
 	public void onAdd(DelegatingMarker marker) {
 		if (!marker.isVisible()) {
 			return;
@@ -116,8 +131,8 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	private void addMarker(DelegatingMarker marker) {
 		LatLng position = marker.getPosition();
-		long clusterId = calculateClusterId(position);
-		ClusterMarker cluster = findClusterById(clusterId);
+		ClusterKey key = calculateClusterKey(marker.getClusterGroup(), position);
+		ClusterMarker cluster = findClusterById(key);
 		cluster.add(marker);
 		markers.put(marker, cluster);
 		if (!addMarkersDynamically || isPositionInVisibleClusters(position)) {
@@ -154,21 +169,16 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			return;
 		}
 		ClusterMarker oldCluster = markers.get(marker);
-		if (oldCluster != null && isMarkerInCluster(marker, oldCluster)) {
+		if (oldCluster != null) {
+			oldCluster.remove(marker);
 			refresh(oldCluster);
-		} else {
-			if (oldCluster != null) {
-				oldCluster.remove(marker);
-				refresh(oldCluster);
-			}
-			addMarker(marker);
 		}
+		addMarker(marker);
 	}
 
 	@Override
 	public Marker map(com.google.android.gms.maps.model.Marker original) {
-		for (int i = 0; i < clusters.size(); i++) {
-			ClusterMarker cluster = clusters.valueAt(i);
+		for (ClusterMarker cluster : clusters.values()) {
 			if (original.equals(cluster.getVirtual())) {
 				return cluster;
 			}
@@ -179,8 +189,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	@Override
 	public List<Marker> getDisplayedMarkers() {
 		List<Marker> displayedMarkers = new ArrayList<Marker>();
-		for (int i = 0; i < clusters.size(); i++) {
-			ClusterMarker cluster = clusters.valueAt(i);
+		for (ClusterMarker cluster : clusters.values()) {
 			Marker displayedMarker = cluster.getDisplayedMarker();
 			if (displayedMarker != null) {
 				displayedMarkers.add(displayedMarker);
@@ -226,18 +235,11 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		return false;
 	}
 
-	private boolean isMarkerInCluster(DelegatingMarker marker, ClusterMarker cluster) {
-		long clusterId = cluster.getClusterId();
-		long markerClusterId = calculateClusterId(marker.getPosition());
-		return clusterId == markerClusterId;
-	}
-
-	private ClusterMarker findClusterById(long clusterId) {
-		ClusterMarker cluster = clusters.get(clusterId);
+	private ClusterMarker findClusterById(ClusterKey key) {
+		ClusterMarker cluster = clusters.get(key);
 		if (cluster == null) {
 			cluster = new ClusterMarker(this);
-			cluster.setClusterId(clusterId);
-			clusters.put(clusterId, cluster);
+			clusters.put(key, cluster);
 		}
 		return cluster;
 	}
@@ -291,24 +293,22 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	}
 
 	private void splitClusters() {
-		LongSparseArray<ClusterMarker> newClusters = new LongSparseArray<ClusterMarker>();
-		for (int i = 0; i < clusters.size(); i++) {
-			ClusterMarker cluster = clusters.valueAt(i);
+		Map<ClusterKey, ClusterMarker> newClusters = new HashMap<ClusterKey, ClusterMarker>();
+		for (ClusterMarker cluster : clusters.values()) {
 			List<DelegatingMarker> ms = cluster.getMarkersInternal();
 			if (ms.isEmpty()) {
 				cluster.removeVirtual();
 				continue;
 			}
-			long[] clusterIds = new long[ms.size()];
+			ClusterKey[] clusterIds = new ClusterKey[ms.size()];
 			boolean allSame = true;
 			for (int j = 0; j < ms.size(); j++) {
-				clusterIds[j] = calculateClusterId(ms.get(j).getPosition());
-				if (clusterIds[j] != clusterIds[0]) {
+				clusterIds[j] = calculateClusterKey(ms.get(j).getClusterGroup(), ms.get(j).getPosition());
+				if (!clusterIds[j].equals(clusterIds[0])) {
 					allSame = false;
 				}
 			}
 			if (allSame) {
-				cluster.setClusterId(clusterIds[0]);
 				newClusters.put(clusterIds[0], cluster);
 			} else {
 				cluster.removeVirtual();
@@ -316,7 +316,6 @@ class GridClusteringStrategy implements ClusteringStrategy {
 					cluster = newClusters.get(clusterIds[j]);
 					if (cluster == null) {
 						cluster = new ClusterMarker(this);
-						cluster.setClusterId(clusterIds[j]);
 						newClusters.put(clusterIds[j], cluster);
 						if (!addMarkersDynamically || isPositionInVisibleClusters(ms.get(j).getPosition())) {
 							refresh(cluster);
@@ -331,16 +330,15 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	}
 
 	private void joinClusters() {
-		LongSparseArray<ClusterMarker> newClusters = new LongSparseArray<ClusterMarker>();
-		LongSparseArray<List<ClusterMarker>> oldClusters = new LongSparseArray<List<ClusterMarker>>();
-		for (int i = 0; i < clusters.size(); i++) {
-			ClusterMarker cluster = clusters.valueAt(i);
+		Map<ClusterKey, ClusterMarker> newClusters = new HashMap<ClusterKey, ClusterMarker>();
+		Map<ClusterKey, List<ClusterMarker>> oldClusters = new HashMap<ClusterKey, List<ClusterMarker>>();
+		for (ClusterMarker cluster : clusters.values()) {
 			List<DelegatingMarker> ms = cluster.getMarkersInternal();
 			if (ms.isEmpty()) {
 				cluster.removeVirtual();
 				continue;
 			}
-			long clusterId = calculateClusterId(ms.get(0).getPosition());
+			ClusterKey clusterId = calculateClusterKey(ms.get(0).getClusterGroup(), ms.get(0).getPosition());
 			List<ClusterMarker> clusterList = oldClusters.get(clusterId);
 			if (clusterList == null) {
 				clusterList = new ArrayList<ClusterMarker>();
@@ -348,17 +346,14 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			}
 			clusterList.add(cluster);
 		}
-		for (int i = 0; i < oldClusters.size(); i++) {
-			long clusterId = oldClusters.keyAt(i);
-			List<ClusterMarker> clusterList = oldClusters.valueAt(i);
+		for (ClusterKey key : oldClusters.keySet()) {
+			List<ClusterMarker> clusterList = oldClusters.get(key);
 			if (clusterList.size() == 1) {
 				ClusterMarker cluster = clusterList.get(0);
-				cluster.setClusterId(clusterId);
-				newClusters.put(clusterId, cluster);
+				newClusters.put(key, cluster);
 			} else {
 				ClusterMarker cluster = new ClusterMarker(this);
-				cluster.setClusterId(clusterId);
-				newClusters.put(clusterId, cluster);
+				newClusters.put(key, cluster);
 				if (!addMarkersDynamically || isPositionInVisibleClusters(clusterList.get(0).getMarkersInternal().get(0).getPosition())) {
 					refresh(cluster);
 				}
@@ -397,11 +392,10 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		visibleClusters[3] = convLng(bounds.northeast.longitude);
 	}
 
-	private long calculateClusterId(LatLng position) {
-		long y = convLat(position.latitude);
-		long x = convLng(position.longitude);
-		long ret = (y << 32) + x;
-		return ret;
+	private ClusterKey calculateClusterKey(int group, LatLng position) {
+		int y = convLat(position.latitude);
+		int x = convLng(position.longitude);
+		return new ClusterKey(group, y, x);
 	}
 
 	private int convLat(double lat) {
@@ -416,8 +410,49 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		return baseClusterSize / (1 << zoom);
 	}
 
-	com.google.android.gms.maps.model.Marker createMarker(int markersCount, LatLng position) {
-		MarkerOptions mo = iconDataProvider.getIconData(markersCount);
-		return map.addMarker(markerOptions.position(position).icon(mo.getIcon()).anchor(mo.getAnchorU(), mo.getAnchorV()));
+	com.google.android.gms.maps.model.Marker createMarker(List<Marker> markers, LatLng position) {
+		if (clusterOptionsProvider != null) {
+			ClusterOptions opts = clusterOptionsProvider.getClusterOptions(markers);
+			return map.addMarker(markerOptions.position(position).icon(opts.getIcon()).anchor(opts.getAnchorU(), opts.getAnchorV()));
+		}
+		if (iconDataProvider != null) {
+			MarkerOptions opts = iconDataProvider.getIconData(markers.size());
+			return map.addMarker(markerOptions.position(position).icon(opts.getIcon()).anchor(opts.getAnchorU(), opts.getAnchorV()));
+		}
+		throw new RuntimeException();
+	}
+
+	private static class ClusterKey {
+		private final int group;
+		private final int latitudeId;
+		private final int longitudeId;
+
+		private ClusterKey(int group, int latitudeId, int longitudeId) {
+			this.group = group;
+			this.latitudeId = latitudeId;
+			this.longitudeId = longitudeId;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+
+			ClusterKey that = (ClusterKey) o;
+
+			if (group != that.group) return false;
+			if (latitudeId != that.latitudeId) return false;
+			if (longitudeId != that.longitudeId) return false;
+
+			return true;
+		}
+
+		@Override
+		public int hashCode() {
+			int result = group;
+			result = 31 * result + latitudeId;
+			result = 31 * result + longitudeId;
+			return result;
+		}
 	}
 }

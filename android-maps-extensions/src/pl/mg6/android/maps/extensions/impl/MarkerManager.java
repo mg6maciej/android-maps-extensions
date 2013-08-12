@@ -108,6 +108,10 @@ class MarkerManager implements OnMarkerCreateListener {
 		clusteringStrategy.onCameraChange(cameraPosition);
 	}
 
+	public void onClusterGroupChange(DelegatingMarker marker) {
+		clusteringStrategy.onClusterGroupChange(marker);
+	}
+
 	public void onPositionChange(DelegatingMarker marker) {
 		clusteringStrategy.onPositionChange(marker);
 	}

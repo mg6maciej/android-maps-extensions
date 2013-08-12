@@ -26,6 +26,8 @@ public interface Marker {
 
 	void animatePosition(LatLng target, AnimationSettings settings);
 
+	int getClusterGroup();
+
 	/**
 	 * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650
 	 */
@@ -64,6 +66,8 @@ public interface Marker {
 	void remove();
 
 	void setAnchor(float anchorU, float anchorV);
+
+	void setClusterGroup(int clusterGroup);
 
 	/**
 	 * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650

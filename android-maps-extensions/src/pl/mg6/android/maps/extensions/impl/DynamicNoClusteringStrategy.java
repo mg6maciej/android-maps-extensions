@@ -53,6 +53,11 @@ class DynamicNoClusteringStrategy implements ClusteringStrategy {
 	}
 
 	@Override
+	public void onClusterGroupChange(DelegatingMarker marker) {
+
+	}
+
+	@Override
 	public void onAdd(DelegatingMarker marker) {
 		if (!marker.isVisible()) {
 			return;
