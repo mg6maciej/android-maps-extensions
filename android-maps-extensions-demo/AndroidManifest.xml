@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.mg6.android.maps.extensions.demo"
-    android:versionCode="3"
-    android:versionName="1.2-SNAPSHOT" >
+    android:versionCode="4"
+    android:versionName="1.2" >
 
     <uses-feature
         android:glEsVersion="0x00020000"
