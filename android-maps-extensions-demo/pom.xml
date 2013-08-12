@@ -5,13 +5,13 @@
 
 	<name>Android Maps Extensions Demo</name>
 	<artifactId>android-maps-extensions-demo</artifactId>
-	<version>1.2-SNAPSHOT</version>
+	<version>1.2</version>
 	<packaging>apk</packaging>
 
 	<parent>
 		<groupId>pl.mg6.android.maps.extensions</groupId>
 		<artifactId>android-maps-extensions-parent</artifactId>
-		<version>1.5-SNAPSHOT</version>
+		<version>1.5</version>
 	</parent>
 
 	<dependencies>
