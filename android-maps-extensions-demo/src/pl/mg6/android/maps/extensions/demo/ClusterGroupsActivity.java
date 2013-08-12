@@ -24,12 +24,19 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+
+import pl.mg6.android.maps.extensions.ClusterOptions;
+import pl.mg6.android.maps.extensions.ClusterOptionsProvider;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 
 public class ClusterGroupsActivity extends FragmentActivity {
+
+	private static final int SINGLE_GROUP = 1;
+	private static final int DYNAMIC_GROUP = 123;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +47,17 @@ public class ClusterGroupsActivity extends FragmentActivity {
 		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
 		final GoogleMap map = f.getExtendedMap();
 
-		map.setClustering(new ClusteringSettings().iconDataProvider(new ClusteringSettings.IconDataProvider() {
+		map.setClustering(new ClusteringSettings().clusterOptionsProvider(new ClusterOptionsProvider() {
 			@Override
-			public MarkerOptions getIconData(int markersCount) {
-				BitmapDescriptor blueIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
-				return new MarkerOptions().icon(blueIcon);
+			public ClusterOptions getClusterOptions(List<Marker> markers) {
+				float hue;
+				if (markers.get(0).getClusterGroup() == DYNAMIC_GROUP) {
+					hue = BitmapDescriptorFactory.HUE_ORANGE;
+				} else {
+					hue = BitmapDescriptorFactory.HUE_ROSE;
+				}
+				BitmapDescriptor blueIcon = BitmapDescriptorFactory.defaultMarker(hue);
+				return new ClusterOptions().icon(blueIcon);
 			}
 		}));
 
@@ -55,7 +68,7 @@ public class ClusterGroupsActivity extends FragmentActivity {
 
 		BitmapDescriptor greenIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
 		final Marker single = map.addMarker(new MarkerOptions().position(new LatLng(10, 10)).icon(greenIcon));
-		single.setClusterGroup(-1);
+		single.setClusterGroup(SINGLE_GROUP);
 
 		map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 			@Override
@@ -69,7 +82,7 @@ public class ClusterGroupsActivity extends FragmentActivity {
 			public void onMapLongClick(LatLng position) {
 				BitmapDescriptor yellowIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
 				Marker alien = map.addMarker(new MarkerOptions().position(position).icon(yellowIcon));
-				alien.setClusterGroup(123);
+				alien.setClusterGroup(DYNAMIC_GROUP);
 			}
 		});
 	}
