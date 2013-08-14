@@ -434,15 +434,24 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 		@Override
 		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
+			if (this == o) {
+				return true;
+			}
+			if (o == null || getClass() != o.getClass()) {
+				return false;
+			}
 
 			ClusterKey that = (ClusterKey) o;
 
-			if (group != that.group) return false;
-			if (latitudeId != that.latitudeId) return false;
-			if (longitudeId != that.longitudeId) return false;
-
+			if (group != that.group) {
+				return false;
+			}
+			if (latitudeId != that.latitudeId) {
+				return false;
+			}
+			if (longitudeId != that.longitudeId) {
+				return false;
+			}
 			return true;
 		}
 
