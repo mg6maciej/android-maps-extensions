@@ -17,7 +17,7 @@ package pl.mg6.android.maps.extensions.impl;
 
 import pl.mg6.android.maps.extensions.GoogleMap;
 
-public class ExtendedMapFactory {
+public final class ExtendedMapFactory {
 
 	private ExtendedMapFactory() {
 	}

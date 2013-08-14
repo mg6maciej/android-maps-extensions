@@ -15,7 +15,7 @@
  */
 package pl.mg6.android.maps.extensions.utils;
 
-public class SphericalMercator {
+public final class SphericalMercator {
 
 	private static final double MIN_LATITUDE = -85.0511287798;
 	private static final double MAX_LATITUDE = 85.0511287798;
