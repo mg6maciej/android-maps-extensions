@@ -61,16 +61,10 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		this.baseClusterSize = settings.getClusterSize();
 		this.map = map;
 		this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
-		for (DelegatingMarker m : markers) {
-			if (m.isVisible()) {
-				this.markers.put(m, null);
-			}
-		}
 		this.refresher = refresher;
-		this.oldZoom = -1;
 		this.zoom = Math.round(map.getCameraPosition().zoom);
 		this.clusterSize = calculateClusterSize(zoom);
-		recalculate();
+		addVisibleMarkers(markers);
 	}
 
 	@Override
@@ -269,20 +263,26 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		refresher.refresh(cluster);
 	}
 
+	private void addVisibleMarkers(List<DelegatingMarker> markers) {
+		if (addMarkersDynamically) {
+			calculateVisibleClusters();
+		}
+		for (DelegatingMarker marker : markers) {
+			if (marker.isVisible()) {
+				addMarker(marker);
+			}
+		}
+		refresher.refreshAll();
+	}
+
 	private void recalculate() {
 		if (addMarkersDynamically) {
 			calculateVisibleClusters();
 		}
-		if (oldZoom == -1) {
-			for (DelegatingMarker marker : markers.keySet()) {
-				addMarker(marker);
-			}
+		if (zoomedIn()) {
+			splitClusters();
 		} else {
-			if (zoomedIn()) {
-				splitClusters();
-			} else {
-				joinClusters();
-			}
+			joinClusters();
 		}
 		refresher.refreshAll();
 	}
