@@ -19,6 +19,9 @@ import pl.mg6.android.maps.extensions.GoogleMap;
 
 public class ExtendedMapFactory {
 
+	private ExtendedMapFactory() {
+	}
+
 	public static GoogleMap create(com.google.android.gms.maps.GoogleMap real) {
 		return new DelegatingGoogleMap(real);
 	}
