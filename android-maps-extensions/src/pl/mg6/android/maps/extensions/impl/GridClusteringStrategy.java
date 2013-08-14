@@ -26,7 +26,6 @@ import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings.IconDataProvider;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.utils.SphericalMercator;
-import android.support.v4.util.LongSparseArray;
 
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
