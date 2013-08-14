@@ -426,7 +426,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		private final int latitudeId;
 		private final int longitudeId;
 
-		private ClusterKey(int group, int latitudeId, int longitudeId) {
+		public ClusterKey(int group, int latitudeId, int longitudeId) {
 			this.group = group;
 			this.latitudeId = latitudeId;
 			this.longitudeId = longitudeId;

@@ -392,9 +392,9 @@ class DelegatingGoogleMap implements GoogleMap {
 
 	private class DelegatingOnInfoWindowClickListener implements com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener {
 
-		private OnInfoWindowClickListener onInfoWindowClickListener;
+		private final OnInfoWindowClickListener onInfoWindowClickListener;
 
-		private DelegatingOnInfoWindowClickListener(OnInfoWindowClickListener onInfoWindowClickListener) {
+		public DelegatingOnInfoWindowClickListener(OnInfoWindowClickListener onInfoWindowClickListener) {
 			this.onInfoWindowClickListener = onInfoWindowClickListener;
 		}
 
@@ -406,9 +406,9 @@ class DelegatingGoogleMap implements GoogleMap {
 
 	private class DelegatingOnMarkerClickListener implements com.google.android.gms.maps.GoogleMap.OnMarkerClickListener {
 
-		private OnMarkerClickListener onMarkerClickListener;
+		private final OnMarkerClickListener onMarkerClickListener;
 
-		private DelegatingOnMarkerClickListener(OnMarkerClickListener onMarkerClickListener) {
+		public DelegatingOnMarkerClickListener(OnMarkerClickListener onMarkerClickListener) {
 			this.onMarkerClickListener = onMarkerClickListener;
 		}
 
