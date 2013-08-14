@@ -97,7 +97,7 @@ public class ClusteringSettings {
 		if (addMarkersDynamically != other.addMarkersDynamically) {
 			return false;
 		}
-		if (enabled == false && other.enabled == false) {
+		if (!enabled && !other.enabled) {
 			return true;
 		}
 		if (clusterSize != other.clusterSize) {
