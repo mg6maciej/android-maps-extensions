@@ -51,7 +51,7 @@ class DelegatingMarker implements Marker {
 	@Override
 	public void animatePosition(LatLng target, AnimationSettings settings) {
 		if (target == null || settings == null) {
-			throw new NullPointerException();
+			throw new IllegalArgumentException();
 		}
 		manager.onAnimateMarkerPosition(this, target, settings);
 	}
