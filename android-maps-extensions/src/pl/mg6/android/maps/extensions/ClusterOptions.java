@@ -19,18 +19,17 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 
 public class ClusterOptions {
 
+	public static final float DEFAULT_ANCHOR_U = 0.5f;
+	public static final float DEFAULT_ANCHOR_V = 1.0f;
+
 	private BitmapDescriptor icon;
-	private float anchorU = 0.5f;
-	private float anchorV = 1.0f;
+	private float anchorU = DEFAULT_ANCHOR_U;
+	private float anchorV = DEFAULT_ANCHOR_V;
 
 	public ClusterOptions anchor(float anchorU, float anchorV) {
 		this.anchorU = anchorU;
 		this.anchorV = anchorV;
 		return this;
-	}
-
-	public BitmapDescriptor getIcon() {
-		return icon;
 	}
 
 	public float getAnchorU() {
@@ -39,6 +38,10 @@ public class ClusterOptions {
 
 	public float getAnchorV() {
 		return anchorV;
+	}
+
+	public BitmapDescriptor getIcon() {
+		return icon;
 	}
 
 	public ClusterOptions icon(BitmapDescriptor icon) {

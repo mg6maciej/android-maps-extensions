@@ -19,11 +19,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ClusteringSettings {
 
+	public static final double DEFAULT_CLUSTER_SIZE = 180.0;
+
 	private boolean addMarkersDynamically = false;
 
 	private ClusterOptionsProvider clusterOptionsProvider = null;
 
-	private double clusterSize = 180.0;
+	private double clusterSize = DEFAULT_CLUSTER_SIZE;
 
 	private boolean enabled = true;
 
