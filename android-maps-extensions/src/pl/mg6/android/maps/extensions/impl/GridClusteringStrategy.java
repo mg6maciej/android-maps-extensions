@@ -309,6 +309,9 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			}
 			if (allSame) {
 				newClusters.put(clusterIds[0], cluster);
+				if (addMarkersDynamically && isPositionInVisibleClusters(cluster.getMarkersInternal().get(0).getPosition())) {
+					refresh(cluster);
+				}
 			} else {
 				cluster.removeVirtual();
 				for (int j = 0; j < ms.size(); j++) {
@@ -350,6 +353,9 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			if (clusterList.size() == 1) {
 				ClusterMarker cluster = clusterList.get(0);
 				newClusters.put(key, cluster);
+				if (addMarkersDynamically && isPositionInVisibleClusters(cluster.getMarkersInternal().get(0).getPosition())) {
+					refresh(cluster);
+				}
 			} else {
 				ClusterMarker cluster = new ClusterMarker(this);
 				newClusters.put(key, cluster);
