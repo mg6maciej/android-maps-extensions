@@ -12,7 +12,7 @@ See [wiki](https://github.com/mg6maciej/android-maps-extensions/wiki) for more d
 Developed by
 ============
 
-* Maciej Górski - <maciek.gorski@gmail.com>
+* Maciej GÃ³rski - <maciek.gorski@gmail.com>
 
 Contributing
 ============
@@ -29,7 +29,7 @@ or even do cool things like creating a YouTube video.
 License
 =======
 
-    Copyright (C) 2013 Maciej Górski
+    Copyright (C) 2013 Maciej GÃ³rski
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
