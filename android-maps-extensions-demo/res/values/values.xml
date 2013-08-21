@@ -4,5 +4,6 @@
     <dimen name="text_size">15dp</dimen>
     <dimen name="padding">66dp</dimen>
     <dimen name="circle_stroke_width">5dp</dimen>
+    <dimen name="distance_between_markers">36dp</dimen>
 
 </resources>
