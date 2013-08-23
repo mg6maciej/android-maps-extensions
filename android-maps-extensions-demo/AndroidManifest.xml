@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.mg6.android.maps.extensions.demo"
-    android:versionCode="4"
-    android:versionName="1.2" >
+    android:versionCode="5"
+    android:versionName="1.3" >
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -32,16 +32,18 @@
         <activity android:name=".DemoActivity" />
         <activity android:name=".AnimateMarkersActivity" />
         <activity android:name=".ClusterGroupsActivity" />
+        <activity android:name=".DeclusterificationExampleActivity" />
         <activity android:name=".LaunchTimeTestActivity" />
         <activity android:name=".Issue14InfoWindowNotShowingExampleActivity" />
         <activity android:name=".Issue14InfoWindowNotShowingClusterExampleActivity" />
         <activity android:name=".Issue15InfoWindowNotShowingExampleActivity" />
         <activity android:name=".Issue15InfoWindowNotShowingClusterExampleActivity" />
+        <activity android:name=".Issue29MarkerNotShownWhenZoomingInOrOutFromOtherRegion" />
         <activity android:name=".SimpleMapActivity" />
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="YOUR_API_KEY" />
+            android:value="AIzaSyCxf3mMH7rhbk3JyH9gZPX3Ko2KLEQEEqU" />
     </application>
 
 </manifest>

@@ -46,7 +46,7 @@ public class AnimationSettings {
 
 	public AnimationSettings interpolator(Interpolator interpolator) {
 		if (interpolator == null) {
-			throw new NullPointerException();
+			throw new IllegalArgumentException();
 		}
 		this.interpolator = interpolator;
 		return this;

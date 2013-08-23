@@ -31,7 +31,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		String[] screens = { "Demo", "Animate markers", "Cluster groups", "No clustering", "No clustering (dynamic)", "Grid clustering", "Grid clustering (dynamic)" };
+		String[] screens = { "Demo", "Animate markers", "Cluster groups", "\"Declusterification\"",
+				"No clustering", "No clustering (dynamic)", "Grid clustering", "Grid clustering (dynamic)" };
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, screens);
 		ListView listView = (ListView) findViewById(R.id.list);
 		listView.setAdapter(adapter);
@@ -45,10 +46,12 @@ public class MainActivity extends Activity {
 					intent = new Intent(MainActivity.this, AnimateMarkersActivity.class);
 				} else if (position == 2) {
 					intent = new Intent(MainActivity.this, ClusterGroupsActivity.class);
+				} else if (position == 3) {
+					intent = new Intent(MainActivity.this, DeclusterificationExampleActivity.class);
 				} else {
 					intent = new Intent(MainActivity.this, LaunchTimeTestActivity.class);
 					// normally: int clusteringType = LaunchTimeTestActivity.CLUSTERING_ENABLED;
-					int clusteringType = position - 3;
+					int clusteringType = position - 4;
 					intent.putExtra(LaunchTimeTestActivity.EXTRA_CLUSTERING_TYPE, clusteringType);
 				}
 				startActivity(intent);

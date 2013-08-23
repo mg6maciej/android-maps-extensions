@@ -20,7 +20,7 @@ import java.util.Arrays;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-public class LatLngBoundsUtils {
+public final class LatLngBoundsUtils {
 
 	private LatLngBoundsUtils() {
 	}

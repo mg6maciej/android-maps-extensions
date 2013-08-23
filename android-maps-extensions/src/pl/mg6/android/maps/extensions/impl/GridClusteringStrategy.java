@@ -26,7 +26,6 @@ import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings.IconDataProvider;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.utils.SphericalMercator;
-import android.support.v4.util.LongSparseArray;
 
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -62,16 +61,10 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		this.baseClusterSize = settings.getClusterSize();
 		this.map = map;
 		this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
-		for (DelegatingMarker m : markers) {
-			if (m.isVisible()) {
-				this.markers.put(m, null);
-			}
-		}
 		this.refresher = refresher;
-		this.oldZoom = -1;
 		this.zoom = Math.round(map.getCameraPosition().zoom);
 		this.clusterSize = calculateClusterSize(zoom);
-		recalculate();
+		addVisibleMarkers(markers);
 	}
 
 	@Override
@@ -270,20 +263,26 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		refresher.refresh(cluster);
 	}
 
+	private void addVisibleMarkers(List<DelegatingMarker> markers) {
+		if (addMarkersDynamically) {
+			calculateVisibleClusters();
+		}
+		for (DelegatingMarker marker : markers) {
+			if (marker.isVisible()) {
+				addMarker(marker);
+			}
+		}
+		refresher.refreshAll();
+	}
+
 	private void recalculate() {
 		if (addMarkersDynamically) {
 			calculateVisibleClusters();
 		}
-		if (oldZoom == -1) {
-			for (DelegatingMarker marker : markers.keySet()) {
-				addMarker(marker);
-			}
+		if (zoomedIn()) {
+			splitClusters();
 		} else {
-			if (zoomedIn()) {
-				splitClusters();
-			} else {
-				joinClusters();
-			}
+			joinClusters();
 		}
 		refresher.refreshAll();
 	}
@@ -310,6 +309,9 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			}
 			if (allSame) {
 				newClusters.put(clusterIds[0], cluster);
+				if (addMarkersDynamically && isPositionInVisibleClusters(cluster.getMarkersInternal().get(0).getPosition())) {
+					refresh(cluster);
+				}
 			} else {
 				cluster.removeVirtual();
 				for (int j = 0; j < ms.size(); j++) {
@@ -351,6 +353,9 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			if (clusterList.size() == 1) {
 				ClusterMarker cluster = clusterList.get(0);
 				newClusters.put(key, cluster);
+				if (addMarkersDynamically && isPositionInVisibleClusters(cluster.getMarkersInternal().get(0).getPosition())) {
+					refresh(cluster);
+				}
 			} else {
 				ClusterMarker cluster = new ClusterMarker(this);
 				newClusters.put(key, cluster);
@@ -427,7 +432,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 		private final int latitudeId;
 		private final int longitudeId;
 
-		private ClusterKey(int group, int latitudeId, int longitudeId) {
+		public ClusterKey(int group, int latitudeId, int longitudeId) {
 			this.group = group;
 			this.latitudeId = latitudeId;
 			this.longitudeId = longitudeId;
@@ -435,15 +440,24 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 		@Override
 		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
+			if (this == o) {
+				return true;
+			}
+			if (o == null || getClass() != o.getClass()) {
+				return false;
+			}
 
 			ClusterKey that = (ClusterKey) o;
 
-			if (group != that.group) return false;
-			if (latitudeId != that.latitudeId) return false;
-			if (longitudeId != that.longitudeId) return false;
-
+			if (group != that.group) {
+				return false;
+			}
+			if (latitudeId != that.latitudeId) {
+				return false;
+			}
+			if (longitudeId != that.longitudeId) {
+				return false;
+			}
 			return true;
 		}
 
