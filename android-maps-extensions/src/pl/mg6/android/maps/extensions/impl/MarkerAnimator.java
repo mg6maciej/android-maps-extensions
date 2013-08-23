@@ -67,7 +67,7 @@ class MarkerAnimator {
 		}
 	}
 
-	public void animate(Marker marker, LatLng from, LatLng to, long start, AnimationSettings settings) {
+	public void animate(Marker marker, LatLng from, LatLng to, long start, AnimationSettings settings, Marker.AnimationCallback callback) {
 		AnimationData data = new AnimationData();
 		data.from = from;
 		data.to = to;

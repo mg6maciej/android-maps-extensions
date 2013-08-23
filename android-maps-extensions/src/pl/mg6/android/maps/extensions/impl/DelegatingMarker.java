@@ -45,15 +45,25 @@ class DelegatingMarker implements Marker {
 
 	@Override
 	public void animatePosition(LatLng target) {
-		animatePosition(target, new AnimationSettings());
+		animatePosition(target, new AnimationSettings(), null);
 	}
 
 	@Override
 	public void animatePosition(LatLng target, AnimationSettings settings) {
+		animatePosition(target, settings, null);
+	}
+
+	@Override
+	public void animatePosition(LatLng target, AnimationCallback callback) {
+		animatePosition(target, new AnimationSettings(), callback);
+	}
+
+	@Override
+	public void animatePosition(LatLng target, AnimationSettings settings, AnimationCallback callback) {
 		if (target == null || settings == null) {
 			throw new IllegalArgumentException();
 		}
-		manager.onAnimateMarkerPosition(this, target, settings);
+		manager.onAnimateMarkerPosition(this, target, settings, callback);
 	}
 
 	@Override

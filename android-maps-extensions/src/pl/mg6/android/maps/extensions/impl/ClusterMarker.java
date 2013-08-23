@@ -123,6 +123,16 @@ class ClusterMarker implements Marker {
 	}
 
 	@Override
+	public void animatePosition(LatLng target, AnimationCallback callback) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void animatePosition(LatLng target, AnimationSettings settings, AnimationCallback callback) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public int getClusterGroup() {
 		if (markers.size() > 0) {
 			return markers.get(0).getClusterGroup();

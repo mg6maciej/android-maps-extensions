@@ -100,8 +100,8 @@ class MarkerManager implements OnMarkerCreateListener {
 		return clusteringStrategy.getMinZoomLevelNotClustered(marker);
 	}
 
-	void onAnimateMarkerPosition(DelegatingMarker marker, LatLng target, AnimationSettings settings) {
-		markerAnimator.animate(marker, marker.getPosition(), target, SystemClock.uptimeMillis(), settings);
+	public void onAnimateMarkerPosition(DelegatingMarker marker, LatLng target, AnimationSettings settings, Marker.AnimationCallback callback) {
+		markerAnimator.animate(marker, marker.getPosition(), target, SystemClock.uptimeMillis(), settings, callback);
 	}
 
 	public void onCameraChange(CameraPosition cameraPosition) {
