@@ -40,19 +40,19 @@ class MarkerAnimator {
 		}
 	});
 
-	private Map<Marker, AnimationData> queue = new HashMap<Marker, AnimationData>();
+	private Map<DelegatingMarker, AnimationData> queue = new HashMap<DelegatingMarker, AnimationData>();
 
 	private void calculatePositions() {
 		long now = SystemClock.uptimeMillis();
-		Iterator<Marker> iterator = queue.keySet().iterator();
+		Iterator<DelegatingMarker> iterator = queue.keySet().iterator();
 		while (iterator.hasNext()) {
-			Marker marker = iterator.next();
+			DelegatingMarker marker = iterator.next();
 			AnimationData data = queue.get(marker);
 			long time = now - data.start;
 			if (time <= 0) {
-				marker.setPosition(data.from);
+				marker.setPositionDuringAnimation(data.from);
 			} else if (time >= data.duration) {
-				marker.setPosition(data.to);
+				marker.setPositionDuringAnimation(data.to);
 				if (data.callback != null) {
 					data.callback.onFinish(marker);
 				}
@@ -62,7 +62,7 @@ class MarkerAnimator {
 				t = data.interpolator.getInterpolation(t);
 				double lat = (1.0f - t) * data.from.latitude + t * data.to.latitude;
 				double lng = (1.0f - t) * data.from.longitude + t * data.to.longitude;
-				marker.setPosition(new LatLng(lat, lng));
+				marker.setPositionDuringAnimation(new LatLng(lat, lng));
 			}
 		}
 		if (queue.size() > 0) {
@@ -70,7 +70,7 @@ class MarkerAnimator {
 		}
 	}
 
-	public void animate(Marker marker, LatLng from, LatLng to, long start, AnimationSettings settings, Marker.AnimationCallback callback) {
+	public void animate(DelegatingMarker marker, LatLng from, LatLng to, long start, AnimationSettings settings, Marker.AnimationCallback callback) {
 		AnimationData data = new AnimationData();
 		data.from = from;
 		data.to = to;
@@ -83,7 +83,7 @@ class MarkerAnimator {
 		handler.sendEmptyMessage(0);
 	}
 
-	public void cancelAnimation(Marker marker, Marker.AnimationCallback.CancelReason reason) {
+	public void cancelAnimation(DelegatingMarker marker, Marker.AnimationCallback.CancelReason reason) {
 		AnimationData data = queue.remove(marker);
 		if (data != null && data.callback != null) {
 			data.callback.onCancel(marker, reason);

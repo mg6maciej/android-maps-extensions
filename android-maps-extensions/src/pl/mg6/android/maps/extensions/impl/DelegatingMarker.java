@@ -171,6 +171,12 @@ class DelegatingMarker implements Marker {
 		manager.onPositionChange(this);
 	}
 
+	void setPositionDuringAnimation(LatLng position) {
+		this.position = position;
+		real.setPosition(position);
+		manager.onPositionDuringAnimationChange(this);
+	}
+
 	@Override
 	public void setSnippet(String snippet) {
 		real.setSnippet(snippet);

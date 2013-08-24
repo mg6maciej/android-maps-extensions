@@ -424,6 +424,7 @@ class DelegatingGoogleMap implements GoogleMap {
 		public void onMarkerDragStart(com.google.android.gms.maps.model.Marker marker) {
 			DelegatingMarker delegating = markerManager.mapToDelegatingMarker(marker);
 			delegating.clearCachedPosition();
+			markerManager.onDragStart(delegating);
 			if (onMarkerDragListener != null) {
 				onMarkerDragListener.onMarkerDragStart(delegating);
 			}
