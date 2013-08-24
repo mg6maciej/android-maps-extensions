@@ -53,6 +53,9 @@ class MarkerAnimator {
 				marker.setPosition(data.from);
 			} else if (time >= data.duration) {
 				marker.setPosition(data.to);
+				if (data.callback != null) {
+					data.callback.onFinish(marker);
+				}
 				iterator.remove();
 			} else {
 				float t = ((float) time) / data.duration;
@@ -74,9 +77,17 @@ class MarkerAnimator {
 		data.start = start;
 		data.duration = settings.getDuration();
 		data.interpolator = settings.getInterpolator();
+		data.callback = callback;
 		queue.put(marker, data);
 		handler.removeMessages(0);
 		handler.sendEmptyMessage(0);
+	}
+
+	public void cancelAnimation(Marker marker, Marker.AnimationCallback.CancelReason reason) {
+		AnimationData data = queue.remove(marker);
+		if (data != null && data.callback != null) {
+			data.callback.onCancel(marker, reason);
+		}
 	}
 
 	private static class AnimationData {
@@ -90,5 +101,7 @@ class MarkerAnimator {
 		private long duration;
 
 		private Interpolator interpolator;
+
+		private Marker.AnimationCallback callback;
 	}
 }
