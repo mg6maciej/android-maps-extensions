@@ -36,6 +36,7 @@ public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
 	private final LruCache<Integer, BitmapDescriptor> cache = new LruCache<Integer, BitmapDescriptor>(128);
 	private final ClusterOptions clusterOptions = new ClusterOptions().anchor(0.5f, 0.5f);
 	private final Paint circlePaint;
+	private final Paint circleShadowPaint;
 	private final Paint textPaint;
 	private final Rect bounds = new Rect();
 	private float blurRadius;
@@ -46,6 +47,7 @@ public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
 
 	public DefaultClusterOptionsProvider(Resources resources) {
 		circlePaint = createCirclePaint(resources);
+		circleShadowPaint = createCircleShadowPaint(resources);
 		textPaint = createTextPaint(resources);
 		textPadding = resources.getDimension(R.dimen.ame_default_cluster_text_padding);
 	}
@@ -56,6 +58,19 @@ public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
 		if (blurRadius > 0.0f) {
 			BlurMaskFilter maskFilter = new BlurMaskFilter(blurRadius, BlurMaskFilter.Blur.SOLID);
 			paint.setMaskFilter(maskFilter);
+		}
+		return paint;
+	}
+
+	private Paint createCircleShadowPaint(Resources resources) {
+		Paint paint = null;
+		float circleShadowBlurRadius = resources.getDimension(R.dimen.ame_default_cluster_circle_shadow_blur_radius);
+		if (circleShadowBlurRadius > 0.0f) {
+			paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+			float offsetX = resources.getDimension(R.dimen.ame_default_cluster_circle_shadow_offset_x);
+			float offsetY = resources.getDimension(R.dimen.ame_default_cluster_circle_shadow_offset_y);
+			int color = resources.getColor(R.color.ame_default_cluster_circle_shadow_color);
+			paint.setShadowLayer(circleShadowBlurRadius, offsetX, offsetY, color);
 		}
 		return paint;
 	}
@@ -109,6 +124,7 @@ public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
 	}
 
 	private void drawCircle(Canvas canvas, int count, float iconSize) {
+		canvas.drawCircle(iconSize / 2, iconSize / 2, iconSize / 2 - blurRadius, circleShadowPaint);
 		circlePaint.setColor(Color.HSVToColor(new float[]{count < 270 ? count : 270, 1, 1}));
 		canvas.drawCircle(iconSize / 2, iconSize / 2, iconSize / 2 - blurRadius, circlePaint);
 	}
