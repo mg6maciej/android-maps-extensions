@@ -26,9 +26,9 @@ public interface Marker {
 
 		enum CancelReason {
 			ANIMATE_POSITION,
+			DRAG_START,
 			REMOVE,
 			SET_POSITION,
-			USER_DRAG,
 		}
 
 		void onFinish(Marker marker);

@@ -114,7 +114,7 @@ class MarkerManager implements OnMarkerCreateListener {
 	}
 
 	public void onDragStart(DelegatingMarker marker) {
-		markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.USER_DRAG);
+		markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.DRAG_START);
 	}
 
 	public void onPositionChange(DelegatingMarker marker) {
