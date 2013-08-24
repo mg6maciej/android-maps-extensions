@@ -22,9 +22,27 @@ import com.google.android.gms.maps.model.LatLng;
 
 public interface Marker {
 
+	interface AnimationCallback {
+
+		enum CancelReason {
+			ANIMATE_POSITION,
+			DRAG_START,
+			REMOVE,
+			SET_POSITION,
+		}
+
+		void onFinish(Marker marker);
+
+		void onCancel(Marker marker, CancelReason reason);
+	}
+
 	void animatePosition(LatLng target);
 
 	void animatePosition(LatLng target, AnimationSettings settings);
+
+	void animatePosition(LatLng target, AnimationCallback callback);
+
+	void animatePosition(LatLng target, AnimationSettings settings, AnimationCallback callback);
 
 	int getClusterGroup();
 

@@ -100,8 +100,9 @@ class MarkerManager implements OnMarkerCreateListener {
 		return clusteringStrategy.getMinZoomLevelNotClustered(marker);
 	}
 
-	void onAnimateMarkerPosition(DelegatingMarker marker, LatLng target, AnimationSettings settings) {
-		markerAnimator.animate(marker, marker.getPosition(), target, SystemClock.uptimeMillis(), settings);
+	public void onAnimateMarkerPosition(DelegatingMarker marker, LatLng target, AnimationSettings settings, Marker.AnimationCallback callback) {
+		markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.ANIMATE_POSITION);
+		markerAnimator.animate(marker, marker.getPosition(), target, SystemClock.uptimeMillis(), settings, callback);
 	}
 
 	public void onCameraChange(CameraPosition cameraPosition) {
@@ -112,7 +113,16 @@ class MarkerManager implements OnMarkerCreateListener {
 		clusteringStrategy.onClusterGroupChange(marker);
 	}
 
+	public void onDragStart(DelegatingMarker marker) {
+		markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.DRAG_START);
+	}
+
 	public void onPositionChange(DelegatingMarker marker) {
+		clusteringStrategy.onPositionChange(marker);
+		markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.SET_POSITION);
+	}
+
+	public void onPositionDuringAnimationChange(DelegatingMarker marker) {
 		clusteringStrategy.onPositionChange(marker);
 	}
 
@@ -120,6 +130,7 @@ class MarkerManager implements OnMarkerCreateListener {
 		markers.remove(marker.getReal());
 		createdMarkers.remove(marker.getReal().getMarker());
 		clusteringStrategy.onRemove(marker);
+		markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.REMOVE);
 	}
 
 	public void onShowInfoWindow(DelegatingMarker marker) {
