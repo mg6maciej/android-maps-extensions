@@ -15,14 +15,107 @@
  */
 package pl.mg6.android.maps.extensions;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.support.v4.util.LruCache;
+
+import com.google.android.gms.R;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+
 import java.util.List;
 
 public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
 
-	private ClusterOptions clusterOptions = new ClusterOptions().anchor(0.5f, 0.5f);
+	private final LruCache<Integer, BitmapDescriptor> cache = new LruCache<Integer, BitmapDescriptor>(128);
+	private final ClusterOptions clusterOptions = new ClusterOptions().anchor(0.5f, 0.5f);
+	private final Paint circlePaint;
+	private final Paint textPaint;
+	private final Rect bounds = new Rect();
+	private float blurRadius;
+	private float textPadding;
+	private float shadowBlurRadius;
+	private float shadowOffsetX;
+	private float shadowOffsetY;
+
+	public DefaultClusterOptionsProvider(Resources resources) {
+		circlePaint = createCirclePaint(resources);
+		textPaint = createTextPaint(resources);
+		textPadding = resources.getDimension(R.dimen.ame_default_cluster_text_padding);
+	}
+
+	private Paint createCirclePaint(Resources resources) {
+		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		blurRadius = resources.getDimension(R.dimen.ame_default_cluster_circle_blur_radius);
+		if (blurRadius > 0.0f) {
+			BlurMaskFilter maskFilter = new BlurMaskFilter(blurRadius, BlurMaskFilter.Blur.SOLID);
+			paint.setMaskFilter(maskFilter);
+		}
+		return paint;
+	}
+
+	private Paint createTextPaint(Resources resources) {
+		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		paint.setColor(resources.getColor(R.color.ame_default_cluster_text_color));
+		shadowBlurRadius = resources.getDimension(R.dimen.ame_default_cluster_text_shadow_blur_radius);
+		if (shadowBlurRadius > 0.0f) {
+			shadowOffsetX = resources.getDimension(R.dimen.ame_default_cluster_text_shadow_offset_x);
+			shadowOffsetY = resources.getDimension(R.dimen.ame_default_cluster_text_shadow_offset_y);
+			int shadowColor = resources.getColor(R.color.ame_default_cluster_text_shadow_color);
+			paint.setShadowLayer(shadowBlurRadius, shadowOffsetX, shadowOffsetY, shadowColor);
+		}
+		paint.setTextSize(resources.getDimension(R.dimen.ame_default_cluster_text_size));
+		paint.setTypeface(Typeface.DEFAULT_BOLD);
+		return paint;
+	}
 
 	@Override
 	public ClusterOptions getClusterOptions(List<Marker> markers) {
+		int count = markers.size();
+		BitmapDescriptor icon = cache.get(count);
+		if (icon == null) {
+			icon = createIcon(count);
+			cache.put(count, icon);
+		}
+		clusterOptions.icon(icon);
 		return clusterOptions;
+	}
+
+	private BitmapDescriptor createIcon(int count) {
+		String text = String.valueOf(count);
+		calculateTextSize(text);
+		int iconSize = calculateIconSize();
+		Bitmap bitmap = Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bitmap);
+		drawCircle(canvas, count, iconSize);
+		drawText(canvas, text, iconSize);
+		return BitmapDescriptorFactory.fromBitmap(bitmap);
+	}
+
+	private void calculateTextSize(String text) {
+		textPaint.getTextBounds(text, 0, text.length(), bounds);
+	}
+
+	private int calculateIconSize() {
+		int w = bounds.width();
+		int h = bounds.height();
+		return (int) Math.ceil(2 * (textPadding + blurRadius) + Math.sqrt(w * w + h * h));
+	}
+
+	private void drawCircle(Canvas canvas, int count, float iconSize) {
+		circlePaint.setColor(Color.HSVToColor(new float[]{count < 270 ? count : 270, 1, 1}));
+		canvas.drawCircle(iconSize / 2, iconSize / 2, iconSize / 2 - blurRadius, circlePaint);
+	}
+
+	private void drawText(Canvas canvas, String text, int iconSize) {
+		int x = Math.round((iconSize - bounds.width()) / 2 - bounds.left - shadowOffsetX);
+		int y = Math.round((iconSize - bounds.height()) / 2 - bounds.top - shadowOffsetY);
+		canvas.drawText(text, x, y, textPaint);
 	}
 }
