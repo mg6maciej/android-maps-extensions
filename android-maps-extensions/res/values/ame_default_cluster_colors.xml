@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ame_default_cluster_circle_color_small">#FF008CFF</color>
+    <color name="ame_default_cluster_circle_color_medium">#FFFFBF00</color>
+    <color name="ame_default_cluster_circle_color_large">#FFFF0000</color>
+    <color name="ame_default_cluster_circle_color_extra_large">#FFFF00ED</color>
+    <color name="ame_default_cluster_circle_shadow_color">#8000</color>
+    <color name="ame_default_cluster_text_color">#FFF</color>
+    <color name="ame_default_cluster_text_shadow_color">#000</color>
+</resources>

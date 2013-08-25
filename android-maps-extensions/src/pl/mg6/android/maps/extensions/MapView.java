@@ -45,7 +45,7 @@ public class MapView extends com.google.android.gms.maps.MapView {
 		if (map == null) {
 			com.google.android.gms.maps.GoogleMap realMap = super.getMap();
 			if (realMap != null) {
-				map = ExtendedMapFactory.create(realMap);
+				map = ExtendedMapFactory.create(realMap, getContext());
 			}
 		}
 		return map;
