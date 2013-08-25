@@ -72,14 +72,13 @@ public class DeclusterificationExampleActivity extends FragmentActivity {
 		declusterifiedMarkers = cluster.getMarkers();
 		LatLng clusterPosition = cluster.getPosition();
 		double distance = calculateDistanceBetweenMarkers();
-		int group = 1;
+		double currentDistance = -declusterifiedMarkers.size() / 2 * distance;
 		for (Marker marker : declusterifiedMarkers) {
 			marker.setData(marker.getPosition());
-			marker.setClusterGroup(group);
-			double currentDistance = (group - declusterifiedMarkers.size() / 2) * distance;
+			marker.setClusterGroup(-1);
 			LatLng newPosition = new LatLng(clusterPosition.latitude, clusterPosition.longitude + currentDistance);
 			marker.animatePosition(newPosition);
-			group++;
+			currentDistance += distance;
 		}
 	}
 
