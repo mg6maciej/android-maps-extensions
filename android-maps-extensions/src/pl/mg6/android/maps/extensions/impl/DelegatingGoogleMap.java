@@ -19,6 +19,7 @@ import java.util.List;
 
 import pl.mg6.android.maps.extensions.Circle;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
+import pl.mg6.android.maps.extensions.DefaultClusterOptionsProvider;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GroundOverlay;
 import pl.mg6.android.maps.extensions.Marker;
@@ -26,6 +27,7 @@ import pl.mg6.android.maps.extensions.Polygon;
 import pl.mg6.android.maps.extensions.Polyline;
 import pl.mg6.android.maps.extensions.TileOverlay;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.view.View;
@@ -45,6 +47,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 class DelegatingGoogleMap implements GoogleMap {
 
 	private IGoogleMap real;
+	private Context context;
 
 	private InfoWindowAdapter infoWindowAdapter;
 	private OnCameraChangeListener onCameraChangeListener;
@@ -57,8 +60,9 @@ class DelegatingGoogleMap implements GoogleMap {
 	private GroundOverlayManager groundOverlayManager;
 	private TileOverlayManager tileOverlayManager;
 
-	DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real) {
+	DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real, Context context) {
 		this.real = new GoogleMapWrapper(real);
+		this.context = context;
 		createManagers();
 		assignMapListeners();
 	}
@@ -216,6 +220,11 @@ class DelegatingGoogleMap implements GoogleMap {
 
 	@Override
 	public void setClustering(ClusteringSettings clusteringSettings) {
+		if (clusteringSettings != null && clusteringSettings.isEnabled()
+				&& clusteringSettings.getIconDataProvider() == null
+				&& clusteringSettings.getClusterOptionsProvider() == null) {
+			clusteringSettings.clusterOptionsProvider(new DefaultClusterOptionsProvider(context.getResources()));
+		}
 		markerManager.setClustering(clusteringSettings);
 	}
 
