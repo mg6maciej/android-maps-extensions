@@ -123,13 +123,19 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	}
 
 	private void addMarker(DelegatingMarker marker) {
-		LatLng position = marker.getPosition();
-		ClusterKey key = calculateClusterKey(marker.getClusterGroup(), position);
-		ClusterMarker cluster = findClusterById(key);
-		cluster.add(marker);
-		markers.put(marker, cluster);
-		if (!addMarkersDynamically || isPositionInVisibleClusters(position)) {
-			refresh(cluster);
+		int clusterGroup = marker.getClusterGroup();
+		if (clusterGroup < 0) {
+			markers.put(marker, null);
+			marker.changeVisible(true);
+		} else {
+			LatLng position = marker.getPosition();
+			ClusterKey key = calculateClusterKey(clusterGroup, position);
+			ClusterMarker cluster = findClusterById(key);
+			cluster.add(marker);
+			markers.put(marker, cluster);
+			if (!addMarkersDynamically || isPositionInVisibleClusters(position)) {
+				refresh(cluster);
+			}
 		}
 	}
 
@@ -186,6 +192,11 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			Marker displayedMarker = cluster.getDisplayedMarker();
 			if (displayedMarker != null) {
 				displayedMarkers.add(displayedMarker);
+			}
+		}
+		for (DelegatingMarker marker : markers.keySet()) {
+			if (markers.get(marker) == null) {
+				displayedMarkers.add(marker);
 			}
 		}
 		return displayedMarkers;
@@ -253,14 +264,18 @@ class GridClusteringStrategy implements ClusteringStrategy {
 			return;
 		}
 		ClusterMarker cluster = markers.get(marker);
-		if (cluster.getMarkersInternal().size() == 1) {
+		if (cluster == null) {
+			marker.forceShowInfoWindow();
+		} else if (cluster.getMarkersInternal().size() == 1) {
 			cluster.refresh();
 			marker.forceShowInfoWindow();
 		}
 	}
 
 	private void refresh(ClusterMarker cluster) {
-		refresher.refresh(cluster);
+		if (cluster != null) {
+			refresher.refresh(cluster);
+		}
 	}
 
 	private void addVisibleMarkers(List<DelegatingMarker> markers) {
