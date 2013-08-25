@@ -35,6 +35,7 @@ public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
 
 	private final LruCache<Integer, BitmapDescriptor> cache = new LruCache<Integer, BitmapDescriptor>(128);
 	private final ClusterOptions clusterOptions = new ClusterOptions().anchor(0.5f, 0.5f);
+	private final int[] colors;
 	private final Paint circlePaint;
 	private final Paint circleShadowPaint;
 	private final Paint textPaint;
@@ -46,6 +47,12 @@ public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
 	private float shadowOffsetY;
 
 	public DefaultClusterOptionsProvider(Resources resources) {
+		colors = new int[] {
+				resources.getColor(R.color.ame_default_cluster_circle_color_small),
+				resources.getColor(R.color.ame_default_cluster_circle_color_medium),
+				resources.getColor(R.color.ame_default_cluster_circle_color_large),
+				resources.getColor(R.color.ame_default_cluster_circle_color_extra_large),
+		};
 		circlePaint = createCirclePaint(resources);
 		circleShadowPaint = createCircleShadowPaint(resources);
 		textPaint = createTextPaint(resources);
@@ -125,13 +132,18 @@ public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
 
 	private void drawCircle(Canvas canvas, int count, float iconSize) {
 		canvas.drawCircle(iconSize / 2, iconSize / 2, iconSize / 2 - blurRadius, circleShadowPaint);
-		circlePaint.setColor(Color.HSVToColor(new float[]{count < 270 ? count : 270, 1, 1}));
+		for (int i = colors.length - 1; i >= 0; i--) {
+			if (count >= Math.pow(10, i)) {
+				circlePaint.setColor(colors[i]);
+				break;
+			}
+		}
 		canvas.drawCircle(iconSize / 2, iconSize / 2, iconSize / 2 - blurRadius, circlePaint);
 	}
 
 	private void drawText(Canvas canvas, String text, int iconSize) {
-		int x = Math.round((iconSize - bounds.width()) / 2 - bounds.left - shadowOffsetX);
-		int y = Math.round((iconSize - bounds.height()) / 2 - bounds.top - shadowOffsetY);
+		int x = Math.round((iconSize - bounds.width()) / 2 - bounds.left - shadowOffsetX / 2);
+		int y = Math.round((iconSize - bounds.height()) / 2 - bounds.top - shadowOffsetY / 2);
 		canvas.drawText(text, x, y, textPaint);
 	}
 }
