@@ -23,6 +23,7 @@ import pl.mg6.android.maps.extensions.DefaultClusterOptionsProvider;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GroundOverlay;
 import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.MarkerOptions;
 import pl.mg6.android.maps.extensions.Polygon;
 import pl.mg6.android.maps.extensions.Polyline;
 import pl.mg6.android.maps.extensions.TileOverlay;
@@ -39,7 +40,6 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -79,6 +79,12 @@ class DelegatingGoogleMap implements GoogleMap {
 
 	@Override
 	public Marker addMarker(MarkerOptions markerOptions) {
+		return markerManager.addMarker(markerOptions);
+	}
+
+	@Deprecated
+	@Override
+	public Marker addMarker(com.google.android.gms.maps.model.MarkerOptions markerOptions) {
 		return markerManager.addMarker(markerOptions);
 	}
 

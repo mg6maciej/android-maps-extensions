@@ -24,13 +24,13 @@ import java.util.Map;
 import pl.mg6.android.maps.extensions.AnimationSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.MarkerOptions;
 import pl.mg6.android.maps.extensions.lazy.LazyMarker;
 import pl.mg6.android.maps.extensions.lazy.LazyMarker.OnMarkerCreateListener;
 import android.os.SystemClock;
 
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 class MarkerManager implements OnMarkerCreateListener {
 
@@ -53,6 +53,32 @@ class MarkerManager implements OnMarkerCreateListener {
 	}
 
 	public Marker addMarker(MarkerOptions markerOptions) {
+		boolean visible = markerOptions.isVisible();
+		markerOptions.visible(false);
+		LazyMarker realMarker = new LazyMarker(factory.getMap(), convertToReal(markerOptions), this);
+		markerOptions.visible(visible);
+		DelegatingMarker marker = new DelegatingMarker(realMarker, this);
+		marker.setClusterGroup(markerOptions.getClusterGroup());
+		marker.setData(markerOptions.getData());
+		markers.put(realMarker, marker);
+		clusteringStrategy.onAdd(marker);
+		marker.setVisible(visible);
+		return marker;
+	}
+
+	private com.google.android.gms.maps.model.MarkerOptions convertToReal(MarkerOptions markerOptions) {
+		com.google.android.gms.maps.model.MarkerOptions real = new com.google.android.gms.maps.model.MarkerOptions();
+		real.anchor(markerOptions.getAnchorU(), markerOptions.getAnchorV());
+		real.draggable(markerOptions.isDraggable());
+		real.icon(markerOptions.getIcon());
+		real.position(markerOptions.getPosition());
+		real.snippet(markerOptions.getSnippet());
+		real.title(markerOptions.getTitle());
+		real.visible(markerOptions.isVisible());
+		return real;
+	}
+
+	public Marker addMarker(com.google.android.gms.maps.model.MarkerOptions markerOptions) {
 		boolean visible = markerOptions.isVisible();
 		markerOptions.visible(false);
 		LazyMarker realMarker = new LazyMarker(factory.getMap(), markerOptions, this);
