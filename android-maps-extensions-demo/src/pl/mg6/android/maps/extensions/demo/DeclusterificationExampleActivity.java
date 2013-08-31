@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
+import pl.mg6.android.maps.extensions.ClusterGroup;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.Marker;
@@ -75,7 +76,7 @@ public class DeclusterificationExampleActivity extends FragmentActivity {
 		double currentDistance = -declusterifiedMarkers.size() / 2 * distance;
 		for (Marker marker : declusterifiedMarkers) {
 			marker.setData(marker.getPosition());
-			marker.setClusterGroup(-1);
+			marker.setClusterGroup(ClusterGroup.NOT_CLUSTERED);
 			LatLng newPosition = new LatLng(clusterPosition.latitude, clusterPosition.longitude + currentDistance);
 			marker.animatePosition(newPosition);
 			currentDistance += distance;
@@ -95,7 +96,7 @@ public class DeclusterificationExampleActivity extends FragmentActivity {
 			for (Marker marker : declusterifiedMarkers) {
 				LatLng position = (LatLng) marker.getData();
 				marker.setPosition(position);
-				marker.setClusterGroup(0);
+				marker.setClusterGroup(ClusterGroup.DEFAULT);
 			}
 			declusterifiedMarkers = null;
 		}

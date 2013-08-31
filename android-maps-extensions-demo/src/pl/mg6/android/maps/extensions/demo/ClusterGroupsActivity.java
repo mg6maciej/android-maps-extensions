@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
+import pl.mg6.android.maps.extensions.ClusterGroup;
 import pl.mg6.android.maps.extensions.ClusterOptions;
 import pl.mg6.android.maps.extensions.ClusterOptionsProvider;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
@@ -35,8 +36,7 @@ import pl.mg6.android.maps.extensions.SupportMapFragment;
 
 public class ClusterGroupsActivity extends FragmentActivity {
 
-	private static final int SINGLE_GROUP = 1;
-	private static final int DYNAMIC_GROUP = 123;
+	private static final int DYNAMIC_GROUP = ClusterGroup.FIRST_USER;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class ClusterGroupsActivity extends FragmentActivity {
 		map.addMarker(new MarkerOptions().position(new LatLng(0.5, 2)));
 
 		BitmapDescriptor greenIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-		final Marker single = map.addMarker(new MarkerOptions().position(new LatLng(10, 10)).icon(greenIcon).clusterGroup(SINGLE_GROUP));
+		final Marker single = map.addMarker(new MarkerOptions().position(new LatLng(10, 10)).icon(greenIcon).clusterGroup(ClusterGroup.NOT_CLUSTERED));
 
 		map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 			@Override
