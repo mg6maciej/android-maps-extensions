@@ -18,12 +18,12 @@
 package com.example.mapdemo;
 
 import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.MarkerOptions;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * This shows how to create a simple activity with a map and a marker on the map.

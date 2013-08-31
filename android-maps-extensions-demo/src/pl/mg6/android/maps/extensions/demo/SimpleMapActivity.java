@@ -21,11 +21,11 @@ import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.MarkerOptions;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 
 public class SimpleMapActivity extends FragmentActivity {

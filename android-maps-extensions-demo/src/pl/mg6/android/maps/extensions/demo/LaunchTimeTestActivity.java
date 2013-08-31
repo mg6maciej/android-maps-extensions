@@ -20,6 +20,7 @@ import java.util.Random;
 
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.MarkerOptions;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -28,7 +29,6 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class LaunchTimeTestActivity extends FragmentActivity {
 

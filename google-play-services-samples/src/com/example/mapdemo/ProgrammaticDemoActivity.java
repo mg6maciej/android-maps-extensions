@@ -18,13 +18,13 @@
 package com.example.mapdemo;
 
 import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.MarkerOptions;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Demonstrates how to instantiate a SupportMapFragment programmatically and add a marker to it.

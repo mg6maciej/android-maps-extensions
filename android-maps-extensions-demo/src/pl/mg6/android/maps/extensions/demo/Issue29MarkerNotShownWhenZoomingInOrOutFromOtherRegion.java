@@ -17,6 +17,7 @@ package pl.mg6.android.maps.extensions.demo;
 
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.MarkerOptions;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 
 import android.os.Bundle;
@@ -26,7 +27,6 @@ import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Issue29MarkerNotShownWhenZoomingInOrOutFromOtherRegion extends FragmentActivity {
 
