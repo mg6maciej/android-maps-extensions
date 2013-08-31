@@ -24,6 +24,7 @@ import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMapLongClickListener;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMarkerDragListener;
 import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.MarkerOptions;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -38,7 +39,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 
 /**

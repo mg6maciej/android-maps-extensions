@@ -16,9 +16,9 @@
 package pl.mg6.android.maps.extensions.demo;
 
 import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.MarkerOptions;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MarkerGenerator {
 
