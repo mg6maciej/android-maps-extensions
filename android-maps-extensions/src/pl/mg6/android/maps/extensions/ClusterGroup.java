@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.mg6.android.maps.extensions.impl;
+package pl.mg6.android.maps.extensions;
 
-import android.content.Context;
+public final class ClusterGroup {
 
-import pl.mg6.android.maps.extensions.GoogleMap;
+	public static final int NOT_CLUSTERED = -1;
+	public static final int DEFAULT = 0;
+	public static final int FIRST_USER = 1;
 
-public final class ExtendedMapFactory {
-
-	private ExtendedMapFactory() {
-	}
-
-	public static GoogleMap create(com.google.android.gms.maps.GoogleMap real, Context context) {
-		return new DelegatingGoogleMap(real, context);
+	private ClusterGroup() {
 	}
 }

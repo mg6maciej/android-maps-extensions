@@ -15,22 +15,18 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import pl.mg6.android.maps.extensions.ClusterOptions;
-import pl.mg6.android.maps.extensions.ClusterOptionsProvider;
-import pl.mg6.android.maps.extensions.ClusteringSettings;
-import pl.mg6.android.maps.extensions.GoogleMap;
-import pl.mg6.android.maps.extensions.Marker;
-import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.List;
+import pl.mg6.android.maps.extensions.ClusteringSettings;
+import pl.mg6.android.maps.extensions.GoogleMap;
+import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.MarkerOptions;
+import pl.mg6.android.maps.extensions.SupportMapFragment;
 
 public class SimpleMapActivity extends FragmentActivity {
 
@@ -43,18 +39,11 @@ public class SimpleMapActivity extends FragmentActivity {
 		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
 		GoogleMap map = f.getExtendedMap();
 
+		map.setClustering(new ClusteringSettings());
+
 		map.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
 		map.addMarker(new MarkerOptions().position(new LatLng(15, 3)));
-		map.addMarker(new MarkerOptions().position(new LatLng(15, 3)));
-
-		ClusterOptionsProvider provider = new ClusterOptionsProvider() {
-
-			@Override
-			public ClusterOptions getClusterOptions(List<Marker> markers) {
-				return new ClusterOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-			}
-		};
-		map.setClustering(new ClusteringSettings().clusterOptionsProvider(provider));
+		map.addMarker(new MarkerOptions().position(new LatLng(14.99, 3.01)));
 
 		map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 

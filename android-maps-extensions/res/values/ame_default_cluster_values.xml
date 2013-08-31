@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ame_default_cluster_circle_blur_radius">5dp</dimen>
+    <dimen name="ame_default_cluster_circle_shadow_blur_radius">1dp</dimen>
+    <dimen name="ame_default_cluster_circle_shadow_offset_x">2dp</dimen>
+    <dimen name="ame_default_cluster_circle_shadow_offset_y">2dp</dimen>
+    <dimen name="ame_default_cluster_text_padding">5dp</dimen>
+    <dimen name="ame_default_cluster_text_shadow_blur_radius">1dp</dimen>
+    <dimen name="ame_default_cluster_text_shadow_offset_x">1dp</dimen>
+    <dimen name="ame_default_cluster_text_shadow_offset_y">1dp</dimen>
+    <dimen name="ame_default_cluster_text_size">16dp</dimen>
+</resources>

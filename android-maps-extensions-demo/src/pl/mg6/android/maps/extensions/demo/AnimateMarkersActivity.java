@@ -21,6 +21,7 @@ import pl.mg6.android.maps.extensions.AnimationSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMarkerClickListener;
 import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.MarkerOptions;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -35,10 +36,10 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class AnimateMarkersActivity extends FragmentActivity {
 
@@ -53,11 +54,22 @@ public class AnimateMarkersActivity extends FragmentActivity {
 		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
 		GoogleMap map = f.getExtendedMap();
 
-		map.addMarker(new MarkerOptions().position(new LatLng(-15, -15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-		map.addMarker(new MarkerOptions().position(new LatLng(-15, 15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-		map.addMarker(new MarkerOptions().position(new LatLng(15, -15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-		map.addMarker(new MarkerOptions().position(new LatLng(15, 15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+		map.addMarker(new MarkerOptions().title("RED").position(new LatLng(-15, -15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+		map.addMarker(new MarkerOptions().title("GREEN").position(new LatLng(-15, 15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+		map.addMarker(new MarkerOptions().title("BLUE").position(new LatLng(15, -15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+		map.addMarker(new MarkerOptions().title("YELLOW").position(new LatLng(15, 15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
 
+		final Marker.AnimationCallback callback = new Marker.AnimationCallback() {
+			@Override
+			public void onFinish(Marker marker) {
+				Toast.makeText(AnimateMarkersActivity.this, "Animation finished: " + marker.getTitle(), Toast.LENGTH_SHORT).show();
+			}
+
+			@Override
+			public void onCancel(Marker marker, CancelReason reason) {
+				Toast.makeText(AnimateMarkersActivity.this, "Animation canceled: " + marker.getTitle() + ", reason: " + reason, Toast.LENGTH_SHORT).show();
+			}
+		};
 		map.setOnMarkerClickListener(new OnMarkerClickListener() {
 
 			@Override
@@ -67,7 +79,7 @@ public class AnimateMarkersActivity extends FragmentActivity {
 				long duration = random.nextInt(1500) + 1500;
 				Interpolator interpolator = randomInterpolator();
 				AnimationSettings settings = new AnimationSettings().duration(duration).interpolator(interpolator);
-				marker.animatePosition(targetPosition, settings);
+				marker.animatePosition(targetPosition, settings, callback);
 				return true;
 			}
 		});

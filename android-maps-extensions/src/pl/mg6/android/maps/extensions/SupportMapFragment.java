@@ -44,7 +44,7 @@ public class SupportMapFragment extends com.google.android.gms.maps.SupportMapFr
 		if (map == null) {
 			com.google.android.gms.maps.GoogleMap realMap = super.getMap();
 			if (realMap != null) {
-				map = ExtendedMapFactory.create(realMap);
+				map = ExtendedMapFactory.create(realMap, getActivity());
 			}
 		}
 		return map;

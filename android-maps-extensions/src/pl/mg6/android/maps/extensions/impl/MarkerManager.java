@@ -24,13 +24,13 @@ import java.util.Map;
 import pl.mg6.android.maps.extensions.AnimationSettings;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.MarkerOptions;
 import pl.mg6.android.maps.extensions.lazy.LazyMarker;
 import pl.mg6.android.maps.extensions.lazy.LazyMarker.OnMarkerCreateListener;
 import android.os.SystemClock;
 
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 class MarkerManager implements OnMarkerCreateListener {
 
@@ -55,12 +55,45 @@ class MarkerManager implements OnMarkerCreateListener {
 	public Marker addMarker(MarkerOptions markerOptions) {
 		boolean visible = markerOptions.isVisible();
 		markerOptions.visible(false);
-		LazyMarker realMarker = new LazyMarker(factory.getMap(), markerOptions, this);
-		markerOptions.visible(visible);
-		DelegatingMarker marker = new DelegatingMarker(realMarker, this);
-		markers.put(realMarker, marker);
+		DelegatingMarker marker = createMarker(convertToReal(markerOptions));
+		setExtendedOptions(marker, markerOptions);
 		clusteringStrategy.onAdd(marker);
 		marker.setVisible(visible);
+		markerOptions.visible(visible);
+		return marker;
+	}
+
+	private com.google.android.gms.maps.model.MarkerOptions convertToReal(MarkerOptions markerOptions) {
+		com.google.android.gms.maps.model.MarkerOptions real = new com.google.android.gms.maps.model.MarkerOptions();
+		real.anchor(markerOptions.getAnchorU(), markerOptions.getAnchorV());
+		real.draggable(markerOptions.isDraggable());
+		real.icon(markerOptions.getIcon());
+		real.position(markerOptions.getPosition());
+		real.snippet(markerOptions.getSnippet());
+		real.title(markerOptions.getTitle());
+		real.visible(markerOptions.isVisible());
+		return real;
+	}
+
+	private void setExtendedOptions(DelegatingMarker marker, MarkerOptions markerOptions) {
+		marker.setClusterGroup(markerOptions.getClusterGroup());
+		marker.setData(markerOptions.getData());
+	}
+
+	public Marker addMarker(com.google.android.gms.maps.model.MarkerOptions markerOptions) {
+		boolean visible = markerOptions.isVisible();
+		markerOptions.visible(false);
+		DelegatingMarker marker = createMarker(markerOptions);
+		clusteringStrategy.onAdd(marker);
+		marker.setVisible(visible);
+		markerOptions.visible(visible);
+		return marker;
+	}
+
+	private DelegatingMarker createMarker(com.google.android.gms.maps.model.MarkerOptions markerOptions) {
+		LazyMarker realMarker = new LazyMarker(factory.getMap(), markerOptions, this);
+		DelegatingMarker marker = new DelegatingMarker(realMarker, this);
+		markers.put(realMarker, marker);
 		return marker;
 	}
 
@@ -100,8 +133,9 @@ class MarkerManager implements OnMarkerCreateListener {
 		return clusteringStrategy.getMinZoomLevelNotClustered(marker);
 	}
 
-	void onAnimateMarkerPosition(DelegatingMarker marker, LatLng target, AnimationSettings settings) {
-		markerAnimator.animate(marker, marker.getPosition(), target, SystemClock.uptimeMillis(), settings);
+	public void onAnimateMarkerPosition(DelegatingMarker marker, LatLng target, AnimationSettings settings, Marker.AnimationCallback callback) {
+		markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.ANIMATE_POSITION);
+		markerAnimator.animate(marker, marker.getPosition(), target, SystemClock.uptimeMillis(), settings, callback);
 	}
 
 	public void onCameraChange(CameraPosition cameraPosition) {
@@ -112,7 +146,16 @@ class MarkerManager implements OnMarkerCreateListener {
 		clusteringStrategy.onClusterGroupChange(marker);
 	}
 
+	public void onDragStart(DelegatingMarker marker) {
+		markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.DRAG_START);
+	}
+
 	public void onPositionChange(DelegatingMarker marker) {
+		clusteringStrategy.onPositionChange(marker);
+		markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.SET_POSITION);
+	}
+
+	public void onPositionDuringAnimationChange(DelegatingMarker marker) {
 		clusteringStrategy.onPositionChange(marker);
 	}
 
@@ -120,6 +163,7 @@ class MarkerManager implements OnMarkerCreateListener {
 		markers.remove(marker.getReal());
 		createdMarkers.remove(marker.getReal().getMarker());
 		clusteringStrategy.onRemove(marker);
+		markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.REMOVE);
 	}
 
 	public void onShowInfoWindow(DelegatingMarker marker) {

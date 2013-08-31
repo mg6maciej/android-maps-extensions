@@ -27,6 +27,7 @@ import pl.mg6.android.maps.extensions.GoogleMap.InfoWindowAdapter;
 import pl.mg6.android.maps.extensions.GoogleMap.OnInfoWindowClickListener;
 import pl.mg6.android.maps.extensions.GoogleMap.OnMapClickListener;
 import pl.mg6.android.maps.extensions.Marker;
+import pl.mg6.android.maps.extensions.MarkerOptions;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -49,7 +50,6 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.LatLngBounds.Builder;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DemoActivity extends FragmentActivity {
 
@@ -188,8 +188,7 @@ public class DemoActivity extends FragmentActivity {
 
 		BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
 		for (MutableData data : dataArray) {
-			Marker m = map.addMarker(new MarkerOptions().position(data.position).icon(icon));
-			m.setData(data);
+			map.addMarker(new MarkerOptions().position(data.position).icon(icon).data(data));
 		}
 
 		setUpClusteringViews();
