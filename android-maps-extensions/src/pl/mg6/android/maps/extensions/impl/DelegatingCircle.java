@@ -16,6 +16,8 @@
 package pl.mg6.android.maps.extensions.impl;
 
 import pl.mg6.android.maps.extensions.Circle;
+import pl.mg6.android.maps.extensions.utils.LatLngUtils;
+
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -36,9 +38,8 @@ class DelegatingCircle implements Circle {
 	public boolean contains(LatLng position) {
 		LatLng center = getCenter();
 		double radius = getRadius();
-		float[] distance = new float[1];
-		Location.distanceBetween(position.latitude, position.longitude, center.latitude, center.longitude, distance);
-		return distance[0] < radius;
+		float distance = LatLngUtils.distanceBetween(position, center);
+		return distance < radius;
 	}
 
 	@Override
