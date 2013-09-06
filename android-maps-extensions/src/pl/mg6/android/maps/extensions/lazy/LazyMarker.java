@@ -171,13 +171,15 @@ public class LazyMarker {
 	}
 
 	public void setVisible(boolean visible) {
-		if (marker != null) {
-			marker.setVisible(visible);
-		} else if (visible) {
-			markerOptions.visible(true);
-			createMarker();
-		}
-	}
+        if (marker != null) {
+            marker.setVisible(visible);
+        } else if (visible) {
+            if (markerOptions != null)
+                markerOptions.visible(true);
+
+            createMarker();
+        }
+    }
 
 	public void showInfoWindow() {
 		if (marker != null) {
