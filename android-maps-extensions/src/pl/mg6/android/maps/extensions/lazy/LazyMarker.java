@@ -194,12 +194,19 @@ public class LazyMarker {
 		}
 	}
 
+	
 	private void createMarker(GoogleMap map, MarkerOptions options, OnMarkerCreateListener listener) {
-		marker = map.addMarker(options);
-		if (listener != null) {
-			listener.onMarkerCreate(this);
-		}
-	}
+        try {
+            if (options != null)
+                marker = map.addMarker(options);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (listener != null) {
+            listener.onMarkerCreate(this);
+        }
+    }
+
 
 	private MarkerOptions copy(MarkerOptions options) {
 		MarkerOptions copy = new MarkerOptions();
