@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import pl.mg6.android.maps.extensions.Circle;
-
-import com.google.android.gms.maps.model.CircleOptions;
+import pl.mg6.android.maps.extensions.CircleOptions;
 
 class CircleManager {
 
@@ -36,6 +35,17 @@ class CircleManager {
 	}
 
 	public Circle addCircle(CircleOptions circleOptions) {
+		Circle circle = createCircle(circleOptions.real);
+		circle.setData(circleOptions.getData());
+		return circle;
+	}
+
+	public Circle addCircle(com.google.android.gms.maps.model.CircleOptions circleOptions) {
+		Circle circle = createCircle(circleOptions);
+		return circle;
+	}
+
+	private Circle createCircle(com.google.android.gms.maps.model.CircleOptions circleOptions) {
 		com.google.android.gms.maps.model.Circle real = factory.addCircle(circleOptions);
 		Circle circle = new DelegatingCircle(real, this);
 		circles.put(real, circle);

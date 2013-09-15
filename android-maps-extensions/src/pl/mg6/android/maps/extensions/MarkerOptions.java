@@ -20,7 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class MarkerOptions {
 
-	private final com.google.android.gms.maps.model.MarkerOptions real = new com.google.android.gms.maps.model.MarkerOptions();
+	public final com.google.android.gms.maps.model.MarkerOptions real = new com.google.android.gms.maps.model.MarkerOptions();
 	private Object data;
 	private int clusterGroup;
 

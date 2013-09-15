@@ -55,24 +55,12 @@ class MarkerManager implements OnMarkerCreateListener {
 	public Marker addMarker(MarkerOptions markerOptions) {
 		boolean visible = markerOptions.isVisible();
 		markerOptions.visible(false);
-		DelegatingMarker marker = createMarker(convertToReal(markerOptions));
+		DelegatingMarker marker = createMarker(markerOptions.real);
 		setExtendedOptions(marker, markerOptions);
 		clusteringStrategy.onAdd(marker);
 		marker.setVisible(visible);
 		markerOptions.visible(visible);
 		return marker;
-	}
-
-	private com.google.android.gms.maps.model.MarkerOptions convertToReal(MarkerOptions markerOptions) {
-		com.google.android.gms.maps.model.MarkerOptions real = new com.google.android.gms.maps.model.MarkerOptions();
-		real.anchor(markerOptions.getAnchorU(), markerOptions.getAnchorV());
-		real.draggable(markerOptions.isDraggable());
-		real.icon(markerOptions.getIcon());
-		real.position(markerOptions.getPosition());
-		real.snippet(markerOptions.getSnippet());
-		real.title(markerOptions.getTitle());
-		real.visible(markerOptions.isVisible());
-		return real;
 	}
 
 	private void setExtendedOptions(DelegatingMarker marker, MarkerOptions markerOptions) {
