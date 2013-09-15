@@ -21,7 +21,7 @@ import java.util.List;
 
 public class PolylineOptions {
 
-	private final com.google.android.gms.maps.model.PolylineOptions real = new com.google.android.gms.maps.model.PolylineOptions();
+	public final com.google.android.gms.maps.model.PolylineOptions real = new com.google.android.gms.maps.model.PolylineOptions();
 	private Object data;
 
 	public PolylineOptions add(LatLng point) {

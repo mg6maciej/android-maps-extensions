@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class CircleOptions {
 
-	private final com.google.android.gms.maps.model.CircleOptions real = new com.google.android.gms.maps.model.CircleOptions();
+	public final com.google.android.gms.maps.model.CircleOptions real = new com.google.android.gms.maps.model.CircleOptions();
 	private Object data;
 
 	public CircleOptions center(LatLng center) {

@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.TileProvider;
 
 public class TileOverlayOptions {
 
-	private final com.google.android.gms.maps.model.TileOverlayOptions real = new com.google.android.gms.maps.model.TileOverlayOptions();
+	public final com.google.android.gms.maps.model.TileOverlayOptions real = new com.google.android.gms.maps.model.TileOverlayOptions();
 	private Object data;
 
 	public TileOverlayOptions data(Object data) {

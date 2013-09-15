@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 public class GroundOverlayOptions {
 
-	private final com.google.android.gms.maps.model.GroundOverlayOptions real = new com.google.android.gms.maps.model.GroundOverlayOptions();
+	public final com.google.android.gms.maps.model.GroundOverlayOptions real = new com.google.android.gms.maps.model.GroundOverlayOptions();
 	private Object data;
 
 	public GroundOverlayOptions anchor(float u, float v) {

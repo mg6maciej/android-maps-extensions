@@ -21,7 +21,7 @@ import java.util.List;
 
 public class PolygonOptions {
 
-	private final com.google.android.gms.maps.model.PolygonOptions real = new com.google.android.gms.maps.model.PolygonOptions();
+	public final com.google.android.gms.maps.model.PolygonOptions real = new com.google.android.gms.maps.model.PolygonOptions();
 	private Object data;
 
 	public PolygonOptions add(LatLng point) {
