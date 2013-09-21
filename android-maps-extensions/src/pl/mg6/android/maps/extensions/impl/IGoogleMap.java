@@ -117,6 +117,8 @@ interface IGoogleMap {
 
 	void setOnMyLocationChangeListener(OnMyLocationChangeListener listener);
 
+	void setPadding(int left, int top, int right, int bottom);
+
 	void setTrafficEnabled(boolean enabled);
 
 	void snapshot(GoogleMap.SnapshotReadyCallback callback);

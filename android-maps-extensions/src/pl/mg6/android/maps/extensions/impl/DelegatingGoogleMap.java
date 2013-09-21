@@ -338,6 +338,11 @@ class DelegatingGoogleMap implements GoogleMap {
 	}
 
 	@Override
+	public void setPadding(int left, int top, int right, int bottom) {
+		real.setPadding(left, top, right, bottom);
+	}
+
+	@Override
 	public void setTrafficEnabled(boolean trafficEnabled) {
 		real.setTrafficEnabled(trafficEnabled);
 	}
