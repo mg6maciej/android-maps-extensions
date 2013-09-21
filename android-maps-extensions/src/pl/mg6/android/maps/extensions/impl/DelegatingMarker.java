@@ -96,6 +96,11 @@ class DelegatingMarker implements Marker {
 	}
 
 	@Override
+	public float getRotation() {
+		return real.getRotation();
+	}
+
+	@Override
 	public String getSnippet() {
 		return real.getSnippet();
 	}
@@ -118,6 +123,11 @@ class DelegatingMarker implements Marker {
 	@Override
 	public boolean isDraggable() {
 		return real.isDraggable();
+	}
+
+	@Override
+	public boolean isFlat() {
+		return real.isFlat();
 	}
 
 	@Override
@@ -160,8 +170,18 @@ class DelegatingMarker implements Marker {
 	}
 
 	@Override
+	public void setFlat(boolean flat) {
+		real.setFlat(flat);
+	}
+
+	@Override
 	public void setIcon(BitmapDescriptor icon) {
 		real.setIcon(icon);
+	}
+
+	@Override
+	public void setInfoWindowAnchor(float anchorU, float anchorV) {
+		real.setInfoWindowAnchor(anchorU, anchorV);
 	}
 
 	@Override
@@ -175,6 +195,11 @@ class DelegatingMarker implements Marker {
 		this.position = position;
 		real.setPosition(position);
 		manager.onPositionDuringAnimationChange(this);
+	}
+
+	@Override
+	public void setRotation(float rotation) {
+		real.setRotation(rotation);
 	}
 
 	@Override

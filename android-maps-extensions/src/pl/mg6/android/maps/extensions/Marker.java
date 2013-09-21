@@ -64,6 +64,8 @@ public interface Marker {
 
 	LatLng getPosition();
 
+	float getRotation();
+
 	String getSnippet();
 
 	String getTitle();
@@ -76,6 +78,8 @@ public interface Marker {
 	boolean isCluster();
 
 	boolean isDraggable();
+
+	boolean isFlat();
 
 	boolean isInfoWindowShown();
 
@@ -94,9 +98,15 @@ public interface Marker {
 
 	void setDraggable(boolean draggable);
 
+	void setFlat(boolean flat);
+
 	void setIcon(BitmapDescriptor icon);
 
+	void setInfoWindowAnchor(float anchorU, float anchorV);
+
 	void setPosition(LatLng position);
+
+	void setRotation(float rotation);
 
 	void setSnippet(String snippet);
 

@@ -161,6 +161,14 @@ class ClusterMarker implements Marker {
 	}
 
 	@Override
+	public float getRotation() {
+		if (virtual != null) {
+			return virtual.getRotation();
+		}
+		return 0.0f;
+	}
+
+	@Override
 	public String getSnippet() {
 		return null;
 	}
@@ -184,6 +192,14 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public boolean isDraggable() {
+		return false;
+	}
+
+	@Override
+	public boolean isFlat() {
+		if (virtual != null) {
+			return virtual.isFlat();
+		}
 		return false;
 	}
 
@@ -229,12 +245,27 @@ class ClusterMarker implements Marker {
 	}
 
 	@Override
+	public void setFlat(boolean flat) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public void setIcon(BitmapDescriptor icon) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
+	public void setInfoWindowAnchor(float anchorU, float anchorV) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public void setPosition(LatLng position) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void setRotation(float rotation) {
 		throw new UnsupportedOperationException();
 	}
 
