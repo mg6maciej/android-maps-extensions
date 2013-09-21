@@ -64,7 +64,7 @@ class ClusterMarker implements Marker {
 				builder.include(m.getPosition());
 				m.changeVisible(false);
 			}
-			LatLng position = calculateCenter(builder.build());
+			LatLng position = builder.build().getCenter();
 			if (virtual == null || lastCount != count) {
 				removeVirtual();
 				lastCount = count;
@@ -90,15 +90,6 @@ class ClusterMarker implements Marker {
 		if (virtual != null) {
 			virtual.remove();
 			virtual = null;
-		}
-	}
-
-	LatLng calculateCenter(LatLngBounds bounds) {
-		if (bounds.southwest.longitude > bounds.northeast.longitude) {
-			// TODO: incorrect
-			return new LatLng((bounds.southwest.latitude + bounds.northeast.latitude) / 2.0, (bounds.southwest.longitude + bounds.northeast.longitude) / 2.0);
-		} else {
-			return new LatLng((bounds.southwest.latitude + bounds.northeast.latitude) / 2.0, (bounds.southwest.longitude + bounds.northeast.longitude) / 2.0);
 		}
 	}
 
@@ -165,7 +156,7 @@ class ClusterMarker implements Marker {
 		for (DelegatingMarker m : markers) {
 			builder.include(m.getPosition());
 		}
-		LatLng position = calculateCenter(builder.build());
+		LatLng position = builder.build().getCenter();
 		return position;
 	}
 
