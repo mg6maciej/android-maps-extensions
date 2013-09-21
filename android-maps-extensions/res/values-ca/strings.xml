@@ -10,6 +10,10 @@
     <string name="common_google_play_services_enable_button" msgid="4181637455539816337">"Activa els serveis de Google Play"</string>
     <string name="common_google_play_services_update_title" msgid="6006316683626838685">"Actualitza els serveis de Google Play"</string>
     <string name="common_google_play_services_update_text" msgid="448354684997260580">"Aquesta aplicació no s\'executarà si no actualitzes els serveis de Google Play."</string>
+    <string name="common_google_play_services_network_error_title" msgid="3827284619958211114">"Error de xarxa"</string>
+    <string name="common_google_play_services_network_error_text" msgid="9038847255613537209">"Es requereix una connexió de dades per connectar amb els serveis de Google Play."</string>
+    <string name="common_google_play_services_invalid_account_title" msgid="1066672360770936753">"Compte no vàlid"</string>
+    <string name="common_google_play_services_invalid_account_text" msgid="4983316348021735578">"El compte especificat no existeix en aquest dispositiu. Tria un compte diferent."</string>
     <string name="common_google_play_services_unknown_issue" msgid="4762332809710093730">"Error desconegut relacionat amb els serveis de Google Play."</string>
     <string name="common_google_play_services_unsupported_title" msgid="6334768798839376943">"Serveis de Google Play"</string>
     <string name="common_google_play_services_unsupported_text" msgid="3542578567569488671">"El teu dispositiu no és compatible amb els serveis de Google Play, en què es basen les teves aplicacions. Per obtenir assistència, contacta amb el fabricant."</string>
