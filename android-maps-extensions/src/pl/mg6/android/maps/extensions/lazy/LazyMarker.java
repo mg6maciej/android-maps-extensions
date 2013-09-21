@@ -65,6 +65,14 @@ public class LazyMarker {
 		}
 	}
 
+	public float getRotation() {
+		if (marker != null) {
+			return marker.getRotation();
+		} else {
+			return markerOptions.getRotation();
+		}
+	}
+
 	public String getSnippet() {
 		if (marker != null) {
 			return marker.getSnippet();
@@ -92,6 +100,14 @@ public class LazyMarker {
 			return marker.isDraggable();
 		} else {
 			return markerOptions.isDraggable();
+		}
+	}
+
+	public boolean isFlat() {
+		if (marker != null) {
+			return marker.isFlat();
+		} else {
+			return markerOptions.isFlat();
 		}
 	}
 
@@ -138,6 +154,14 @@ public class LazyMarker {
 		}
 	}
 
+	public void setFlat(boolean flat) {
+		if (marker != null) {
+			marker.setFlat(flat);
+		} else {
+			markerOptions.flat(flat);
+		}
+	}
+
 	public void setIcon(BitmapDescriptor icon) {
 		if (marker != null) {
 			marker.setIcon(icon);
@@ -146,11 +170,27 @@ public class LazyMarker {
 		}
 	}
 
+	public void setInfoWindowAnchor(float anchorU, float anchorV) {
+		if (marker != null) {
+			marker.setInfoWindowAnchor(anchorU, anchorV);
+		} else {
+			markerOptions.infoWindowAnchor(anchorU, anchorV);
+		}
+	}
+
 	public void setPosition(LatLng position) {
 		if (marker != null) {
 			marker.setPosition(position);
 		} else {
 			markerOptions.position(position);
+		}
+	}
+
+	public void setRotation(float rotation) {
+		if (marker != null) {
+			marker.setRotation(rotation);
+		} else {
+			markerOptions.rotation(rotation);
 		}
 	}
 
@@ -201,12 +241,15 @@ public class LazyMarker {
 		}
 	}
 
-	private MarkerOptions copy(MarkerOptions options) {
+	private static MarkerOptions copy(MarkerOptions options) {
 		MarkerOptions copy = new MarkerOptions();
 		copy.anchor(options.getAnchorU(), options.getAnchorV());
 		copy.draggable(options.isDraggable());
+		copy.flat(options.isFlat());
 		copy.icon(options.getIcon());
+		copy.infoWindowAnchor(options.getInfoWindowAnchorU(), options.getInfoWindowAnchorV());
 		copy.position(options.getPosition());
+		copy.rotation(options.getRotation());
 		copy.snippet(options.getSnippet());
 		copy.title(options.getTitle());
 		copy.visible(options.isVisible());

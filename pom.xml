@@ -29,7 +29,7 @@
 
 		<google.play.services.groupId>com.google.android.gms</google.play.services.groupId>
 		<google.play.services.artifactId>google-play-services</google.play.services.artifactId>
-		<google.play.services.version>r10</google.play.services.version>
+		<google.play.services.version>r12</google.play.services.version>
 	</properties>
 
 	<dependencyManagement>

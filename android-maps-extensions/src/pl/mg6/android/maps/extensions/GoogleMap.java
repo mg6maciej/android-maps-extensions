@@ -162,6 +162,8 @@ public interface GoogleMap {
 
 	void setOnMyLocationChangeListener(OnMyLocationChangeListener onMyLocationChangeListener);
 
+	void setPadding(int left, int top, int right, int bottom);
+
 	void setTrafficEnabled(boolean trafficEnabled);
 
 	void snapshot(SnapshotReadyCallback callback);

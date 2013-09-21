@@ -431,15 +431,23 @@ class GridClusteringStrategy implements ClusteringStrategy {
 	}
 
 	com.google.android.gms.maps.model.Marker createMarker(List<Marker> markers, LatLng position) {
+		markerOptions.position(position);
 		if (clusterOptionsProvider != null) {
 			ClusterOptions opts = clusterOptionsProvider.getClusterOptions(markers);
-			return map.addMarker(markerOptions.position(position).icon(opts.getIcon()).anchor(opts.getAnchorU(), opts.getAnchorV()));
-		}
-		if (iconDataProvider != null) {
+			markerOptions.icon(opts.getIcon());
+			markerOptions.anchor(opts.getAnchorU(), opts.getAnchorV());
+			markerOptions.flat(opts.isFlat());
+			markerOptions.infoWindowAnchor(opts.getInfoWindowAnchorU(), opts.getInfoWindowAnchorV());
+			markerOptions.rotation(opts.getRotation());
+		} else {
 			MarkerOptions opts = iconDataProvider.getIconData(markers.size());
-			return map.addMarker(markerOptions.position(position).icon(opts.getIcon()).anchor(opts.getAnchorU(), opts.getAnchorV()));
+			markerOptions.icon(opts.getIcon());
+			markerOptions.anchor(opts.getAnchorU(), opts.getAnchorV());
+			markerOptions.flat(opts.isFlat());
+			markerOptions.infoWindowAnchor(opts.getInfoWindowAnchorU(), opts.getInfoWindowAnchorV());
+			markerOptions.rotation(opts.getRotation());
 		}
-		throw new RuntimeException();
+		return map.addMarker(markerOptions);
 	}
 
 	private static class ClusterKey {
