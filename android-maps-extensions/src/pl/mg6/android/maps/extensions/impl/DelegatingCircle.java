@@ -18,8 +18,6 @@ package pl.mg6.android.maps.extensions.impl;
 import pl.mg6.android.maps.extensions.Circle;
 import pl.mg6.android.maps.extensions.utils.LatLngUtils;
 
-import android.location.Location;
-
 import com.google.android.gms.maps.model.LatLng;
 
 class DelegatingCircle implements Circle {
