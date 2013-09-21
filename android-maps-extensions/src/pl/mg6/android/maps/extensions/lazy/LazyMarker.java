@@ -241,12 +241,15 @@ public class LazyMarker {
 		}
 	}
 
-	private MarkerOptions copy(MarkerOptions options) {
+	private static MarkerOptions copy(MarkerOptions options) {
 		MarkerOptions copy = new MarkerOptions();
 		copy.anchor(options.getAnchorU(), options.getAnchorV());
 		copy.draggable(options.isDraggable());
+		copy.flat(options.isFlat());
 		copy.icon(options.getIcon());
+		copy.infoWindowAnchor(options.getInfoWindowAnchorU(), options.getInfoWindowAnchorV());
 		copy.position(options.getPosition());
+		copy.rotation(options.getRotation());
 		copy.snippet(options.getSnippet());
 		copy.title(options.getTitle());
 		copy.visible(options.isVisible());
