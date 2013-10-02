@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import pl.mg6.android.maps.extensions.GroundOverlay;
-
-import com.google.android.gms.maps.model.GroundOverlayOptions;
+import pl.mg6.android.maps.extensions.GroundOverlayOptions;
 
 class GroundOverlayManager {
 
@@ -36,6 +35,17 @@ class GroundOverlayManager {
 	}
 
 	public GroundOverlay addGroundOverlay(GroundOverlayOptions groundOverlayOptions) {
+		GroundOverlay groundOverlay = createGroundOverlay(groundOverlayOptions.real);
+		groundOverlay.setData(groundOverlayOptions.getData());
+		return groundOverlay;
+	}
+
+	public GroundOverlay addGroundOverlay(com.google.android.gms.maps.model.GroundOverlayOptions groundOverlayOptions) {
+		GroundOverlay groundOverlay = createGroundOverlay(groundOverlayOptions);
+		return groundOverlay;
+	}
+
+	private GroundOverlay createGroundOverlay(com.google.android.gms.maps.model.GroundOverlayOptions groundOverlayOptions) {
 		com.google.android.gms.maps.model.GroundOverlay real = factory.addGroundOverlay(groundOverlayOptions);
 		GroundOverlay groundOverlay = new DelegatingGroundOverlay(real, this);
 		groundOverlays.put(real, groundOverlay);

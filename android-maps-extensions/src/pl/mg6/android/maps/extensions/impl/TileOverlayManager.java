@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import pl.mg6.android.maps.extensions.TileOverlay;
-
-import com.google.android.gms.maps.model.TileOverlayOptions;
+import pl.mg6.android.maps.extensions.TileOverlayOptions;
 
 class TileOverlayManager {
 
@@ -36,6 +35,17 @@ class TileOverlayManager {
 	}
 
 	public TileOverlay addTileOverlay(TileOverlayOptions tileOverlayOptions) {
+		TileOverlay tileOverlay = createTileOverlay(tileOverlayOptions.real);
+		tileOverlay.setData(tileOverlayOptions.getData());
+		return tileOverlay;
+	}
+
+	public TileOverlay addTileOverlay(com.google.android.gms.maps.model.TileOverlayOptions tileOverlayOptions) {
+		TileOverlay tileOverlay = createTileOverlay(tileOverlayOptions);
+		return tileOverlay;
+	}
+
+	private TileOverlay createTileOverlay(com.google.android.gms.maps.model.TileOverlayOptions tileOverlayOptions) {
 		com.google.android.gms.maps.model.TileOverlay real = factory.addTileOverlay(tileOverlayOptions);
 		TileOverlay tileOverlay = new DelegatingTileOverlay(real, this);
 		tileOverlays.put(real, tileOverlay);

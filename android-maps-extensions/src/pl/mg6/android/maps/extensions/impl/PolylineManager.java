@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import pl.mg6.android.maps.extensions.Polyline;
-
-import com.google.android.gms.maps.model.PolylineOptions;
+import pl.mg6.android.maps.extensions.PolylineOptions;
 
 class PolylineManager {
 
@@ -36,6 +35,17 @@ class PolylineManager {
 	}
 
 	public Polyline addPolyline(PolylineOptions polylineOptions) {
+		Polyline polyline = createPolyline(polylineOptions.real);
+		polyline.setData(polylineOptions.getData());
+		return polyline;
+	}
+
+	public Polyline addPolyline(com.google.android.gms.maps.model.PolylineOptions polylineOptions) {
+		Polyline polyline = createPolyline(polylineOptions);
+		return polyline;
+	}
+
+	private Polyline createPolyline(com.google.android.gms.maps.model.PolylineOptions polylineOptions) {
 		com.google.android.gms.maps.model.Polyline real = factory.addPolyline(polylineOptions);
 		Polyline polyline = new DelegatingPolyline(real, this);
 		polylines.put(real, polyline);

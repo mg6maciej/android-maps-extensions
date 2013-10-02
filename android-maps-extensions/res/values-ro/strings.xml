@@ -10,6 +10,10 @@
     <string name="common_google_play_services_enable_button" msgid="4181637455539816337">"Activaţi Servicii Google Play"</string>
     <string name="common_google_play_services_update_title" msgid="6006316683626838685">"Actualizaţi Servicii Google Play"</string>
     <string name="common_google_play_services_update_text" msgid="448354684997260580">"Această aplicaţie nu poate rula decât dacă actualizaţi Servicii Google Play."</string>
+    <string name="common_google_play_services_network_error_title" msgid="3827284619958211114">"Eroare de reţea"</string>
+    <string name="common_google_play_services_network_error_text" msgid="9038847255613537209">"Este necesară o conexiune de date pentru a vă conecta la serviciile Google Play."</string>
+    <string name="common_google_play_services_invalid_account_title" msgid="1066672360770936753">"Cont nevalid"</string>
+    <string name="common_google_play_services_invalid_account_text" msgid="4983316348021735578">"Contul menționat nu există pe acest dispozitiv. Alegeți alt cont."</string>
     <string name="common_google_play_services_unknown_issue" msgid="4762332809710093730">"Problemă necunoscută privind Servicii Google Play."</string>
     <string name="common_google_play_services_unsupported_title" msgid="6334768798839376943">"Servicii Google Play"</string>
     <string name="common_google_play_services_unsupported_text" msgid="3542578567569488671">"Gadgetul nu acceptă serviciile Google Play, pe care se bazează unele dintre aplicații. Pentru asistență, contactați producătorul gadgetului."</string>

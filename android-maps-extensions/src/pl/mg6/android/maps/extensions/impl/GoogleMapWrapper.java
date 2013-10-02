@@ -227,6 +227,11 @@ class GoogleMapWrapper implements IGoogleMap {
 	}
 
 	@Override
+	public void setPadding(int left, int top, int right, int bottom) {
+		map.setPadding(left, top, right, bottom);
+	}
+
+	@Override
 	public final void setTrafficEnabled(boolean enabled) {
 		map.setTrafficEnabled(enabled);
 	}

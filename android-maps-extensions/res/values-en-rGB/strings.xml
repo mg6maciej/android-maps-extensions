@@ -10,6 +10,10 @@
     <string name="common_google_play_services_enable_button" msgid="4181637455539816337">"Enable Google Play services"</string>
     <string name="common_google_play_services_update_title" msgid="6006316683626838685">"Update Google Play services"</string>
     <string name="common_google_play_services_update_text" msgid="448354684997260580">"This app won\'t run unless you update Google Play services."</string>
+    <string name="common_google_play_services_network_error_title" msgid="3827284619958211114">"Network Error"</string>
+    <string name="common_google_play_services_network_error_text" msgid="9038847255613537209">"A data connection is required to connect to Google Play services."</string>
+    <string name="common_google_play_services_invalid_account_title" msgid="1066672360770936753">"Invalid Account"</string>
+    <string name="common_google_play_services_invalid_account_text" msgid="4983316348021735578">"The specified account does not exist on this device. Please choose a different account."</string>
     <string name="common_google_play_services_unknown_issue" msgid="4762332809710093730">"Unknown issue with Google Play services."</string>
     <string name="common_google_play_services_unsupported_title" msgid="6334768798839376943">"Google Play services"</string>
     <string name="common_google_play_services_unsupported_text" msgid="3542578567569488671">"Google Play services, which some of your applications rely on, is not supported by your device. Please contact the manufacturer for assistance."</string>

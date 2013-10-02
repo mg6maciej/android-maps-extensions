@@ -64,7 +64,7 @@ class ClusterMarker implements Marker {
 				builder.include(m.getPosition());
 				m.changeVisible(false);
 			}
-			LatLng position = calculateCenter(builder.build());
+			LatLng position = builder.build().getCenter();
 			if (virtual == null || lastCount != count) {
 				removeVirtual();
 				lastCount = count;
@@ -90,15 +90,6 @@ class ClusterMarker implements Marker {
 		if (virtual != null) {
 			virtual.remove();
 			virtual = null;
-		}
-	}
-
-	LatLng calculateCenter(LatLngBounds bounds) {
-		if (bounds.southwest.longitude > bounds.northeast.longitude) {
-			// TODO: incorrect
-			return new LatLng((bounds.southwest.latitude + bounds.northeast.latitude) / 2.0, (bounds.southwest.longitude + bounds.northeast.longitude) / 2.0);
-		} else {
-			return new LatLng((bounds.southwest.latitude + bounds.northeast.latitude) / 2.0, (bounds.southwest.longitude + bounds.northeast.longitude) / 2.0);
 		}
 	}
 
@@ -165,8 +156,16 @@ class ClusterMarker implements Marker {
 		for (DelegatingMarker m : markers) {
 			builder.include(m.getPosition());
 		}
-		LatLng position = calculateCenter(builder.build());
+		LatLng position = builder.build().getCenter();
 		return position;
+	}
+
+	@Override
+	public float getRotation() {
+		if (virtual != null) {
+			return virtual.getRotation();
+		}
+		return 0.0f;
 	}
 
 	@Override
@@ -193,6 +192,14 @@ class ClusterMarker implements Marker {
 
 	@Override
 	public boolean isDraggable() {
+		return false;
+	}
+
+	@Override
+	public boolean isFlat() {
+		if (virtual != null) {
+			return virtual.isFlat();
+		}
 		return false;
 	}
 
@@ -238,12 +245,27 @@ class ClusterMarker implements Marker {
 	}
 
 	@Override
+	public void setFlat(boolean flat) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public void setIcon(BitmapDescriptor icon) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
+	public void setInfoWindowAnchor(float anchorU, float anchorV) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public void setPosition(LatLng position) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void setRotation(float rotation) {
 		throw new UnsupportedOperationException();
 	}
 

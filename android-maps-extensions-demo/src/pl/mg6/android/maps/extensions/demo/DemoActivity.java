@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import pl.mg6.android.maps.extensions.Circle;
+import pl.mg6.android.maps.extensions.CircleOptions;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
 import pl.mg6.android.maps.extensions.GoogleMap;
 import pl.mg6.android.maps.extensions.GoogleMap.InfoWindowAdapter;
@@ -46,7 +47,6 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.LatLngBounds.Builder;
@@ -216,11 +216,8 @@ public class DemoActivity extends FragmentActivity {
 	private void addCircles() {
 		float strokeWidth = getResources().getDimension(R.dimen.circle_stroke_width);
 		CircleOptions options = new CircleOptions().strokeWidth(strokeWidth);
-		Circle circle;
-		circle = map.addCircle(options.center(new LatLng(0.0, 0.0)).radius(2000000));
-		circle.setData("first circle");
-		circle = map.addCircle(options.center(new LatLng(30.0, 30.0)).radius(1000000));
-		circle.setData("second circle");
+		map.addCircle(options.center(new LatLng(0.0, 0.0)).data("first circle").radius(2000000));
+		map.addCircle(options.center(new LatLng(30.0, 30.0)).data("second circle").radius(1000000));
 	}
 
 	private void setUpClusteringViews() {

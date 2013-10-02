@@ -37,6 +37,18 @@
         Google Play services (from Play Store) [CHAR LIMIT=NONE] -->
     <string name="common_google_play_services_update_text" msgid="9053896323427875356">This app won\'t run unless you update Google Play services.</string>
 
+    <!-- Title of confirmation dialog informing the user that a network error occurred. [CHAR LIMIT=40] -->
+    <string name="common_google_play_services_network_error_title">Network Error</string>
+
+    <!-- Message in confirmation dialog informing the user that a network error occurred. [CHAR LIMIT=NONE] -->
+    <string name="common_google_play_services_network_error_text">A data connection is required to connect to Google Play services.</string>
+
+    <!-- Title of confirmation dialog informing the user that they provided an invalid account. [CHAR LIMIT=40] -->
+    <string name="common_google_play_services_invalid_account_title">Invalid Account</string>
+
+    <!-- Message in confirmation dialog informing the user that they provided an invalid account. [CHAR LIMIT=NONE] -->
+    <string name="common_google_play_services_invalid_account_text">The specified account does not exist on this device. Please choose a different account.</string>
+
     <!-- Message in confirmation dialog informing user there is an unknown issue in Google Play
         services [CHAR LIMIT=NONE] -->
     <string name="common_google_play_services_unknown_issue">Unknown issue with Google Play services.</string>

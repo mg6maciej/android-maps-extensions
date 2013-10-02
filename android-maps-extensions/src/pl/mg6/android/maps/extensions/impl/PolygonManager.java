@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import pl.mg6.android.maps.extensions.Polygon;
-
-import com.google.android.gms.maps.model.PolygonOptions;
+import pl.mg6.android.maps.extensions.PolygonOptions;
 
 class PolygonManager {
 
@@ -36,6 +35,17 @@ class PolygonManager {
 	}
 
 	public Polygon addPolygon(PolygonOptions polygonOptions) {
+		Polygon polygon = createPolygon(polygonOptions.real);
+		polygon.setData(polygonOptions.getData());
+		return polygon;
+	}
+
+	public Polygon addPolygon(com.google.android.gms.maps.model.PolygonOptions polygonOptions) {
+		Polygon polygon = createPolygon(polygonOptions);
+		return polygon;
+	}
+
+	private Polygon createPolygon(com.google.android.gms.maps.model.PolygonOptions polygonOptions) {
 		com.google.android.gms.maps.model.Polygon real = factory.addPolygon(polygonOptions);
 		Polygon polygon = new DelegatingPolygon(real, this);
 		polygons.put(real, polygon);

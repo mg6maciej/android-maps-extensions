@@ -10,6 +10,10 @@
     <string name="common_google_play_services_enable_button" msgid="4181637455539816337">"Enable Google Play services"</string>
     <string name="common_google_play_services_update_title" msgid="6006316683626838685">"I-update ang mga serbisyo ng Google Play"</string>
     <string name="common_google_play_services_update_text" msgid="448354684997260580">"Hindi gagana ang app na ito maliban kung i-a-update mo ang mga serbisyo ng Google Play."</string>
+    <string name="common_google_play_services_network_error_title" msgid="3827284619958211114">"May Error sa Network"</string>
+    <string name="common_google_play_services_network_error_text" msgid="9038847255613537209">"Kailangan ng koneksyon ng data upang makakonekta sa mga serbisyo ng Google Play."</string>
+    <string name="common_google_play_services_invalid_account_title" msgid="1066672360770936753">"Di-wasto ang Account"</string>
+    <string name="common_google_play_services_invalid_account_text" msgid="4983316348021735578">"Hindi umiiral ang tinukoy na account sa device na ito. Mangyaring pumili ng ibang account."</string>
     <string name="common_google_play_services_unknown_issue" msgid="4762332809710093730">"May hindi alam na isyu sa mga serbisyo ng Google Play."</string>
     <string name="common_google_play_services_unsupported_title" msgid="6334768798839376943">"Mga serbisyo ng Google Play"</string>
     <string name="common_google_play_services_unsupported_text" msgid="3542578567569488671">"Ang mga serbisyo ng Google Play, kung saan nakadepende ang ilan sa iyong mga application, ay hindi sinusuportahan ng iyong device. Mangyaring makipag-ugnay sa manufacturer para sa tulong."</string>

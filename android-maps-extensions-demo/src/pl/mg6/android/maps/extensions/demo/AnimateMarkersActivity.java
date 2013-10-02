@@ -23,6 +23,8 @@ import pl.mg6.android.maps.extensions.GoogleMap.OnMarkerClickListener;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.MarkerOptions;
 import pl.mg6.android.maps.extensions.SupportMapFragment;
+import pl.mg6.android.maps.extensions.utils.LatLngUtils;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -52,7 +54,7 @@ public class AnimateMarkersActivity extends FragmentActivity {
 
 		FragmentManager fm = getSupportFragmentManager();
 		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-		GoogleMap map = f.getExtendedMap();
+		final GoogleMap map = f.getExtendedMap();
 
 		map.addMarker(new MarkerOptions().title("RED").position(new LatLng(-15, -15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 		map.addMarker(new MarkerOptions().title("GREEN").position(new LatLng(-15, 15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
@@ -81,6 +83,24 @@ public class AnimateMarkersActivity extends FragmentActivity {
 				AnimationSettings settings = new AnimationSettings().duration(duration).interpolator(interpolator);
 				marker.animatePosition(targetPosition, settings, callback);
 				return true;
+			}
+		});
+		map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+			@Override
+			public void onMapClick(LatLng clickPosition) {
+				Marker closest = null;
+				float distanceToClosest = Float.MAX_VALUE;
+				for (Marker marker : map.getMarkers()) {
+					LatLng markerPosition = marker.getPosition();
+					float distance = LatLngUtils.distanceBetween(clickPosition, markerPosition);
+					if (distanceToClosest > distance) {
+						distanceToClosest = distance;
+						closest = marker;
+					}
+				}
+				if (closest != null) {
+					closest.remove();
+				}
 			}
 		});
 	}
