@@ -15,16 +15,16 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,23 +39,32 @@ public class MainActivity extends Activity {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent intent;
-				if (position == 0) {
-					intent = new Intent(MainActivity.this, DemoActivity.class);
-				} else if (position == 1) {
-					intent = new Intent(MainActivity.this, AnimateMarkersActivity.class);
-				} else if (position == 2) {
-					intent = new Intent(MainActivity.this, ClusterGroupsActivity.class);
-				} else if (position == 3) {
-					intent = new Intent(MainActivity.this, DeclusterificationExampleActivity.class);
-				} else {
-					intent = new Intent(MainActivity.this, LaunchTimeTestActivity.class);
-					// normally: int clusteringType = LaunchTimeTestActivity.CLUSTERING_ENABLED;
-					int clusteringType = position - 4;
-					intent.putExtra(LaunchTimeTestActivity.EXTRA_CLUSTERING_TYPE, clusteringType);
+				if (GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(MainActivity.this)) {
+					startExample(position);
 				}
-				startActivity(intent);
 			}
 		});
+		if (savedInstanceState == null) {
+			GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(this);
+		}
+	}
+
+	private void startExample(int position) {
+		Intent intent;
+		if (position == 0) {
+			intent = new Intent(this, DemoActivity.class);
+		} else if (position == 1) {
+			intent = new Intent(this, AnimateMarkersActivity.class);
+		} else if (position == 2) {
+			intent = new Intent(this, ClusterGroupsActivity.class);
+		} else if (position == 3) {
+			intent = new Intent(this, DeclusterificationExampleActivity.class);
+		} else {
+			intent = new Intent(this, LaunchTimeTestActivity.class);
+			// normally: int clusteringType = LaunchTimeTestActivity.CLUSTERING_ENABLED;
+			int clusteringType = position - 4;
+			intent.putExtra(LaunchTimeTestActivity.EXTRA_CLUSTERING_TYPE, clusteringType);
+		}
+		startActivity(intent);
 	}
 }
