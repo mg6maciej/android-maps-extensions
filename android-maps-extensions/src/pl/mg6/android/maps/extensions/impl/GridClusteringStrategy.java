@@ -23,7 +23,6 @@ import java.util.Map;
 import pl.mg6.android.maps.extensions.ClusterOptions;
 import pl.mg6.android.maps.extensions.ClusterOptionsProvider;
 import pl.mg6.android.maps.extensions.ClusteringSettings;
-import pl.mg6.android.maps.extensions.ClusteringSettings.IconDataProvider;
 import pl.mg6.android.maps.extensions.Marker;
 import pl.mg6.android.maps.extensions.utils.SphericalMercator;
 
@@ -52,11 +51,9 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	private ClusterRefresher refresher;
 	private ClusterOptionsProvider clusterOptionsProvider;
-	private IconDataProvider iconDataProvider;
 
 	public GridClusteringStrategy(ClusteringSettings settings, IGoogleMap map, List<DelegatingMarker> markers, ClusterRefresher refresher) {
 		this.clusterOptionsProvider = settings.getClusterOptionsProvider();
-		this.iconDataProvider = settings.getIconDataProvider();
 		this.addMarkersDynamically = settings.isAddMarkersDynamically();
 		this.baseClusterSize = settings.getClusterSize();
 		this.map = map;
@@ -432,21 +429,12 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
 	com.google.android.gms.maps.model.Marker createMarker(List<Marker> markers, LatLng position) {
 		markerOptions.position(position);
-		if (clusterOptionsProvider != null) {
-			ClusterOptions opts = clusterOptionsProvider.getClusterOptions(markers);
-			markerOptions.icon(opts.getIcon());
-			markerOptions.anchor(opts.getAnchorU(), opts.getAnchorV());
-			markerOptions.flat(opts.isFlat());
-			markerOptions.infoWindowAnchor(opts.getInfoWindowAnchorU(), opts.getInfoWindowAnchorV());
-			markerOptions.rotation(opts.getRotation());
-		} else {
-			MarkerOptions opts = iconDataProvider.getIconData(markers.size());
-			markerOptions.icon(opts.getIcon());
-			markerOptions.anchor(opts.getAnchorU(), opts.getAnchorV());
-			markerOptions.flat(opts.isFlat());
-			markerOptions.infoWindowAnchor(opts.getInfoWindowAnchorU(), opts.getInfoWindowAnchorV());
-			markerOptions.rotation(opts.getRotation());
-		}
+		ClusterOptions opts = clusterOptionsProvider.getClusterOptions(markers);
+		markerOptions.icon(opts.getIcon());
+		markerOptions.anchor(opts.getAnchorU(), opts.getAnchorV());
+		markerOptions.flat(opts.isFlat());
+		markerOptions.infoWindowAnchor(opts.getInfoWindowAnchorU(), opts.getInfoWindowAnchorV());
+		markerOptions.rotation(opts.getRotation());
 		return map.addMarker(markerOptions);
 	}
 

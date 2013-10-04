@@ -29,8 +29,6 @@ public class ClusteringSettings {
 
 	private boolean enabled = true;
 
-	private IconDataProvider iconDataProvider = null;
-
 	public ClusteringSettings addMarkersDynamically(boolean addMarkersDynamically) {
 		this.addMarkersDynamically = addMarkersDynamically;
 		return this;
@@ -63,17 +61,6 @@ public class ClusteringSettings {
 
 	public double getClusterSize() {
 		return clusterSize;
-	}
-
-	@Deprecated
-	public IconDataProvider getIconDataProvider() {
-		return iconDataProvider;
-	}
-
-	@Deprecated
-	public ClusteringSettings iconDataProvider(IconDataProvider iconDataProvider) {
-		this.iconDataProvider = iconDataProvider;
-		return this;
 	}
 
 	public boolean isAddMarkersDynamically() {
@@ -114,15 +101,6 @@ public class ClusteringSettings {
 				return false;
 			}
 		}
-		if (iconDataProvider == null) {
-			if (other.iconDataProvider != null) {
-				return false;
-			}
-		} else {
-			if (!iconDataProvider.equals(other.iconDataProvider)) {
-				return false;
-			}
-		}
 		return true;
 	}
 
@@ -130,11 +108,5 @@ public class ClusteringSettings {
 	public int hashCode() {
 		// TODO: implement, low priority
 		return super.hashCode();
-	}
-
-	@Deprecated
-	public interface IconDataProvider {
-
-		MarkerOptions getIconData(int markersCount);
 	}
 }

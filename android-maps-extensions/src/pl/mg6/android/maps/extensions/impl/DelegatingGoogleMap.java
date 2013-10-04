@@ -257,7 +257,6 @@ class DelegatingGoogleMap implements GoogleMap {
 	@Override
 	public void setClustering(ClusteringSettings clusteringSettings) {
 		if (clusteringSettings != null && clusteringSettings.isEnabled()
-				&& clusteringSettings.getIconDataProvider() == null
 				&& clusteringSettings.getClusterOptionsProvider() == null) {
 			clusteringSettings.clusterOptionsProvider(new DefaultClusterOptionsProvider(context.getResources()));
 		}
