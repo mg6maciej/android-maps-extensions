@@ -40,11 +40,6 @@ class TileOverlayManager {
 		return tileOverlay;
 	}
 
-	public TileOverlay addTileOverlay(com.google.android.gms.maps.model.TileOverlayOptions tileOverlayOptions) {
-		TileOverlay tileOverlay = createTileOverlay(tileOverlayOptions);
-		return tileOverlay;
-	}
-
 	private TileOverlay createTileOverlay(com.google.android.gms.maps.model.TileOverlayOptions tileOverlayOptions) {
 		com.google.android.gms.maps.model.TileOverlay real = factory.addTileOverlay(tileOverlayOptions);
 		TileOverlay tileOverlay = new DelegatingTileOverlay(real, this);

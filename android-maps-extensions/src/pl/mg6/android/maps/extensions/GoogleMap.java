@@ -38,33 +38,15 @@ public interface GoogleMap {
 
 	Circle addCircle(CircleOptions circleOptions);
 
-	@Deprecated
-	Circle addCircle(com.google.android.gms.maps.model.CircleOptions circleOptions);
-
 	GroundOverlay addGroundOverlay(GroundOverlayOptions groundOverlayOptions);
-
-	@Deprecated
-	GroundOverlay addGroundOverlay(com.google.android.gms.maps.model.GroundOverlayOptions groundOverlayOptions);
 
 	Marker addMarker(MarkerOptions markerOptions);
 
-	@Deprecated
-	Marker addMarker(com.google.android.gms.maps.model.MarkerOptions markerOptions);
-
 	Polygon addPolygon(PolygonOptions polygonOptions);
-
-	@Deprecated
-	Polygon addPolygon(com.google.android.gms.maps.model.PolygonOptions polygonOptions);
 
 	Polyline addPolyline(PolylineOptions polylineOptions);
 
-	@Deprecated
-	Polyline addPolyline(com.google.android.gms.maps.model.PolylineOptions polylineOptions);
-
 	TileOverlay addTileOverlay(TileOverlayOptions tileOverlayOptions);
-
-	@Deprecated
-	TileOverlay addTileOverlay(com.google.android.gms.maps.model.TileOverlayOptions tileOverlayOptions);
 
 	void animateCamera(CameraUpdate cameraUpdate, CancelableCallback cancelableCallback);
 

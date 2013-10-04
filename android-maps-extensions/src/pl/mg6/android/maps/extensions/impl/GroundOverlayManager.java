@@ -40,11 +40,6 @@ class GroundOverlayManager {
 		return groundOverlay;
 	}
 
-	public GroundOverlay addGroundOverlay(com.google.android.gms.maps.model.GroundOverlayOptions groundOverlayOptions) {
-		GroundOverlay groundOverlay = createGroundOverlay(groundOverlayOptions);
-		return groundOverlay;
-	}
-
 	private GroundOverlay createGroundOverlay(com.google.android.gms.maps.model.GroundOverlayOptions groundOverlayOptions) {
 		com.google.android.gms.maps.model.GroundOverlay real = factory.addGroundOverlay(groundOverlayOptions);
 		GroundOverlay groundOverlay = new DelegatingGroundOverlay(real, this);

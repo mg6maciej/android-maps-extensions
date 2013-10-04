@@ -40,11 +40,6 @@ class PolygonManager {
 		return polygon;
 	}
 
-	public Polygon addPolygon(com.google.android.gms.maps.model.PolygonOptions polygonOptions) {
-		Polygon polygon = createPolygon(polygonOptions);
-		return polygon;
-	}
-
 	private Polygon createPolygon(com.google.android.gms.maps.model.PolygonOptions polygonOptions) {
 		com.google.android.gms.maps.model.Polygon real = factory.addPolygon(polygonOptions);
 		Polygon polygon = new DelegatingPolygon(real, this);

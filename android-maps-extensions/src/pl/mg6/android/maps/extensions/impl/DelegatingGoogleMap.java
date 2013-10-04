@@ -72,20 +72,8 @@ class DelegatingGoogleMap implements GoogleMap {
 		return circleManager.addCircle(circleOptions);
 	}
 
-	@Deprecated
-	@Override
-	public Circle addCircle(com.google.android.gms.maps.model.CircleOptions circleOptions) {
-		return circleManager.addCircle(circleOptions);
-	}
-
 	@Override
 	public GroundOverlay addGroundOverlay(GroundOverlayOptions groundOverlayOptions) {
-		return groundOverlayManager.addGroundOverlay(groundOverlayOptions);
-	}
-
-	@Deprecated
-	@Override
-	public GroundOverlay addGroundOverlay(com.google.android.gms.maps.model.GroundOverlayOptions groundOverlayOptions) {
 		return groundOverlayManager.addGroundOverlay(groundOverlayOptions);
 	}
 
@@ -94,20 +82,8 @@ class DelegatingGoogleMap implements GoogleMap {
 		return markerManager.addMarker(markerOptions);
 	}
 
-	@Deprecated
-	@Override
-	public Marker addMarker(com.google.android.gms.maps.model.MarkerOptions markerOptions) {
-		return markerManager.addMarker(markerOptions);
-	}
-
 	@Override
 	public Polygon addPolygon(PolygonOptions polygonOptions) {
-		return polygonManager.addPolygon(polygonOptions);
-	}
-
-	@Deprecated
-	@Override
-	public Polygon addPolygon(com.google.android.gms.maps.model.PolygonOptions polygonOptions) {
 		return polygonManager.addPolygon(polygonOptions);
 	}
 
@@ -116,20 +92,8 @@ class DelegatingGoogleMap implements GoogleMap {
 		return polylineManager.addPolyline(polylineOptions);
 	}
 
-	@Deprecated
-	@Override
-	public Polyline addPolyline(com.google.android.gms.maps.model.PolylineOptions polylineOptions) {
-		return polylineManager.addPolyline(polylineOptions);
-	}
-
 	@Override
 	public TileOverlay addTileOverlay(TileOverlayOptions tileOverlayOptions) {
-		return tileOverlayManager.addTileOverlay(tileOverlayOptions);
-	}
-
-	@Deprecated
-	@Override
-	public TileOverlay addTileOverlay(com.google.android.gms.maps.model.TileOverlayOptions tileOverlayOptions) {
 		return tileOverlayManager.addTileOverlay(tileOverlayOptions);
 	}
 

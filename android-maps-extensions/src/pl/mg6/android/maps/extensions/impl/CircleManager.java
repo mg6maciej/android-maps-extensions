@@ -40,11 +40,6 @@ class CircleManager {
 		return circle;
 	}
 
-	public Circle addCircle(com.google.android.gms.maps.model.CircleOptions circleOptions) {
-		Circle circle = createCircle(circleOptions);
-		return circle;
-	}
-
 	private Circle createCircle(com.google.android.gms.maps.model.CircleOptions circleOptions) {
 		com.google.android.gms.maps.model.Circle real = factory.addCircle(circleOptions);
 		Circle circle = new DelegatingCircle(real, this);
