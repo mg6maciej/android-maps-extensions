@@ -15,98 +15,95 @@
  */
 package pl.mg6.android.maps.extensions;
 
-import com.google.android.gms.maps.model.MarkerOptions;
-
 public class ClusteringSettings {
 
-	public static final double DEFAULT_CLUSTER_SIZE = 180.0;
+    public static final double DEFAULT_CLUSTER_SIZE = 180.0;
 
-	private boolean addMarkersDynamically = false;
+    private boolean addMarkersDynamically = false;
 
-	private ClusterOptionsProvider clusterOptionsProvider = null;
+    private ClusterOptionsProvider clusterOptionsProvider = null;
 
-	private double clusterSize = DEFAULT_CLUSTER_SIZE;
+    private double clusterSize = DEFAULT_CLUSTER_SIZE;
 
-	private boolean enabled = true;
+    private boolean enabled = true;
 
-	public ClusteringSettings addMarkersDynamically(boolean addMarkersDynamically) {
-		this.addMarkersDynamically = addMarkersDynamically;
-		return this;
-	}
+    public ClusteringSettings addMarkersDynamically(boolean addMarkersDynamically) {
+        this.addMarkersDynamically = addMarkersDynamically;
+        return this;
+    }
 
-	public ClusteringSettings clusterOptionsProvider(ClusterOptionsProvider clusterOptionsProvider) {
-		this.clusterOptionsProvider = clusterOptionsProvider;
-		return this;
-	}
+    public ClusteringSettings clusterOptionsProvider(ClusterOptionsProvider clusterOptionsProvider) {
+        this.clusterOptionsProvider = clusterOptionsProvider;
+        return this;
+    }
 
-	/**
-	 * Consider using value of 180, 160, 144, 120 or 96 for 8x8, 9x9, 10x10, 12x12 and 15x15 grids respectively on zoom level 2.
-	 * 
-	 * @param clusterSize
-	 *            cluster size in degrees of longitude on zoom level 0.
-	 */
-	public ClusteringSettings clusterSize(double clusterSize) {
-		this.clusterSize = clusterSize;
-		return this;
-	}
+    /**
+     * Consider using value of 180, 160, 144, 120 or 96 for 8x8, 9x9, 10x10, 12x12 and 15x15 grids respectively on zoom level 2.
+     *
+     * @param clusterSize cluster size in degrees of longitude on zoom level 0.
+     */
+    public ClusteringSettings clusterSize(double clusterSize) {
+        this.clusterSize = clusterSize;
+        return this;
+    }
 
-	public ClusteringSettings enabled(boolean enabled) {
-		this.enabled = enabled;
-		return this;
-	}
+    public ClusteringSettings enabled(boolean enabled) {
+        this.enabled = enabled;
+        return this;
+    }
 
-	public ClusterOptionsProvider getClusterOptionsProvider() {
-		return clusterOptionsProvider;
-	}
+    public ClusterOptionsProvider getClusterOptionsProvider() {
+        return clusterOptionsProvider;
+    }
 
-	public double getClusterSize() {
-		return clusterSize;
-	}
+    public double getClusterSize() {
+        return clusterSize;
+    }
 
-	public boolean isAddMarkersDynamically() {
-		return addMarkersDynamically;
-	}
+    public boolean isAddMarkersDynamically() {
+        return addMarkersDynamically;
+    }
 
-	public boolean isEnabled() {
-		return enabled;
-	}
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (!(o instanceof ClusteringSettings)) {
-			return false;
-		}
-		ClusteringSettings other = (ClusteringSettings) o;
-		if (enabled != other.enabled) {
-			return false;
-		}
-		if (addMarkersDynamically != other.addMarkersDynamically) {
-			return false;
-		}
-		if (!enabled && !other.enabled) {
-			return true;
-		}
-		if (clusterSize != other.clusterSize) {
-			return false;
-		}
-		if (clusterOptionsProvider == null) {
-			if (other.clusterOptionsProvider != null) {
-				return false;
-			}
-		} else {
-			if (!clusterOptionsProvider.equals(other.clusterOptionsProvider)) {
-				return false;
-			}
-		}
-		return true;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ClusteringSettings)) {
+            return false;
+        }
+        ClusteringSettings other = (ClusteringSettings) o;
+        if (enabled != other.enabled) {
+            return false;
+        }
+        if (addMarkersDynamically != other.addMarkersDynamically) {
+            return false;
+        }
+        if (!enabled && !other.enabled) {
+            return true;
+        }
+        if (clusterSize != other.clusterSize) {
+            return false;
+        }
+        if (clusterOptionsProvider == null) {
+            if (other.clusterOptionsProvider != null) {
+                return false;
+            }
+        } else {
+            if (!clusterOptionsProvider.equals(other.clusterOptionsProvider)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	@Override
-	public int hashCode() {
-		// TODO: implement, low priority
-		return super.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        // TODO: implement, low priority
+        return super.hashCode();
+    }
 }

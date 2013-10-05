@@ -20,44 +20,44 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 public interface GroundOverlay {
 
-	float getBearing();
+    float getBearing();
 
-	LatLngBounds getBounds();
+    LatLngBounds getBounds();
 
-	Object getData();
+    Object getData();
 
-	float getHeight();
+    float getHeight();
 
-	@Deprecated
-	String getId();
+    @Deprecated
+    String getId();
 
-	LatLng getPosition();
+    LatLng getPosition();
 
-	float getTransparency();
+    float getTransparency();
 
-	float getWidth();
+    float getWidth();
 
-	float getZIndex();
+    float getZIndex();
 
-	boolean isVisible();
+    boolean isVisible();
 
-	void remove();
+    void remove();
 
-	void setBearing(float bearing);
+    void setBearing(float bearing);
 
-	void setData(Object data);
+    void setData(Object data);
 
-	void setDimensions(float width, float height);
+    void setDimensions(float width, float height);
 
-	void setDimensions(float width);
+    void setDimensions(float width);
 
-	void setPosition(LatLng position);
+    void setPosition(LatLng position);
 
-	void setPositionFromBounds(LatLngBounds bounds);
+    void setPositionFromBounds(LatLngBounds bounds);
 
-	void setTransparency(float transparency);
+    void setTransparency(float transparency);
 
-	void setVisible(boolean visible);
+    void setVisible(boolean visible);
 
-	void setZIndex(float zIndex);
+    void setZIndex(float zIndex);
 }

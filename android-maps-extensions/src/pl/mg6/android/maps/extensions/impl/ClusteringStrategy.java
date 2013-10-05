@@ -15,33 +15,33 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import com.google.android.gms.maps.model.CameraPosition;
+
 import java.util.List;
 
 import pl.mg6.android.maps.extensions.Marker;
 
-import com.google.android.gms.maps.model.CameraPosition;
-
 interface ClusteringStrategy {
 
-	void cleanup();
+    void cleanup();
 
-	void onCameraChange(CameraPosition cameraPosition);
+    void onCameraChange(CameraPosition cameraPosition);
 
-	void onClusterGroupChange(DelegatingMarker marker);
+    void onClusterGroupChange(DelegatingMarker marker);
 
-	void onAdd(DelegatingMarker marker);
+    void onAdd(DelegatingMarker marker);
 
-	void onRemove(DelegatingMarker marker);
+    void onRemove(DelegatingMarker marker);
 
-	void onPositionChange(DelegatingMarker marker);
+    void onPositionChange(DelegatingMarker marker);
 
-	void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible);
+    void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible);
 
-	void onShowInfoWindow(DelegatingMarker marker);
+    void onShowInfoWindow(DelegatingMarker marker);
 
-	Marker map(com.google.android.gms.maps.model.Marker original);
+    Marker map(com.google.android.gms.maps.model.Marker original);
 
-	List<Marker> getDisplayedMarkers();
+    List<Marker> getDisplayedMarkers();
 
-	float getMinZoomLevelNotClustered(Marker marker);
+    float getMinZoomLevelNotClustered(Marker marker);
 }

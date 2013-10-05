@@ -15,42 +15,42 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
 
+import java.util.HashSet;
+import java.util.Set;
+
 class ClusterRefresher {
 
-	private Set<ClusterMarker> refreshQueue = new HashSet<ClusterMarker>();
-	private boolean refreshPending;
-	private Handler refresher = new Handler(new Callback() {
-		public boolean handleMessage(Message msg) {
-			refreshAll();
-			return true;
-		}
-	});
+    private Set<ClusterMarker> refreshQueue = new HashSet<ClusterMarker>();
+    private boolean refreshPending;
+    private Handler refresher = new Handler(new Callback() {
+        public boolean handleMessage(Message msg) {
+            refreshAll();
+            return true;
+        }
+    });
 
-	void refresh(ClusterMarker cluster) {
-		refreshQueue.add(cluster);
-		if (!refreshPending) {
-			refresher.sendEmptyMessage(0);
-			refreshPending = true;
-		}
-	}
+    void refresh(ClusterMarker cluster) {
+        refreshQueue.add(cluster);
+        if (!refreshPending) {
+            refresher.sendEmptyMessage(0);
+            refreshPending = true;
+        }
+    }
 
-	void cleanup() {
-		refreshQueue.clear();
-		refreshPending = false;
-		refresher.removeMessages(0);
-	}
+    void cleanup() {
+        refreshQueue.clear();
+        refreshPending = false;
+        refresher.removeMessages(0);
+    }
 
-	void refreshAll() {
-		for (ClusterMarker cluster : refreshQueue) {
-			cluster.refresh();
-		}
-		cleanup();
-	}
+    void refreshAll() {
+        for (ClusterMarker cluster : refreshQueue) {
+            cluster.refresh();
+        }
+        cleanup();
+    }
 }

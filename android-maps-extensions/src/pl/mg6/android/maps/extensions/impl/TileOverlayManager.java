@@ -25,37 +25,37 @@ import pl.mg6.android.maps.extensions.TileOverlayOptions;
 
 class TileOverlayManager {
 
-	private final IGoogleMap factory;
+    private final IGoogleMap factory;
 
-	private final Map<com.google.android.gms.maps.model.TileOverlay, TileOverlay> tileOverlays;
+    private final Map<com.google.android.gms.maps.model.TileOverlay, TileOverlay> tileOverlays;
 
-	public TileOverlayManager(IGoogleMap factory) {
-		this.factory = factory;
-		this.tileOverlays = new HashMap<com.google.android.gms.maps.model.TileOverlay, TileOverlay>();
-	}
+    public TileOverlayManager(IGoogleMap factory) {
+        this.factory = factory;
+        this.tileOverlays = new HashMap<com.google.android.gms.maps.model.TileOverlay, TileOverlay>();
+    }
 
-	public TileOverlay addTileOverlay(TileOverlayOptions tileOverlayOptions) {
-		TileOverlay tileOverlay = createTileOverlay(tileOverlayOptions.real);
-		tileOverlay.setData(tileOverlayOptions.getData());
-		return tileOverlay;
-	}
+    public TileOverlay addTileOverlay(TileOverlayOptions tileOverlayOptions) {
+        TileOverlay tileOverlay = createTileOverlay(tileOverlayOptions.real);
+        tileOverlay.setData(tileOverlayOptions.getData());
+        return tileOverlay;
+    }
 
-	private TileOverlay createTileOverlay(com.google.android.gms.maps.model.TileOverlayOptions tileOverlayOptions) {
-		com.google.android.gms.maps.model.TileOverlay real = factory.addTileOverlay(tileOverlayOptions);
-		TileOverlay tileOverlay = new DelegatingTileOverlay(real, this);
-		tileOverlays.put(real, tileOverlay);
-		return tileOverlay;
-	}
+    private TileOverlay createTileOverlay(com.google.android.gms.maps.model.TileOverlayOptions tileOverlayOptions) {
+        com.google.android.gms.maps.model.TileOverlay real = factory.addTileOverlay(tileOverlayOptions);
+        TileOverlay tileOverlay = new DelegatingTileOverlay(real, this);
+        tileOverlays.put(real, tileOverlay);
+        return tileOverlay;
+    }
 
-	public void clear() {
-		tileOverlays.clear();
-	}
+    public void clear() {
+        tileOverlays.clear();
+    }
 
-	public List<TileOverlay> getTileOverlays() {
-		return new ArrayList<TileOverlay>(tileOverlays.values());
-	}
+    public List<TileOverlay> getTileOverlays() {
+        return new ArrayList<TileOverlay>(tileOverlays.values());
+    }
 
-	public void onRemove(com.google.android.gms.maps.model.TileOverlay real) {
-		tileOverlays.remove(real);
-	}
+    public void onRemove(com.google.android.gms.maps.model.TileOverlay real) {
+        tileOverlays.remove(real);
+    }
 }

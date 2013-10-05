@@ -15,8 +15,6 @@
  */
 package pl.mg6.android.maps.extensions;
 
-import java.util.List;
-
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.view.View;
@@ -28,200 +26,202 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.List;
+
 public interface GoogleMap {
 
-	int MAP_TYPE_HYBRID = com.google.android.gms.maps.GoogleMap.MAP_TYPE_HYBRID;
-	int MAP_TYPE_NONE = com.google.android.gms.maps.GoogleMap.MAP_TYPE_NONE;
-	int MAP_TYPE_NORMAL = com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
-	int MAP_TYPE_SATELLITE = com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
-	int MAP_TYPE_TERRAIN = com.google.android.gms.maps.GoogleMap.MAP_TYPE_TERRAIN;
+    int MAP_TYPE_HYBRID = com.google.android.gms.maps.GoogleMap.MAP_TYPE_HYBRID;
+    int MAP_TYPE_NONE = com.google.android.gms.maps.GoogleMap.MAP_TYPE_NONE;
+    int MAP_TYPE_NORMAL = com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
+    int MAP_TYPE_SATELLITE = com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
+    int MAP_TYPE_TERRAIN = com.google.android.gms.maps.GoogleMap.MAP_TYPE_TERRAIN;
 
-	Circle addCircle(CircleOptions circleOptions);
+    Circle addCircle(CircleOptions circleOptions);
 
-	GroundOverlay addGroundOverlay(GroundOverlayOptions groundOverlayOptions);
+    GroundOverlay addGroundOverlay(GroundOverlayOptions groundOverlayOptions);
 
-	Marker addMarker(MarkerOptions markerOptions);
+    Marker addMarker(MarkerOptions markerOptions);
 
-	Polygon addPolygon(PolygonOptions polygonOptions);
+    Polygon addPolygon(PolygonOptions polygonOptions);
 
-	Polyline addPolyline(PolylineOptions polylineOptions);
+    Polyline addPolyline(PolylineOptions polylineOptions);
 
-	TileOverlay addTileOverlay(TileOverlayOptions tileOverlayOptions);
+    TileOverlay addTileOverlay(TileOverlayOptions tileOverlayOptions);
 
-	void animateCamera(CameraUpdate cameraUpdate, CancelableCallback cancelableCallback);
+    void animateCamera(CameraUpdate cameraUpdate, CancelableCallback cancelableCallback);
 
-	void animateCamera(CameraUpdate cameraUpdate, int time, CancelableCallback cancelableCallback);
+    void animateCamera(CameraUpdate cameraUpdate, int time, CancelableCallback cancelableCallback);
 
-	void animateCamera(CameraUpdate cameraUpdate);
+    void animateCamera(CameraUpdate cameraUpdate);
 
-	void clear();
+    void clear();
 
-	CameraPosition getCameraPosition();
+    CameraPosition getCameraPosition();
 
-	/**
-	 * Get a list of markers that could be clicked by user. This is a mix of normal (only visible) and cluster markers.
-	 * 
-	 * @return list of markers that are displayed at current zoom level
-	 */
-	List<Marker> getDisplayedMarkers();
+    /**
+     * Get a list of markers that could be clicked by user. This is a mix of normal (only visible) and cluster markers.
+     *
+     * @return list of markers that are displayed at current zoom level
+     */
+    List<Marker> getDisplayedMarkers();
 
-	int getMapType();
+    int getMapType();
 
-	/**
-	 * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=5106
-	 */
-	List<Circle> getCircles();
+    /**
+     * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=5106
+     */
+    List<Circle> getCircles();
 
-	List<GroundOverlay> getGroundOverlays();
+    List<GroundOverlay> getGroundOverlays();
 
-	List<Marker> getMarkers();
+    List<Marker> getMarkers();
 
-	Marker getMarkerShowingInfoWindow();
+    Marker getMarkerShowingInfoWindow();
 
-	List<Polygon> getPolygons();
+    List<Polygon> getPolygons();
 
-	List<Polyline> getPolylines();
+    List<Polyline> getPolylines();
 
-	List<TileOverlay> getTileOverlays();
+    List<TileOverlay> getTileOverlays();
 
-	float getMaxZoomLevel();
+    float getMaxZoomLevel();
 
-	float getMinZoomLevel();
+    float getMinZoomLevel();
 
-	/**
-	 * Get the minimum zoom level at which marker will be displayed. This function can take as a parameter only markers added via GoogleMap.addMarker and
-	 * visible. When clustering is not used, it will always return 0.
-	 * 
-	 * <code>
-	 * float zoom = map.getMinZoomLevelNotClustered(marker);
-	 * map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), zoom));
-	 * </code>
-	 * 
-	 * @param marker
-	 * @return value in range [0, 25] inclusive or Float.POSITIVE_INFINITY when this marker is very near another visible marker
-	 */
-	float getMinZoomLevelNotClustered(Marker marker);
+    /**
+     * Get the minimum zoom level at which marker will be displayed. This function can take as a parameter only markers added via GoogleMap.addMarker and
+     * visible. When clustering is not used, it will always return 0.
+     * <p/>
+     * <code>
+     * float zoom = map.getMinZoomLevelNotClustered(marker);
+     * map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), zoom));
+     * </code>
+     *
+     * @param marker
+     * @return value in range [0, 25] inclusive or Float.POSITIVE_INFINITY when this marker is very near another visible marker
+     */
+    float getMinZoomLevelNotClustered(Marker marker);
 
-	Location getMyLocation();
+    Location getMyLocation();
 
-	Projection getProjection();
+    Projection getProjection();
 
-	UiSettings getUiSettings();
+    UiSettings getUiSettings();
 
-	boolean isIndoorEnabled();
+    boolean isIndoorEnabled();
 
-	boolean isMyLocationEnabled();
+    boolean isMyLocationEnabled();
 
-	boolean isTrafficEnabled();
+    boolean isTrafficEnabled();
 
-	void moveCamera(CameraUpdate cameraUpdate);
+    void moveCamera(CameraUpdate cameraUpdate);
 
-	void setClustering(ClusteringSettings clusteringSettings);
+    void setClustering(ClusteringSettings clusteringSettings);
 
-	boolean setIndoorEnabled(boolean indoorEnabled);
+    boolean setIndoorEnabled(boolean indoorEnabled);
 
-	void setInfoWindowAdapter(InfoWindowAdapter infoWindowAdapter);
+    void setInfoWindowAdapter(InfoWindowAdapter infoWindowAdapter);
 
-	void setLocationSource(LocationSource locationSource);
+    void setLocationSource(LocationSource locationSource);
 
-	void setMapType(int mapType);
+    void setMapType(int mapType);
 
-	void setMyLocationEnabled(boolean myLocationEnabled);
+    void setMyLocationEnabled(boolean myLocationEnabled);
 
-	void setOnCameraChangeListener(OnCameraChangeListener onCameraChangeListener);
+    void setOnCameraChangeListener(OnCameraChangeListener onCameraChangeListener);
 
-	void setOnInfoWindowClickListener(OnInfoWindowClickListener onInfoWindowClickListener);
+    void setOnInfoWindowClickListener(OnInfoWindowClickListener onInfoWindowClickListener);
 
-	void setOnMapClickListener(OnMapClickListener onMapClickListener);
+    void setOnMapClickListener(OnMapClickListener onMapClickListener);
 
-	void setOnMapLongClickListener(OnMapLongClickListener onMapLongClickListener);
+    void setOnMapLongClickListener(OnMapLongClickListener onMapLongClickListener);
 
-	void setOnMarkerClickListener(OnMarkerClickListener onMarkerClickListener);
+    void setOnMarkerClickListener(OnMarkerClickListener onMarkerClickListener);
 
-	void setOnMarkerDragListener(OnMarkerDragListener onMarkerDragListener);
+    void setOnMarkerDragListener(OnMarkerDragListener onMarkerDragListener);
 
-	void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
+    void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
 
-	void setOnMyLocationChangeListener(OnMyLocationChangeListener onMyLocationChangeListener);
+    void setOnMyLocationChangeListener(OnMyLocationChangeListener onMyLocationChangeListener);
 
-	void setPadding(int left, int top, int right, int bottom);
+    void setPadding(int left, int top, int right, int bottom);
 
-	void setTrafficEnabled(boolean trafficEnabled);
+    void setTrafficEnabled(boolean trafficEnabled);
 
-	void snapshot(SnapshotReadyCallback callback);
+    void snapshot(SnapshotReadyCallback callback);
 
-	void snapshot(SnapshotReadyCallback callback, Bitmap bitmap);
+    void snapshot(SnapshotReadyCallback callback, Bitmap bitmap);
 
-	void stopAnimation();
+    void stopAnimation();
 
-	interface CancelableCallback extends com.google.android.gms.maps.GoogleMap.CancelableCallback {
+    interface CancelableCallback extends com.google.android.gms.maps.GoogleMap.CancelableCallback {
 
-		@Override
-		void onCancel();
+        @Override
+        void onCancel();
 
-		@Override
-		void onFinish();
-	}
+        @Override
+        void onFinish();
+    }
 
-	interface InfoWindowAdapter {
+    interface InfoWindowAdapter {
 
-		View getInfoContents(Marker marker);
+        View getInfoContents(Marker marker);
 
-		View getInfoWindow(Marker marker);
-	}
+        View getInfoWindow(Marker marker);
+    }
 
-	interface OnCameraChangeListener extends com.google.android.gms.maps.GoogleMap.OnCameraChangeListener {
+    interface OnCameraChangeListener extends com.google.android.gms.maps.GoogleMap.OnCameraChangeListener {
 
-		@Override
-		void onCameraChange(CameraPosition cameraPosition);
-	}
+        @Override
+        void onCameraChange(CameraPosition cameraPosition);
+    }
 
-	interface OnInfoWindowClickListener {
+    interface OnInfoWindowClickListener {
 
-		void onInfoWindowClick(Marker marker);
-	}
+        void onInfoWindowClick(Marker marker);
+    }
 
-	interface OnMapClickListener extends com.google.android.gms.maps.GoogleMap.OnMapClickListener {
+    interface OnMapClickListener extends com.google.android.gms.maps.GoogleMap.OnMapClickListener {
 
-		@Override
-		void onMapClick(LatLng position);
-	}
+        @Override
+        void onMapClick(LatLng position);
+    }
 
-	interface OnMapLongClickListener extends com.google.android.gms.maps.GoogleMap.OnMapLongClickListener {
+    interface OnMapLongClickListener extends com.google.android.gms.maps.GoogleMap.OnMapLongClickListener {
 
-		@Override
-		void onMapLongClick(LatLng position);
-	}
+        @Override
+        void onMapLongClick(LatLng position);
+    }
 
-	interface OnMarkerClickListener {
+    interface OnMarkerClickListener {
 
-		boolean onMarkerClick(Marker marker);
-	}
+        boolean onMarkerClick(Marker marker);
+    }
 
-	interface OnMarkerDragListener {
+    interface OnMarkerDragListener {
 
-		void onMarkerDragStart(Marker marker);
+        void onMarkerDragStart(Marker marker);
 
-		void onMarkerDrag(Marker marker);
+        void onMarkerDrag(Marker marker);
 
-		void onMarkerDragEnd(Marker marker);
-	}
+        void onMarkerDragEnd(Marker marker);
+    }
 
-	interface OnMyLocationButtonClickListener extends com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener {
+    interface OnMyLocationButtonClickListener extends com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener {
 
-		@Override
-		boolean onMyLocationButtonClick();
-	}
+        @Override
+        boolean onMyLocationButtonClick();
+    }
 
-	interface OnMyLocationChangeListener extends com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener {
+    interface OnMyLocationChangeListener extends com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener {
 
-		@Override
-		void onMyLocationChange(Location location);
-	}
+        @Override
+        void onMyLocationChange(Location location);
+    }
 
-	interface SnapshotReadyCallback extends com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback {
+    interface SnapshotReadyCallback extends com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback {
 
-		@Override
-		void onSnapshotReady(Bitmap snapshot);
-	}
+        @Override
+        void onSnapshotReady(Bitmap snapshot);
+    }
 }

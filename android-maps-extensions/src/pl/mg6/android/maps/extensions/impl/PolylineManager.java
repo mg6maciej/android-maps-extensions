@@ -25,37 +25,37 @@ import pl.mg6.android.maps.extensions.PolylineOptions;
 
 class PolylineManager {
 
-	private final IGoogleMap factory;
+    private final IGoogleMap factory;
 
-	private final Map<com.google.android.gms.maps.model.Polyline, Polyline> polylines;
+    private final Map<com.google.android.gms.maps.model.Polyline, Polyline> polylines;
 
-	public PolylineManager(IGoogleMap factory) {
-		this.factory = factory;
-		this.polylines = new HashMap<com.google.android.gms.maps.model.Polyline, Polyline>();
-	}
+    public PolylineManager(IGoogleMap factory) {
+        this.factory = factory;
+        this.polylines = new HashMap<com.google.android.gms.maps.model.Polyline, Polyline>();
+    }
 
-	public Polyline addPolyline(PolylineOptions polylineOptions) {
-		Polyline polyline = createPolyline(polylineOptions.real);
-		polyline.setData(polylineOptions.getData());
-		return polyline;
-	}
+    public Polyline addPolyline(PolylineOptions polylineOptions) {
+        Polyline polyline = createPolyline(polylineOptions.real);
+        polyline.setData(polylineOptions.getData());
+        return polyline;
+    }
 
-	private Polyline createPolyline(com.google.android.gms.maps.model.PolylineOptions polylineOptions) {
-		com.google.android.gms.maps.model.Polyline real = factory.addPolyline(polylineOptions);
-		Polyline polyline = new DelegatingPolyline(real, this);
-		polylines.put(real, polyline);
-		return polyline;
-	}
+    private Polyline createPolyline(com.google.android.gms.maps.model.PolylineOptions polylineOptions) {
+        com.google.android.gms.maps.model.Polyline real = factory.addPolyline(polylineOptions);
+        Polyline polyline = new DelegatingPolyline(real, this);
+        polylines.put(real, polyline);
+        return polyline;
+    }
 
-	public void clear() {
-		polylines.clear();
-	}
+    public void clear() {
+        polylines.clear();
+    }
 
-	public List<Polyline> getPolylines() {
-		return new ArrayList<Polyline>(polylines.values());
-	}
+    public List<Polyline> getPolylines() {
+        return new ArrayList<Polyline>(polylines.values());
+    }
 
-	public void onRemove(com.google.android.gms.maps.model.Polyline real) {
-		polylines.remove(real);
-	}
+    public void onRemove(com.google.android.gms.maps.model.Polyline real) {
+        polylines.remove(real);
+    }
 }

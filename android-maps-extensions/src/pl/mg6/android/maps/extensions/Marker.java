@@ -15,104 +15,104 @@
  */
 package pl.mg6.android.maps.extensions;
 
-import java.util.List;
-
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.List;
+
 public interface Marker {
 
-	interface AnimationCallback {
+    interface AnimationCallback {
 
-		enum CancelReason {
-			ANIMATE_POSITION,
-			DRAG_START,
-			REMOVE,
-			SET_POSITION,
-		}
+        enum CancelReason {
+            ANIMATE_POSITION,
+            DRAG_START,
+            REMOVE,
+            SET_POSITION,
+        }
 
-		void onFinish(Marker marker);
+        void onFinish(Marker marker);
 
-		void onCancel(Marker marker, CancelReason reason);
-	}
+        void onCancel(Marker marker, CancelReason reason);
+    }
 
-	void animatePosition(LatLng target);
+    void animatePosition(LatLng target);
 
-	void animatePosition(LatLng target, AnimationSettings settings);
+    void animatePosition(LatLng target, AnimationSettings settings);
 
-	void animatePosition(LatLng target, AnimationCallback callback);
+    void animatePosition(LatLng target, AnimationCallback callback);
 
-	void animatePosition(LatLng target, AnimationSettings settings, AnimationCallback callback);
+    void animatePosition(LatLng target, AnimationSettings settings, AnimationCallback callback);
 
-	int getClusterGroup();
+    int getClusterGroup();
 
-	/**
-	 * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650
-	 */
-	Object getData();
+    /**
+     * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650
+     */
+    Object getData();
 
-	/**
-	 * http://code.google.com/p/gmaps-api-issues/issues/detail?id=5101
-	 */
-	@Deprecated
-	String getId();
+    /**
+     * http://code.google.com/p/gmaps-api-issues/issues/detail?id=5101
+     */
+    @Deprecated
+    String getId();
 
-	/**
-	 * @return list of markers inside cluster when isCluster() returns true, null otherwise
-	 */
-	List<Marker> getMarkers();
+    /**
+     * @return list of markers inside cluster when isCluster() returns true, null otherwise
+     */
+    List<Marker> getMarkers();
 
-	LatLng getPosition();
+    LatLng getPosition();
 
-	float getRotation();
+    float getRotation();
 
-	String getSnippet();
+    String getSnippet();
 
-	String getTitle();
+    String getTitle();
 
-	void hideInfoWindow();
+    void hideInfoWindow();
 
-	/**
-	 * @return true if this marker groups other markers, false otherwise
-	 */
-	boolean isCluster();
+    /**
+     * @return true if this marker groups other markers, false otherwise
+     */
+    boolean isCluster();
 
-	boolean isDraggable();
+    boolean isDraggable();
 
-	boolean isFlat();
+    boolean isFlat();
 
-	boolean isInfoWindowShown();
+    boolean isInfoWindowShown();
 
-	boolean isVisible();
+    boolean isVisible();
 
-	void remove();
+    void remove();
 
-	void setAnchor(float anchorU, float anchorV);
+    void setAnchor(float anchorU, float anchorV);
 
-	void setClusterGroup(int clusterGroup);
+    void setClusterGroup(int clusterGroup);
 
-	/**
-	 * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650
-	 */
-	void setData(Object data);
+    /**
+     * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650
+     */
+    void setData(Object data);
 
-	void setDraggable(boolean draggable);
+    void setDraggable(boolean draggable);
 
-	void setFlat(boolean flat);
+    void setFlat(boolean flat);
 
-	void setIcon(BitmapDescriptor icon);
+    void setIcon(BitmapDescriptor icon);
 
-	void setInfoWindowAnchor(float anchorU, float anchorV);
+    void setInfoWindowAnchor(float anchorU, float anchorV);
 
-	void setPosition(LatLng position);
+    void setPosition(LatLng position);
 
-	void setRotation(float rotation);
+    void setRotation(float rotation);
 
-	void setSnippet(String snippet);
+    void setSnippet(String snippet);
 
-	void setTitle(String title);
+    void setTitle(String title);
 
-	void setVisible(boolean visible);
+    void setVisible(boolean visible);
 
-	void showInfoWindow();
+    void showInfoWindow();
 }

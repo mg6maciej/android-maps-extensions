@@ -15,42 +15,42 @@
  */
 package pl.mg6.android.maps.extensions;
 
-import java.util.List;
-
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.List;
 
 public interface Polyline {
 
-	int getColor();
+    int getColor();
 
-	Object getData();
+    Object getData();
 
-	@Deprecated
-	String getId();
+    @Deprecated
+    String getId();
 
-	List<LatLng> getPoints();
+    List<LatLng> getPoints();
 
-	float getWidth();
+    float getWidth();
 
-	float getZIndex();
+    float getZIndex();
 
-	boolean isGeodesic();
+    boolean isGeodesic();
 
-	boolean isVisible();
+    boolean isVisible();
 
-	void remove();
+    void remove();
 
-	void setColor(int color);
+    void setColor(int color);
 
-	void setData(Object data);
+    void setData(Object data);
 
-	void setGeodesic(boolean geodesic);
+    void setGeodesic(boolean geodesic);
 
-	void setPoints(List<LatLng> points);
+    void setPoints(List<LatLng> points);
 
-	void setVisible(boolean visible);
+    void setVisible(boolean visible);
 
-	void setWidth(float width);
+    void setWidth(float width);
 
-	void setZIndex(float zIndex);
+    void setZIndex(float zIndex);
 }

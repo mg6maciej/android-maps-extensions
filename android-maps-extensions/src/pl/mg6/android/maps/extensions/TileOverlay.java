@@ -17,22 +17,22 @@ package pl.mg6.android.maps.extensions;
 
 public interface TileOverlay {
 
-	void clearTileCache();
+    void clearTileCache();
 
-	Object getData();
+    Object getData();
 
-	@Deprecated
-	String getId();
+    @Deprecated
+    String getId();
 
-	float getZIndex();
+    float getZIndex();
 
-	boolean isVisible();
+    boolean isVisible();
 
-	void remove();
+    void remove();
 
-	void setData(Object data);
+    void setData(Object data);
 
-	void setVisible(boolean visible);
+    void setVisible(boolean visible);
 
-	void setZIndex(float zIndex);
+    void setZIndex(float zIndex);
 }

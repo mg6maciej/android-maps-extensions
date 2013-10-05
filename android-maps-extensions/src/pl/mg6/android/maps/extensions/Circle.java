@@ -19,42 +19,42 @@ import com.google.android.gms.maps.model.LatLng;
 
 public interface Circle {
 
-	boolean contains(LatLng position);
+    boolean contains(LatLng position);
 
-	LatLng getCenter();
+    LatLng getCenter();
 
-	Object getData();
+    Object getData();
 
-	int getFillColor();
+    int getFillColor();
 
-	@Deprecated
-	String getId();
+    @Deprecated
+    String getId();
 
-	double getRadius();
+    double getRadius();
 
-	int getStrokeColor();
+    int getStrokeColor();
 
-	float getStrokeWidth();
+    float getStrokeWidth();
 
-	float getZIndex();
+    float getZIndex();
 
-	boolean isVisible();
+    boolean isVisible();
 
-	void remove();
+    void remove();
 
-	void setCenter(LatLng center);
+    void setCenter(LatLng center);
 
-	void setData(Object data);
+    void setData(Object data);
 
-	void setFillColor(int fillColor);
+    void setFillColor(int fillColor);
 
-	void setRadius(double radius);
+    void setRadius(double radius);
 
-	void setStrokeColor(int strokeColor);
+    void setStrokeColor(int strokeColor);
 
-	void setStrokeWidth(float strokeWidth);
+    void setStrokeWidth(float strokeWidth);
 
-	void setVisible(boolean visible);
+    void setVisible(boolean visible);
 
-	void setZIndex(float zIndex);
+    void setZIndex(float zIndex);
 }

@@ -17,10 +17,10 @@ package pl.mg6.android.maps.extensions;
 
 public final class ClusterGroup {
 
-	public static final int NOT_CLUSTERED = -1;
-	public static final int DEFAULT = 0;
-	public static final int FIRST_USER = 1;
+    public static final int NOT_CLUSTERED = -1;
+    public static final int DEFAULT = 0;
+    public static final int FIRST_USER = 1;
 
-	private ClusterGroup() {
-	}
+    private ClusterGroup() {
+    }
 }

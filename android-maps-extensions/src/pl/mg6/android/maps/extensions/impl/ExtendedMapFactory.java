@@ -21,10 +21,10 @@ import pl.mg6.android.maps.extensions.GoogleMap;
 
 public final class ExtendedMapFactory {
 
-	private ExtendedMapFactory() {
-	}
+    private ExtendedMapFactory() {
+    }
 
-	public static GoogleMap create(com.google.android.gms.maps.GoogleMap real, Context context) {
-		return new DelegatingGoogleMap(real, context);
-	}
+    public static GoogleMap create(com.google.android.gms.maps.GoogleMap real, Context context) {
+        return new DelegatingGoogleMap(real, context);
+    }
 }

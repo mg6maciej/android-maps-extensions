@@ -15,28 +15,28 @@
  */
 package pl.mg6.android.maps.extensions.utils;
 
-import java.util.Arrays;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import java.util.Arrays;
+
 public final class LatLngBoundsUtils {
 
-	private LatLngBoundsUtils() {
-	}
+    private LatLngBoundsUtils() {
+    }
 
-	public static LatLngBounds fromCenterAndPositions(LatLng center, Iterable<LatLng> positions) {
-		LatLngBounds.Builder builder = LatLngBounds.builder();
-		builder.include(center);
-		for (LatLng position : positions) {
-			LatLng other = new LatLng(2 * center.latitude - position.latitude, 2 * center.longitude - position.longitude);
-			builder.include(position);
-			builder.include(other);
-		}
-		return builder.build();
-	}
+    public static LatLngBounds fromCenterAndPositions(LatLng center, Iterable<LatLng> positions) {
+        LatLngBounds.Builder builder = LatLngBounds.builder();
+        builder.include(center);
+        for (LatLng position : positions) {
+            LatLng other = new LatLng(2 * center.latitude - position.latitude, 2 * center.longitude - position.longitude);
+            builder.include(position);
+            builder.include(other);
+        }
+        return builder.build();
+    }
 
-	public static LatLngBounds fromCenterAndPositions(LatLng center, LatLng... positions) {
-		return fromCenterAndPositions(center, Arrays.asList(positions));
-	}
+    public static LatLngBounds fromCenterAndPositions(LatLng center, LatLng... positions) {
+        return fromCenterAndPositions(center, Arrays.asList(positions));
+    }
 }

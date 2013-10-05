@@ -19,5 +19,5 @@ import java.util.List;
 
 public interface ClusterOptionsProvider {
 
-	ClusterOptions getClusterOptions(List<Marker> markers);
+    ClusterOptions getClusterOptions(List<Marker> markers);
 }

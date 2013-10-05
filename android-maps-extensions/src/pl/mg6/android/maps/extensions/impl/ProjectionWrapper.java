@@ -24,29 +24,29 @@ import com.google.android.gms.maps.model.VisibleRegion;
 //TODO: to be deleted when com.google.android.gms.maps.Projection becomes an interface
 class ProjectionWrapper implements IProjection {
 
-	private Projection projection;
+    private Projection projection;
 
-	public ProjectionWrapper(Projection projection) {
-		this.projection = projection;
-	}
+    public ProjectionWrapper(Projection projection) {
+        this.projection = projection;
+    }
 
-	@Override
-	public LatLng fromScreenLocation(Point point) {
-		return projection.fromScreenLocation(point);
-	}
+    @Override
+    public LatLng fromScreenLocation(Point point) {
+        return projection.fromScreenLocation(point);
+    }
 
-	@Override
-	public VisibleRegion getVisibleRegion() {
-		return projection.getVisibleRegion();
-	}
+    @Override
+    public VisibleRegion getVisibleRegion() {
+        return projection.getVisibleRegion();
+    }
 
-	@Override
-	public Point toScreenLocation(LatLng location) {
-		return projection.toScreenLocation(location);
-	}
+    @Override
+    public Point toScreenLocation(LatLng location) {
+        return projection.toScreenLocation(location);
+    }
 
-	@Override
-	public Projection getProjection() {
-		return projection;
-	}
+    @Override
+    public Projection getProjection() {
+        return projection;
+    }
 }

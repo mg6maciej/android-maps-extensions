@@ -24,11 +24,11 @@ import com.google.android.gms.maps.model.VisibleRegion;
 //TODO: to be deleted when com.google.android.gms.maps.Projection becomes an interface
 interface IProjection {
 
-	LatLng fromScreenLocation(Point point);
+    LatLng fromScreenLocation(Point point);
 
-	VisibleRegion getVisibleRegion();
+    VisibleRegion getVisibleRegion();
 
-	Point toScreenLocation(LatLng location);
+    Point toScreenLocation(LatLng location);
 
-	Projection getProjection();
+    Projection getProjection();
 }

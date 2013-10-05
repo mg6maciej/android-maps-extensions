@@ -15,74 +15,74 @@
  */
 package pl.mg6.android.maps.extensions.impl;
 
+import com.google.android.gms.maps.model.CameraPosition;
+
 import java.util.List;
 
 import pl.mg6.android.maps.extensions.Marker;
 
-import com.google.android.gms.maps.model.CameraPosition;
-
 class NoClusteringStrategy implements ClusteringStrategy {
 
-	public NoClusteringStrategy(List<DelegatingMarker> markers) {
-		for (DelegatingMarker marker : markers) {
-			if (marker.isVisible()) {
-				marker.changeVisible(true);
-			}
-		}
-	}
+    public NoClusteringStrategy(List<DelegatingMarker> markers) {
+        for (DelegatingMarker marker : markers) {
+            if (marker.isVisible()) {
+                marker.changeVisible(true);
+            }
+        }
+    }
 
-	@Override
-	public void cleanup() {
+    @Override
+    public void cleanup() {
 
-	}
+    }
 
-	@Override
-	public void onCameraChange(CameraPosition cameraPosition) {
+    @Override
+    public void onCameraChange(CameraPosition cameraPosition) {
 
-	}
+    }
 
-	@Override
-	public void onClusterGroupChange(DelegatingMarker marker) {
+    @Override
+    public void onClusterGroupChange(DelegatingMarker marker) {
 
-	}
+    }
 
-	@Override
-	public void onAdd(DelegatingMarker marker) {
+    @Override
+    public void onAdd(DelegatingMarker marker) {
 
-	}
+    }
 
-	@Override
-	public void onRemove(DelegatingMarker marker) {
+    @Override
+    public void onRemove(DelegatingMarker marker) {
 
-	}
+    }
 
-	@Override
-	public void onPositionChange(DelegatingMarker marker) {
+    @Override
+    public void onPositionChange(DelegatingMarker marker) {
 
-	}
+    }
 
-	@Override
-	public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
-		marker.changeVisible(visible);
-	}
+    @Override
+    public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
+        marker.changeVisible(visible);
+    }
 
-	@Override
-	public void onShowInfoWindow(DelegatingMarker marker) {
-		marker.forceShowInfoWindow();
-	}
+    @Override
+    public void onShowInfoWindow(DelegatingMarker marker) {
+        marker.forceShowInfoWindow();
+    }
 
-	@Override
-	public Marker map(com.google.android.gms.maps.model.Marker original) {
-		return null;
-	}
+    @Override
+    public Marker map(com.google.android.gms.maps.model.Marker original) {
+        return null;
+    }
 
-	@Override
-	public List<Marker> getDisplayedMarkers() {
-		return null;
-	}
+    @Override
+    public List<Marker> getDisplayedMarkers() {
+        return null;
+    }
 
-	@Override
-	public float getMinZoomLevelNotClustered(Marker marker) {
-		return 0.0f;
-	}
+    @Override
+    public float getMinZoomLevelNotClustered(Marker marker) {
+        return 0.0f;
+    }
 }

@@ -19,42 +19,42 @@ import com.google.android.gms.maps.model.TileProvider;
 
 public class TileOverlayOptions {
 
-	public final com.google.android.gms.maps.model.TileOverlayOptions real = new com.google.android.gms.maps.model.TileOverlayOptions();
-	private Object data;
+    public final com.google.android.gms.maps.model.TileOverlayOptions real = new com.google.android.gms.maps.model.TileOverlayOptions();
+    private Object data;
 
-	public TileOverlayOptions data(Object data) {
-		this.data = data;
-		return this;
-	}
+    public TileOverlayOptions data(Object data) {
+        this.data = data;
+        return this;
+    }
 
-	public Object getData() {
-		return data;
-	}
+    public Object getData() {
+        return data;
+    }
 
-	public TileProvider getTileProvider() {
-		return real.getTileProvider();
-	}
+    public TileProvider getTileProvider() {
+        return real.getTileProvider();
+    }
 
-	public float getZIndex() {
-		return real.getZIndex();
-	}
+    public float getZIndex() {
+        return real.getZIndex();
+    }
 
-	public boolean isVisible() {
-		return real.isVisible();
-	}
+    public boolean isVisible() {
+        return real.isVisible();
+    }
 
-	public TileOverlayOptions tileProvider(TileProvider tileProvider) {
-		real.tileProvider(tileProvider);
-		return this;
-	}
+    public TileOverlayOptions tileProvider(TileProvider tileProvider) {
+        real.tileProvider(tileProvider);
+        return this;
+    }
 
-	public TileOverlayOptions visible(boolean visible) {
-		real.visible(visible);
-		return this;
-	}
+    public TileOverlayOptions visible(boolean visible) {
+        real.visible(visible);
+        return this;
+    }
 
-	public TileOverlayOptions zIndex(float zIndex) {
-		real.zIndex(zIndex);
-		return this;
-	}
+    public TileOverlayOptions zIndex(float zIndex) {
+        real.zIndex(zIndex);
+        return this;
+    }
 }

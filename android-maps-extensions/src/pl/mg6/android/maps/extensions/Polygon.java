@@ -15,50 +15,50 @@
  */
 package pl.mg6.android.maps.extensions;
 
-import java.util.List;
-
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.List;
 
 public interface Polygon {
 
-	Object getData();
+    Object getData();
 
-	int getFillColor();
+    int getFillColor();
 
-	List<List<LatLng>> getHoles();
+    List<List<LatLng>> getHoles();
 
-	@Deprecated
-	String getId();
+    @Deprecated
+    String getId();
 
-	List<LatLng> getPoints();
+    List<LatLng> getPoints();
 
-	int getStrokeColor();
+    int getStrokeColor();
 
-	float getStrokeWidth();
+    float getStrokeWidth();
 
-	float getZIndex();
+    float getZIndex();
 
-	boolean isGeodesic();
+    boolean isGeodesic();
 
-	boolean isVisible();
+    boolean isVisible();
 
-	void remove();
+    void remove();
 
-	void setData(Object data);
+    void setData(Object data);
 
-	void setFillColor(int fillColor);
+    void setFillColor(int fillColor);
 
-	void setGeodesic(boolean geodesic);
+    void setGeodesic(boolean geodesic);
 
-	void setHoles(List<? extends List<LatLng>> holes);
+    void setHoles(List<? extends List<LatLng>> holes);
 
-	void setPoints(List<LatLng> points);
+    void setPoints(List<LatLng> points);
 
-	void setStrokeColor(int strokeColor);
+    void setStrokeColor(int strokeColor);
 
-	void setStrokeWidth(float strokeWidth);
+    void setStrokeWidth(float strokeWidth);
 
-	void setVisible(boolean visible);
+    void setVisible(boolean visible);
 
-	void setZIndex(float zIndex);
+    void setZIndex(float zIndex);
 }

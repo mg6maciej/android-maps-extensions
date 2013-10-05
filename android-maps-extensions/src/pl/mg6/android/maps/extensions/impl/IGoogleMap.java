@@ -49,83 +49,83 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 //TODO: to be deleted when com.google.android.gms.maps.GoogleMap becomes an interface
 interface IGoogleMap {
 
-	Circle addCircle(CircleOptions options);
+    Circle addCircle(CircleOptions options);
 
-	GroundOverlay addGroundOverlay(GroundOverlayOptions options);
+    GroundOverlay addGroundOverlay(GroundOverlayOptions options);
 
-	Marker addMarker(MarkerOptions options);
+    Marker addMarker(MarkerOptions options);
 
-	Polygon addPolygon(PolygonOptions options);
+    Polygon addPolygon(PolygonOptions options);
 
-	Polyline addPolyline(PolylineOptions options);
+    Polyline addPolyline(PolylineOptions options);
 
-	TileOverlay addTileOverlay(TileOverlayOptions options);
+    TileOverlay addTileOverlay(TileOverlayOptions options);
 
-	void animateCamera(CameraUpdate update, CancelableCallback callback);
+    void animateCamera(CameraUpdate update, CancelableCallback callback);
 
-	void animateCamera(CameraUpdate update, int durationMs, CancelableCallback callback);
+    void animateCamera(CameraUpdate update, int durationMs, CancelableCallback callback);
 
-	void animateCamera(CameraUpdate update);
+    void animateCamera(CameraUpdate update);
 
-	void clear();
+    void clear();
 
-	CameraPosition getCameraPosition();
+    CameraPosition getCameraPosition();
 
-	int getMapType();
+    int getMapType();
 
-	float getMaxZoomLevel();
+    float getMaxZoomLevel();
 
-	float getMinZoomLevel();
+    float getMinZoomLevel();
 
-	Location getMyLocation();
+    Location getMyLocation();
 
-	IProjection getProjection();
+    IProjection getProjection();
 
-	UiSettings getUiSettings();
+    UiSettings getUiSettings();
 
-	boolean isIndoorEnabled();
+    boolean isIndoorEnabled();
 
-	boolean isMyLocationEnabled();
+    boolean isMyLocationEnabled();
 
-	boolean isTrafficEnabled();
+    boolean isTrafficEnabled();
 
-	void moveCamera(CameraUpdate update);
+    void moveCamera(CameraUpdate update);
 
-	boolean setIndoorEnabled(boolean enabled);
+    boolean setIndoorEnabled(boolean enabled);
 
-	void setInfoWindowAdapter(InfoWindowAdapter adapter);
+    void setInfoWindowAdapter(InfoWindowAdapter adapter);
 
-	void setLocationSource(LocationSource source);
+    void setLocationSource(LocationSource source);
 
-	void setMapType(int type);
+    void setMapType(int type);
 
-	void setMyLocationEnabled(boolean enabled);
+    void setMyLocationEnabled(boolean enabled);
 
-	void setOnCameraChangeListener(OnCameraChangeListener listener);
+    void setOnCameraChangeListener(OnCameraChangeListener listener);
 
-	void setOnInfoWindowClickListener(OnInfoWindowClickListener listener);
+    void setOnInfoWindowClickListener(OnInfoWindowClickListener listener);
 
-	void setOnMapClickListener(OnMapClickListener listener);
+    void setOnMapClickListener(OnMapClickListener listener);
 
-	void setOnMapLongClickListener(OnMapLongClickListener listener);
+    void setOnMapLongClickListener(OnMapLongClickListener listener);
 
-	void setOnMarkerClickListener(OnMarkerClickListener listener);
+    void setOnMarkerClickListener(OnMarkerClickListener listener);
 
-	void setOnMarkerDragListener(OnMarkerDragListener listener);
+    void setOnMarkerDragListener(OnMarkerDragListener listener);
 
-	void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
+    void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
 
-	void setOnMyLocationChangeListener(OnMyLocationChangeListener listener);
+    void setOnMyLocationChangeListener(OnMyLocationChangeListener listener);
 
-	void setPadding(int left, int top, int right, int bottom);
+    void setPadding(int left, int top, int right, int bottom);
 
-	void setTrafficEnabled(boolean enabled);
+    void setTrafficEnabled(boolean enabled);
 
-	void snapshot(GoogleMap.SnapshotReadyCallback callback);
+    void snapshot(GoogleMap.SnapshotReadyCallback callback);
 
-	void snapshot(GoogleMap.SnapshotReadyCallback callback, Bitmap bitmap);
+    void snapshot(GoogleMap.SnapshotReadyCallback callback, Bitmap bitmap);
 
-	void stopAnimation();
+    void stopAnimation();
 
-	GoogleMap getMap();
+    GoogleMap getMap();
 }
