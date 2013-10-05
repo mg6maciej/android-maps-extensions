@@ -11,6 +11,7 @@
 
 	<modules>
 		<module>android-maps-extensions-libs-installer</module>
+		<module>google-play-services_lib</module>
 		<module>android-maps-extensions</module>
 		<module>android-maps-extensions-demo</module>
 		<module>google-play-services-samples</module>
@@ -48,6 +49,12 @@
 				<groupId>${google.play.services.groupId}</groupId>
 				<artifactId>${google.play.services.artifactId}</artifactId>
 				<version>${google.play.services.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${google.play.services.groupId}</groupId>
+				<artifactId>${google.play.services.artifactId}</artifactId>
+				<version>${google.play.services.version}</version>
+				<type>apklib</type>
 			</dependency>
 			<dependency>
 				<groupId>junit</groupId>

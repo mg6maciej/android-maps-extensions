@@ -44,7 +44,7 @@
 							<artifactId>${google.play.services.artifactId}</artifactId>
 							<version>${google.play.services.version}</version>
 							<packaging>jar</packaging>
-							<file>../android-maps-extensions/libs/google-play-services.jar</file>
+							<file>../google-play-services_lib/libs/google-play-services.jar</file>
 						</configuration>
 					</execution>
 				</executions>

@@ -20,12 +20,17 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>support-v4</artifactId>
+			<groupId>${support.v4.groupId}</groupId>
+			<artifactId>${support.v4.artifactId}</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.google.android.gms</groupId>
-			<artifactId>google-play-services</artifactId>
+			<groupId>${google.play.services.groupId}</groupId>
+			<artifactId>${google.play.services.artifactId}</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${google.play.services.groupId}</groupId>
+			<artifactId>${google.play.services.artifactId}</artifactId>
+			<type>apklib</type>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
