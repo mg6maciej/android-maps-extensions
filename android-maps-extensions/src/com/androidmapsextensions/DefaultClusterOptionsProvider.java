@@ -24,7 +24,6 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.v4.util.LruCache;
 
-import com.google.android.gms.R;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
