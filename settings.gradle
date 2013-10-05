@@ -1,0 +1,2 @@
+include ':android-maps-extensions'
+include ':android-maps-extensions-demo'
