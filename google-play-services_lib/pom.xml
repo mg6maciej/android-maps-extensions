@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>Google Play Services</name>
-	<groupId>${google.play.services.groupId}</groupId>
-	<artifactId>${google.play.services.artifactId}</artifactId>
-	<version>${google.play.services.version}</version>
+	<groupId>com.google.android.gms</groupId>
+	<artifactId>google-play-services</artifactId>
+	<version>r12</version>
 	<packaging>apklib</packaging>
 
 	<parent>
