@@ -17,14 +17,14 @@
 
 package com.example.mapdemo;
 
-import pl.mg6.android.maps.extensions.GoogleMap;
-import pl.mg6.android.maps.extensions.GoogleMap.InfoWindowAdapter;
-import pl.mg6.android.maps.extensions.GoogleMap.OnInfoWindowClickListener;
-import pl.mg6.android.maps.extensions.GoogleMap.OnMarkerClickListener;
-import pl.mg6.android.maps.extensions.GoogleMap.OnMarkerDragListener;
-import pl.mg6.android.maps.extensions.Marker;
-import pl.mg6.android.maps.extensions.MarkerOptions;
-import pl.mg6.android.maps.extensions.SupportMapFragment;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.GoogleMap.InfoWindowAdapter;
+import com.androidmapsextensions.GoogleMap.OnInfoWindowClickListener;
+import com.androidmapsextensions.GoogleMap.OnMarkerClickListener;
+import com.androidmapsextensions.GoogleMap.OnMarkerDragListener;
+import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.MarkerOptions;
+import com.androidmapsextensions.SupportMapFragment;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Point;

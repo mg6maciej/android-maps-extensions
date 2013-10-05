@@ -17,9 +17,9 @@
 
 package com.example.mapdemo;
 
-import pl.mg6.android.maps.extensions.GoogleMap;
-import pl.mg6.android.maps.extensions.MapView;
-import pl.mg6.android.maps.extensions.MarkerOptions;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.MapView;
+import com.androidmapsextensions.MarkerOptions;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;

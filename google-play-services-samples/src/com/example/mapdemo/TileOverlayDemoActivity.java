@@ -21,12 +21,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 
-import pl.mg6.android.maps.extensions.GoogleMap;
-import pl.mg6.android.maps.extensions.SupportMapFragment;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.androidmapsextensions.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
 

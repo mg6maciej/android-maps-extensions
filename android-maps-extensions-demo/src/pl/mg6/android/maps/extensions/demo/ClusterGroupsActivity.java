@@ -25,14 +25,14 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-import pl.mg6.android.maps.extensions.ClusterGroup;
-import pl.mg6.android.maps.extensions.ClusterOptions;
-import pl.mg6.android.maps.extensions.ClusterOptionsProvider;
-import pl.mg6.android.maps.extensions.ClusteringSettings;
-import pl.mg6.android.maps.extensions.GoogleMap;
-import pl.mg6.android.maps.extensions.Marker;
-import pl.mg6.android.maps.extensions.MarkerOptions;
-import pl.mg6.android.maps.extensions.SupportMapFragment;
+import com.androidmapsextensions.ClusterGroup;
+import com.androidmapsextensions.ClusterOptions;
+import com.androidmapsextensions.ClusterOptionsProvider;
+import com.androidmapsextensions.ClusteringSettings;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.MarkerOptions;
+import com.androidmapsextensions.SupportMapFragment;
 
 public class ClusterGroupsActivity extends FragmentActivity {
 

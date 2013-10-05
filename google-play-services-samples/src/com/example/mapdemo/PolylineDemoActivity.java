@@ -17,9 +17,10 @@
 
 package com.example.mapdemo;
 
-import pl.mg6.android.maps.extensions.GoogleMap;
-import pl.mg6.android.maps.extensions.Polyline;
-import pl.mg6.android.maps.extensions.SupportMapFragment;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.Polyline;
+import com.androidmapsextensions.PolylineOptions;
+import com.androidmapsextensions.SupportMapFragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -28,7 +29,6 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 /**
  * This shows how to draw polylines on a map.

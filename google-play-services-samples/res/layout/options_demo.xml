@@ -21,7 +21,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:layout_margin="5dp"
-  class="pl.mg6.android.maps.extensions.SupportMapFragment"
+  class="com.androidmapsextensions.SupportMapFragment"
   map:cameraBearing="112.5"
   map:cameraTargetLat="-33.796923"
   map:cameraTargetLng="150.922433"

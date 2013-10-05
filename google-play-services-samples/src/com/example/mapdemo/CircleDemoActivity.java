@@ -19,13 +19,14 @@ package com.example.mapdemo;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.mg6.android.maps.extensions.Circle;
-import pl.mg6.android.maps.extensions.GoogleMap;
-import pl.mg6.android.maps.extensions.GoogleMap.OnMapLongClickListener;
-import pl.mg6.android.maps.extensions.GoogleMap.OnMarkerDragListener;
-import pl.mg6.android.maps.extensions.Marker;
-import pl.mg6.android.maps.extensions.MarkerOptions;
-import pl.mg6.android.maps.extensions.SupportMapFragment;
+import com.androidmapsextensions.Circle;
+import com.androidmapsextensions.CircleOptions;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.GoogleMap.OnMapLongClickListener;
+import com.androidmapsextensions.GoogleMap.OnMarkerDragListener;
+import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.MarkerOptions;
+import com.androidmapsextensions.SupportMapFragment;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
@@ -37,7 +38,6 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 
 

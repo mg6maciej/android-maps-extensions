@@ -15,9 +15,9 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import pl.mg6.android.maps.extensions.ClusterOptions;
-import pl.mg6.android.maps.extensions.ClusterOptionsProvider;
-import pl.mg6.android.maps.extensions.Marker;
+import com.androidmapsextensions.ClusterOptions;
+import com.androidmapsextensions.ClusterOptionsProvider;
+import com.androidmapsextensions.Marker;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

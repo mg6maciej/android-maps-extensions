@@ -17,11 +17,11 @@
 
 package com.example.mapdemo;
 
-import pl.mg6.android.maps.extensions.GoogleMap;
-import pl.mg6.android.maps.extensions.GoogleMap.OnCameraChangeListener;
-import pl.mg6.android.maps.extensions.GoogleMap.OnMapClickListener;
-import pl.mg6.android.maps.extensions.GoogleMap.OnMapLongClickListener;
-import pl.mg6.android.maps.extensions.SupportMapFragment;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.GoogleMap.OnCameraChangeListener;
+import com.androidmapsextensions.GoogleMap.OnMapClickListener;
+import com.androidmapsextensions.GoogleMap.OnMapLongClickListener;
+import com.androidmapsextensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;

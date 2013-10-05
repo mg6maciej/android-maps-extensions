@@ -37,5 +37,5 @@
     android:id="@+id/map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    class="pl.mg6.android.maps.extensions.SupportMapFragment"/>
+    class="com.androidmapsextensions.SupportMapFragment"/>
 </LinearLayout>

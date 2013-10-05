@@ -15,8 +15,8 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import pl.mg6.android.maps.extensions.GoogleMap;
-import pl.mg6.android.maps.extensions.MarkerOptions;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.MarkerOptions;
 
 import com.google.android.gms.maps.model.LatLng;
 
