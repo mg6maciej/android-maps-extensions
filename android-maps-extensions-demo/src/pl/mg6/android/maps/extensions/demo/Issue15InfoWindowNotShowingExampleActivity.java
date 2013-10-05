@@ -15,42 +15,42 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import com.androidmapsextensions.ClusteringSettings;
-import com.androidmapsextensions.GoogleMap;
-import com.androidmapsextensions.MarkerOptions;
-import com.androidmapsextensions.SupportMapFragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
+import com.androidmapsextensions.ClusteringSettings;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.MarkerOptions;
+import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Issue15InfoWindowNotShowingExampleActivity extends FragmentActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.simple_map);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.simple_map);
 
-		FragmentManager fm = getSupportFragmentManager();
-		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-		final GoogleMap map = f.getExtendedMap();
+        FragmentManager fm = getSupportFragmentManager();
+        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
+        final GoogleMap map = f.getExtendedMap();
 
-		ClusteringSettings settings = new ClusteringSettings();
-		settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
-		settings.addMarkersDynamically(true);
-		map.setClustering(settings);
+        ClusteringSettings settings = new ClusteringSettings();
+        settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
+        settings.addMarkersDynamically(true);
+        map.setClustering(settings);
 
-		MarkerOptions options = new MarkerOptions().position(new LatLng(50, 0)).title("title");
-		map.addMarker(options);
+        MarkerOptions options = new MarkerOptions().position(new LatLng(50, 0)).title("title");
+        map.addMarker(options);
 
-		new Handler().post(new Runnable() {
+        new Handler().post(new Runnable() {
 
-			@Override
-			public void run() {
-				map.getDisplayedMarkers().get(0).showInfoWindow();
-			}
-		});
-	}
+            @Override
+            public void run() {
+                map.getDisplayedMarkers().get(0).showInfoWindow();
+            }
+        });
+    }
 }

@@ -26,45 +26,45 @@ import android.widget.ListView;
 
 public class MainActivity extends FragmentActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
 
-		String[] screens = { "Demo", "Animate markers", "Cluster groups", "\"Declusterification\"",
-				"No clustering", "No clustering (dynamic)", "Grid clustering", "Grid clustering (dynamic)" };
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, screens);
-		ListView listView = (ListView) findViewById(R.id.list);
-		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(MainActivity.this)) {
-					startExample(position);
-				}
-			}
-		});
-		if (savedInstanceState == null) {
-			GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(this);
-		}
-	}
+        String[] screens = {"Demo", "Animate markers", "Cluster groups", "\"Declusterification\"",
+                "No clustering", "No clustering (dynamic)", "Grid clustering", "Grid clustering (dynamic)"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, screens);
+        ListView listView = (ListView) findViewById(R.id.list);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(MainActivity.this)) {
+                    startExample(position);
+                }
+            }
+        });
+        if (savedInstanceState == null) {
+            GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(this);
+        }
+    }
 
-	private void startExample(int position) {
-		Intent intent;
-		if (position == 0) {
-			intent = new Intent(this, DemoActivity.class);
-		} else if (position == 1) {
-			intent = new Intent(this, AnimateMarkersActivity.class);
-		} else if (position == 2) {
-			intent = new Intent(this, ClusterGroupsActivity.class);
-		} else if (position == 3) {
-			intent = new Intent(this, DeclusterificationExampleActivity.class);
-		} else {
-			intent = new Intent(this, LaunchTimeTestActivity.class);
-			// normally: int clusteringType = LaunchTimeTestActivity.CLUSTERING_ENABLED;
-			int clusteringType = position - 4;
-			intent.putExtra(LaunchTimeTestActivity.EXTRA_CLUSTERING_TYPE, clusteringType);
-		}
-		startActivity(intent);
-	}
+    private void startExample(int position) {
+        Intent intent;
+        if (position == 0) {
+            intent = new Intent(this, DemoActivity.class);
+        } else if (position == 1) {
+            intent = new Intent(this, AnimateMarkersActivity.class);
+        } else if (position == 2) {
+            intent = new Intent(this, ClusterGroupsActivity.class);
+        } else if (position == 3) {
+            intent = new Intent(this, DeclusterificationExampleActivity.class);
+        } else {
+            intent = new Intent(this, LaunchTimeTestActivity.class);
+            // normally: int clusteringType = LaunchTimeTestActivity.CLUSTERING_ENABLED;
+            int clusteringType = position - 4;
+            intent.putExtra(LaunchTimeTestActivity.EXTRA_CLUSTERING_TYPE, clusteringType);
+        }
+        startActivity(intent);
+    }
 }

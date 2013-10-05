@@ -20,38 +20,37 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import com.androidmapsextensions.ClusteringSettings;
 import com.androidmapsextensions.GoogleMap;
 import com.androidmapsextensions.Marker;
 import com.androidmapsextensions.MarkerOptions;
 import com.androidmapsextensions.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 public class SimpleMapActivity extends FragmentActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.simple_map);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.simple_map);
 
-		FragmentManager fm = getSupportFragmentManager();
-		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-		GoogleMap map = f.getExtendedMap();
+        FragmentManager fm = getSupportFragmentManager();
+        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
+        GoogleMap map = f.getExtendedMap();
 
-		map.setClustering(new ClusteringSettings());
+        map.setClustering(new ClusteringSettings());
 
-		map.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
-		map.addMarker(new MarkerOptions().position(new LatLng(15, 3)));
-		map.addMarker(new MarkerOptions().position(new LatLng(14.99, 3.01)));
+        map.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
+        map.addMarker(new MarkerOptions().position(new LatLng(15, 3)));
+        map.addMarker(new MarkerOptions().position(new LatLng(14.99, 3.01)));
 
-		map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
-			@Override
-			public boolean onMarkerClick(Marker marker) {
-				Toast.makeText(SimpleMapActivity.this, "Clicked marker at: " + marker.getPosition(), Toast.LENGTH_SHORT).show();
-				return false;
-			}
-		});
-	}
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Toast.makeText(SimpleMapActivity.this, "Clicked marker at: " + marker.getPosition(), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+    }
 }

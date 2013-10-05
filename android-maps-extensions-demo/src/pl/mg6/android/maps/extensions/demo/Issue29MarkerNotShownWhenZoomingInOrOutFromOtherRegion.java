@@ -15,56 +15,55 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import com.androidmapsextensions.ClusteringSettings;
-import com.androidmapsextensions.GoogleMap;
-import com.androidmapsextensions.MarkerOptions;
-import com.androidmapsextensions.SupportMapFragment;
-
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
+import com.androidmapsextensions.ClusteringSettings;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.MarkerOptions;
+import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Issue29MarkerNotShownWhenZoomingInOrOutFromOtherRegion extends FragmentActivity {
 
-	private static final LatLng OTHER_POSITION = new LatLng(52.399, 23.900);
-	private static final float OTHER_ZOOM = 10;
-	private static final LatLng POZNAN_POSITION = new LatLng(52.399, 16.900);
-	private static final float POZNAN_ZOOM = 9;
+    private static final LatLng OTHER_POSITION = new LatLng(52.399, 23.900);
+    private static final float OTHER_ZOOM = 10;
+    private static final LatLng POZNAN_POSITION = new LatLng(52.399, 16.900);
+    private static final float POZNAN_ZOOM = 9;
 
-	private GoogleMap mMap;
+    private GoogleMap mMap;
 
-	public void onClickIssue(View v) {
-		mMap.addMarker(new MarkerOptions().title("Poznań").position(POZNAN_POSITION));
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(POZNAN_POSITION, POZNAN_ZOOM));
-	}
+    public void onClickIssue(View v) {
+        mMap.addMarker(new MarkerOptions().title("Poznań").position(POZNAN_POSITION));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(POZNAN_POSITION, POZNAN_ZOOM));
+    }
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.issue29_zoom_in_out);
-		initializeMap();
-		initializeClustering();
-		initializeCameraPosition();
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.issue29_zoom_in_out);
+        initializeMap();
+        initializeClustering();
+        initializeCameraPosition();
+    }
 
-	private void initializeMap() {
-		FragmentManager fm = getSupportFragmentManager();
-		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-		mMap = f.getExtendedMap();
-	}
+    private void initializeMap() {
+        FragmentManager fm = getSupportFragmentManager();
+        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
+        mMap = f.getExtendedMap();
+    }
 
-	private void initializeClustering() {
-		ClusteringSettings settings = new ClusteringSettings();
-		settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
-		settings.addMarkersDynamically(true);
-		mMap.setClustering(settings);
-	}
+    private void initializeClustering() {
+        ClusteringSettings settings = new ClusteringSettings();
+        settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
+        settings.addMarkersDynamically(true);
+        mMap.setClustering(settings);
+    }
 
-	private void initializeCameraPosition() {
-		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(OTHER_POSITION, OTHER_ZOOM));
-	}
+    private void initializeCameraPosition() {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(OTHER_POSITION, OTHER_ZOOM));
+    }
 }

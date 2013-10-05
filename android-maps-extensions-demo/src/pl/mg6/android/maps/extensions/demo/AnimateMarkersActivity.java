@@ -15,16 +15,6 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import java.util.Random;
-
-import com.androidmapsextensions.AnimationSettings;
-import com.androidmapsextensions.GoogleMap;
-import com.androidmapsextensions.GoogleMap.OnMarkerClickListener;
-import com.androidmapsextensions.Marker;
-import com.androidmapsextensions.MarkerOptions;
-import com.androidmapsextensions.SupportMapFragment;
-import com.androidmapsextensions.utils.LatLngUtils;
-
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -40,119 +30,128 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
+import com.androidmapsextensions.AnimationSettings;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.GoogleMap.OnMarkerClickListener;
+import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.MarkerOptions;
+import com.androidmapsextensions.SupportMapFragment;
+import com.androidmapsextensions.utils.LatLngUtils;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Random;
+
 public class AnimateMarkersActivity extends FragmentActivity {
 
-	private Random random = new Random();
+    private Random random = new Random();
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.simple_map);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.simple_map);
 
-		FragmentManager fm = getSupportFragmentManager();
-		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-		final GoogleMap map = f.getExtendedMap();
+        FragmentManager fm = getSupportFragmentManager();
+        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
+        final GoogleMap map = f.getExtendedMap();
 
-		map.addMarker(new MarkerOptions().title("RED").position(new LatLng(-15, -15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-		map.addMarker(new MarkerOptions().title("GREEN").position(new LatLng(-15, 15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-		map.addMarker(new MarkerOptions().title("BLUE").position(new LatLng(15, -15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-		map.addMarker(new MarkerOptions().title("YELLOW").position(new LatLng(15, 15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+        map.addMarker(new MarkerOptions().title("RED").position(new LatLng(-15, -15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        map.addMarker(new MarkerOptions().title("GREEN").position(new LatLng(-15, 15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        map.addMarker(new MarkerOptions().title("BLUE").position(new LatLng(15, -15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+        map.addMarker(new MarkerOptions().title("YELLOW").position(new LatLng(15, 15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
 
-		final Marker.AnimationCallback callback = new Marker.AnimationCallback() {
-			@Override
-			public void onFinish(Marker marker) {
-				Toast.makeText(AnimateMarkersActivity.this, "Animation finished: " + marker.getTitle(), Toast.LENGTH_SHORT).show();
-			}
+        final Marker.AnimationCallback callback = new Marker.AnimationCallback() {
+            @Override
+            public void onFinish(Marker marker) {
+                Toast.makeText(AnimateMarkersActivity.this, "Animation finished: " + marker.getTitle(), Toast.LENGTH_SHORT).show();
+            }
 
-			@Override
-			public void onCancel(Marker marker, CancelReason reason) {
-				Toast.makeText(AnimateMarkersActivity.this, "Animation canceled: " + marker.getTitle() + ", reason: " + reason, Toast.LENGTH_SHORT).show();
-			}
-		};
-		map.setOnMarkerClickListener(new OnMarkerClickListener() {
+            @Override
+            public void onCancel(Marker marker, CancelReason reason) {
+                Toast.makeText(AnimateMarkersActivity.this, "Animation canceled: " + marker.getTitle() + ", reason: " + reason, Toast.LENGTH_SHORT).show();
+            }
+        };
+        map.setOnMarkerClickListener(new OnMarkerClickListener() {
 
-			@Override
-			public boolean onMarkerClick(Marker marker) {
-				LatLng position = marker.getPosition();
-				LatLng targetPosition = randomPositionAcrossTheOcean(position);
-				long duration = random.nextInt(1500) + 1500;
-				Interpolator interpolator = randomInterpolator();
-				AnimationSettings settings = new AnimationSettings().duration(duration).interpolator(interpolator);
-				marker.animatePosition(targetPosition, settings, callback);
-				return true;
-			}
-		});
-		map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-			@Override
-			public void onMapClick(LatLng clickPosition) {
-				Marker closest = null;
-				float distanceToClosest = Float.MAX_VALUE;
-				for (Marker marker : map.getMarkers()) {
-					LatLng markerPosition = marker.getPosition();
-					float distance = LatLngUtils.distanceBetween(clickPosition, markerPosition);
-					if (distanceToClosest > distance) {
-						distanceToClosest = distance;
-						closest = marker;
-					}
-				}
-				if (closest != null) {
-					closest.remove();
-				}
-			}
-		});
-	}
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                LatLng position = marker.getPosition();
+                LatLng targetPosition = randomPositionAcrossTheOcean(position);
+                long duration = random.nextInt(1500) + 1500;
+                Interpolator interpolator = randomInterpolator();
+                AnimationSettings settings = new AnimationSettings().duration(duration).interpolator(interpolator);
+                marker.animatePosition(targetPosition, settings, callback);
+                return true;
+            }
+        });
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng clickPosition) {
+                Marker closest = null;
+                float distanceToClosest = Float.MAX_VALUE;
+                for (Marker marker : map.getMarkers()) {
+                    LatLng markerPosition = marker.getPosition();
+                    float distance = LatLngUtils.distanceBetween(clickPosition, markerPosition);
+                    if (distanceToClosest > distance) {
+                        distanceToClosest = distance;
+                        closest = marker;
+                    }
+                }
+                if (closest != null) {
+                    closest.remove();
+                }
+            }
+        });
+    }
 
-	private LatLng randomPositionAcrossTheOcean(LatLng position) {
-		double lat;
-		double lng;
-		if (position.latitude < 0) {
-			lat = random.nextDouble() * 10 + 10;
-		} else {
-			lat = random.nextDouble() * 10 - 20;
-		}
-		if (position.longitude < 0) {
-			lng = random.nextDouble() * 10 + 10;
-		} else {
-			lng = random.nextDouble() * 10 - 20;
-		}
-		return new LatLng(lat, lng);
-	}
+    private LatLng randomPositionAcrossTheOcean(LatLng position) {
+        double lat;
+        double lng;
+        if (position.latitude < 0) {
+            lat = random.nextDouble() * 10 + 10;
+        } else {
+            lat = random.nextDouble() * 10 - 20;
+        }
+        if (position.longitude < 0) {
+            lng = random.nextDouble() * 10 + 10;
+        } else {
+            lng = random.nextDouble() * 10 - 20;
+        }
+        return new LatLng(lat, lng);
+    }
 
-	private Interpolator randomInterpolator() {
-		int val = random.nextInt(14);
-		switch (val) {
-			case 0:
-				return new LinearInterpolator();
-			case 1:
-				return new AccelerateDecelerateInterpolator();
-			case 2:
-				return new AccelerateInterpolator();
-			case 3:
-				return new AccelerateInterpolator(6.0f);
-			case 4:
-				return new DecelerateInterpolator();
-			case 5:
-				return new DecelerateInterpolator(6.0f);
-			case 6:
-				return new BounceInterpolator();
-			case 7:
-				return new AnticipateOvershootInterpolator();
-			case 8:
-				return new AnticipateOvershootInterpolator(6.0f);
-			case 9:
-				return new AnticipateInterpolator();
-			case 10:
-				return new AnticipateInterpolator(6.0f);
-			case 11:
-				return new OvershootInterpolator();
-			case 12:
-				return new OvershootInterpolator(6.0f);
-			case 13:
-				return new CycleInterpolator(1.25f);
-		}
-		throw new RuntimeException();
-	}
+    private Interpolator randomInterpolator() {
+        int val = random.nextInt(14);
+        switch (val) {
+            case 0:
+                return new LinearInterpolator();
+            case 1:
+                return new AccelerateDecelerateInterpolator();
+            case 2:
+                return new AccelerateInterpolator();
+            case 3:
+                return new AccelerateInterpolator(6.0f);
+            case 4:
+                return new DecelerateInterpolator();
+            case 5:
+                return new DecelerateInterpolator(6.0f);
+            case 6:
+                return new BounceInterpolator();
+            case 7:
+                return new AnticipateOvershootInterpolator();
+            case 8:
+                return new AnticipateOvershootInterpolator(6.0f);
+            case 9:
+                return new AnticipateInterpolator();
+            case 10:
+                return new AnticipateInterpolator(6.0f);
+            case 11:
+                return new OvershootInterpolator();
+            case 12:
+                return new OvershootInterpolator(6.0f);
+            case 13:
+                return new CycleInterpolator(1.25f);
+        }
+        throw new RuntimeException();
+    }
 }

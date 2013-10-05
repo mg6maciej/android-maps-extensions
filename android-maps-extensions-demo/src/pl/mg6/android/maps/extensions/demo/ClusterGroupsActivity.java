@@ -19,12 +19,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.List;
-
 import com.androidmapsextensions.ClusterGroup;
 import com.androidmapsextensions.ClusterOptions;
 import com.androidmapsextensions.ClusterOptionsProvider;
@@ -33,55 +27,60 @@ import com.androidmapsextensions.GoogleMap;
 import com.androidmapsextensions.Marker;
 import com.androidmapsextensions.MarkerOptions;
 import com.androidmapsextensions.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.List;
 
 public class ClusterGroupsActivity extends FragmentActivity {
 
-	private static final int DYNAMIC_GROUP = ClusterGroup.FIRST_USER;
+    private static final int DYNAMIC_GROUP = ClusterGroup.FIRST_USER;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.simple_map);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.simple_map);
 
-		FragmentManager fm = getSupportFragmentManager();
-		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-		final GoogleMap map = f.getExtendedMap();
+        FragmentManager fm = getSupportFragmentManager();
+        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
+        final GoogleMap map = f.getExtendedMap();
 
-		map.setClustering(new ClusteringSettings().clusterOptionsProvider(new ClusterOptionsProvider() {
-			@Override
-			public ClusterOptions getClusterOptions(List<Marker> markers) {
-				float hue;
-				if (markers.get(0).getClusterGroup() == DYNAMIC_GROUP) {
-					hue = BitmapDescriptorFactory.HUE_ORANGE;
-				} else {
-					hue = BitmapDescriptorFactory.HUE_ROSE;
-				}
-				BitmapDescriptor blueIcon = BitmapDescriptorFactory.defaultMarker(hue);
-				return new ClusterOptions().icon(blueIcon);
-			}
-		}));
+        map.setClustering(new ClusteringSettings().clusterOptionsProvider(new ClusterOptionsProvider() {
+            @Override
+            public ClusterOptions getClusterOptions(List<Marker> markers) {
+                float hue;
+                if (markers.get(0).getClusterGroup() == DYNAMIC_GROUP) {
+                    hue = BitmapDescriptorFactory.HUE_ORANGE;
+                } else {
+                    hue = BitmapDescriptorFactory.HUE_ROSE;
+                }
+                BitmapDescriptor blueIcon = BitmapDescriptorFactory.defaultMarker(hue);
+                return new ClusterOptions().icon(blueIcon);
+            }
+        }));
 
-		map.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
-		map.addMarker(new MarkerOptions().position(new LatLng(3, 1)));
-		map.addMarker(new MarkerOptions().position(new LatLng(2, 0.5)));
-		map.addMarker(new MarkerOptions().position(new LatLng(0.5, 2)));
+        map.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
+        map.addMarker(new MarkerOptions().position(new LatLng(3, 1)));
+        map.addMarker(new MarkerOptions().position(new LatLng(2, 0.5)));
+        map.addMarker(new MarkerOptions().position(new LatLng(0.5, 2)));
 
-		BitmapDescriptor greenIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-		final Marker single = map.addMarker(new MarkerOptions().position(new LatLng(10, 10)).icon(greenIcon).clusterGroup(ClusterGroup.NOT_CLUSTERED));
+        BitmapDescriptor greenIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+        final Marker single = map.addMarker(new MarkerOptions().position(new LatLng(10, 10)).icon(greenIcon).clusterGroup(ClusterGroup.NOT_CLUSTERED));
 
-		map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-			@Override
-			public void onMapClick(LatLng position) {
-				single.setPosition(position);
-			}
-		});
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng position) {
+                single.setPosition(position);
+            }
+        });
 
-		map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-			@Override
-			public void onMapLongClick(LatLng position) {
-				BitmapDescriptor yellowIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-				map.addMarker(new MarkerOptions().position(position).icon(yellowIcon).clusterGroup(DYNAMIC_GROUP));
-			}
-		});
-	}
+        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng position) {
+                BitmapDescriptor yellowIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+                map.addMarker(new MarkerOptions().position(position).icon(yellowIcon).clusterGroup(DYNAMIC_GROUP));
+            }
+        });
+    }
 }

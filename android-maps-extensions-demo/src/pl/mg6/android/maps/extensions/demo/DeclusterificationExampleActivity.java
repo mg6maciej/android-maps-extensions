@@ -20,85 +20,84 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
+import com.androidmapsextensions.ClusterGroup;
+import com.androidmapsextensions.ClusteringSettings;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-import com.androidmapsextensions.ClusterGroup;
-import com.androidmapsextensions.ClusteringSettings;
-import com.androidmapsextensions.GoogleMap;
-import com.androidmapsextensions.Marker;
-import com.androidmapsextensions.SupportMapFragment;
-
 public class DeclusterificationExampleActivity extends FragmentActivity {
 
-	private GoogleMap map;
-	private List<Marker> declusterifiedMarkers;
+    private GoogleMap map;
+    private List<Marker> declusterifiedMarkers;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.simple_map);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.simple_map);
 
-		FragmentManager fm = getSupportFragmentManager();
-		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-		map = f.getExtendedMap();
+        FragmentManager fm = getSupportFragmentManager();
+        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
+        map = f.getExtendedMap();
 
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.0, 19.0), 7.0f));
-		map.setClustering(new ClusteringSettings().clusterOptionsProvider(new DemoClusterOptionsProvider(getResources())));
-		MarkerGenerator.addMarkersInPoland(map);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.0, 19.0), 7.0f));
+        map.setClustering(new ClusteringSettings().clusterOptionsProvider(new DemoClusterOptionsProvider(getResources())));
+        MarkerGenerator.addMarkersInPoland(map);
 
-		map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-			@Override
-			public boolean onMarkerClick(Marker marker) {
-				if (marker.isCluster()) {
-					declusterify(marker);
-					return true;
-				}
-				return false;
-			}
-		});
-		map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-			@Override
-			public void onMapClick(LatLng position) {
-				clusterifyMarkers();
-			}
-		});
-	}
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.isCluster()) {
+                    declusterify(marker);
+                    return true;
+                }
+                return false;
+            }
+        });
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng position) {
+                clusterifyMarkers();
+            }
+        });
+    }
 
-	private void declusterify(Marker cluster) {
-		clusterifyMarkers();
-		declusterifiedMarkers = cluster.getMarkers();
-		LatLng clusterPosition = cluster.getPosition();
-		double distance = calculateDistanceBetweenMarkers();
-		double currentDistance = -declusterifiedMarkers.size() / 2 * distance;
-		for (Marker marker : declusterifiedMarkers) {
-			marker.setData(marker.getPosition());
-			marker.setClusterGroup(ClusterGroup.NOT_CLUSTERED);
-			LatLng newPosition = new LatLng(clusterPosition.latitude, clusterPosition.longitude + currentDistance);
-			marker.animatePosition(newPosition);
-			currentDistance += distance;
-		}
-	}
+    private void declusterify(Marker cluster) {
+        clusterifyMarkers();
+        declusterifiedMarkers = cluster.getMarkers();
+        LatLng clusterPosition = cluster.getPosition();
+        double distance = calculateDistanceBetweenMarkers();
+        double currentDistance = -declusterifiedMarkers.size() / 2 * distance;
+        for (Marker marker : declusterifiedMarkers) {
+            marker.setData(marker.getPosition());
+            marker.setClusterGroup(ClusterGroup.NOT_CLUSTERED);
+            LatLng newPosition = new LatLng(clusterPosition.latitude, clusterPosition.longitude + currentDistance);
+            marker.animatePosition(newPosition);
+            currentDistance += distance;
+        }
+    }
 
-	private double calculateDistanceBetweenMarkers() {
-		Projection projection = map.getProjection();
-		Point point = projection.toScreenLocation(new LatLng(0.0, 0.0));
-		point.x += getResources().getDimensionPixelSize(R.dimen.distance_between_markers);
-		LatLng nextPosition = projection.fromScreenLocation(point);
-		return nextPosition.longitude;
-	}
+    private double calculateDistanceBetweenMarkers() {
+        Projection projection = map.getProjection();
+        Point point = projection.toScreenLocation(new LatLng(0.0, 0.0));
+        point.x += getResources().getDimensionPixelSize(R.dimen.distance_between_markers);
+        LatLng nextPosition = projection.fromScreenLocation(point);
+        return nextPosition.longitude;
+    }
 
-	private void clusterifyMarkers() {
-		if (declusterifiedMarkers != null) {
-			for (Marker marker : declusterifiedMarkers) {
-				LatLng position = (LatLng) marker.getData();
-				marker.setPosition(position);
-				marker.setClusterGroup(ClusterGroup.DEFAULT);
-			}
-			declusterifiedMarkers = null;
-		}
-	}
+    private void clusterifyMarkers() {
+        if (declusterifiedMarkers != null) {
+            for (Marker marker : declusterifiedMarkers) {
+                LatLng position = (LatLng) marker.getData();
+                marker.setPosition(position);
+                marker.setClusterGroup(ClusterGroup.DEFAULT);
+            }
+            declusterifiedMarkers = null;
+        }
+    }
 }

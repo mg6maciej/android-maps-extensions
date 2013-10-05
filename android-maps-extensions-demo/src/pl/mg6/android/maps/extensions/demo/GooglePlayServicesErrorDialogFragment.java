@@ -28,50 +28,50 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class GooglePlayServicesErrorDialogFragment extends DialogFragment {
 
-	private static final String TAG = GooglePlayServicesErrorDialogFragment.class.getSimpleName();
+    private static final String TAG = GooglePlayServicesErrorDialogFragment.class.getSimpleName();
 
-	private static final String KEY_STATUS = "status";
+    private static final String KEY_STATUS = "status";
 
-	public static GooglePlayServicesErrorDialogFragment newInstance(int status) {
-		GooglePlayServicesErrorDialogFragment f = new GooglePlayServicesErrorDialogFragment();
-		Bundle args = new Bundle();
-		args.putInt(KEY_STATUS, status);
-		f.setArguments(args);
-		return f;
-	}
+    public static GooglePlayServicesErrorDialogFragment newInstance(int status) {
+        GooglePlayServicesErrorDialogFragment f = new GooglePlayServicesErrorDialogFragment();
+        Bundle args = new Bundle();
+        args.putInt(KEY_STATUS, status);
+        f.setArguments(args);
+        return f;
+    }
 
-	public static void showDialog(int status, FragmentActivity activity) {
-		FragmentManager fm = activity.getSupportFragmentManager();
-		GooglePlayServicesErrorDialogFragment f = newInstance(status);
-		f.show(fm, TAG);
-	}
+    public static void showDialog(int status, FragmentActivity activity) {
+        FragmentManager fm = activity.getSupportFragmentManager();
+        GooglePlayServicesErrorDialogFragment f = newInstance(status);
+        f.show(fm, TAG);
+    }
 
-	public static boolean showDialogIfNotAvailable(FragmentActivity activity) {
-		removeDialog(activity);
-		int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
-		boolean available = status == ConnectionResult.SUCCESS;
-		if (!available) {
-			if (GooglePlayServicesUtil.isUserRecoverableError(status)) {
-				showDialog(status, activity);
-			} else {
-				Toast.makeText(activity.getApplication(), "Google Play services not available", Toast.LENGTH_SHORT).show();
-			}
-		}
-		return available;
-	}
+    public static boolean showDialogIfNotAvailable(FragmentActivity activity) {
+        removeDialog(activity);
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
+        boolean available = status == ConnectionResult.SUCCESS;
+        if (!available) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(status)) {
+                showDialog(status, activity);
+            } else {
+                Toast.makeText(activity.getApplication(), "Google Play services not available", Toast.LENGTH_SHORT).show();
+            }
+        }
+        return available;
+    }
 
-	public static void removeDialog(FragmentActivity activity) {
-		FragmentManager fm = activity.getSupportFragmentManager();
-		Fragment f = fm.findFragmentByTag(TAG);
-		if (f != null) {
-			fm.beginTransaction().remove(f).commit();
-		}
-	}
+    public static void removeDialog(FragmentActivity activity) {
+        FragmentManager fm = activity.getSupportFragmentManager();
+        Fragment f = fm.findFragmentByTag(TAG);
+        if (f != null) {
+            fm.beginTransaction().remove(f).commit();
+        }
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		Bundle args = getArguments();
-		int status = args.getInt(KEY_STATUS);
-		return GooglePlayServicesUtil.getErrorDialog(status, getActivity(), 0);
-	}
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Bundle args = getArguments();
+        int status = args.getInt(KEY_STATUS);
+        return GooglePlayServicesUtil.getErrorDialog(status, getActivity(), 0);
+    }
 }

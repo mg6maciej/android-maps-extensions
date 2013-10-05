@@ -15,32 +15,32 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import com.androidmapsextensions.ClusteringSettings;
-import com.androidmapsextensions.GoogleMap;
-import com.androidmapsextensions.MarkerOptions;
-import com.androidmapsextensions.SupportMapFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
+import com.androidmapsextensions.ClusteringSettings;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.MarkerOptions;
+import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Issue14InfoWindowNotShowingExampleActivity extends FragmentActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.simple_map);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.simple_map);
 
-		FragmentManager fm = getSupportFragmentManager();
-		SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-		GoogleMap map = f.getExtendedMap();
+        FragmentManager fm = getSupportFragmentManager();
+        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
+        GoogleMap map = f.getExtendedMap();
 
-		ClusteringSettings settings = new ClusteringSettings();
-		settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
-		map.setClustering(settings);
+        ClusteringSettings settings = new ClusteringSettings();
+        settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
+        map.setClustering(settings);
 
-		MarkerOptions options = new MarkerOptions().position(new LatLng(0, 0)).title("title");
-		map.addMarker(options).showInfoWindow();
-	}
+        MarkerOptions options = new MarkerOptions().position(new LatLng(0, 0)).title("title");
+        map.addMarker(options).showInfoWindow();
+    }
 }
