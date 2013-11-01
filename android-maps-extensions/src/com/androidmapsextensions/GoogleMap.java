@@ -108,6 +108,8 @@ public interface GoogleMap {
 
     UiSettings getUiSettings();
 
+    boolean isBuildingsEnabled();
+
     boolean isIndoorEnabled();
 
     boolean isMyLocationEnabled();
@@ -115,6 +117,8 @@ public interface GoogleMap {
     boolean isTrafficEnabled();
 
     void moveCamera(CameraUpdate cameraUpdate);
+
+    void setBuildingsEnabled(boolean buildingsEnabled);
 
     void setClustering(ClusteringSettings clusteringSettings);
 
@@ -133,6 +137,8 @@ public interface GoogleMap {
     void setOnInfoWindowClickListener(OnInfoWindowClickListener onInfoWindowClickListener);
 
     void setOnMapClickListener(OnMapClickListener onMapClickListener);
+
+    void setOnMapLoadedCallback(OnMapLoadedCallback onMapLoadedCallback);
 
     void setOnMapLongClickListener(OnMapLongClickListener onMapLongClickListener);
 
@@ -185,6 +191,12 @@ public interface GoogleMap {
 
         @Override
         void onMapClick(LatLng position);
+    }
+
+    interface OnMapLoadedCallback extends com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback {
+
+        @Override
+        void onMapLoaded();
     }
 
     interface OnMapLongClickListener extends com.google.android.gms.maps.GoogleMap.OnMapLongClickListener {

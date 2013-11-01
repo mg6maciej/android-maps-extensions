@@ -198,6 +198,11 @@ class DelegatingGoogleMap implements GoogleMap {
     }
 
     @Override
+    public boolean isBuildingsEnabled() {
+        return real.isBuildingsEnabled();
+    }
+
+    @Override
     public boolean isIndoorEnabled() {
         return real.isIndoorEnabled();
     }
@@ -215,6 +220,11 @@ class DelegatingGoogleMap implements GoogleMap {
     @Override
     public void moveCamera(CameraUpdate cameraUpdate) {
         real.moveCamera(cameraUpdate);
+    }
+
+    @Override
+    public void setBuildingsEnabled(boolean buildingsEnabled) {
+        real.setBuildingsEnabled(buildingsEnabled);
     }
 
     @Override
@@ -268,6 +278,11 @@ class DelegatingGoogleMap implements GoogleMap {
     @Override
     public void setOnMapClickListener(OnMapClickListener onMapClickListener) {
         real.setOnMapClickListener(onMapClickListener);
+    }
+
+    @Override
+    public void setOnMapLoadedCallback(OnMapLoadedCallback onMapLoadedCallback) {
+        real.setOnMapLoadedCallback(onMapLoadedCallback);
     }
 
     @Override
