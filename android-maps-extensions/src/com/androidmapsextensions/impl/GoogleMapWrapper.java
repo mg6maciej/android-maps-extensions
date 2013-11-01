@@ -25,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
@@ -142,6 +143,11 @@ class GoogleMapWrapper implements IGoogleMap {
     }
 
     @Override
+    public final boolean isBuildingsEnabled() {
+        return map.isBuildingsEnabled();
+    }
+
+    @Override
     public final boolean isIndoorEnabled() {
         return map.isIndoorEnabled();
     }
@@ -159,6 +165,11 @@ class GoogleMapWrapper implements IGoogleMap {
     @Override
     public final void moveCamera(CameraUpdate update) {
         map.moveCamera(update);
+    }
+
+    @Override
+    public final void setBuildingsEnabled(boolean enabled) {
+        map.setBuildingsEnabled(enabled);
     }
 
     @Override
@@ -199,6 +210,11 @@ class GoogleMapWrapper implements IGoogleMap {
     @Override
     public final void setOnMapClickListener(OnMapClickListener listener) {
         map.setOnMapClickListener(listener);
+    }
+
+    @Override
+    public void setOnMapLoadedCallback(OnMapLoadedCallback callback) {
+        map.setOnMapLoadedCallback(callback);
     }
 
     @Override

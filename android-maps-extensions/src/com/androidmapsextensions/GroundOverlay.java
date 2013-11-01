@@ -15,6 +15,7 @@
  */
 package com.androidmapsextensions;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -50,6 +51,8 @@ public interface GroundOverlay {
     void setDimensions(float width, float height);
 
     void setDimensions(float width);
+
+    void setImage(BitmapDescriptor image);
 
     void setPosition(LatLng position);
 

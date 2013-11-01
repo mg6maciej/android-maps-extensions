@@ -24,6 +24,11 @@ public class MarkerOptions {
     private Object data;
     private int clusterGroup;
 
+    public MarkerOptions alpha(float alpha) {
+        real.alpha(alpha);
+        return this;
+    }
+
     public MarkerOptions anchor(float u, float v) {
         real.anchor(u, v);
         return this;
@@ -47,6 +52,10 @@ public class MarkerOptions {
     public MarkerOptions flat(boolean flat) {
         real.flat(flat);
         return this;
+    }
+
+    public float getAlpha() {
+        return real.getAlpha();
     }
 
     public float getAnchorU() {

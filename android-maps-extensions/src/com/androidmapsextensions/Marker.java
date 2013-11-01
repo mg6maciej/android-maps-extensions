@@ -44,6 +44,8 @@ public interface Marker {
 
     void animatePosition(LatLng target, AnimationSettings settings, AnimationCallback callback);
 
+    float getAlpha();
+
     int getClusterGroup();
 
     /**
@@ -86,6 +88,8 @@ public interface Marker {
     boolean isVisible();
 
     void remove();
+
+    void setAlpha(float alpha);
 
     void setAnchor(float anchorU, float anchorV);
 

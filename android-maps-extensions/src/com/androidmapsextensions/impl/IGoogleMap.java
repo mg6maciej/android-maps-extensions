@@ -83,6 +83,8 @@ interface IGoogleMap {
 
     UiSettings getUiSettings();
 
+    boolean isBuildingsEnabled();
+
     boolean isIndoorEnabled();
 
     boolean isMyLocationEnabled();
@@ -90,6 +92,8 @@ interface IGoogleMap {
     boolean isTrafficEnabled();
 
     void moveCamera(CameraUpdate update);
+
+    void setBuildingsEnabled(boolean enabled);
 
     boolean setIndoorEnabled(boolean enabled);
 
@@ -106,6 +110,8 @@ interface IGoogleMap {
     void setOnInfoWindowClickListener(OnInfoWindowClickListener listener);
 
     void setOnMapClickListener(OnMapClickListener listener);
+
+    void setOnMapLoadedCallback(GoogleMap.OnMapLoadedCallback callback);
 
     void setOnMapLongClickListener(OnMapLongClickListener listener);
 

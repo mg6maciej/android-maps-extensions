@@ -47,6 +47,14 @@ public class LazyMarker {
         }
     }
 
+    public float getAlpha() {
+        if (marker != null) {
+            return marker.getAlpha();
+        } else {
+            return markerOptions.getAlpha();
+        }
+    }
+
     @Deprecated
     public String getId() {
         createMarker();
@@ -135,6 +143,14 @@ public class LazyMarker {
             map = null;
             markerOptions = null;
             listener = null;
+        }
+    }
+
+    public void setAlpha(float alpha) {
+        if (marker != null) {
+            marker.setAlpha(alpha);
+        } else {
+            markerOptions.alpha(alpha);
         }
     }
 
@@ -243,6 +259,7 @@ public class LazyMarker {
 
     private static MarkerOptions copy(MarkerOptions options) {
         MarkerOptions copy = new MarkerOptions();
+        copy.alpha(options.getAlpha());
         copy.anchor(options.getAnchorU(), options.getAnchorV());
         copy.draggable(options.isDraggable());
         copy.flat(options.isFlat());

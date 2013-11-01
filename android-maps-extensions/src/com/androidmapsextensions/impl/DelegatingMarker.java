@@ -66,6 +66,11 @@ class DelegatingMarker implements Marker {
     }
 
     @Override
+    public float getAlpha() {
+        return real.getAlpha();
+    }
+
+    @Override
     public int getClusterGroup() {
         return clusterGroup;
     }
@@ -143,6 +148,11 @@ class DelegatingMarker implements Marker {
     public void remove() {
         manager.onRemove(this);
         real.remove();
+    }
+
+    @Override
+    public void setAlpha(float alpha) {
+        real.setAlpha(alpha);
     }
 
     @Override
