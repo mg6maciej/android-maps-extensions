@@ -430,6 +430,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
         markerOptions.position(position);
         ClusterOptions opts = clusterOptionsProvider.getClusterOptions(markers);
         markerOptions.icon(opts.getIcon());
+        markerOptions.alpha(opts.getAlpha());
         markerOptions.anchor(opts.getAnchorU(), opts.getAnchorV());
         markerOptions.flat(opts.isFlat());
         markerOptions.infoWindowAnchor(opts.getInfoWindowAnchorU(), opts.getInfoWindowAnchorV());
