@@ -59,8 +59,8 @@ class DelegatingGoogleMap implements GoogleMap {
     private GroundOverlayManager groundOverlayManager;
     private TileOverlayManager tileOverlayManager;
 
-    DelegatingGoogleMap(com.google.android.gms.maps.GoogleMap real, Context context) {
-        this.real = new GoogleMapWrapper(real);
+    DelegatingGoogleMap(GoogleMapWrapper real, Context context) {
+        this.real = real;
         this.context = context;
         createManagers();
         assignMapListeners();
