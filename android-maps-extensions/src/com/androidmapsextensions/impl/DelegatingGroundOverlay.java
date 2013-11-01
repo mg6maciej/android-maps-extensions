@@ -16,6 +16,7 @@
 package com.androidmapsextensions.impl;
 
 import com.androidmapsextensions.GroundOverlay;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -106,6 +107,11 @@ class DelegatingGroundOverlay implements GroundOverlay {
     @Override
     public void setDimensions(float width) {
         real.setDimensions(width);
+    }
+
+    @Override
+    public void setImage(BitmapDescriptor image) {
+        real.setImage(image);
     }
 
     @Override
