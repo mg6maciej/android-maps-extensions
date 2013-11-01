@@ -6,7 +6,7 @@
 	<name>Google Play Services</name>
 	<groupId>com.google.android.gms</groupId>
 	<artifactId>google-play-services</artifactId>
-	<version>r12</version>
+	<version>r13</version>
 	<packaging>apklib</packaging>
 
 	<parent>
