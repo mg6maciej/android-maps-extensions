@@ -123,6 +123,14 @@ class ClusterMarker implements Marker {
     }
 
     @Override
+    public float getAlpha() {
+        if (virtual != null) {
+            return virtual.getAlpha();
+        }
+        return 1.0f;
+    }
+
+    @Override
     public int getClusterGroup() {
         if (markers.size() > 0) {
             return markers.get(0).getClusterGroup();
@@ -220,6 +228,11 @@ class ClusterMarker implements Marker {
 
     @Override
     public void remove() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setAlpha(float alpha) {
         throw new UnsupportedOperationException();
     }
 
