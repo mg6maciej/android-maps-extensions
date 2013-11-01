@@ -59,7 +59,7 @@ class DelegatingGoogleMap implements GoogleMap {
     private GroundOverlayManager groundOverlayManager;
     private TileOverlayManager tileOverlayManager;
 
-    DelegatingGoogleMap(GoogleMapWrapper real, Context context) {
+    DelegatingGoogleMap(IGoogleMap real, Context context) {
         this.real = real;
         this.context = context;
         createManagers();
