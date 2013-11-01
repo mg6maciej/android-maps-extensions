@@ -6,7 +6,10 @@ buildscript {
         classpath 'com.android.tools.build:gradle:0.5.+'
     }
 }
+
 apply plugin: 'android-library'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 repositories {
     mavenCentral()
@@ -19,8 +22,8 @@ android {
     defaultConfig {
         minSdkVersion 8
     }
-	
-	sourceSets {
+
+    sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
@@ -31,4 +34,47 @@ android {
 
 dependencies {
     compile 'com.google.android.gms:play-services:4.0.30'
+}
+
+group = 'com.androidmapsextensions'
+version = '2.0.0-SNAPSHOT'
+
+uploadArchives.repositories.mavenDeployer {
+    repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2') {
+        authentication(userName: sonatypeUserName, password: sonatypePassword)
+    }
+    snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots') {
+        authentication(userName: sonatypeUserName, password: sonatypePassword)
+    }
+
+    pom.project {
+        name 'Android Maps Extensions'
+        description 'Library extending capabilities of Google Maps Android API v2'
+        inceptionYear '2013'
+        url 'http://AndroidMapsExtensions.com'
+        packaging 'aar'
+
+        developers {
+            developer {
+                name 'Maciej Gorski'
+                id 'mg6maciej'
+                email 'maciek.gorski@gmail.com'
+                url 'http://mg6.pl'
+            }
+        }
+
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+
+        scm {
+            url 'https://github.com/mg6maciej/android-maps-extensions'
+            connection 'https://github.com/mg6maciej/android-maps-extensions.git'
+            developerConnection 'https://github.com/mg6maciej/android-maps-extensions.git'
+        }
+    }
 }
