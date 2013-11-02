@@ -211,13 +211,15 @@ public class LazyMarker {
 	}
 
 	public void setVisible(boolean visible) {
-		if (marker != null) {
-			marker.setVisible(visible);
-		} else if (visible) {
-			markerOptions.visible(true);
-			createMarker();
-		}
-	}
+        if (marker != null) {
+            marker.setVisible(visible);
+        } else if (visible) {
+            if (markerOptions != null)
+                markerOptions.visible(true);
+
+            createMarker();
+        }
+    }
 
 	public void showInfoWindow() {
 		if (marker != null) {
@@ -234,12 +236,19 @@ public class LazyMarker {
 		}
 	}
 
+	
 	private void createMarker(GoogleMap map, MarkerOptions options, OnMarkerCreateListener listener) {
-		marker = map.addMarker(options);
-		if (listener != null) {
-			listener.onMarkerCreate(this);
-		}
-	}
+        try {
+            if (options != null)
+                marker = map.addMarker(options);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (listener != null) {
+            listener.onMarkerCreate(this);
+        }
+    }
+
 
 	private static MarkerOptions copy(MarkerOptions options) {
 		MarkerOptions copy = new MarkerOptions();
