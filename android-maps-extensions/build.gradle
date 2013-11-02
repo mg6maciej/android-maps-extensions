@@ -86,4 +86,8 @@ uploadArchives.repositories.mavenDeployer {
             developerConnection 'https://github.com/mg6maciej/android-maps-extensions.git'
         }
     }
+
+    pom.whenConfigured {
+        pom -> pom.dependencies = []
+    }
 }
