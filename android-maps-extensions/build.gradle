@@ -39,7 +39,16 @@ dependencies {
 group = 'com.androidmapsextensions'
 version = '2.0.0-SNAPSHOT'
 
+signing {
+    sign configurations.archives
+}
+
 uploadArchives.repositories.mavenDeployer {
+
+    beforeDeployment {
+        MavenDeployment deployment -> signing.signPom(deployment)
+    }
+
     repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2') {
         authentication(userName: sonatypeUserName, password: sonatypePassword)
     }
