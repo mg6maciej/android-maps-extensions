@@ -16,30 +16,38 @@
 package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.androidmapsextensions.ClusteringSettings;
-import com.androidmapsextensions.GoogleMap;
 import com.androidmapsextensions.MarkerOptions;
-import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Issue14InfoWindowNotShowingExampleActivity extends BaseActivity {
+public class Issue15InfoWindowNotShowingFragment extends BaseFragment {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.simple_map);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.simple_map, container, false);
+    }
 
-        FragmentManager fm = getSupportFragmentManager();
-        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        GoogleMap map = f.getExtendedMap();
-
+    @Override
+    protected void setUpMap() {
         ClusteringSettings settings = new ClusteringSettings();
         settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
+        settings.addMarkersDynamically(true);
         map.setClustering(settings);
 
-        MarkerOptions options = new MarkerOptions().position(new LatLng(0, 0)).title("title");
-        map.addMarker(options).showInfoWindow();
+        MarkerOptions options = new MarkerOptions().position(new LatLng(50, 0)).title("title");
+        map.addMarker(options);
+
+        new Handler().post(new Runnable() {
+
+            @Override
+            public void run() {
+                map.getDisplayedMarkers().get(0).showInfoWindow();
+            }
+        });
     }
 }

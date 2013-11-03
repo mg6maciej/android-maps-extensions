@@ -5,14 +5,13 @@
     android:orientation="vertical" >
 
     <Button
+        android:id="@+id/issue_29_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onClickIssue"
         android:text="Issue 29" />
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.androidmapsextensions.SupportMapFragment"
+    <FrameLayout
+        android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

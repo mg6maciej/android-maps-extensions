@@ -16,27 +16,26 @@
 package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.androidmapsextensions.ClusteringSettings;
 import com.androidmapsextensions.GoogleMap;
 import com.androidmapsextensions.Marker;
 import com.androidmapsextensions.MarkerOptions;
-import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-public class SimpleMapActivity extends BaseActivity {
+public class SimpleMapFragment extends BaseFragment {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.simple_map);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.simple_map, container, false);
+    }
 
-        FragmentManager fm = getSupportFragmentManager();
-        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        GoogleMap map = f.getExtendedMap();
-
+    @Override
+    protected void setUpMap() {
         map.setClustering(new ClusteringSettings());
 
         map.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
@@ -47,7 +46,7 @@ public class SimpleMapActivity extends BaseActivity {
 
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Toast.makeText(SimpleMapActivity.this, "Clicked marker at: " + marker.getPosition(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Clicked marker at: " + marker.getPosition(), Toast.LENGTH_SHORT).show();
                 return false;
             }
         });

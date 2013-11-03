@@ -31,12 +31,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".LaunchTimeTestActivity" />
-        <activity android:name=".Issue14InfoWindowNotShowingExampleActivity" />
-        <activity android:name=".Issue14InfoWindowNotShowingClusterExampleActivity" />
-        <activity android:name=".Issue15InfoWindowNotShowingExampleActivity" />
-        <activity android:name=".Issue15InfoWindowNotShowingClusterExampleActivity" />
-        <activity android:name=".Issue29MarkerNotShownWhenZoomingInOrOutFromOtherRegion" />
-        <activity android:name=".SimpleMapActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"

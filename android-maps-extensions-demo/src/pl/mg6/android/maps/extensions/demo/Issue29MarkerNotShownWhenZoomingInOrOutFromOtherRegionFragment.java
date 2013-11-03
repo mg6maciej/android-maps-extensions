@@ -16,53 +16,57 @@
 package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.androidmapsextensions.ClusteringSettings;
-import com.androidmapsextensions.GoogleMap;
 import com.androidmapsextensions.MarkerOptions;
-import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Issue29MarkerNotShownWhenZoomingInOrOutFromOtherRegion extends BaseActivity {
+public class Issue29MarkerNotShownWhenZoomingInOrOutFromOtherRegionFragment extends BaseFragment {
 
     private static final LatLng OTHER_POSITION = new LatLng(52.399, 23.900);
     private static final float OTHER_ZOOM = 10;
     private static final LatLng POZNAN_POSITION = new LatLng(52.399, 16.900);
     private static final float POZNAN_ZOOM = 9;
 
-    private GoogleMap mMap;
-
-    public void onClickIssue(View v) {
-        mMap.addMarker(new MarkerOptions().title("Poznań").position(POZNAN_POSITION));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(POZNAN_POSITION, POZNAN_ZOOM));
+    private void onClickIssue() {
+        map.addMarker(new MarkerOptions().title("Poznań").position(POZNAN_POSITION));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(POZNAN_POSITION, POZNAN_ZOOM));
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.issue29_zoom_in_out);
-        initializeMap();
-        initializeClustering();
-        initializeCameraPosition();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.issue29_zoom_in_out, container, false);
     }
 
-    private void initializeMap() {
-        FragmentManager fm = getSupportFragmentManager();
-        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        mMap = f.getExtendedMap();
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.findViewById(R.id.issue_29_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickIssue();
+            }
+        });
+    }
+
+    @Override
+    protected void setUpMap() {
+        initializeClustering();
+        initializeCameraPosition();
     }
 
     private void initializeClustering() {
         ClusteringSettings settings = new ClusteringSettings();
         settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
         settings.addMarkersDynamically(true);
-        mMap.setClustering(settings);
+        map.setClustering(settings);
     }
 
     private void initializeCameraPosition() {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(OTHER_POSITION, OTHER_ZOOM));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(OTHER_POSITION, OTHER_ZOOM));
     }
 }
