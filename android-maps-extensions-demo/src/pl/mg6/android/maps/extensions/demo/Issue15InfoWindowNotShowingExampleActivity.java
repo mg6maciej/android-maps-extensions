@@ -17,7 +17,6 @@ package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import com.androidmapsextensions.ClusteringSettings;
