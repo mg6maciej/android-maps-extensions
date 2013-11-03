@@ -33,7 +33,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-public class ClusterGroupsActivity extends FragmentActivity {
+public class ClusterGroupsActivity extends BaseActivity {
 
     private static final int DYNAMIC_GROUP = ClusterGroup.FIRST_USER;
 

@@ -42,7 +42,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Random;
 
-public class AnimateMarkersActivity extends FragmentActivity {
+public class AnimateMarkersActivity extends BaseActivity {
 
     private Random random = new Random();
 

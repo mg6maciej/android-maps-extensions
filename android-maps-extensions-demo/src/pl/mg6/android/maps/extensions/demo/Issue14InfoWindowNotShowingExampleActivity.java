@@ -25,7 +25,7 @@ import com.androidmapsextensions.MarkerOptions;
 import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Issue14InfoWindowNotShowingExampleActivity extends FragmentActivity {
+public class Issue14InfoWindowNotShowingExampleActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

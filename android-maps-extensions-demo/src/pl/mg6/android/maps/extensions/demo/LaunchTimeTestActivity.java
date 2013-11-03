@@ -30,7 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.Locale;
 import java.util.Random;
 
-public class LaunchTimeTestActivity extends FragmentActivity {
+public class LaunchTimeTestActivity extends BaseActivity {
 
     private static final String TAG = LaunchTimeTestActivity.class.getSimpleName();
 

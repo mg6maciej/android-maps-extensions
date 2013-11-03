@@ -31,7 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-public class DeclusterificationExampleActivity extends FragmentActivity {
+public class DeclusterificationExampleActivity extends BaseActivity {
 
     private GoogleMap map;
     private List<Marker> declusterifiedMarkers;

@@ -51,7 +51,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class DemoActivity extends FragmentActivity {
+public class DemoActivity extends BaseActivity {
 
     private static final double[] CLUSTER_SIZES = new double[]{180, 160, 144, 120, 96};
 

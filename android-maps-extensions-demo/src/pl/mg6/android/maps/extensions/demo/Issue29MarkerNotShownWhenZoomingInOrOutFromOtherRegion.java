@@ -27,7 +27,7 @@ import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Issue29MarkerNotShownWhenZoomingInOrOutFromOtherRegion extends FragmentActivity {
+public class Issue29MarkerNotShownWhenZoomingInOrOutFromOtherRegion extends BaseActivity {
 
     private static final LatLng OTHER_POSITION = new LatLng(52.399, 23.900);
     private static final float OTHER_ZOOM = 10;
