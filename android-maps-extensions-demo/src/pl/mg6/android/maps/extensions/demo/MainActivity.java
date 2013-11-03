@@ -63,26 +63,22 @@ public class MainActivity extends BaseActivity {
     }
 
     private void startExample(int position) {
-        Intent intent;
         if (position == 0) {
             replaceMainFragment(new DemoFragment());
-            drawerLayout.closeDrawers();
         } else if (position == 1) {
             replaceMainFragment(new AnimateMarkersFragment());
-            drawerLayout.closeDrawers();
         } else if (position == 2) {
             replaceMainFragment(new ClusterGroupsFragment());
-            drawerLayout.closeDrawers();
         } else if (position == 3) {
             replaceMainFragment(new DeclusterificationExampleFragment());
-            drawerLayout.closeDrawers();
         } else {
-            intent = new Intent(this, LaunchTimeTestActivity.class);
+            Intent intent = new Intent(this, LaunchTimeTestActivity.class);
             // normally: int clusteringType = LaunchTimeTestActivity.CLUSTERING_ENABLED;
             int clusteringType = position - 4;
             intent.putExtra(LaunchTimeTestActivity.EXTRA_CLUSTERING_TYPE, clusteringType);
             startActivity(intent);
         }
+        drawerLayout.closeDrawers();
     }
 
     private void initDrawerToggle() {
