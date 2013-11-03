@@ -18,6 +18,9 @@ package pl.mg6.android.maps.extensions.demo;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.androidmapsextensions.ClusterGroup;
 import com.androidmapsextensions.ClusteringSettings;
@@ -30,20 +33,17 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-public class DeclusterificationExampleActivity extends BaseActivity {
+public class DeclusterificationExampleFragment extends BaseFragment {
 
-    private GoogleMap map;
     private List<Marker> declusterifiedMarkers;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.simple_map);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.simple_map, container, false);
+    }
 
-        FragmentManager fm = getSupportFragmentManager();
-        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        map = f.getExtendedMap();
-
+    @Override
+    protected void setUpMap() {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.0, 19.0), 7.0f));
         map.setClustering(new ClusteringSettings().clusterOptionsProvider(new DemoClusterOptionsProvider(getResources())));
         MarkerGenerator.addMarkersInPoland(map);

@@ -30,8 +30,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ClusterGroupsActivity" />
-        <activity android:name=".DeclusterificationExampleActivity" />
         <activity android:name=".LaunchTimeTestActivity" />
         <activity android:name=".Issue14InfoWindowNotShowingExampleActivity" />
         <activity android:name=".Issue14InfoWindowNotShowingClusterExampleActivity" />

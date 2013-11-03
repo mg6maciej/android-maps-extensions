@@ -71,11 +71,11 @@ public class MainActivity extends BaseActivity {
             replaceMainFragment(new AnimateMarkersFragment());
             drawerLayout.closeDrawers();
         } else if (position == 2) {
-            intent = new Intent(this, ClusterGroupsActivity.class);
-            startActivity(intent);
+            replaceMainFragment(new ClusterGroupsFragment());
+            drawerLayout.closeDrawers();
         } else if (position == 3) {
-            intent = new Intent(this, DeclusterificationExampleActivity.class);
-            startActivity(intent);
+            replaceMainFragment(new DeclusterificationExampleFragment());
+            drawerLayout.closeDrawers();
         } else {
             intent = new Intent(this, LaunchTimeTestActivity.class);
             // normally: int clusteringType = LaunchTimeTestActivity.CLUSTERING_ENABLED;

@@ -17,6 +17,9 @@ package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.androidmapsextensions.ClusterGroup;
 import com.androidmapsextensions.ClusterOptions;
@@ -32,19 +35,17 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-public class ClusterGroupsActivity extends BaseActivity {
+public class ClusterGroupsFragment extends BaseFragment {
 
     private static final int DYNAMIC_GROUP = ClusterGroup.FIRST_USER;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.simple_map);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.simple_map, container, false);
+    }
 
-        FragmentManager fm = getSupportFragmentManager();
-        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        final GoogleMap map = f.getExtendedMap();
-
+    @Override
+    protected void setUpMap() {
         map.setClustering(new ClusteringSettings().clusterOptionsProvider(new ClusterOptionsProvider() {
             @Override
             public ClusterOptions getClusterOptions(List<Marker> markers) {
