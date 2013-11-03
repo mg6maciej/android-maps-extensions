@@ -36,13 +36,21 @@ public class LaunchTimeTestFragment extends BaseFragment {
 
     private static final String TAG = LaunchTimeTestFragment.class.getSimpleName();
 
-    public static final String EXTRA_CLUSTERING_TYPE = "clusteringType";
+    private static final String EXTRA_CLUSTERING_TYPE = "clusteringType";
     public static final int CLUSTERING_DISABLED = 0;
     public static final int CLUSTERING_DISABLED_DYNAMIC = 1;
     public static final int CLUSTERING_ENABLED = 2;
     public static final int CLUSTERING_ENABLED_DYNAMIC = 3;
 
     private static final int MARKERS_COUNT = 20000;
+
+    static LaunchTimeTestFragment newInstance(int clusteringType) {
+        LaunchTimeTestFragment f = new LaunchTimeTestFragment();
+        Bundle args = new Bundle();
+        args.putInt(EXTRA_CLUSTERING_TYPE, clusteringType);
+        f.setArguments(args);
+        return f;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

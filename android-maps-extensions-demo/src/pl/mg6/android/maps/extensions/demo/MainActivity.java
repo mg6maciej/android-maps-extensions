@@ -71,12 +71,9 @@ public class MainActivity extends BaseActivity {
         } else if (position == 3) {
             replaceMainFragment(new DeclusterificationExampleFragment());
         } else {
-            Fragment fragment = new LaunchTimeTestFragment();
-            Bundle args = new Bundle();
             // normally: int clusteringType = LaunchTimeTestFragment.CLUSTERING_ENABLED;
             int clusteringType = position - 4;
-            args.putInt(LaunchTimeTestFragment.EXTRA_CLUSTERING_TYPE, clusteringType);
-            fragment.setArguments(args);
+            Fragment fragment = LaunchTimeTestFragment.newInstance(clusteringType);
             replaceMainFragment(fragment);
         }
         drawerLayout.closeDrawers();
