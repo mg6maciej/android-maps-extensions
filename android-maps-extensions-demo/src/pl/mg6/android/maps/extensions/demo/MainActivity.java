@@ -15,7 +15,6 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -72,11 +71,13 @@ public class MainActivity extends BaseActivity {
         } else if (position == 3) {
             replaceMainFragment(new DeclusterificationExampleFragment());
         } else {
-            Intent intent = new Intent(this, LaunchTimeTestActivity.class);
-            // normally: int clusteringType = LaunchTimeTestActivity.CLUSTERING_ENABLED;
+            Fragment fragment = new LaunchTimeTestFragment();
+            Bundle args = new Bundle();
+            // normally: int clusteringType = LaunchTimeTestFragment.CLUSTERING_ENABLED;
             int clusteringType = position - 4;
-            intent.putExtra(LaunchTimeTestActivity.EXTRA_CLUSTERING_TYPE, clusteringType);
-            startActivity(intent);
+            args.putInt(LaunchTimeTestFragment.EXTRA_CLUSTERING_TYPE, clusteringType);
+            fragment.setArguments(args);
+            replaceMainFragment(fragment);
         }
         drawerLayout.closeDrawers();
     }

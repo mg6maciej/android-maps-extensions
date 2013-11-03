@@ -45,11 +45,15 @@ public abstract class BaseFragment extends Fragment {
         FragmentManager fm = getChildFragmentManager();
         mapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map_container);
         if (mapFragment == null) {
-            mapFragment = new SupportMapFragment();
+            mapFragment = createMapFragment();
             FragmentTransaction tx = fm.beginTransaction();
             tx.add(R.id.map_container, mapFragment);
             tx.commit();
         }
+    }
+
+    protected SupportMapFragment createMapFragment() {
+        return SupportMapFragment.newInstance();
     }
 
     private void setUpMapIfNeeded() {

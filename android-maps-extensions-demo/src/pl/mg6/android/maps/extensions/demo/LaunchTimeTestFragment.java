@@ -17,21 +17,24 @@ package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.androidmapsextensions.ClusteringSettings;
-import com.androidmapsextensions.GoogleMap;
 import com.androidmapsextensions.MarkerOptions;
 import com.androidmapsextensions.SupportMapFragment;
+import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Locale;
 import java.util.Random;
 
-public class LaunchTimeTestActivity extends BaseActivity {
+public class LaunchTimeTestFragment extends BaseFragment {
 
-    private static final String TAG = LaunchTimeTestActivity.class.getSimpleName();
+    private static final String TAG = LaunchTimeTestFragment.class.getSimpleName();
 
     public static final String EXTRA_CLUSTERING_TYPE = "clusteringType";
     public static final int CLUSTERING_DISABLED = 0;
@@ -42,15 +45,20 @@ public class LaunchTimeTestActivity extends BaseActivity {
     private static final int MARKERS_COUNT = 20000;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.launch_time_test);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.launch_time_test, container, false);
+    }
 
-        FragmentManager fm = getSupportFragmentManager();
-        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        GoogleMap map = f.getExtendedMap();
+    @Override
+    protected SupportMapFragment createMapFragment() {
+        GoogleMapOptions options = new GoogleMapOptions();
+        options.camera(CameraPosition.builder().target(new LatLng(0.0, 0.0)).zoom(4.0f).build());
+        return SupportMapFragment.newInstance(options);
+    }
 
-        int clusteringType = getIntent().getIntExtra(EXTRA_CLUSTERING_TYPE, CLUSTERING_DISABLED);
+    @Override
+    protected void setUpMap() {
+        int clusteringType = getArguments().getInt(EXTRA_CLUSTERING_TYPE, CLUSTERING_DISABLED);
 
         ClusteringSettings settings = new ClusteringSettings();
         switch (clusteringType) {
