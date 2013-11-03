@@ -1,5 +1,7 @@
 <resources>
 
     <string name="app_name">Android Maps Extensions Demo</string>
+    <string name="open_drawer">Open</string>
+    <string name="close_drawer">Close</string>
 
 </resources>

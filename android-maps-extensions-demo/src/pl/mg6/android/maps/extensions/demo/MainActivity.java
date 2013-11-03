@@ -17,6 +17,12 @@ package pl.mg6.android.maps.extensions.demo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -25,10 +31,15 @@ import android.widget.ListView;
 
 public class MainActivity extends BaseActivity {
 
+    private ActionBarDrawerToggle toggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        initDrawerToggle(drawerLayout);
 
         String[] screens = {"Demo", "Animate markers", "Cluster groups", "\"Declusterification\"",
                 "No clustering", "No clustering (dynamic)", "Grid clustering", "Grid clustering (dynamic)"};
@@ -44,7 +55,9 @@ public class MainActivity extends BaseActivity {
             }
         });
         if (savedInstanceState == null) {
-            GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(this);
+            if (GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(this)) {
+            	replaceMainFragment(new Fragment());
+            }
         }
     }
 
@@ -65,5 +78,33 @@ public class MainActivity extends BaseActivity {
             intent.putExtra(LaunchTimeTestActivity.EXTRA_CLUSTERING_TYPE, clusteringType);
         }
         startActivity(intent);
+    }
+
+    private void initDrawerToggle(DrawerLayout drawerLayout) {
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.open_drawer, R.string.close_drawer);
+        drawerLayout.setDrawerListener(toggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        toggle.syncState();
+    }
+
+    private void replaceMainFragment(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction tx = fm.beginTransaction();
+        tx.replace(R.id.main_container, fragment);
+        tx.commit();
     }
 }
