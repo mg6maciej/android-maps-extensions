@@ -19,7 +19,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -50,10 +53,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class DemoActivity extends BaseActivity {
+public class DemoFragment extends BaseFragment {
 
     private static final double[] CLUSTER_SIZES = new double[]{180, 160, 144, 120, 96};
 
+    private SupportMapFragment mapFragment;
     private GoogleMap map;
 
     private MutableData[] dataArray = {new MutableData(6, new LatLng(-50, 0)), new MutableData(28, new LatLng(-52, 1)),
@@ -72,14 +76,37 @@ public class DemoActivity extends BaseActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.demo);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.demo, container, false);
+    }
 
-        FragmentManager fm = getSupportFragmentManager();
-        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        map = f.getExtendedMap();
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        setUpClusteringViews(view);
+        createMapFragmentIfNeeded();
+    }
 
+    private void createMapFragmentIfNeeded() {
+        FragmentManager fm = getChildFragmentManager();
+        mapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map_container);
+        if (mapFragment == null) {
+            mapFragment = new SupportMapFragment();
+            FragmentTransaction tx = fm.beginTransaction();
+            tx.add(R.id.map_container, mapFragment);
+            tx.commit();
+        }
+    }
+
+    private void setUpMapIfNeeded() {
+        if (map == null) {
+            map = mapFragment.getExtendedMap();
+            if (map != null) {
+                setUpMap();
+            }
+        }
+    }
+
+    private void setUpMap() {
         addCircles();
 
         map.setOnMapClickListener(new OnMapClickListener() {
@@ -88,7 +115,7 @@ public class DemoActivity extends BaseActivity {
             public void onMapClick(LatLng position) {
                 for (Circle circle : map.getCircles()) {
                     if (circle.contains(position)) {
-                        Toast.makeText(DemoActivity.this, "Clicked " + circle.getData(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Clicked " + circle.getData(), Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
@@ -100,8 +127,9 @@ public class DemoActivity extends BaseActivity {
         map.setInfoWindowAdapter(new InfoWindowAdapter() {
 
             private TextView tv;
+
             {
-                tv = new TextView(DemoActivity.this);
+                tv = new TextView(getActivity());
                 tv.setTextColor(Color.BLACK);
             }
 
@@ -189,18 +217,17 @@ public class DemoActivity extends BaseActivity {
         for (MutableData data : dataArray) {
             map.addMarker(new MarkerOptions().position(data.position).icon(icon).data(data));
         }
-
-        setUpClusteringViews();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
+        setUpMapIfNeeded();
         handler.post(dataUpdater);
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         handler.removeCallbacks(dataUpdater);
     }
@@ -219,9 +246,9 @@ public class DemoActivity extends BaseActivity {
         map.addCircle(options.center(new LatLng(30.0, 30.0)).data("second circle").radius(1000000));
     }
 
-    private void setUpClusteringViews() {
-        CheckBox clusterCheckbox = (CheckBox) findViewById(R.id.checkbox_cluster);
-        final SeekBar clusterSizeSeekbar = (SeekBar) findViewById(R.id.seekbar_cluster_size);
+    private void setUpClusteringViews(View view) {
+        CheckBox clusterCheckbox = (CheckBox) view.findViewById(R.id.checkbox_cluster);
+        final SeekBar clusterSizeSeekbar = (SeekBar) view.findViewById(R.id.seekbar_cluster_size);
         clusterCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
             @Override

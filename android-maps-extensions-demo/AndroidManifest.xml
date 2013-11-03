@@ -30,7 +30,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DemoActivity" />
         <activity android:name=".AnimateMarkersActivity" />
         <activity android:name=".ClusterGroupsActivity" />
         <activity android:name=".DeclusterificationExampleActivity" />

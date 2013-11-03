@@ -31,6 +31,7 @@ import android.widget.ListView;
 
 public class MainActivity extends BaseActivity {
 
+    private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
 
     @Override
@@ -38,8 +39,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        initDrawerToggle(drawerLayout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        initDrawerToggle();
 
         String[] screens = {"Demo", "Animate markers", "Cluster groups", "\"Declusterification\"",
                 "No clustering", "No clustering (dynamic)", "Grid clustering", "Grid clustering (dynamic)"};
@@ -56,7 +57,7 @@ public class MainActivity extends BaseActivity {
         });
         if (savedInstanceState == null) {
             if (GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(this)) {
-            	replaceMainFragment(new Fragment());
+            	replaceMainFragment(new DemoFragment());
             }
         }
     }
@@ -64,23 +65,27 @@ public class MainActivity extends BaseActivity {
     private void startExample(int position) {
         Intent intent;
         if (position == 0) {
-            intent = new Intent(this, DemoActivity.class);
+            replaceMainFragment(new DemoFragment());
+            drawerLayout.closeDrawers();
         } else if (position == 1) {
             intent = new Intent(this, AnimateMarkersActivity.class);
+            startActivity(intent);
         } else if (position == 2) {
             intent = new Intent(this, ClusterGroupsActivity.class);
+            startActivity(intent);
         } else if (position == 3) {
             intent = new Intent(this, DeclusterificationExampleActivity.class);
+            startActivity(intent);
         } else {
             intent = new Intent(this, LaunchTimeTestActivity.class);
             // normally: int clusteringType = LaunchTimeTestActivity.CLUSTERING_ENABLED;
             int clusteringType = position - 4;
             intent.putExtra(LaunchTimeTestActivity.EXTRA_CLUSTERING_TYPE, clusteringType);
+            startActivity(intent);
         }
-        startActivity(intent);
     }
 
-    private void initDrawerToggle(DrawerLayout drawerLayout) {
+    private void initDrawerToggle() {
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.open_drawer, R.string.close_drawer);
         drawerLayout.setDrawerListener(toggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
