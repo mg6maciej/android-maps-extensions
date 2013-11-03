@@ -17,6 +17,9 @@ package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnticipateInterpolator;
@@ -41,19 +44,17 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Random;
 
-public class AnimateMarkersActivity extends BaseActivity {
+public class AnimateMarkersFragment extends BaseFragment {
 
     private Random random = new Random();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.simple_map);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.simple_map, container, false);
+    }
 
-        FragmentManager fm = getSupportFragmentManager();
-        SupportMapFragment f = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        final GoogleMap map = f.getExtendedMap();
-
+    @Override
+    protected void setUpMap() {
         map.addMarker(new MarkerOptions().title("RED").position(new LatLng(-15, -15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         map.addMarker(new MarkerOptions().title("GREEN").position(new LatLng(-15, 15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         map.addMarker(new MarkerOptions().title("BLUE").position(new LatLng(15, -15)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
@@ -62,12 +63,12 @@ public class AnimateMarkersActivity extends BaseActivity {
         final Marker.AnimationCallback callback = new Marker.AnimationCallback() {
             @Override
             public void onFinish(Marker marker) {
-                Toast.makeText(AnimateMarkersActivity.this, "Animation finished: " + marker.getTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Animation finished: " + marker.getTitle(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancel(Marker marker, CancelReason reason) {
-                Toast.makeText(AnimateMarkersActivity.this, "Animation canceled: " + marker.getTitle() + ", reason: " + reason, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Animation canceled: " + marker.getTitle() + ", reason: " + reason, Toast.LENGTH_SHORT).show();
             }
         };
         map.setOnMarkerClickListener(new OnMarkerClickListener() {

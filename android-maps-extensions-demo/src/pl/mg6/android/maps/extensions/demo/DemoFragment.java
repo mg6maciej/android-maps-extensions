@@ -57,9 +57,6 @@ public class DemoFragment extends BaseFragment {
 
     private static final double[] CLUSTER_SIZES = new double[]{180, 160, 144, 120, 96};
 
-    private SupportMapFragment mapFragment;
-    private GoogleMap map;
-
     private MutableData[] dataArray = {new MutableData(6, new LatLng(-50, 0)), new MutableData(28, new LatLng(-52, 1)),
             new MutableData(496, new LatLng(-51, -2)),};
     private Handler handler = new Handler();
@@ -82,31 +79,12 @@ public class DemoFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         setUpClusteringViews(view);
-        createMapFragmentIfNeeded();
     }
 
-    private void createMapFragmentIfNeeded() {
-        FragmentManager fm = getChildFragmentManager();
-        mapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map_container);
-        if (mapFragment == null) {
-            mapFragment = new SupportMapFragment();
-            FragmentTransaction tx = fm.beginTransaction();
-            tx.add(R.id.map_container, mapFragment);
-            tx.commit();
-        }
-    }
-
-    private void setUpMapIfNeeded() {
-        if (map == null) {
-            map = mapFragment.getExtendedMap();
-            if (map != null) {
-                setUpMap();
-            }
-        }
-    }
-
-    private void setUpMap() {
+    @Override
+    protected void setUpMap() {
         addCircles();
 
         map.setOnMapClickListener(new OnMapClickListener() {
@@ -222,7 +200,6 @@ public class DemoFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
         handler.post(dataUpdater);
     }
 

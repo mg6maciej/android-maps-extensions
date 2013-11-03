@@ -68,8 +68,8 @@ public class MainActivity extends BaseActivity {
             replaceMainFragment(new DemoFragment());
             drawerLayout.closeDrawers();
         } else if (position == 1) {
-            intent = new Intent(this, AnimateMarkersActivity.class);
-            startActivity(intent);
+            replaceMainFragment(new AnimateMarkersFragment());
+            drawerLayout.closeDrawers();
         } else if (position == 2) {
             intent = new Intent(this, ClusterGroupsActivity.class);
             startActivity(intent);
