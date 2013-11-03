@@ -23,6 +23,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class LazyMarker {
 
+    private static boolean GOOGLE_PLAY_SERVICES_4_0 = true;
+
     public interface OnMarkerCreateListener {
 
         void onMarkerCreate(LazyMarker marker);
@@ -259,7 +261,14 @@ public class LazyMarker {
 
     private static MarkerOptions copy(MarkerOptions options) {
         MarkerOptions copy = new MarkerOptions();
-        copy.alpha(options.getAlpha());
+        if (GOOGLE_PLAY_SERVICES_4_0) {
+            try {
+                copy.alpha(options.getAlpha());
+            } catch (NoSuchMethodError error) {
+                // not the cutest way to handle backward compatibility
+                GOOGLE_PLAY_SERVICES_4_0 = false;
+            }
+        }
         copy.anchor(options.getAnchorU(), options.getAnchorV());
         copy.draggable(options.isDraggable());
         copy.flat(options.isFlat());
