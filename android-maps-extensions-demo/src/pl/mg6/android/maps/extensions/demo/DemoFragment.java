@@ -68,6 +68,9 @@ public class DemoFragment extends BaseFragment {
         }
     };
 
+    private SeekBar clusterSizeSeekbar;
+    private CheckBox clusterCheckbox;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.demo, container, false);
@@ -96,7 +99,7 @@ public class DemoFragment extends BaseFragment {
             }
         });
 
-        map.setClustering(new ClusteringSettings().clusterOptionsProvider(new DemoClusterOptionsProvider(getResources())).addMarkersDynamically(true));
+        updateClustering(clusterSizeSeekbar.getProgress(), clusterCheckbox.isChecked());
 
         map.setInfoWindowAdapter(new InfoWindowAdapter() {
 
@@ -220,8 +223,8 @@ public class DemoFragment extends BaseFragment {
     }
 
     private void setUpClusteringViews(View view) {
-        CheckBox clusterCheckbox = (CheckBox) view.findViewById(R.id.checkbox_cluster);
-        final SeekBar clusterSizeSeekbar = (SeekBar) view.findViewById(R.id.seekbar_cluster_size);
+        clusterCheckbox = (CheckBox) view.findViewById(R.id.checkbox_cluster);
+        clusterSizeSeekbar = (SeekBar) view.findViewById(R.id.seekbar_cluster_size);
         clusterCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
             @Override
@@ -239,7 +242,7 @@ public class DemoFragment extends BaseFragment {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                updateClustering(progress, true);
+                updateClustering(progress, clusterCheckbox.isChecked());
             }
 
             @Override
@@ -249,6 +252,9 @@ public class DemoFragment extends BaseFragment {
     }
 
     void updateClustering(int clusterSizeIndex, boolean enabled) {
+        if (map == null) {
+            return;
+        }
         ClusteringSettings clusteringSettings = new ClusteringSettings();
         clusteringSettings.addMarkersDynamically(true);
 
