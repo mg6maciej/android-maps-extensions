@@ -42,7 +42,7 @@ public class MainActivity extends BaseActivity {
         initDrawerToggle();
 
         String[] screens = {"Demo", "Animate markers", "Cluster groups", "\"Declusterification\"",
-                "No clustering", "No clustering (dynamic)", "Grid clustering", "Grid clustering (dynamic)"};
+                "Grid clustering (dynamic)", "No clustering (dynamic)", "Grid clustering", "No clustering"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, screens);
         ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(adapter);
@@ -71,8 +71,16 @@ public class MainActivity extends BaseActivity {
         } else if (position == 3) {
             replaceMainFragment(new DeclusterificationExampleFragment());
         } else {
-            // normally: int clusteringType = LaunchTimeTestFragment.CLUSTERING_ENABLED;
-            int clusteringType = position - 4;
+            int clusteringType;
+            if (position == 4) {
+                clusteringType = LaunchTimeTestFragment.CLUSTERING_ENABLED_DYNAMIC;
+            } else if (position == 5) {
+                clusteringType = LaunchTimeTestFragment.CLUSTERING_DISABLED_DYNAMIC;
+            } else if (position == 6) {
+                clusteringType = LaunchTimeTestFragment.CLUSTERING_ENABLED;
+            } else {
+                clusteringType = LaunchTimeTestFragment.CLUSTERING_DISABLED;
+            }
             Fragment fragment = LaunchTimeTestFragment.newInstance(clusteringType);
             replaceMainFragment(fragment);
         }
