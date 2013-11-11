@@ -89,16 +89,18 @@ public class ClusteringSettings {
         if (clusterSize != other.clusterSize) {
             return false;
         }
-        if (clusterOptionsProvider == null) {
-            if (other.clusterOptionsProvider != null) {
-                return false;
-            }
-        } else {
-            if (!clusterOptionsProvider.equals(other.clusterOptionsProvider)) {
-                return false;
-            }
+        if (!equals(clusterOptionsProvider, other.clusterOptionsProvider)) {
+            return false;
         }
         return true;
+    }
+
+    private static boolean equals(Object objLeft, Object objRight) {
+        if (objLeft == null) {
+            return objRight == null;
+        } else {
+            return objLeft.equals(objRight);
+        }
     }
 
     @Override
