@@ -29,7 +29,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
-import android.widget.Toast;
 
 import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.GoogleMap;
@@ -61,12 +60,12 @@ public class AnimateMarkersFragment extends BaseFragment {
         final Marker.AnimationCallback callback = new Marker.AnimationCallback() {
             @Override
             public void onFinish(Marker marker) {
-                Toast.makeText(getActivity(), "Animation finished: " + marker.getTitle(), Toast.LENGTH_SHORT).show();
+                ToastHelper.showToast(getActivity(), "Animation finished: " + marker.getTitle());
             }
 
             @Override
             public void onCancel(Marker marker, CancelReason reason) {
-                Toast.makeText(getActivity(), "Animation canceled: " + marker.getTitle() + ", reason: " + reason, Toast.LENGTH_SHORT).show();
+                ToastHelper.showToast(getActivity(), "Animation canceled: " + marker.getTitle() + ", reason: " + reason);
             }
         };
         map.setOnMarkerClickListener(new OnMarkerClickListener() {

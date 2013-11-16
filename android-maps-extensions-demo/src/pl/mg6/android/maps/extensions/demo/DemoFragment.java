@@ -27,7 +27,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidmapsextensions.Circle;
 import com.androidmapsextensions.CircleOptions;
@@ -92,7 +91,7 @@ public class DemoFragment extends BaseFragment {
             public void onMapClick(LatLng position) {
                 for (Circle circle : map.getCircles()) {
                     if (circle.contains(position)) {
-                        Toast.makeText(getActivity(), "Clicked " + circle.getData(), Toast.LENGTH_SHORT).show();
+                        ToastHelper.showToast(getActivity(), "Clicked " + circle.getData());
                         return;
                     }
                 }

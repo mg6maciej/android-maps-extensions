@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.androidmapsextensions.ClusteringSettings;
 import com.androidmapsextensions.GoogleMap;
@@ -46,7 +45,7 @@ public class SimpleMapFragment extends BaseFragment {
 
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Toast.makeText(getActivity(), "Clicked marker at: " + marker.getPosition(), Toast.LENGTH_SHORT).show();
+                ToastHelper.showToast(getActivity(), "Clicked marker at: " + marker.getPosition());
                 return false;
             }
         });

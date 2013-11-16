@@ -21,7 +21,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -54,7 +53,7 @@ public class GooglePlayServicesErrorDialogFragment extends DialogFragment {
             if (GooglePlayServicesUtil.isUserRecoverableError(status)) {
                 showDialog(status, activity);
             } else {
-                Toast.makeText(activity.getApplication(), "Google Play services not available", Toast.LENGTH_SHORT).show();
+                ToastHelper.showToast(activity.getApplication(), "Google Play services not available");
             }
         }
         return available;
