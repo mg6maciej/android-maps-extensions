@@ -15,56 +15,103 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends BaseActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle toggle;
 
-		String[] screens = { "Demo", "Animate markers", "Cluster groups", "\"Declusterification\"",
-				"No clustering", "No clustering (dynamic)", "Grid clustering", "Grid clustering (dynamic)" };
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, screens);
-		ListView listView = (ListView) findViewById(R.id.list);
-		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(MainActivity.this)) {
-					startExample(position);
-				}
-			}
-		});
-		if (savedInstanceState == null) {
-			GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(this);
-		}
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
 
-	private void startExample(int position) {
-		Intent intent;
-		if (position == 0) {
-			intent = new Intent(this, DemoActivity.class);
-		} else if (position == 1) {
-			intent = new Intent(this, AnimateMarkersActivity.class);
-		} else if (position == 2) {
-			intent = new Intent(this, ClusterGroupsActivity.class);
-		} else if (position == 3) {
-			intent = new Intent(this, DeclusterificationExampleActivity.class);
-		} else {
-			intent = new Intent(this, LaunchTimeTestActivity.class);
-			// normally: int clusteringType = LaunchTimeTestActivity.CLUSTERING_ENABLED;
-			int clusteringType = position - 4;
-			intent.putExtra(LaunchTimeTestActivity.EXTRA_CLUSTERING_TYPE, clusteringType);
-		}
-		startActivity(intent);
-	}
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        initDrawerToggle();
+
+        String[] screens = {"Demo", "Animate markers", "Cluster groups", "\"Declusterification\"",
+                "Grid clustering (dynamic)", "No clustering (dynamic)", "Grid clustering", "No clustering"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, screens);
+        ListView listView = (ListView) findViewById(R.id.list);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(MainActivity.this)) {
+                    startExample(position);
+                }
+            }
+        });
+        if (savedInstanceState == null) {
+            if (GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(this)) {
+            	replaceMainFragment(new DemoFragment());
+            }
+        }
+    }
+
+    private void startExample(int position) {
+        if (position == 0) {
+            replaceMainFragment(new DemoFragment());
+        } else if (position == 1) {
+            replaceMainFragment(new AnimateMarkersFragment());
+        } else if (position == 2) {
+            replaceMainFragment(new ClusterGroupsFragment());
+        } else if (position == 3) {
+            replaceMainFragment(new DeclusterificationExampleFragment());
+        } else {
+            int clusteringType;
+            if (position == 4) {
+                clusteringType = LaunchTimeTestFragment.CLUSTERING_ENABLED_DYNAMIC;
+            } else if (position == 5) {
+                clusteringType = LaunchTimeTestFragment.CLUSTERING_DISABLED_DYNAMIC;
+            } else if (position == 6) {
+                clusteringType = LaunchTimeTestFragment.CLUSTERING_ENABLED;
+            } else {
+                clusteringType = LaunchTimeTestFragment.CLUSTERING_DISABLED;
+            }
+            Fragment fragment = LaunchTimeTestFragment.newInstance(clusteringType);
+            replaceMainFragment(fragment);
+        }
+        drawerLayout.closeDrawers();
+    }
+
+    private void initDrawerToggle() {
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.open_drawer, R.string.close_drawer);
+        drawerLayout.setDrawerListener(toggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        toggle.syncState();
+    }
+
+    private void replaceMainFragment(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction tx = fm.beginTransaction();
+        tx.replace(R.id.main_container, fragment);
+        tx.commit();
+    }
 }

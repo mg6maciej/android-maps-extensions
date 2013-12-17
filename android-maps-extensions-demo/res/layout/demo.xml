@@ -26,9 +26,8 @@
             android:max="4" />
     </LinearLayout>
 
-    <fragment
-        android:id="@+id/map"
-        android:name="pl.mg6.android.maps.extensions.SupportMapFragment"
+    <FrameLayout
+        android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

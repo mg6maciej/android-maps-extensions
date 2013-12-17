@@ -1,9 +1,12 @@
 bin/
+build/
 gen/
 out/
 target/
 .classpath
 .project
+.gradle/
 .settings/
 .idea/
 *.iml
+local.properties

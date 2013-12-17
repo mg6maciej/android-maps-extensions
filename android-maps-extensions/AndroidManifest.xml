@@ -1,8 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.android.gms"
-    android:versionCode="12"
-    android:versionName="1.7.0" >
+    package="com.androidmapsextensions"
+    android:versionCode="13"
+    android:versionName="2.0.0" >
 
     <uses-sdk android:minSdkVersion="8" />
+
+    <application />
 
 </manifest>
