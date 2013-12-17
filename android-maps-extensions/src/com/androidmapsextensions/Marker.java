@@ -51,7 +51,7 @@ public interface Marker {
     /**
      * WARNING: may be changed in future API when this is fixed: http://code.google.com/p/gmaps-api-issues/issues/detail?id=4650
      */
-    Object getData();
+    <T> T getData();
 
     /**
      * http://code.google.com/p/gmaps-api-issues/issues/detail?id=5101

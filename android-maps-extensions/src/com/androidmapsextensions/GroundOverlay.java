@@ -25,7 +25,7 @@ public interface GroundOverlay {
 
     LatLngBounds getBounds();
 
-    Object getData();
+    <T> T getData();
 
     float getHeight();
 

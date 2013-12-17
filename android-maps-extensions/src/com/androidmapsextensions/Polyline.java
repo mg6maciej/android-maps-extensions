@@ -23,7 +23,7 @@ public interface Polyline {
 
     int getColor();
 
-    Object getData();
+    <T> T getData();
 
     @Deprecated
     String getId();

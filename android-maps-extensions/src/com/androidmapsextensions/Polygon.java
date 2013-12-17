@@ -21,7 +21,7 @@ import java.util.List;
 
 public interface Polygon {
 
-    Object getData();
+    <T> T getData();
 
     int getFillColor();
 

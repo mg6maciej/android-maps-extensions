@@ -19,7 +19,7 @@ public interface TileOverlay {
 
     void clearTileCache();
 
-    Object getData();
+    <T> T getData();
 
     @Deprecated
     String getId();

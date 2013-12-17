@@ -23,7 +23,7 @@ public interface Circle {
 
     LatLng getCenter();
 
-    Object getData();
+    <T> T getData();
 
     int getFillColor();
 

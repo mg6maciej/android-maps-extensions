@@ -90,7 +90,7 @@ public class DeclusterificationExampleFragment extends BaseFragment {
     private void clusterifyMarkers() {
         if (declusterifiedMarkers != null) {
             for (Marker marker : declusterifiedMarkers) {
-                LatLng position = (LatLng) marker.getData();
+                LatLng position = marker.getData();
                 marker.setPosition(position);
                 marker.setClusterGroup(ClusterGroup.DEFAULT);
             }

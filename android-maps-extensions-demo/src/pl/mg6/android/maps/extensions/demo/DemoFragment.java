@@ -158,9 +158,8 @@ public class DemoFragment extends BaseFragment {
                     tv.setText(text);
                     return tv;
                 } else {
-                    Object data = marker.getData();
-                    if (data instanceof MutableData) {
-                        MutableData mutableData = (MutableData) data;
+                    if (marker.getData() instanceof MutableData) {
+                        MutableData mutableData = marker.getData();
                         tv.setText("Value: " + mutableData.value);
                         return tv;
                     }
