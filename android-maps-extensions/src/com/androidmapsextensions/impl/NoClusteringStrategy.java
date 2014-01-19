@@ -18,9 +18,7 @@ package com.androidmapsextensions.impl;
 import com.androidmapsextensions.Marker;
 import com.google.android.gms.maps.model.CameraPosition;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 class NoClusteringStrategy implements ClusteringStrategy {
 
@@ -45,10 +43,12 @@ class NoClusteringStrategy implements ClusteringStrategy {
     @Override
     public void onCameraChange(CameraPosition cameraPosition) {
     	for (DelegatingMarker marker : markers) {
-            if (cameraPosition.zoom >= marker.getMinZoomLevelVisible()) {
+            if ( marker.isVisible()  &&  cameraPosition.zoom >= marker.getMinZoomLevelVisible() ) {
                 marker.changeVisible(true);
             }
-            else {
+            else 
+            if ( cameraPosition.zoom < marker.getMinZoomLevelVisible() )
+            {
             	marker.changeVisible(false);
             }
         }

@@ -128,7 +128,7 @@ class DynamicNoClusteringStrategy implements ClusteringStrategy {
         Iterator<DelegatingMarker> iterator = markers.iterator();
         while (iterator.hasNext()) {
             DelegatingMarker marker = iterator.next();
-            if (visibleRegionBounds.contains(marker.getPosition())  &&
+            if (marker.isVisible()  &&  visibleRegionBounds.contains(marker.getPosition())  &&
             		map.getCameraPosition().zoom >= marker.getMinZoomLevelVisible() ) {
                 marker.changeVisible(true);
                 iterator.remove();
