@@ -18,12 +18,19 @@ package com.androidmapsextensions.impl;
 import com.androidmapsextensions.Marker;
 import com.google.android.gms.maps.model.CameraPosition;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class NoClusteringStrategy implements ClusteringStrategy {
 
+	private List<DelegatingMarker> markers;
+    
     public NoClusteringStrategy(List<DelegatingMarker> markers) {
-        for (DelegatingMarker marker : markers) {
+  
+    	this.markers = markers;
+    	
+        for (DelegatingMarker marker : markers) {        	
             if (marker.isVisible()) {
                 marker.changeVisible(true);
             }
@@ -37,9 +44,16 @@ class NoClusteringStrategy implements ClusteringStrategy {
 
     @Override
     public void onCameraChange(CameraPosition cameraPosition) {
-
+    	for (DelegatingMarker marker : markers) {
+            if (cameraPosition.zoom >= marker.getMinZoomLevelVisible()) {
+                marker.changeVisible(true);
+            }
+            else {
+            	marker.changeVisible(false);
+            }
+        }
     }
-
+    
     @Override
     public void onClusterGroupChange(DelegatingMarker marker) {
 

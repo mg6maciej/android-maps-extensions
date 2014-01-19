@@ -66,6 +66,7 @@ class MarkerManager implements OnMarkerCreateListener {
     private void setExtendedOptions(DelegatingMarker marker, MarkerOptions markerOptions) {
         marker.setClusterGroup(markerOptions.getClusterGroup());
         marker.setData(markerOptions.getData());
+        marker.setMinZoomLevelVisible(markerOptions.getMinZoomLevel());
     }
 
     private DelegatingMarker createMarker(com.google.android.gms.maps.model.MarkerOptions markerOptions) {

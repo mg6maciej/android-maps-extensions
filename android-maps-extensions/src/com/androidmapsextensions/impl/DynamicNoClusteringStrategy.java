@@ -40,7 +40,7 @@ class DynamicNoClusteringStrategy implements ClusteringStrategy {
         }
         showMarkersInVisibleRegion();
     }
-
+    
     @Override
     public void cleanup() {
         markers.clear();
@@ -120,7 +120,7 @@ class DynamicNoClusteringStrategy implements ClusteringStrategy {
     public float getMinZoomLevelNotClustered(Marker marker) {
         return 0.0f;
     }
-
+    
     private void showMarkersInVisibleRegion() {
         IProjection projection = map.getProjection();
         VisibleRegion visibleRegion = projection.getVisibleRegion();
@@ -128,13 +128,14 @@ class DynamicNoClusteringStrategy implements ClusteringStrategy {
         Iterator<DelegatingMarker> iterator = markers.iterator();
         while (iterator.hasNext()) {
             DelegatingMarker marker = iterator.next();
-            if (visibleRegionBounds.contains(marker.getPosition())) {
+            if (visibleRegionBounds.contains(marker.getPosition())  &&
+            		map.getCameraPosition().zoom >= marker.getMinZoomLevelVisible() ) {
                 marker.changeVisible(true);
                 iterator.remove();
             }
         }
     }
-
+    
     private void addMarker(DelegatingMarker marker) {
         if (visibleRegionBounds.contains(marker.getPosition())) {
             marker.changeVisible(true);
