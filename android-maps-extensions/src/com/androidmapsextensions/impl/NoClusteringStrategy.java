@@ -53,7 +53,7 @@ class NoClusteringStrategy implements ClusteringStrategy {
             }
         }
     }
-    
+
     @Override
     public void onClusterGroupChange(DelegatingMarker marker) {
 
