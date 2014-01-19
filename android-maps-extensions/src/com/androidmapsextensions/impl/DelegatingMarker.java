@@ -285,5 +285,5 @@ class DelegatingMarker implements Marker {
 
     void setVirtualPosition(LatLng position) {
         real.setPosition(position);
-    }	
+    }
 }
