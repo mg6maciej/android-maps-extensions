@@ -27,8 +27,17 @@ public class TileOverlayOptions {
         return this;
     }
 
+    public TileOverlayOptions fadeIn(boolean fadeIn) {
+        real.fadeIn(fadeIn);
+        return this;
+    }
+
     public Object getData() {
         return data;
+    }
+
+    public boolean getFadeIn() {
+        return real.getFadeIn();
     }
 
     public TileProvider getTileProvider() {
