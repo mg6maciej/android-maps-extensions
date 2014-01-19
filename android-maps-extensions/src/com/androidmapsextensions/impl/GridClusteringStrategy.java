@@ -85,13 +85,16 @@ class GridClusteringStrategy implements ClusteringStrategy {
         oldZoom = zoom;
         zoom = Math.round(cameraPosition.zoom);
         
-        for (DelegatingMarker marker : markers.keySet()) {
-        	if ( marker.getClusterGroup() < 0 ) {
-        		if ( cameraPosition.zoom >= marker.getMinZoomLevelVisible() ) {
-        			marker.setVisible(true);
+        VisibleRegion visibleRegion = map.getProjection().getVisibleRegion();
+        LatLngBounds bounds = visibleRegion.latLngBounds;
+        for ( DelegatingMarker marker : markers.keySet() ) {
+        	if ( marker.isVisible()  &&  marker.getClusterGroup() < 0 ) {
+        		if ( cameraPosition.zoom >= marker.getMinZoomLevelVisible()  &&  bounds.contains(marker.getPosition()) ) {
+        			marker.changeVisible(true);
         		}
-        		else {
-        			marker.setVisible(false);
+        		else 
+        		if ( cameraPosition.zoom < marker.getMinZoomLevelVisible() ) {
+        			marker.changeVisible(false);
         		}
         	}
         }
