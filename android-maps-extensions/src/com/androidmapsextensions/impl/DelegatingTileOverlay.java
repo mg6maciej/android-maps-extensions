@@ -39,6 +39,11 @@ class DelegatingTileOverlay implements TileOverlay {
         return data;
     }
 
+    @Override
+    public boolean getFadeIn() {
+        return real.getFadeIn();
+    }
+
     @Deprecated
     @Override
     public String getId() {
@@ -64,6 +69,11 @@ class DelegatingTileOverlay implements TileOverlay {
     @Override
     public void setData(Object data) {
         this.data = data;
+    }
+
+    @Override
+    public void setFadeIn(boolean fadeIn) {
+        real.setFadeIn(fadeIn);
     }
 
     @Override

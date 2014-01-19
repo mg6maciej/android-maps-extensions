@@ -21,6 +21,8 @@ public interface TileOverlay {
 
     <T> T getData();
 
+    boolean getFadeIn();
+
     @Deprecated
     String getId();
 
@@ -31,6 +33,8 @@ public interface TileOverlay {
     void remove();
 
     void setData(Object data);
+
+    void setFadeIn(boolean fadeIn);
 
     void setVisible(boolean visible);
 
