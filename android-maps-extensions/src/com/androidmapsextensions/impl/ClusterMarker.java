@@ -58,12 +58,10 @@ class ClusterMarker implements Marker {
             removeVirtual();
             markers.get(0).changeVisible(true);
         } else {
-            LatLngBounds.Builder builder = LatLngBounds.builder();
             for (DelegatingMarker m : markers) {
-                builder.include(m.getPosition());
                 m.changeVisible(false);
             }
-            LatLng position = builder.build().getCenter();
+            LatLng position = calculateClusterPosition();
             if (virtual == null || lastCount != count) {
                 removeVirtual();
                 lastCount = count;
@@ -72,6 +70,14 @@ class ClusterMarker implements Marker {
                 virtual.setPosition(position);
             }
         }
+    }
+
+    private LatLng calculateClusterPosition() {
+        LatLngBounds.Builder builder = LatLngBounds.builder();
+        for (DelegatingMarker m : markers) {
+            builder.include(m.getPosition());
+        }
+        return builder.build().getCenter();
     }
 
     Marker getDisplayedMarker() {
@@ -159,11 +165,7 @@ class ClusterMarker implements Marker {
         if (virtual != null) {
             return virtual.getPosition();
         }
-        LatLngBounds.Builder builder = LatLngBounds.builder();
-        for (DelegatingMarker m : markers) {
-            builder.include(m.getPosition());
-        }
-        LatLng position = builder.build().getCenter();
+        LatLng position = calculateClusterPosition();
         return position;
     }
 
