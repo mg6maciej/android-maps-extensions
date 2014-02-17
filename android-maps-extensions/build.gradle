@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services:4.1.32'
+    compile 'com.google.android.gms:play-services:4.2.42'
 }
 
 group = 'com.androidmapsextensions'

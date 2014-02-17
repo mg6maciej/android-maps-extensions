@@ -3,7 +3,7 @@
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="common_google_play_services_install_title" msgid="26645092511305524">"Pata huduma za Google Play"</string>
     <string name="common_google_play_services_install_text_phone" msgid="8685301130651051380">"Programu hii haiwezi kuendeshwa bila huduma za Google Play, ambazo hazipo kwenye simu yako."</string>
-    <string name="common_google_play_services_install_text_tablet" msgid="1589957570365247855">"Programu hii haiwezi kuendeshwa bila huduma za Google Play, ambazo hazipo kwenye kompyuta yako ndogo."</string>
+    <string name="common_google_play_services_install_text_tablet" msgid="1589957570365247855">"Programu hii haiwezi kufanya kazi bila huduma za Google Play, ambazo hazipatikani kwenye kompyuta kibao yako."</string>
     <string name="common_google_play_services_install_button" msgid="8515591849428043265">"Pata huduma za Google Play"</string>
     <string name="common_google_play_services_enable_title" msgid="529078775174559253">"Wezesha huduma za Google Play"</string>
     <string name="common_google_play_services_enable_text" msgid="7627896071867667758">"Programu hii haitafanya kazi mpaka utakapowezesha huduma za Google Play."</string>
