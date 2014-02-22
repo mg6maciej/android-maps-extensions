@@ -42,6 +42,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
     private boolean addMarkersDynamically;
     private double baseClusterSize;
+    private int minMarkersCount;
     private IGoogleMap map;
     private Map<DelegatingMarker, ClusterMarker> markers;
     private double clusterSize;
@@ -57,6 +58,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
         this.clusterOptionsProvider = settings.getClusterOptionsProvider();
         this.addMarkersDynamically = settings.isAddMarkersDynamically();
         this.baseClusterSize = settings.getClusterSize();
+        this.minMarkersCount = settings.getMinMarkersCount();
         this.map = map;
         this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
         this.refresher = refresher;
@@ -187,9 +189,9 @@ class GridClusteringStrategy implements ClusteringStrategy {
     public List<Marker> getDisplayedMarkers() {
         List<Marker> displayedMarkers = new ArrayList<Marker>();
         for (ClusterMarker cluster : clusters.values()) {
-            Marker displayedMarker = cluster.getDisplayedMarker();
-            if (displayedMarker != null) {
-                displayedMarkers.add(displayedMarker);
+            List<? extends Marker> clusterDisplayedMarkers = cluster.getDisplayedMarkers();
+            if (clusterDisplayedMarkers != null) {
+                displayedMarkers.addAll(clusterDisplayedMarkers);
             }
         }
         for (DelegatingMarker marker : markers.keySet()) {
@@ -445,6 +447,10 @@ class GridClusteringStrategy implements ClusteringStrategy {
         markerOptions.infoWindowAnchor(opts.getInfoWindowAnchorU(), opts.getInfoWindowAnchorV());
         markerOptions.rotation(opts.getRotation());
         return map.addMarker(markerOptions);
+    }
+
+    int getMinMarkersCount() {
+        return minMarkersCount;
     }
 
     private static class ClusterKey {
