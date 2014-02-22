@@ -18,14 +18,13 @@ package com.androidmapsextensions;
 public class ClusteringSettings {
 
     public static final double DEFAULT_CLUSTER_SIZE = 180.0;
+    private static final int DEFAULT_MIN_MARKERS_COUNT = 2;
 
     private boolean addMarkersDynamically = false;
-
     private ClusterOptionsProvider clusterOptionsProvider = null;
-
     private double clusterSize = DEFAULT_CLUSTER_SIZE;
-
     private boolean enabled = true;
+    private int minMarkersCount = DEFAULT_MIN_MARKERS_COUNT;
 
     public ClusteringSettings addMarkersDynamically(boolean addMarkersDynamically) {
         this.addMarkersDynamically = addMarkersDynamically;
@@ -60,12 +59,21 @@ public class ClusteringSettings {
         return clusterSize;
     }
 
+    public int getMinMarkersCount() {
+        return minMarkersCount;
+    }
+
     public boolean isAddMarkersDynamically() {
         return addMarkersDynamically;
     }
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public ClusteringSettings minMarkersCount(int minMarkersCount) {
+        this.minMarkersCount = minMarkersCount;
+        return this;
     }
 
     @Override
@@ -87,6 +95,9 @@ public class ClusteringSettings {
             return true;
         }
         if (clusterSize != other.clusterSize) {
+            return false;
+        }
+        if (minMarkersCount != other.minMarkersCount) {
             return false;
         }
         if (!equals(clusterOptionsProvider, other.clusterOptionsProvider)) {
