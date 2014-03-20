@@ -109,3 +109,14 @@ uploadArchives.repositories.mavenDeployer {
         pom -> pom.dependencies = []
     }
 }
+
+android.libraryVariants.all { variant ->
+    variant.processManifest.doFirst {
+        File manifestFile = file("${buildDir}/exploded-bundles/ComGoogleAndroidGmsPlayServices4242.aar/AndroidManifest.xml")
+        if (manifestFile.exists()) {
+            String content = manifestFile.getText('UTF-8')
+            content = content.replaceAll(/minSdkVersion="9"/, 'minSdkVersion="8"')
+            manifestFile.write(content, 'UTF-8')
+        }
+    }
+}
