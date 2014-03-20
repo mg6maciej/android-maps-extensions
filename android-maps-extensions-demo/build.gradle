@@ -16,6 +16,8 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+def isTravis = "true".equals(System.getenv("TRAVIS"))
+
 android {
     compileSdkVersion 19
     buildToolsVersion '19.0.3'
@@ -31,6 +33,10 @@ android {
             java.srcDirs = ['src']
             res.srcDirs = ['res']
         }
+    }
+
+    dexOptions {
+        preDexLibraries = !isTravis
     }
 }
 

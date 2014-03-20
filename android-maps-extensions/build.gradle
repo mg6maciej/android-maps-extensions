@@ -19,6 +19,8 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+def isTravis = "true".equals(System.getenv("TRAVIS"))
+
 android {
     compileSdkVersion 19
     buildToolsVersion '19.0.3'
@@ -34,6 +36,10 @@ android {
             res.srcDirs = ['res']
         }
     }
+
+    dexOptions {
+        preDexLibraries = !isTravis
+    }
 }
 
 dependencies {
@@ -42,8 +48,6 @@ dependencies {
 
 group = 'com.androidmapsextensions'
 version = '2.1.1-SNAPSHOT'
-
-def isTravis = "true".equals(System.getenv("TRAVIS"))
 
 if (!isTravis) {
 
