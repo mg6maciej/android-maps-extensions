@@ -10,4 +10,4 @@ before_install:
   - source ~/.android-sdk-installer/env
 
 notifications:
-  email: true
+  email: false
