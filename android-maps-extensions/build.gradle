@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.8.+'
+        classpath 'com.android.tools.build:gradle:0.9.+'
     }
 }
 
@@ -112,7 +112,7 @@ uploadArchives.repositories.mavenDeployer {
 
 android.libraryVariants.all { variant ->
     variant.processManifest.doFirst {
-        File manifestFile = file("${buildDir}/exploded-bundles/ComGoogleAndroidGmsPlayServices4242.aar/AndroidManifest.xml")
+        File manifestFile = file("${buildDir}/exploded-aar/com.google.android.gms/play-services/4.2.42/AndroidManifest.xml")
         if (manifestFile.exists()) {
             String content = manifestFile.getText('UTF-8')
             content = content.replaceAll(/minSdkVersion="9"/, 'minSdkVersion="8"')
