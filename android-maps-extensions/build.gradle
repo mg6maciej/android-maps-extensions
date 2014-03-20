@@ -21,7 +21,7 @@ tasks.withType(JavaCompile) {
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '19.0.1'
+    buildToolsVersion '19.0.3'
 
     defaultConfig {
         minSdkVersion 8
