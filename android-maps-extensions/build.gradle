@@ -117,8 +117,6 @@ if (!isTravis) {
             pom -> pom.dependencies = []
         }
     }
-} else {
-    println("on Travis, not signing")
 }
 
 android.libraryVariants.all { variant ->
