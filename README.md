@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mg6maciej/android-maps-extensions.svg?branch=develop)](https://travis-ci.org/mg6maciej/android-maps-extensions)
+
 Android Maps Extensions
 =======================
 
