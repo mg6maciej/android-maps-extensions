@@ -86,6 +86,21 @@ class GridClusteringStrategy implements ClusteringStrategy {
     public void onCameraChange(CameraPosition cameraPosition) {
         oldZoom = zoom;
         zoom = Math.round(cameraPosition.zoom);
+        
+        VisibleRegion visibleRegion = map.getProjection().getVisibleRegion();
+        LatLngBounds bounds = visibleRegion.latLngBounds;
+        for ( DelegatingMarker marker : markers.keySet() ) {
+        	if ( marker.isVisible()  &&  marker.getClusterGroup() < 0 ) {
+        		if ( cameraPosition.zoom >= marker.getMinZoomLevelVisible()  &&  bounds.contains(marker.getPosition()) ) {
+        			marker.changeVisible(true);
+        		}
+        		else 
+        		if ( cameraPosition.zoom < marker.getMinZoomLevelVisible() ) {
+        			marker.changeVisible(false);
+        		}
+        	}
+        }
+        
         double clusterSize = calculateClusterSize(zoom);
         if (this.clusterSize != clusterSize) {
             this.clusterSize = clusterSize;
@@ -126,7 +141,12 @@ class GridClusteringStrategy implements ClusteringStrategy {
         int clusterGroup = marker.getClusterGroup();
         if (clusterGroup < 0) {
             markers.put(marker, null);
-            marker.changeVisible(true);
+            if ( map.getCameraPosition().zoom >= marker.getMinZoomLevelVisible() ) {
+            	marker.changeVisible(true);
+            }
+            else {
+            	marker.changeVisible(false);
+            }
         } else {
             LatLng position = marker.getPosition();
             ClusterKey key = calculateClusterKey(clusterGroup, position);

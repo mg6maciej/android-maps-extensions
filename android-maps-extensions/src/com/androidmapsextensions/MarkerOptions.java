@@ -23,6 +23,7 @@ public class MarkerOptions {
     public final com.google.android.gms.maps.model.MarkerOptions real = new com.google.android.gms.maps.model.MarkerOptions();
     private Object data;
     private int clusterGroup;
+    private float minZoomLevelVisible;
 
     public MarkerOptions alpha(float alpha) {
         real.alpha(alpha);
@@ -74,6 +75,10 @@ public class MarkerOptions {
         return data;
     }
 
+    public float getMinZoomLevel() {
+        return minZoomLevelVisible;
+    }
+    
     public BitmapDescriptor getIcon() {
         return real.getIcon();
     }
@@ -146,6 +151,11 @@ public class MarkerOptions {
 
     public MarkerOptions visible(boolean visible) {
         real.visible(visible);
+        return this;
+    }
+    
+    public MarkerOptions minZoomLevelVisible(float minZoomLevelVisible) {
+        this.minZoomLevelVisible = minZoomLevelVisible;
         return this;
     }
 }

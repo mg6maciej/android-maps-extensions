@@ -30,6 +30,7 @@ class DelegatingMarker implements Marker {
 
     private int clusterGroup;
     private Object data;
+    private float minZoomLevelVisible;
 
     private LatLng position;
     private boolean visible;
@@ -40,6 +41,8 @@ class DelegatingMarker implements Marker {
 
         this.position = real.getPosition();
         this.visible = real.isVisible();
+        
+        this.minZoomLevelVisible = -1; 
     }
 
     @Override
@@ -79,6 +82,10 @@ class DelegatingMarker implements Marker {
     public Object getData() {
         return data;
     }
+
+	public float getMinZoomLevelVisible() {
+		return minZoomLevelVisible;
+	}
 
     @Deprecated
     @Override
@@ -173,6 +180,10 @@ class DelegatingMarker implements Marker {
         this.data = data;
     }
 
+    public void setMinZoomLevelVisible(float minZoomLevelVisible) {
+        this.minZoomLevelVisible = minZoomLevelVisible;
+    }
+    
     @Override
     public void setDraggable(boolean draggable) {
         real.setDraggable(draggable);

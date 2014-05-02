@@ -22,8 +22,13 @@ import java.util.List;
 
 class NoClusteringStrategy implements ClusteringStrategy {
 
+	private List<DelegatingMarker> markers;
+    
     public NoClusteringStrategy(List<DelegatingMarker> markers) {
-        for (DelegatingMarker marker : markers) {
+  
+    	this.markers = markers;
+    	
+        for (DelegatingMarker marker : markers) {        	
             if (marker.isVisible()) {
                 marker.changeVisible(true);
             }
@@ -37,7 +42,16 @@ class NoClusteringStrategy implements ClusteringStrategy {
 
     @Override
     public void onCameraChange(CameraPosition cameraPosition) {
-
+    	for (DelegatingMarker marker : markers) {
+            if ( marker.isVisible()  &&  cameraPosition.zoom >= marker.getMinZoomLevelVisible() ) {
+                marker.changeVisible(true);
+            }
+            else 
+            if ( cameraPosition.zoom < marker.getMinZoomLevelVisible() )
+            {
+            	marker.changeVisible(false);
+            }
+        }
     }
 
     @Override
