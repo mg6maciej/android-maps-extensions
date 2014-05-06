@@ -42,7 +42,7 @@ class MarkerManager implements OnMarkerCreateListener {
     private Marker markerShowingInfoWindow;
 
     private ClusteringSettings clusteringSettings = new ClusteringSettings().enabled(false);
-    private ClusteringStrategy clusteringStrategy = new NoClusteringStrategy(new ArrayList<DelegatingMarker>());
+    ClusteringStrategy clusteringStrategy = new NoClusteringStrategy(new ArrayList<DelegatingMarker>());
 
     private final MarkerAnimator markerAnimator = new MarkerAnimator();
 
@@ -111,7 +111,12 @@ class MarkerManager implements OnMarkerCreateListener {
     public float getMinZoomLevelNotClustered(Marker marker) {
         return clusteringStrategy.getMinZoomLevelNotClustered(marker);
     }
-
+    
+    public void onAnimateScreenMarkerPosition(DelegatingMarker marker, LatLng from, LatLng to, AnimationSettings settings, Marker.AnimationCallback callback) {
+        markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.ANIMATE_POSITION);
+        markerAnimator.animateScreen(marker, from, to, SystemClock.uptimeMillis(), settings, callback);
+    }
+    
     public void onAnimateMarkerPosition(DelegatingMarker marker, LatLng target, AnimationSettings settings, Marker.AnimationCallback callback) {
         markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.ANIMATE_POSITION);
         markerAnimator.animate(marker, marker.getPosition(), target, SystemClock.uptimeMillis(), settings, callback);

@@ -45,6 +45,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.VisibleRegion;
 
 //TODO: to be deleted when com.google.android.gms.maps.GoogleMap becomes an interface
 interface IGoogleMap {
@@ -134,4 +135,6 @@ interface IGoogleMap {
     void stopAnimation();
 
     GoogleMap getMap();
+
+	VisibleRegion getVisibleRegion();
 }

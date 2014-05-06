@@ -15,6 +15,8 @@
  */
 package com.androidmapsextensions.impl;
 
+import android.util.Log;
+
 import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.Marker;
 import com.androidmapsextensions.lazy.LazyMarker;
@@ -25,7 +27,7 @@ import java.util.List;
 
 class DelegatingMarker implements Marker {
 
-    private LazyMarker real;
+    LazyMarker real;
     private MarkerManager manager;
 
     private int clusterGroup;
@@ -34,7 +36,9 @@ class DelegatingMarker implements Marker {
 
     private LatLng position;
     private boolean visible;
-
+    LatLng splitClusterPosition; // VH - Position of cluster this marker split away from, for animating
+    
+    
     DelegatingMarker(LazyMarker real, MarkerManager manager) {
         this.real = real;
         this.manager = manager;
@@ -43,6 +47,14 @@ class DelegatingMarker implements Marker {
         this.visible = real.isVisible();
         
         this.minZoomLevelVisible = -1; 
+    }
+
+    // VH
+    public void animateScreenPosition(LatLng from, LatLng to, AnimationCallback callback) {
+        if ( from == null  ||  to == null ) {
+            throw new IllegalArgumentException();
+        }
+        manager.onAnimateScreenMarkerPosition(this, from, to, new AnimationSettings(), callback);
     }
 
     @Override
@@ -209,6 +221,10 @@ class DelegatingMarker implements Marker {
         this.position = position;
         real.setPosition(position);
         manager.onPositionChange(this);
+    }
+
+    void setPositionDuringScreenAnimation(LatLng position) {
+        real.setPosition(position);
     }
 
     void setPositionDuringAnimation(LatLng position) {

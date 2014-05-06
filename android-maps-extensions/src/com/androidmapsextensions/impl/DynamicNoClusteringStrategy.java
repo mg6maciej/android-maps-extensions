@@ -123,7 +123,7 @@ class DynamicNoClusteringStrategy implements ClusteringStrategy {
 
     private void showMarkersInVisibleRegion() {
         IProjection projection = map.getProjection();
-        VisibleRegion visibleRegion = projection.getVisibleRegion();
+        VisibleRegion visibleRegion = map.getVisibleRegion();
         visibleRegionBounds = visibleRegion.latLngBounds;
         Iterator<DelegatingMarker> iterator = markers.iterator();
         while (iterator.hasNext()) {
@@ -143,4 +143,8 @@ class DynamicNoClusteringStrategy implements ClusteringStrategy {
             markers.add(marker);
         }
     }
+
+	@Override
+	public void refreshAll() {
+	}
 }

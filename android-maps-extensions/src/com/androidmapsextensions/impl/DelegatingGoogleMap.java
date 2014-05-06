@@ -17,8 +17,12 @@ package com.androidmapsextensions.impl;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.location.Location;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.androidmapsextensions.Circle;
 import com.androidmapsextensions.CircleOptions;
@@ -40,6 +44,9 @@ import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.VisibleRegion;
 
 import java.util.List;
 
@@ -59,7 +66,18 @@ class DelegatingGoogleMap implements GoogleMap {
     private GroundOverlayManager groundOverlayManager;
     private TileOverlayManager tileOverlayManager;
 
+    private int mWidthPixels;
+    private int mHeightPixels;
+
     DelegatingGoogleMap(IGoogleMap real, Context context) {
+    	
+    	DisplayMetrics dm = new DisplayMetrics();
+    	WindowManager wm = (WindowManager) context.getSystemService( Context.WINDOW_SERVICE );
+    	Display dd = wm.getDefaultDisplay();
+    	dd.getMetrics(dm);
+    	mWidthPixels  = dm.widthPixels;
+        mHeightPixels = dm.heightPixels;    	
+        
         this.real = real;
         this.context = context;
         createManagers();
@@ -186,12 +204,12 @@ class DelegatingGoogleMap implements GoogleMap {
     public Location getMyLocation() {
         return real.getMyLocation();
     }
-
+    
     @Override
     public Projection getProjection() {
         return real.getProjection().getProjection();
     }
-
+    
     @Override
     public UiSettings getUiSettings() {
         return real.getUiSettings();
@@ -338,7 +356,12 @@ class DelegatingGoogleMap implements GoogleMap {
     public void stopAnimation() {
         real.stopAnimation();
     }
-
+    
+    @Override
+    public void refreshAll() {
+        markerManager.clusteringStrategy.refreshAll();
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -476,4 +499,8 @@ class DelegatingGoogleMap implements GoogleMap {
             }
         }
     }
-}
+    
+    public VisibleRegion getVisibleRegion() {
+    	return real.getVisibleRegion();
+    }
+}    

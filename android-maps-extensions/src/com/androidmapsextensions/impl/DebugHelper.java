@@ -31,7 +31,7 @@ class DebugHelper {
     void drawDebugGrid(IGoogleMap map, double clusterSize) {
         cleanup();
         IProjection projection = map.getProjection();
-        LatLngBounds bounds = projection.getVisibleRegion().latLngBounds;
+        LatLngBounds bounds = map.getVisibleRegion().latLngBounds;
         double minY = -180 + clusterSize * (int) (SphericalMercator.scaleLatitude(bounds.southwest.latitude) / clusterSize);
         double minX = -180 + clusterSize * (int) (SphericalMercator.scaleLongitude(bounds.southwest.longitude) / clusterSize);
         double maxY = -180 + clusterSize * (int) (SphericalMercator.scaleLatitude(bounds.northeast.latitude) / clusterSize);

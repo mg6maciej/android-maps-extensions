@@ -15,14 +15,15 @@
  */
 package com.androidmapsextensions;
 
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
 public class AnimationSettings {
 
-    public static final long DEFAULT_DURATION = 500L;
+    public static final long DEFAULT_DURATION = 250L;
 
-    public static final Interpolator DEFAULT_INTERPOLATOR = new LinearInterpolator();
+    public static final Interpolator DEFAULT_INTERPOLATOR = new DecelerateInterpolator();
 
     private long duration = DEFAULT_DURATION;
 

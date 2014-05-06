@@ -36,6 +36,9 @@ public interface Marker {
         void onCancel(Marker marker, CancelReason reason);
     }
 
+    // VH
+    void animateScreenPosition(LatLng from, LatLng to, AnimationCallback callback);
+    
     void animatePosition(LatLng target);
 
     void animatePosition(LatLng target, AnimationSettings settings);

@@ -15,8 +15,12 @@
  */
 package com.androidmapsextensions.impl;
 
+import android.os.SystemClock;
+import android.util.Log;
+
 import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.lazy.LazyMarker;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -55,21 +59,53 @@ class ClusterMarker implements Marker {
         if (count == 0) {
             removeVirtual();
         } else if (count == 1) {
-            removeVirtual();
-            markers.get(0).changeVisible(true);
+        	// VH - animate the marker splitting away
+        	DelegatingMarker dm = markers.get(0);
+        	if ( dm.splitClusterPosition != null ) {        		
+        		double lat = dm.getPosition().latitude;
+        		double lon = dm.getPosition().longitude;
+        		Log.e("ANIMATING MARKER SPLIT", "From" + dm.splitClusterPosition + " to " + new LatLng(lat,lon) );
+        		dm.changeVisible(true);
+        		dm.animateScreenPosition( dm.splitClusterPosition, new LatLng(lat,lon), null );
+        		dm.splitClusterPosition = null;
+        	}
+        	else {
+        		dm.changeVisible(true);
+        	}
+        	
+            removeVirtual(); 
         } else {
+        	// VH - animate the marker joining the cluster
             LatLngBounds.Builder builder = LatLngBounds.builder();
             for (DelegatingMarker m : markers) {
                 builder.include(m.getPosition());
-                m.changeVisible(false);
             }
             LatLng position = builder.build().getCenter();
+                 
+            // Show new cluster marker only after animation is complete
+            // TODO - need to animate cluster markers as well
             if (virtual == null || lastCount != count) {
                 removeVirtual();
                 lastCount = count;
                 virtual = strategy.createMarker(new ArrayList<Marker>(markers), position);
             } else {
                 virtual.setPosition(position);
+            }
+            
+            for (final DelegatingMarker m : markers) {
+                if ( m.real.isVisible() ) {
+                	Log.e("ANIMATING MARKER JOIN", "From" + m.getPosition() + " to " + position );
+            		m.animateScreenPosition( m.real.getPosition(), position, new AnimationCallback() {
+						@Override
+						public void onFinish( Marker marker ) {
+							m.changeVisible(false);
+						}
+						@Override
+						public void onCancel( Marker marker, CancelReason reason ) {
+							m.changeVisible(false);
+						} 
+					} );                	
+                }
             }
         }
     }
@@ -82,6 +118,25 @@ class ClusterMarker implements Marker {
             return markers.get(0);
         } else {
             return this;
+        }
+    }
+
+    void removeVirtual( LatLng slideTo ) {
+        if ( virtual != null ) {
+        	/*
+        	MarkerManager = 
+            LazyMarker realMarker = new LazyMarker(factory.getMap(), markerOptions, this);
+            DelegatingMarker marker = new DelegatingMarker(realMarker, this);
+
+        	LazyMarker dummyLm = new LazyMarker(null, null);
+        	
+        	DelegatingMarker dummy = new DelegatingMarker(virtual, null);        	
+            manager.markerAnimator.cancelAnimation( dummy, Marker.AnimationCallback.CancelReason.ANIMATE_POSITION);
+            manager.markerAnimator.animateScreen(   dummy, virtual.getPosition(), slideTo, SystemClock.uptimeMillis(), new AnimationSettings(), null);
+        	//virtual	.        	 
+        	 */
+            virtual.remove();
+            virtual = null;
         }
     }
 
@@ -316,4 +371,11 @@ class ClusterMarker implements Marker {
             virtual.setPosition(position);
         }
     }
+
+	@Override
+	public void animateScreenPosition( LatLng from, LatLng to,
+			AnimationCallback callback ) {
+		// TODO Auto-generated method stub
+		
+	}
 }

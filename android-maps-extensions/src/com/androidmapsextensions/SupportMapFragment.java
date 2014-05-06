@@ -16,6 +16,7 @@
 package com.androidmapsextensions;
 
 import android.os.Bundle;
+import android.os.Handler;
 
 import com.androidmapsextensions.impl.ExtendedMapFactory;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -39,7 +40,7 @@ public class SupportMapFragment extends com.google.android.gms.maps.SupportMapFr
     }
 
     private GoogleMap map;
-
+    
     public GoogleMap getExtendedMap() {
         if (map == null) {
             com.google.android.gms.maps.GoogleMap realMap = super.getMap();

@@ -139,7 +139,7 @@ public class LazyMarker {
 
     public void remove() {
         if (marker != null) {
-            marker.remove();
+			marker.remove();
             marker = null;
         } else {
             map = null;

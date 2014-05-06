@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 class GridClusteringStrategy implements ClusteringStrategy {
 
     private static boolean GOOGLE_PLAY_SERVICES_4_0 = true;
@@ -85,9 +86,10 @@ class GridClusteringStrategy implements ClusteringStrategy {
         oldZoom = zoom;
         zoom = Math.round(cameraPosition.zoom);
         
-        VisibleRegion visibleRegion = map.getProjection().getVisibleRegion();
+        VisibleRegion visibleRegion = map.getVisibleRegion();
         LatLngBounds bounds = visibleRegion.latLngBounds;
         for ( DelegatingMarker marker : markers.keySet() ) {
+        	marker.splitClusterPosition = null; // Reset this, will not be needed any more    
         	if ( marker.isVisible()  &&  marker.getClusterGroup() < 0 ) {
         		if ( cameraPosition.zoom >= marker.getMinZoomLevelVisible()  &&  bounds.contains(marker.getPosition()) ) {
         			marker.changeVisible(true);
@@ -346,6 +348,12 @@ class GridClusteringStrategy implements ClusteringStrategy {
                     refresh(cluster);
                 }
             } else {
+            	// VH 
+            	for (int j = 0; j < ms.size(); j++) {
+            		DelegatingMarker dm = ms.get(j);
+            		dm.splitClusterPosition = cluster.getPosition();
+            	}
+            	
                 cluster.removeVirtual();
                 for (int j = 0; j < ms.size(); j++) {
                     cluster = newClusters.get(clusterIds[j]);
@@ -357,7 +365,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
                         }
                     }
                     cluster.add(ms.get(j));
-                    markers.put(ms.get(j), cluster);
+                    markers.put(ms.get(j), cluster);                    
                 }
             }
         }
@@ -397,6 +405,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
                 }
                 for (ClusterMarker old : clusterList) {
                     old.removeVirtual();
+                    //old.removeVirtual( cluster.getPosition() ); // VH - new position after join
                     List<DelegatingMarker> ms = old.getMarkersInternal();
                     for (DelegatingMarker m : ms) {
                         cluster.add(m);
@@ -421,8 +430,8 @@ class GridClusteringStrategy implements ClusteringStrategy {
     }
 
     private void calculateVisibleClusters() {
-        IProjection projection = map.getProjection();
-        VisibleRegion visibleRegion = projection.getVisibleRegion();
+        
+        VisibleRegion visibleRegion = map.getVisibleRegion();
         LatLngBounds bounds = visibleRegion.latLngBounds;
         visibleClusters[0] = convLat(bounds.southwest.latitude);
         visibleClusters[1] = convLng(bounds.southwest.longitude);
@@ -509,4 +518,9 @@ class GridClusteringStrategy implements ClusteringStrategy {
             return result;
         }
     }
+
+	@Override
+	public void refreshAll() {
+		refresher.refreshAll();		
+	}
 }

@@ -159,6 +159,8 @@ public interface GoogleMap {
     void snapshot(SnapshotReadyCallback callback, Bitmap bitmap);
 
     void stopAnimation();
+    
+    void refreshAll();
 
     interface CancelableCallback extends com.google.android.gms.maps.GoogleMap.CancelableCallback {
 

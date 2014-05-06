@@ -15,8 +15,13 @@
  */
 package com.androidmapsextensions.impl;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.location.Location;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,12 +38,15 @@ import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback;
 import com.google.android.gms.maps.LocationSource;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
@@ -47,14 +55,24 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.VisibleRegion;
 
 // TODO: to be deleted when com.google.android.gms.maps.GoogleMap becomes an interface
 class GoogleMapWrapper implements IGoogleMap {
 
     private GoogleMap map;
+    private int mWidthPixels;
+    private int mHeightPixels;
 
-    public GoogleMapWrapper(GoogleMap map) {
+    public GoogleMapWrapper(GoogleMap map, Context context) {
         this.map = map;
+        
+    	DisplayMetrics dm = new DisplayMetrics();
+    	WindowManager wm = (WindowManager) context.getSystemService( Context.WINDOW_SERVICE );
+    	Display dd = wm.getDefaultDisplay();
+    	dd.getMetrics(dm);
+    	mWidthPixels  = dm.widthPixels;
+        mHeightPixels = dm.heightPixels;
     }
 
     @Override
@@ -271,4 +289,30 @@ class GoogleMapWrapper implements IGoogleMap {
     public GoogleMap getMap() {
         return map;
     }
+
+	@Override
+	public VisibleRegion getVisibleRegion() {
+		Projection projection = map.getProjection();
+		// VH - increased in Size    	
+		double nPad = 0.3;
+
+		Point pNearLeft  = new Point((int)(-mWidthPixels*nPad),     (int)( mHeightPixels*(nPad+1)) );
+		Point pNearRight = new Point((int)( mWidthPixels*(nPad+1)), (int)( mHeightPixels*(nPad+1)) );    	
+		Point pFarLeft   = new Point((int)(-mWidthPixels*nPad),     (int)(-mHeightPixels*nPad) );
+		Point pFarRight  = new Point((int)( mWidthPixels*(nPad+1)), (int)(-mHeightPixels*nPad) );
+
+		LatLng nearLeft  = projection.fromScreenLocation( pNearLeft );
+		LatLng nearRight = projection.fromScreenLocation( pNearRight );
+		LatLng farLeft   = projection.fromScreenLocation( pFarLeft );
+		LatLng farRight  = projection.fromScreenLocation( pFarRight );
+
+		LatLngBounds latLngBounds = new LatLngBounds.Builder()
+		.include( nearLeft )
+		.include( nearRight )
+		.include( farLeft )
+		.include( farRight )
+		.build();
+
+		return new VisibleRegion( nearLeft, nearRight, farLeft, farRight, latLngBounds );
+	}
 }

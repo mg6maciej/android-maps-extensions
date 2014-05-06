@@ -98,4 +98,8 @@ class NoClusteringStrategy implements ClusteringStrategy {
     public float getMinZoomLevelNotClustered(Marker marker) {
         return 0.0f;
     }
+
+	@Override
+	public void refreshAll() {
+	}
 }

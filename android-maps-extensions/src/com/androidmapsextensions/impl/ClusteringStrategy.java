@@ -22,6 +22,8 @@ import java.util.List;
 
 interface ClusteringStrategy {
 
+	void refreshAll();
+	
     void cleanup();
 
     void onCameraChange(CameraPosition cameraPosition);

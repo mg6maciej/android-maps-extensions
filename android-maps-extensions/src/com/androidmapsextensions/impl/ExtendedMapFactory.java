@@ -25,6 +25,6 @@ public final class ExtendedMapFactory {
     }
 
     public static GoogleMap create(com.google.android.gms.maps.GoogleMap real, Context context) {
-        return new DelegatingGoogleMap(new GoogleMapWrapper(real), context);
+        return new DelegatingGoogleMap(new GoogleMapWrapper(real, context), context);
     }
 }

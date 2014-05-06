@@ -26,7 +26,7 @@ interface IProjection {
 
     LatLng fromScreenLocation(Point point);
 
-    VisibleRegion getVisibleRegion();
+    //VisibleRegion getVisibleRegion();
 
     Point toScreenLocation(LatLng location);
 
