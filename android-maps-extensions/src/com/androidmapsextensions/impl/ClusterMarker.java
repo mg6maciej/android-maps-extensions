@@ -15,12 +15,11 @@
  */
 package com.androidmapsextensions.impl;
 
-import android.os.SystemClock;
-import android.util.Log;
+
+import ch.usi.inf.sape.hac.dendrogram.MergeNode;
 
 import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.Marker;
-import com.androidmapsextensions.lazy.LazyMarker;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -32,13 +31,15 @@ class ClusterMarker implements Marker {
 
     private int lastCount = -1;
 
-    private GridClusteringStrategy strategy;
-
+    private HierarchicalClusteringStrategy strategy;
+    MergeNode mergeNode;
+    LatLng splitClusterPosition; // Position of cluster this cluster split away from
+    
     private com.google.android.gms.maps.model.Marker virtual;
 
     private List<DelegatingMarker> markers = new ArrayList<DelegatingMarker>();
 
-    public ClusterMarker(GridClusteringStrategy strategy) {
+    public ClusterMarker(HierarchicalClusteringStrategy strategy) {
         this.strategy = strategy;
     }
 
@@ -64,7 +65,7 @@ class ClusterMarker implements Marker {
         	if ( dm.splitClusterPosition != null ) {        		
         		double lat = dm.getPosition().latitude;
         		double lon = dm.getPosition().longitude;
-        		Log.e("ANIMATING MARKER SPLIT", "From" + dm.splitClusterPosition + " to " + new LatLng(lat,lon) );
+        		//Log.e("ANIMATING MARKER SPLIT", "From" + dm.splitClusterPosition + " to " + new LatLng(lat,lon) );
         		dm.changeVisible(true);
         		dm.animateScreenPosition( dm.splitClusterPosition, new LatLng(lat,lon), null );
         		dm.splitClusterPosition = null;
@@ -92,9 +93,9 @@ class ClusterMarker implements Marker {
                 virtual.setPosition(position);
             }
             
-            for (final DelegatingMarker m : markers) {
+            for ( final DelegatingMarker m : markers ) {
                 if ( m.real.isVisible() ) {
-                	Log.e("ANIMATING MARKER JOIN", "From" + m.getPosition() + " to " + position );
+                	//Log.e("ANIMATING MARKER JOIN", "From" + m.getPosition() + " to " + position );
             		m.animateScreenPosition( m.real.getPosition(), position, new AnimationCallback() {
 						@Override
 						public void onFinish( Marker marker ) {
@@ -187,7 +188,7 @@ class ClusterMarker implements Marker {
 
     @Override
     public int getClusterGroup() {
-        if (markers.size() > 0) {
+        if ( markers.size() > 0 ) {
             return markers.get(0).getClusterGroup();
         }
         throw new IllegalStateException();
@@ -297,7 +298,7 @@ class ClusterMarker implements Marker {
     }
 
     @Override
-    public void setClusterGroup(int clusterGroup) {
+    public void setClusterGroup( int clusterGroup ) {
         throw new UnsupportedOperationException();
     }
 
@@ -373,9 +374,7 @@ class ClusterMarker implements Marker {
     }
 
 	@Override
-	public void animateScreenPosition( LatLng from, LatLng to,
-			AnimationCallback callback ) {
-		// TODO Auto-generated method stub
-		
+	public void animateScreenPosition( LatLng from, LatLng to, AnimationCallback callback ) {
+		// TODO Auto-generated method stub		
 	}
 }

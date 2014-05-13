@@ -61,6 +61,9 @@ class NoClusteringStrategy implements ClusteringStrategy {
 
     @Override
     public void onAdd(DelegatingMarker marker) {
+    }
+    @Override
+    public void onBulkAdd(DelegatingMarker marker) {
 
     }
 

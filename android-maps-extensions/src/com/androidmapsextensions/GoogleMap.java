@@ -41,7 +41,8 @@ public interface GoogleMap {
     GroundOverlay addGroundOverlay(GroundOverlayOptions groundOverlayOptions);
 
     Marker addMarker(MarkerOptions markerOptions);
-
+    Marker bulkAddMarker(MarkerOptions markerOptions);
+    
     Polygon addPolygon(PolygonOptions polygonOptions);
 
     Polyline addPolyline(PolylineOptions polylineOptions);

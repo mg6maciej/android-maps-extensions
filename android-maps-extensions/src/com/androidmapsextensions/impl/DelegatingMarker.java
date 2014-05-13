@@ -39,7 +39,7 @@ class DelegatingMarker implements Marker {
     LatLng splitClusterPosition; // VH - Position of cluster this marker split away from, for animating
     
     
-    DelegatingMarker(LazyMarker real, MarkerManager manager) {
+    DelegatingMarker( LazyMarker real, MarkerManager manager ) {
         this.real = real;
         this.manager = manager;
 
@@ -180,19 +180,19 @@ class DelegatingMarker implements Marker {
     }
 
     @Override
-    public void setClusterGroup(int clusterGroup) {
-        if (this.clusterGroup != clusterGroup) {
+    public void setClusterGroup( int clusterGroup ) {
+        if ( this.clusterGroup != clusterGroup ) {
             this.clusterGroup = clusterGroup;
-            manager.onClusterGroupChange(this);
+            manager.onClusterGroupChange( this );
         }
     }
 
     @Override
-    public void setData(Object data) {
+    public void setData( Object data ) {
         this.data = data;
     }
 
-    public void setMinZoomLevelVisible(float minZoomLevelVisible) {
+    public void setMinZoomLevelVisible( float minZoomLevelVisible ) {
         this.minZoomLevelVisible = minZoomLevelVisible;
     }
     

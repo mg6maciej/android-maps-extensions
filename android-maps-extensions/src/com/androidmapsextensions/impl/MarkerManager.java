@@ -16,6 +16,7 @@
 package com.androidmapsextensions.impl;
 
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.ClusteringSettings;
@@ -38,21 +39,22 @@ class MarkerManager implements OnMarkerCreateListener {
 
     private final Map<LazyMarker, DelegatingMarker> markers;
     private final Map<com.google.android.gms.maps.model.Marker, LazyMarker> createdMarkers;
-
+    
     private Marker markerShowingInfoWindow;
-
-    private ClusteringSettings clusteringSettings = new ClusteringSettings().enabled(false);
-    ClusteringStrategy clusteringStrategy = new NoClusteringStrategy(new ArrayList<DelegatingMarker>());
-
+    
+    private ClusteringSettings clusteringSettings = new ClusteringSettings().enabled(true);    
+    ClusteringStrategy clusteringStrategy;
+    
     private final MarkerAnimator markerAnimator = new MarkerAnimator();
-
-    public MarkerManager(IGoogleMap factory) {
+    
+    public MarkerManager( IGoogleMap factory ) {
         this.factory = factory;
         this.markers = new HashMap<LazyMarker, DelegatingMarker>();
         this.createdMarkers = new HashMap<com.google.android.gms.maps.model.Marker, LazyMarker>();
+        this.clusteringStrategy = new HierarchicalClusteringStrategy(clusteringSettings, factory, new ArrayList<DelegatingMarker>(), new ClusterRefresher());
     }
 
-    public Marker addMarker(MarkerOptions markerOptions) {
+    public Marker addMarker( MarkerOptions markerOptions ) {
         boolean visible = markerOptions.isVisible();
         markerOptions.visible(false);
         DelegatingMarker marker = createMarker(markerOptions.real);
@@ -62,13 +64,25 @@ class MarkerManager implements OnMarkerCreateListener {
         markerOptions.visible(visible);
         return marker;
     }
-
+    
+    public Marker bulkAddMarker(MarkerOptions markerOptions) {
+    	Log.e( "MarkerManager", "bulkAddMarker" + markerOptions );
+        boolean visible = markerOptions.isVisible();
+        markerOptions.visible(false);
+        DelegatingMarker marker = createMarker(markerOptions.real);
+        setExtendedOptions(marker, markerOptions);
+        clusteringStrategy.onBulkAdd(marker);
+        marker.setVisible(visible);
+        markerOptions.visible(visible);
+        return marker;
+    }
+    
     private void setExtendedOptions(DelegatingMarker marker, MarkerOptions markerOptions) {
         marker.setClusterGroup(markerOptions.getClusterGroup());
         marker.setData(markerOptions.getData());
         marker.setMinZoomLevelVisible(markerOptions.getMinZoomLevel());
     }
-
+    
     private DelegatingMarker createMarker(com.google.android.gms.maps.model.MarkerOptions markerOptions) {
         LazyMarker realMarker = new LazyMarker(factory.getMap(), markerOptions, this);
         DelegatingMarker marker = new DelegatingMarker(realMarker, this);
@@ -167,7 +181,7 @@ class MarkerManager implements OnMarkerCreateListener {
             clusteringStrategy.cleanup();
             ArrayList<DelegatingMarker> list = new ArrayList<DelegatingMarker>(markers.values());
             if (clusteringSettings.isEnabled()) {
-                clusteringStrategy = new GridClusteringStrategy(clusteringSettings, factory, list, new ClusterRefresher());
+                clusteringStrategy = new HierarchicalClusteringStrategy(clusteringSettings, factory, list, new ClusterRefresher());
             } else if (clusteringSettings.isAddMarkersDynamically()) {
                 clusteringStrategy = new DynamicNoClusteringStrategy(factory, list);
             } else {

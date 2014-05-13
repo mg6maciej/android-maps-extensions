@@ -98,6 +98,11 @@ class DelegatingGoogleMap implements GoogleMap {
     public Marker addMarker(MarkerOptions markerOptions) {
         return markerManager.addMarker(markerOptions);
     }
+    
+    @Override
+    public Marker bulkAddMarker(MarkerOptions markerOptions) {
+        return markerManager.bulkAddMarker(markerOptions);
+    }
 
     @Override
     public Polygon addPolygon(PolygonOptions polygonOptions) {
