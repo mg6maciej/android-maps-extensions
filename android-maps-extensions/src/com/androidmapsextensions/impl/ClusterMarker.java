@@ -54,7 +54,7 @@ public class ClusterMarker implements Marker {
     void remove(DelegatingMarker marker) {
         markers.remove(marker);
     }
-
+    
     void refresh() {
         int count = markers.size();
         if ( count == 0 ) {
@@ -81,18 +81,19 @@ public class ClusterMarker implements Marker {
         } else {
         	// VH - animate the marker joining the cluster
             LatLngBounds.Builder builder = LatLngBounds.builder();
-            for (DelegatingMarker m : markers) {
-                builder.include(m.getPosition());
+            for ( DelegatingMarker m : markers ) {
+                builder.include( m.getPosition() );
             }
             LatLng position = builder.build().getCenter();
                  
             // Show new cluster marker only after animation is complete
             // TODO - need to animate cluster markers as well
-            if (virtual == null || lastCount != count) {
+            if ( virtual == null || lastCount != count ) {
                 removeVirtual();
                 lastCount = count;
                 virtual = strategy.createClusterMarker(new ArrayList<Marker>(markers), position);
-            } else {
+            } 
+            else {
                 virtual.setPosition(position);
             }
             
@@ -116,11 +117,14 @@ public class ClusterMarker implements Marker {
 
     Marker getDisplayedMarker() {
         int count = markers.size();
-        if (count == 0) {
+        if ( count == 0 ) {
             return null;
-        } else if (count == 1) {
+        } 
+        else 
+        if ( count == 1 ) {
             return markers.get(0);
-        } else {
+        } 
+        else {
             return this;
         }
     }
@@ -215,12 +219,12 @@ public class ClusterMarker implements Marker {
 
     @Override
     public LatLng getPosition() {
-        if (virtual != null) {
+        if ( virtual != null ) {
             return virtual.getPosition();
         }
         LatLngBounds.Builder builder = LatLngBounds.builder();
-        for (DelegatingMarker m : markers) {
-            builder.include(m.getPosition());
+        for ( DelegatingMarker m : markers ) {
+            builder.include( m.getPosition() );
         }
         LatLng position = builder.build().getCenter();
         return position;
@@ -271,7 +275,7 @@ public class ClusterMarker implements Marker {
 
     @Override
     public boolean isInfoWindowShown() {
-        if (virtual != null) {
+        if ( virtual != null ) {
             return virtual.isInfoWindowShown();
         }
         return false;
@@ -279,7 +283,7 @@ public class ClusterMarker implements Marker {
 
     @Override
     public boolean isVisible() {
-        if (virtual != null) {
+        if ( virtual != null ) {
             return virtual.isVisible();
         }
         return false;
@@ -357,27 +361,45 @@ public class ClusterMarker implements Marker {
 
     @Override
     public void showInfoWindow() {
-        if (virtual == null && markers.size() > 1) {
+        if ( virtual == null  &&  markers.size() > 1 ) {
             refresh();
         }
-        if (virtual != null) {
+        if ( virtual != null ) {
             virtual.showInfoWindow();
         }
     }
 
-    void setVirtualPosition(LatLng position) {
+    void setVirtualPosition( LatLng position ) {
         int count = markers.size();
-        if (count == 0) {
+        if ( count == 0 ) {
             // no op
-        } else if (count == 1) {
-            markers.get(0).setVirtualPosition(position);
+        } 
+        else 
+        if ( count == 1 ) {
+            markers.get(0).setVirtualPosition( position );
         } else {
-            virtual.setPosition(position);
+            virtual.setPosition( position );
         }
     }
 
 	@Override
 	public void animateScreenPosition( LatLng from, LatLng to, AnimationCallback callback ) {
-		// TODO Auto-generated method stub		
+		throw new UnsupportedOperationException();		
+	}
+
+	public void changeVisible( boolean visible ) {
+		if ( virtual != null  &&  ! visible ) {
+			virtual.remove();
+			virtual = null;
+		}
+		else
+		if ( virtual == null  &&  visible ) {
+            LatLngBounds.Builder builder = LatLngBounds.builder();
+            for ( DelegatingMarker m : markers ) {
+                builder.include( m.getPosition() );
+            }
+            LatLng position = builder.build().getCenter();
+			virtual = strategy.createClusterMarker( new ArrayList<Marker>(markers), position );
+		}
 	}
 }

@@ -30,50 +30,53 @@ import java.util.Iterator;
 import java.util.Map;
 
 class MarkerAnimator {
-
-    private Handler handlerScreen = new Handler(new Callback() {
+	
+    private Handler handlerScreen = new Handler( new Callback() {
         @Override
-        public boolean handleMessage(Message msg) {
+        public boolean handleMessage( Message msg ) {
             calculateScreenPositions();
             return true;
         }
     });
     
-    private Handler handler = new Handler(new Callback() {
+    private Handler handler = new Handler( new Callback() {
         @Override
-        public boolean handleMessage(Message msg) {
+        public boolean handleMessage( Message msg ) {
             calculatePositions();
             return true;
         }
     });
     
-    private Map<DelegatingMarker, AnimationData> queueScreen = new HashMap<DelegatingMarker, AnimationData>();
+    private Map<Marker, AnimationData> queueScreen     = new HashMap<Marker, AnimationData>();
     private Map<DelegatingMarker, AnimationData> queue = new HashMap<DelegatingMarker, AnimationData>();
-
+    
     private void calculateScreenPositions() {
         long now = SystemClock.uptimeMillis();
-        Iterator<DelegatingMarker> iterator = queueScreen.keySet().iterator();
-        while (iterator.hasNext()) {
-            DelegatingMarker marker = iterator.next();
+        Iterator<Marker> iterator = queueScreen.keySet().iterator();
+        while ( iterator.hasNext() ) {
+            Marker marker = iterator.next();
             AnimationData data = queueScreen.get(marker);
             long time = now - data.start;
-            if (time <= 0) {
-                marker.setPositionDuringScreenAnimation(data.from);
-            } else if (time >= data.duration) {
-                marker.setPositionDuringScreenAnimation(data.to);
-                if (data.callback != null) {
-                    data.callback.onFinish(marker);
+            if ( time <= 0 ) {
+            	marker.setPosition( data.from );
+            } 
+            else 
+            if ( time >= data.duration ) {
+                marker.setPosition( data.to );
+                if ( data.callback != null ) {
+                    data.callback.onFinish( marker );
                 }
                 iterator.remove();
-            } else {
+            } 
+            else {
                 float t = ((float) time) / data.duration;
-                t = data.interpolator.getInterpolation(t);
-                double lat = (1.0f - t) * data.from.latitude + t * data.to.latitude;
+                t = data.interpolator.getInterpolation( t );
+                double lat = (1.0f - t) * data.from.latitude  + t * data.to.latitude; // TODO - approx
                 double lng = (1.0f - t) * data.from.longitude + t * data.to.longitude;
-                marker.setPositionDuringScreenAnimation(new LatLng(lat, lng));
+                marker.setPosition( new LatLng(lat, lng) );
             }
         }
-        if (queueScreen.size() > 0) {
+        if ( queueScreen.size() > 0 ) {
             handlerScreen.sendEmptyMessage(0);
         }
     }
@@ -81,11 +84,11 @@ class MarkerAnimator {
     private void calculatePositions() {
         long now = SystemClock.uptimeMillis();
         Iterator<DelegatingMarker> iterator = queue.keySet().iterator();
-        while (iterator.hasNext()) {
+        while ( iterator.hasNext() ) {
             DelegatingMarker marker = iterator.next();
             AnimationData data = queue.get(marker);
             long time = now - data.start;
-            if (time <= 0) {
+            if ( time <= 0 ) {
                 marker.setPositionDuringAnimation(data.from);
             } else if (time >= data.duration) {
                 marker.setPositionDuringAnimation(data.to);
@@ -101,12 +104,12 @@ class MarkerAnimator {
                 marker.setPositionDuringAnimation(new LatLng(lat, lng));
             }
         }
-        if (queue.size() > 0) {
+        if ( queue.size() > 0 ) {
             handler.sendEmptyMessage(0);
         }
     }
     
-    public void animateScreen(DelegatingMarker marker, LatLng from, LatLng to, long start, AnimationSettings settings, Marker.AnimationCallback callback) {
+    public void animateScreen( Marker marker, LatLng from, LatLng to, long start, AnimationSettings settings, Marker.AnimationCallback callback ) {
         AnimationData data = new AnimationData();
         data.from = from;
         data.to = to;
@@ -119,7 +122,7 @@ class MarkerAnimator {
         handlerScreen.sendEmptyMessage(0);
     }
 
-    public void animate(DelegatingMarker marker, LatLng from, LatLng to, long start, AnimationSettings settings, Marker.AnimationCallback callback) {
+    public void animate( DelegatingMarker marker, LatLng from, LatLng to, long start, AnimationSettings settings, Marker.AnimationCallback callback ) {
         AnimationData data = new AnimationData();
         data.from = from;
         data.to = to;
@@ -131,8 +134,15 @@ class MarkerAnimator {
         handler.removeMessages(0);
         handler.sendEmptyMessage(0);
     }
+    
+    public void cancelScreenAnimation( Marker marker, Marker.AnimationCallback.CancelReason reason ) {
+        AnimationData data = queueScreen.remove(marker);
+        if ( data != null  &&  data.callback != null ) {
+            data.callback.onCancel(marker, reason);
+        }
+    }
 
-    public void cancelAnimation(DelegatingMarker marker, Marker.AnimationCallback.CancelReason reason) {
+    public void cancelAnimation( DelegatingMarker marker, Marker.AnimationCallback.CancelReason reason ) {
         AnimationData data = queue.remove(marker);
         if (data != null && data.callback != null) {
             data.callback.onCancel(marker, reason);

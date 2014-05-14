@@ -97,13 +97,13 @@ class MarkerManager implements OnMarkerCreateListener {
         markers.put(realMarker, marker);
         return marker;
     }
-
+    
     public void clear() {
         markers.clear();
         createdMarkers.clear();
         clusteringStrategy.cleanup();
     }
-
+    
     public List<Marker> getDisplayedMarkers() {
         List<Marker> displayedMarkers = clusteringStrategy.getDisplayedMarkers();
         if (displayedMarkers == null) {
@@ -134,8 +134,8 @@ class MarkerManager implements OnMarkerCreateListener {
         return clusteringStrategy.getMinZoomLevelNotClustered(marker);
     }
     
-    public void onAnimateScreenMarkerPosition(DelegatingMarker marker, LatLng from, LatLng to, AnimationSettings settings, Marker.AnimationCallback callback) {
-        markerAnimator.cancelAnimation(marker, Marker.AnimationCallback.CancelReason.ANIMATE_POSITION);
+    public void onAnimateScreenMarkerPosition(Marker marker, LatLng from, LatLng to, AnimationSettings settings, Marker.AnimationCallback callback) {
+        markerAnimator.cancelScreenAnimation(marker, Marker.AnimationCallback.CancelReason.ANIMATE_POSITION);
         markerAnimator.animateScreen(marker, from, to, SystemClock.uptimeMillis(), settings, callback);
     }
     

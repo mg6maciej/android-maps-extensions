@@ -38,7 +38,6 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
     
     private final MarkerOptions markerOptions = new MarkerOptions();
     
-    private boolean addMarkersDynamically;
     private IGoogleMap map;
     private Map<DelegatingMarker, ClusterMarker> markers;
     //private double baseClusterSize;
@@ -104,8 +103,8 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
         	return;
         dendrogram.dump();
         
-		DendrogramNode node = dendrogram.getRoot();		
-		evaluateNode( node, getThreshold(zoom) );
+		DendrogramNode rootNode = dendrogram.getRoot();	
+		evaluateNode( rootNode, getThreshold(zoom) );
         refresher.refreshAll();
 		
 		Log.e("e","reComputingDendrogram DONE");
@@ -134,25 +133,33 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
     		double distance = ((MergeNode) node).getDissimilarity();
     		
     		if ( distance < threshold ) {
-    			// Terminate here, create a new cluster containing all the lower ObservationNodes		
+    			// Terminate here, create a new hidden cluster containing all the lower MergeNodes and ObservationNodes    			
     			ClusterMarker cm = new ClusterMarker(this);
     			cm.mergeNode = (MergeNode) node;
     			addToCluster(cm, node);
     			clusters.add( cm );
-    			refresh( cm );
+    			cm.changeVisible( isVisible( cm.getPosition() ) );
+    			Log.e("e","Showing Cluster with size " + cm.getMarkersInternal().size() );    			
     		}
     		else {
     			evaluateNode( node.getLeft(),  threshold );
     			evaluateNode( node.getRight(), threshold );
     		}
     	}
-    	else
+    	else // This marker is not clustered.
     	if ( node instanceof ObservationNode ) {
-    		// This marker is not clustered.
     		DelegatingMarker dm = fullMarkerList.get( ((ObservationNode) node).getObservation() );
     		dm.parentNode = node.getParent();
     		markers.put( dm, null );
-    		renderedMarkerList.add( dm );
+    		if ( isVisible( dm.getPosition() ) ) {
+    			Log.e("e","Showing final marker");
+    			renderedMarkerList.add( dm );
+    			dm.changeVisible( true );
+    		}
+    		else {
+    			renderedMarkerList.remove( dm );
+    			dm.changeVisible( false );
+    		}
     	}
 	}
     
@@ -163,21 +170,12 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
     public HierarchicalClusteringStrategy(ClusteringSettings settings, IGoogleMap map, List<DelegatingMarker> fullMarkerList, ClusterRefresher refresher) {
     	this.fullMarkerList = fullMarkerList;
         this.clusterOptionsProvider = settings.getClusterOptionsProvider();
-        this.addMarkersDynamically  = settings.isAddMarkersDynamically();        
         this.map = map;
         this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
         this.refresher = refresher;
         this.zoom = Math.round(map.getCameraPosition().zoom);
         
-    	// Need to keep track of distance between nodes in dendrogram. For every zoom level, determine cluster
-		// membership for every marker. Compute MinDistanceMiles(zoom). Start at root. If child nodes are more then
-		// MDM apart, proceed down the tree, until two child nodes collide. Stop there.
-    	// Needed output is: private Map<ClusterKey, ClusterMarker> clusters = new HashMap<ClusterKey, ClusterMarker>();
         reComputeDendrogram();
-        
-        // this.baseClusterSize        = settings.getClusterSize();
-        // this.clusterSize = calculateClusterSize(zoom);
-        // addVisibleMarkers(markers);
     }
     
     @Override
@@ -203,37 +201,36 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
         
         VisibleRegion visibleRegion = map.getVisibleRegion();
         LatLngBounds bounds = visibleRegion.latLngBounds;
-        for ( DelegatingMarker marker : fullMarkerList ) {
-        	marker.splitClusterPosition = null; // Reset this, will not be needed any more    
-        	if ( marker.isVisible()  &&  marker.getClusterGroup() < 0 ) {
-        		if ( cameraPosition.zoom >= marker.getMinZoomLevelVisible()  &&  bounds.contains(marker.getPosition()) ) {
+        
+        addMarkersAndClustersInVisibleRegion();
+        
+        if ( zoomedIn() ) {
+        	for ( DelegatingMarker marker : fullMarkerList ) {
+        		if ( marker.isVisible()  &&
+        			 marker.getClusterGroup() < 0   &&
+        			 cameraPosition.zoom >= marker.getMinZoomLevelVisible()  &&
+        			 bounds.contains(marker.getPosition()) ) {
         			marker.changeVisible(true);
         		}
-        		else 
-        		if ( cameraPosition.zoom < marker.getMinZoomLevelVisible() ) {
-        			marker.changeVisible(false);
-        		}
         	}
-        }
-        
-        //if ( addMarkersDynamically ) {
-        //   calculateVisibleClusters();
-        //}
-        if ( zoomedIn() ) {
             splitClusters();
             refresher.refreshAll();
         } 
         else
         if ( zoomedOut() ) {
+            for ( DelegatingMarker marker : fullMarkerList ) {               
+            	if ( marker.isVisible()  &&  
+            		 marker.getClusterGroup() < 0  &&
+            		 cameraPosition.zoom < marker.getMinZoomLevelVisible() ) {
+            			marker.changeVisible(false);
+            	}
+            }        
+            
             mergeClusters();
             refresher.refreshAll();
         }
-        else 
-        if ( addMarkersDynamically ) {
-            addMarkersInVisibleRegion();
-        }
     }
-
+    
     // This is used when e.g. a cluster is declusterified by user
     @Override
     public void onClusterGroupChange( DelegatingMarker marker ) {
@@ -369,7 +366,7 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
     
     @Override
     public void onVisibilityChangeRequest(DelegatingMarker marker, boolean visible) {
-        if (visible) {
+        if ( visible ) {
             addMarker(marker);
         } else {
             removeMarker(marker);
@@ -546,7 +543,7 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
    			
             if ( map.getCameraPosition().zoom >= marker.getMinZoomLevelVisible() ) {
             	marker.changeVisible(true);
-            	marker.animateScreenPosition( marker.splitClusterPosition, marker.getPosition(), null );
+            	//marker.animateScreenPosition( marker.splitClusterPosition, marker.getPosition(), null );
         		marker.splitClusterPosition = null;
             }
             else {
@@ -584,10 +581,9 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
     	for ( ClusterMarker cm : removedClusters ) {
     		if ( cm != null ) {
     			cm.removeVirtual();
-    			refresh(cm);
+    			clusters.remove( cm );
     		}
     	}
-    	clusters.removeAll( removedClusters );
     	
         clusters.addAll( newClusters );
         
@@ -597,19 +593,31 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
         }
     }
     
-    private void addMarkersInVisibleRegion() {
-        //calculateVisibleClusters();    	
-        for ( DelegatingMarker marker : markers.keySet() ) {
-            LatLng position = marker.getPosition();
-            if ( isVisible( position ) ) {
-//            if ( isPositionInVisibleClusters(position) ) {
-                ClusterMarker cluster = markers.get(marker);
-                refresh(cluster);
+    // Add single markers and clusters in visible region, upon a pan or zoom out for example
+    private void addMarkersAndClustersInVisibleRegion() {
+    	for ( ClusterMarker cm : clusters ) {
+    		if ( isVisible( cm.getPosition() ) ) {
+    			cm.changeVisible( true );
+    		}
+    		else {
+    			cm.changeVisible( false );    			
+    		}
+    	}
+    	
+        for ( DelegatingMarker dm : markers.keySet() ) {
+        	if ( markers.get( dm ) == null ) { // not clustered
+        		LatLng position = dm.getPosition();
+        		if ( isVisible( position ) ) {
+        			dm.changeVisible( true );
+        		} 
+        		else {
+        			dm.changeVisible( false );
+        		}
             }
         }
         refresher.refreshAll();
     }
-
+    
     private boolean isVisible( LatLng pos ) {
     	 VisibleRegion visibleRegion = map.getVisibleRegion();
          LatLngBounds bounds = visibleRegion.latLngBounds;
@@ -655,7 +663,7 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
     
     com.google.android.gms.maps.model.Marker createClusterMarker(List<Marker> markers, LatLng position) {
         markerOptions.position(position);
-        ClusterOptions opts = clusterOptionsProvider.getClusterOptions(markers);
+        ClusterOptions opts = clusterOptionsProvider.getClusterOptions( markers );
         markerOptions.icon(opts.getIcon());
         if ( GOOGLE_PLAY_SERVICES_4_0 ) {
             try {

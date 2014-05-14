@@ -33,9 +33,9 @@ class ClusterRefresher {
         }
     });
 
-    void refresh(ClusterMarker cluster) {
+    void refresh( ClusterMarker cluster ) {
         refreshQueue.add(cluster);
-        if (!refreshPending) {
+        if ( ! refreshPending ) {
             refresher.sendEmptyMessage(0);
             refreshPending = true;
         }
@@ -48,7 +48,7 @@ class ClusterRefresher {
     }
 
     void refreshAll() {
-        for (ClusterMarker cluster : refreshQueue) {
+        for ( ClusterMarker cluster : refreshQueue ) {
             cluster.refresh();
         }
         cleanup();
