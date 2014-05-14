@@ -100,6 +100,7 @@ public class ClusterMarker implements Marker {
             for ( final DelegatingMarker m : markers ) {
                 if ( m.real.isVisible() ) {
                 	//Log.e("ANIMATING MARKER JOIN", "From" + m.getPosition() + " to " + position );
+                	/*
             		m.animateScreenPosition( m.real.getPosition(), position, new AnimationCallback() {
 						@Override
 						public void onFinish( Marker marker ) {
@@ -109,7 +110,8 @@ public class ClusterMarker implements Marker {
 						public void onCancel( Marker marker, CancelReason reason ) {
 							m.changeVisible(false);
 						} 
-					} );                	
+					} );
+					*/                	
                 }
             }
         }

@@ -94,7 +94,7 @@ public final class HierarchicalAgglomerativeClusterer {
     			DendrogramNode target = kd.search( pos );
     			
     			// Find the nearest observation to this observation, excluding itself
-    			DendrogramNode nearest = findNearest(target);    			
+    			DendrogramNode nearest = findNearest( target );    			
     			
     			double dist = dissimilarityMeasure.distanceMiles( pos, nearest.getPosition() );
     			minHeap.put( dist, new Pair(target,nearest) );
@@ -157,7 +157,7 @@ public final class HierarchicalAgglomerativeClusterer {
     private DendrogramNode findNearest( DendrogramNode A ) {    	
 		try {
 			List<DendrogramNode> nearestList = kd.nearest( A.getPosition(), 2 );
-			/*
+			
 			if ( nearestList.size() == 0 ) {
 				throw new IllegalStateException();
 			}
@@ -165,7 +165,7 @@ public final class HierarchicalAgglomerativeClusterer {
 			if ( nearestList.size() == 1 ) {
 				return nearestList.get(0);
 			}
-			*/
+			
 	    	if ( nearestList.get(0).equals( A ) ) {
 	    		return nearestList.get(1);
 	    	} else {
