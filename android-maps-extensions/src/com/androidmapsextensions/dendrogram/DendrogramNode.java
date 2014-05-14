@@ -10,6 +10,8 @@
  */
 package com.androidmapsextensions.dendrogram;
 
+import com.androidmapsextensions.impl.ClusterMarker;
+
 
 /**
  * A DendrogramNode is a node in a Dendrogram.
@@ -27,4 +29,6 @@ public interface DendrogramNode {
 	public void setParent(MergeNode parent);
 	public int getObservationCount();
 	public double[] getPosition();
+	public ClusterMarker getClusterMarker();
+	public void setClusterMarker( ClusterMarker clusterMarker );
 }

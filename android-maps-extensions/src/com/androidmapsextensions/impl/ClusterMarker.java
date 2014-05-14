@@ -15,11 +15,9 @@
  */
 package com.androidmapsextensions.impl;
 
-
-
 import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.Marker;
-import com.androidmapsextensions.dendrogram.MergeNode;
+import com.androidmapsextensions.dendrogram.DendrogramNode;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -32,7 +30,7 @@ public class ClusterMarker implements Marker {
     private int lastCount = -1;
 
     private HierarchicalClusteringStrategy strategy;
-    MergeNode mergeNode;
+    DendrogramNode dendrogramNode;
     LatLng splitClusterPosition; // Position of cluster this cluster split away from
     
     private com.google.android.gms.maps.model.Marker virtual;
@@ -77,7 +75,9 @@ public class ClusterMarker implements Marker {
         		dm.changeVisible(true);
         	}
         	*/
-            removeVirtual(); 
+        	DelegatingMarker dm = markers.get(0);
+        	dm.changeVisible(true);
+            removeVirtual();
         } else {
         	// VH - animate the marker joining the cluster
             LatLngBounds.Builder builder = LatLngBounds.builder();

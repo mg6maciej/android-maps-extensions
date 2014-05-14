@@ -70,10 +70,11 @@ public final class MergeNode implements DendrogramNode {
 	public void setParent( MergeNode parent ) {
 		this.parent = parent;
 	}
-	
+	@Override
 	public ClusterMarker getClusterMarker() {
 		return clusterMarker;
 	}
+	@Override
 	public void setClusterMarker( ClusterMarker clusterMarker ) {
 		this.clusterMarker = clusterMarker;
 	}

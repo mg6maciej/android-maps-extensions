@@ -45,7 +45,7 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
     private int oldZoom, zoom;
     //private int[] visibleClusters = new int[4];
     
-    private List<ClusterMarker> clusters = new ArrayList<ClusterMarker>();
+    private Set<ClusterMarker> clusters = new HashSet<ClusterMarker>();
     
     private ClusterRefresher refresher;
     private ClusterOptionsProvider clusterOptionsProvider;
@@ -121,45 +121,68 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
     	else
     	if ( node instanceof ObservationNode ) {
     		DelegatingMarker dm = fullMarkerList.get( ((ObservationNode) node).getObservation() );
-    		cm.add( dm );
-    		markers.put( dm, cm );
+    		if ( dm.isVisible() ) {
+    			cm.add( dm );
+    			markers.put( dm, cm );
+    		}
     	}
     }
+    
+    private void slideOutSmallerClustersToMerge( DendrogramNode node, DendrogramNode targetNode ) {
+    	if ( node == null ) {
+    		return;
+    	}
+    	if ( node.getClusterMarker() != null ) {
+    		ClusterMarker cm = node.getClusterMarker();
+			cm.removeVirtual();
+			clusters.remove( cm ); // TODO - slide
+    	}
+    	slideOutSmallerClustersToMerge( node.getLeft(), targetNode );
+    	slideOutSmallerClustersToMerge( node.getRight(), targetNode );
+    }
+    
+    // After a zoom change, traverse the dendrogram and assign markers to new clusters. The dendrogram is not modified.
     private void evaluateNode( DendrogramNode node, double threshold ) {
     	if ( node == null ) {
     	}
     	else
     	if ( node instanceof MergeNode ) {
     		double distance = ((MergeNode) node).getDissimilarity();
-    		
+    		// If we zoomed in, do we need to remove any cluster?
+    		// It will be removed immediately
+    		if ( distance >= threshold ) {
+    			ClusterMarker cm = ((MergeNode)node).getClusterMarker();
+    			if ( cm != null ) {
+    				cm.removeVirtual();
+    			}
+    			clusters.remove( cm );
+    			
+    			evaluateNode( node.getLeft(),  threshold );
+    			evaluateNode( node.getRight(), threshold );
+    		}
+    		else
     		if ( distance < threshold ) {
     			// Terminate here, create a new hidden cluster containing all the lower MergeNodes and ObservationNodes    			
     			ClusterMarker cm = new ClusterMarker(this);
-    			cm.mergeNode = (MergeNode) node;
+    			cm.dendrogramNode = node;
     			addToCluster(cm, node);
     			clusters.add( cm );
     			cm.changeVisible( isVisible( cm.getPosition() ) );
-    			Log.e("e","Showing Cluster with size " + cm.getMarkersInternal().size() );    			
-    		}
-    		else {
-    			evaluateNode( node.getLeft(),  threshold );
-    			evaluateNode( node.getRight(), threshold );
+    			Log.e("e","Showing Cluster with size " + cm.getMarkersInternal().size() );
+    			
+    			// Remove all smaller clusters while sliding
+    			slideOutSmallerClustersToMerge( node.getLeft(), node );
+    			slideOutSmallerClustersToMerge( node.getRight(), node );
     		}
     	}
     	else // This marker is not clustered.
     	if ( node instanceof ObservationNode ) {
-    		DelegatingMarker dm = fullMarkerList.get( ((ObservationNode) node).getObservation() );
-    		dm.parentNode = node.getParent();
-    		markers.put( dm, null );
-    		if ( isVisible( dm.getPosition() ) ) {
-    			Log.e("e","Showing final marker");
-    			renderedMarkerList.add( dm );
-    			dm.changeVisible( true );
-    		}
-    		else {
-    			renderedMarkerList.remove( dm );
-    			dm.changeVisible( false );
-    		}
+			ClusterMarker cm = new ClusterMarker(this);
+			cm.dendrogramNode = node;
+			addToCluster(cm, node);
+			clusters.add( cm );
+			cm.changeVisible( isVisible( cm.getPosition() ) );
+			Log.e("e","Showing Cluster with size " + cm.getMarkersInternal().size() );    			
     	}
 	}
     
@@ -205,6 +228,7 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
         addMarkersAndClustersInVisibleRegion();
         
         if ( zoomedIn() ) {
+        	// Handle special markers with minZoomLevelVisible
         	for ( DelegatingMarker marker : fullMarkerList ) {
         		if ( marker.isVisible()  &&
         			 marker.getClusterGroup() < 0   &&
@@ -360,7 +384,7 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
         
         return zoom;
     }
-        
+    
     // Find the parent node of the marker in the dendrogram (which will be a MergeNode, if it has one), then get the 
     // dissimilarity measure and compare to threshold.
     
@@ -453,48 +477,13 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
        		}
     	}
     	else {
+    		Log.e("e","Creating a new cluster after split");
     		ClusterMarker cm = new ClusterMarker( this );
-    		cm.mergeNode = node;
+    		cm.dendrogramNode = node;
     	    addToCluster( cm, node );
     		newClusters.add( cm );
-    		refresh(cm);
-    	}
-    }
-    
-    private void mergeNode( MergeNode node, Set<ClusterMarker> newClusters, Set<ClusterMarker> removedClusters, Set<DelegatingMarker> newlyHiddenMarkers, double threshold ) {
-    	if ( node.getDissimilarity() < threshold ) { // merge the siblings
-    		DendrogramNode left  = node.getLeft();
-    		DendrogramNode right = node.getRight();    		    	
-    		
-    		if ( left instanceof MergeNode ) {
-    			removedClusters.add( ((MergeNode) left).getClusterMarker() );
-    		}
-    		else
-       		if ( left instanceof ObservationNode ) {
-       			DelegatingMarker dm = fullMarkerList.get( ((ObservationNode) left).getObservation() );
-       			newlyHiddenMarkers.add( dm );
-       		}
-    		
-    		if ( right instanceof MergeNode ) {
-    			removedClusters.add( ((MergeNode) right).getClusterMarker() );
-    		}
-    		else
-       		if ( right instanceof ObservationNode ) {
-       			DelegatingMarker dm = fullMarkerList.get( ((ObservationNode) right).getObservation() );
-       			newlyHiddenMarkers.add( dm );
-       		}
-    		
-    		if ( node.getParent() != null ) {
-    			mergeNode( node.getParent(), newClusters, removedClusters, newlyHiddenMarkers, threshold );
-    		}
-    	}
-    	else {
-    		// No more merging to do, create a new cluster
-    		ClusterMarker cm = new ClusterMarker( this );
-    		cm.mergeNode = node;
-    	    addToCluster( cm, node );
-    		newClusters.add( cm );
-    		refresh(cm);
+    		cm.changeVisible( isVisible( cm.getPosition() ) );
+    		//refresh(cm);
     	}
     }
     
@@ -551,7 +540,53 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
             }
         }
     }
-    
+        
+    private void mergeNode( MergeNode parent, Set<ClusterMarker> newClusters, Set<ClusterMarker> oldClusters, Set<DelegatingMarker> newlyHiddenMarkers, double threshold ) {
+    	if ( parent.getDissimilarity() < threshold ) { // merge the siblings
+    		DendrogramNode left  = parent.getLeft();
+    		DendrogramNode right = parent.getRight();
+    		
+    		if ( left instanceof MergeNode ) {
+    			ClusterMarker oldcm = ((MergeNode)left).getClusterMarker();
+    			if ( oldcm != null ) {
+    				oldClusters.remove( oldcm );
+    				oldcm.remove();
+    			}
+    		}
+    		else
+       		if ( left instanceof ObservationNode ) {
+       			DelegatingMarker dm = fullMarkerList.get( ((ObservationNode) left).getObservation() );
+       			newlyHiddenMarkers.add( dm );
+       		}
+    		
+    		if ( right instanceof MergeNode ) {
+    			ClusterMarker oldcm = ((MergeNode)right).getClusterMarker();
+    			if ( oldcm != null ) {
+    				oldClusters.remove( oldcm );
+    				oldcm.remove();
+    			}
+    		}
+    		else
+       		if ( right instanceof ObservationNode ) {
+       			DelegatingMarker dm = fullMarkerList.get( ((ObservationNode) right).getObservation() );
+       			newlyHiddenMarkers.add( dm );
+       		}
+    		
+    		if ( parent.getParent() != null ) {
+    			mergeNode( parent.getParent(), newClusters, oldClusters, newlyHiddenMarkers, threshold );
+    		}
+    	}
+    	else {
+    		// No more merging to do, create a new cluster
+    		Log.e("e", "Creating a new cluster after mergem old cl size=" + oldClusters.size() );
+    		ClusterMarker cm = new ClusterMarker( this );
+    		cm.mergeNode = parent;
+    	    addToCluster( cm, parent );
+    		newClusters.add( cm );
+    		cm.changeVisible( isVisible( cm.getPosition() ) );
+    	}
+    }
+
     // See if any markers or clusters should be joined
     private void mergeClusters() {
     	double threshold = getThreshold( zoom );
@@ -562,17 +597,38 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
     	
     	// First check if any clusters need merging
     	Iterator<ClusterMarker> it = clusters.iterator();
-    	while( it.hasNext() ) {
+    	while ( it.hasNext() ) {
     		ClusterMarker cluster = it.next();
+    		MergeNode parent = cluster.mergeNode.getParent();
+    		if ( parent.getDissimilarity() < threshold ) {
+    			// Remove it
+    			removedClusters.add( cluster );
+    			// Find location of merged cluster
+    			MergeNode newLocation = parent;
+    			while ( newLocation.getParent() != null  &&  newLocation.getParent().getDissimilarity() >= threshold ) {
+    				newLocation = newLocation.getParent();
+    			}
+        		ClusterMarker cm = new ClusterMarker( this );
+        		cm.mergeNode = newLocation;
+        	    addToCluster( cm, newLocation );
+        		newClusters.add( cm );
+        		cm.changeVisible( isVisible( cm.getPosition() ) );
+    		}
+    	}
+    	
+    		ClusterMarker sibling = parent.getLeft().getClusterMarker();
+    		
+    
         	
         	// Does this cluster have a nearby sibling?
         	// Proceed up the tree until we reach a parent with siblings far enough
-        	MergeNode parent = cluster.mergeNode.getParent();
-        	if ( parent != null ) { // to handle root cluster
-        		mergeNode( parent, newClusters, removedClusters, newlyHiddenMarkers, threshold );
+        	
+        	if ( parent != null  &&  parent.getDissimilarity() < threshold ) { // to handle root cluster
+        		mergeNode( parent, newClusters, oldClusters, newlyHiddenMarkers, threshold );
         	}
     	}
-    	// Next check if any markers need merging
+    	// Next check if any single markers need merging
+    	Log.e("e", "renderedMarkerList size=" + renderedMarkerList.size() );
     	for ( DelegatingMarker dm : renderedMarkerList ) {
     		MergeNode parent = dm.parentNode;
     		mergeNode( parent, newClusters, removedClusters, newlyHiddenMarkers, threshold );
@@ -586,7 +642,7 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
     	}
     	
         clusters.addAll( newClusters );
-        
+        Log.e("e","MergeClusters newlyHidden size=" + newlyHiddenMarkers.size() );
         for ( DelegatingMarker marker : newlyHiddenMarkers ) {
         	marker.changeVisible( false );
         	renderedMarkerList.remove( marker );

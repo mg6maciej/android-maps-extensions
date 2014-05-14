@@ -10,6 +10,8 @@
  */
 package com.androidmapsextensions.dendrogram;
 
+import com.androidmapsextensions.impl.ClusterMarker;
+
 
 /**
  * An ObservationNode represents a leaf node in a Dendrogram.
@@ -20,8 +22,9 @@ package com.androidmapsextensions.dendrogram;
 public final class ObservationNode implements DendrogramNode {
 
 	private final int observation;
-	private final double[] position;
 	private MergeNode parent;
+	private final double[] position;	
+	private ClusterMarker clusterMarker;
 	
 	public ObservationNode( final int observation, final double[] position ) {
 		this.observation = observation;
@@ -59,5 +62,12 @@ public final class ObservationNode implements DendrogramNode {
 	public double[] getPosition() {
 		return position;
 	}
-
+	@Override
+	public ClusterMarker getClusterMarker() {
+		return clusterMarker;
+	}
+	@Override
+	public void setClusterMarker( ClusterMarker clusterMarker ) {
+		this.clusterMarker = clusterMarker;
+	}
 }
