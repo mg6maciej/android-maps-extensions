@@ -8,7 +8,9 @@
  * See the COPYRIGHT file distributed with this work for information
  * regarding copyright ownership.
  */
-package ch.usi.inf.sape.hac.dendrogram;
+package com.androidmapsextensions.dendrogram;
+
+import com.androidmapsextensions.impl.ClusterMarker;
 
 
 /**
@@ -21,13 +23,15 @@ public final class MergeNode implements DendrogramNode {
 	
 	private final DendrogramNode left;
 	private final DendrogramNode right;
+	private MergeNode parent;
 	private final double dissimilarity;
 	private final int observationCount;
 	private final double[] position;
+	private ClusterMarker clusterMarker;
 	
-	public MergeNode(final DendrogramNode left, final DendrogramNode right, double dissimilarity) {
-		this.left = left;
-		this.right = right;		
+	public MergeNode( final DendrogramNode left, final DendrogramNode right, double dissimilarity ) {
+		this.left   = left;
+		this.right  = right;
 		observationCount = left.getObservationCount() + right.getObservationCount();
 		
 		double[] leftPos  = left.getPosition();
@@ -42,16 +46,36 @@ public final class MergeNode implements DendrogramNode {
 		this.dissimilarity = dissimilarity;
 	}
 	
+	@Override
 	public int getObservationCount() {
 		return observationCount;
 	}
 	
+	@Override
 	public final DendrogramNode getLeft() {
 		return left;
 	}
 	
+	@Override
 	public final DendrogramNode getRight() {
 		return right;
+	}
+	
+	@Override
+	public MergeNode getParent() {
+		return parent;
+	}
+	
+	@Override
+	public void setParent( MergeNode parent ) {
+		this.parent = parent;
+	}
+	
+	public ClusterMarker getClusterMarker() {
+		return clusterMarker;
+	}
+	public void setClusterMarker( ClusterMarker clusterMarker ) {
+		this.clusterMarker = clusterMarker;
 	}
 	
 	public final double getDissimilarity() {

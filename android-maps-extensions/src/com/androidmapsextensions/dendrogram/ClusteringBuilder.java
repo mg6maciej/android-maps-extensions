@@ -8,10 +8,8 @@
  * See the COPYRIGHT file distributed with this work for information
  * regarding copyright ownership.
  */
-package ch.usi.inf.sape.hac;
+package com.androidmapsextensions.dendrogram;
 
-import ch.usi.inf.sape.hac.dendrogram.DendrogramNode;
-import ch.usi.inf.sape.hac.dendrogram.MergeNode;
 
 
 /**

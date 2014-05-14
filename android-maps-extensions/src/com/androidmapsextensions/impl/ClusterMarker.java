@@ -16,10 +16,10 @@
 package com.androidmapsextensions.impl;
 
 
-import ch.usi.inf.sape.hac.dendrogram.MergeNode;
 
 import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.dendrogram.MergeNode;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -27,7 +27,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import java.util.ArrayList;
 import java.util.List;
 
-class ClusterMarker implements Marker {
+public class ClusterMarker implements Marker {
 
     private int lastCount = -1;
 
@@ -57,10 +57,13 @@ class ClusterMarker implements Marker {
 
     void refresh() {
         int count = markers.size();
-        if (count == 0) {
+        if ( count == 0 ) {
             removeVirtual();
-        } else if (count == 1) {
+        } 
+        else 
+        if ( count == 1 ) {
         	// VH - animate the marker splitting away
+        	/*
         	DelegatingMarker dm = markers.get(0);
         	if ( dm.splitClusterPosition != null ) {        		
         		double lat = dm.getPosition().latitude;
@@ -73,7 +76,7 @@ class ClusterMarker implements Marker {
         	else {
         		dm.changeVisible(true);
         	}
-        	
+        	*/
             removeVirtual(); 
         } else {
         	// VH - animate the marker joining the cluster
@@ -88,7 +91,7 @@ class ClusterMarker implements Marker {
             if (virtual == null || lastCount != count) {
                 removeVirtual();
                 lastCount = count;
-                virtual = strategy.createMarker(new ArrayList<Marker>(markers), position);
+                virtual = strategy.createClusterMarker(new ArrayList<Marker>(markers), position);
             } else {
                 virtual.setPosition(position);
             }

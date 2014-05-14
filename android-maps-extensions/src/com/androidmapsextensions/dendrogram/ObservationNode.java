@@ -8,7 +8,7 @@
  * See the COPYRIGHT file distributed with this work for information
  * regarding copyright ownership.
  */
-package ch.usi.inf.sape.hac.dendrogram;
+package com.androidmapsextensions.dendrogram;
 
 
 /**
@@ -21,18 +21,30 @@ public final class ObservationNode implements DendrogramNode {
 
 	private final int observation;
 	private final double[] position;
+	private MergeNode parent;
 	
-	public ObservationNode(final int observation, final double[] position) {
+	public ObservationNode( final int observation, final double[] position ) {
 		this.observation = observation;
 		this.position    = position;
 	}
 	
+	@Override
 	public final DendrogramNode getLeft() {
 		return null;
 	}
 	
+	@Override
 	public final DendrogramNode getRight() {
 		return null;
+	}
+	
+	@Override
+	public final MergeNode getParent() {
+		return parent;
+	}
+		
+	public final void setParent( MergeNode parent ) {
+		this.parent = parent;
 	}
 	
 	public int getObservationCount() {

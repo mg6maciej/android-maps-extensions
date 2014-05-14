@@ -8,10 +8,8 @@
  * See the COPYRIGHT file distributed with this work for information
  * regarding copyright ownership.
  */
-package ch.usi.inf.sape.hac.dendrogram;
+package com.androidmapsextensions.dendrogram;
 
-import ch.usi.inf.sape.hac.ClusteringBuilder;
-import ch.usi.inf.sape.hac.experiment.Experiment;
 
 
 /**
@@ -29,8 +27,10 @@ public final class DendrogramBuilder implements ClusteringBuilder {
     	this.experiment = experiment;    
     }
     public final MergeNode merge(final DendrogramNode i, final DendrogramNode j, double dist) {
-        final MergeNode node = new MergeNode(i, j, dist);
+        final MergeNode node = new MergeNode( i, j, dist );
         lastMergeNode = node;
+        i.setParent(node);
+        j.setParent(node);
         return node;
     }
 

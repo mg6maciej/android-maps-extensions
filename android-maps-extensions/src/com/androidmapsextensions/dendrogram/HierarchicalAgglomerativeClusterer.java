@@ -8,16 +8,13 @@
  * See the COPYRIGHT file distributed with this work for information
  * regarding copyright ownership.
  */
-package ch.usi.inf.sape.hac;
+package com.androidmapsextensions.dendrogram;
 
 import android.util.Log;
 
-import ch.usi.inf.sape.hac.dendrogram.DendrogramBuilder;
-import ch.usi.inf.sape.hac.dendrogram.DendrogramNode;
-import ch.usi.inf.sape.hac.dendrogram.MergeNode;
-import ch.usi.inf.sape.hac.dendrogram.ObservationNode;
-import ch.usi.inf.sape.hac.experiment.DissimilarityMeasure;
-import ch.usi.inf.sape.hac.experiment.Experiment;
+import com.androidmapsextensions.impl.DelegatingMarker;
+
+
 import edu.wlu.cs.levy.CG.KDTree;
 import edu.wlu.cs.levy.CG.KeyDuplicateException;
 import edu.wlu.cs.levy.CG.KeyMissingException;
@@ -46,9 +43,9 @@ import java.util.TreeMap;
 public final class HierarchicalAgglomerativeClusterer {
 
     private Experiment experiment;
-    private MyDissimilarityMeasure dissimilarityMeasure;    
+    private DissimilarityMeasure dissimilarityMeasure;    
         
-    public HierarchicalAgglomerativeClusterer(final Experiment experiment, final MyDissimilarityMeasure dissimilarityMeasure ) {
+    public HierarchicalAgglomerativeClusterer(final Experiment experiment, final DissimilarityMeasure dissimilarityMeasure ) {
         this.experiment = experiment;
         this.dissimilarityMeasure = dissimilarityMeasure;
     }
@@ -61,7 +58,7 @@ public final class HierarchicalAgglomerativeClusterer {
         return experiment;
     }
     
-    public void setDissimilarityMeasure(final MyDissimilarityMeasure dissimilarityMeasure) {
+    public void setDissimilarityMeasure( final DissimilarityMeasure dissimilarityMeasure ) {
         this.dissimilarityMeasure = dissimilarityMeasure;
     }
 

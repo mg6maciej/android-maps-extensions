@@ -17,6 +17,7 @@ package com.androidmapsextensions.impl;
 
 import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.dendrogram.MergeNode;
 import com.androidmapsextensions.lazy.LazyMarker;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
@@ -35,8 +36,9 @@ public class DelegatingMarker implements Marker {
 
     private LatLng position;
     private boolean visible;
-    LatLng splitClusterPosition; // VH - Position of cluster this marker split away from, for animating
     
+    MergeNode parentNode;
+    LatLng splitClusterPosition; // VH - Position of cluster this marker split away from, for animating
     
     DelegatingMarker( LazyMarker real, MarkerManager manager ) {
         this.real = real;

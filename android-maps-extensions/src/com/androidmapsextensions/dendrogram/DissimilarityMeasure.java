@@ -8,7 +8,7 @@
  * See the COPYRIGHT file distributed with this work for information
  * regarding copyright ownership.
  */
-package ch.usi.inf.sape.hac.experiment;
+package com.androidmapsextensions.dendrogram;
 
 
 /**
@@ -17,7 +17,6 @@ package ch.usi.inf.sape.hac.experiment;
  * @author Matthias.Hauswirth@usi.ch
  */
 public interface DissimilarityMeasure {
-
     public double computeDissimilarity(Experiment experiment, int observation1, int observation2);
-
+    public double distanceMiles( double[] pos1, double[] pos2 );
 }

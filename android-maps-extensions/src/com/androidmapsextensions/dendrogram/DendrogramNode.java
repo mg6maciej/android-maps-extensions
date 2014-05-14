@@ -8,7 +8,7 @@
  * See the COPYRIGHT file distributed with this work for information
  * regarding copyright ownership.
  */
-package ch.usi.inf.sape.hac.dendrogram;
+package com.androidmapsextensions.dendrogram;
 
 
 /**
@@ -23,6 +23,8 @@ public interface DendrogramNode {
 	
 	public DendrogramNode getLeft();
 	public DendrogramNode getRight();
+	public MergeNode getParent();
+	public void setParent(MergeNode parent);
 	public int getObservationCount();
 	public double[] getPosition();
 }

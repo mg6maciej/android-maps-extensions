@@ -8,7 +8,7 @@
  * See the COPYRIGHT file distributed with this work for information
  * regarding copyright ownership.
  */
-package ch.usi.inf.sape.hac.experiment;
+package com.androidmapsextensions.dendrogram;
 
 
 /**

@@ -16,7 +16,6 @@
 package com.androidmapsextensions.impl;
 
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.ClusteringSettings;
