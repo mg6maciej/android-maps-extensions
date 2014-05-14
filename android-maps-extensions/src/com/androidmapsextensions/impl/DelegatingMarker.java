@@ -15,8 +15,6 @@
  */
 package com.androidmapsextensions.impl;
 
-import android.util.Log;
-
 import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.Marker;
 import com.androidmapsextensions.lazy.LazyMarker;
@@ -25,7 +23,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-class DelegatingMarker implements Marker {
+
+public class DelegatingMarker implements Marker {
 
     LazyMarker real;
     private MarkerManager manager;
@@ -255,7 +254,14 @@ class DelegatingMarker implements Marker {
             manager.onVisibilityChangeRequest(this, visible);
         }
     }
+    
+    public void setBulkVisible(boolean visible) {
+        if (this.visible != visible) {
+            this.visible = visible;
+        }
+    }
 
+    
     @Override
     public void showInfoWindow() {
         manager.onShowInfoWindow(this);

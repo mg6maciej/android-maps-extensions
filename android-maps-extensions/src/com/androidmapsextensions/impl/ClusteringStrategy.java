@@ -31,7 +31,7 @@ interface ClusteringStrategy {
     void onClusterGroupChange(DelegatingMarker marker);
 
     void onAdd(DelegatingMarker marker);
-    void onBulkAdd(DelegatingMarker marker);
+    void onBulkAdd(List<DelegatingMarker> marker);
     
     void onRemove(DelegatingMarker marker);
 

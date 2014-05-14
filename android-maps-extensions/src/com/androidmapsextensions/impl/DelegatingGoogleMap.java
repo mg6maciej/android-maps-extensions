@@ -100,7 +100,7 @@ class DelegatingGoogleMap implements GoogleMap {
     }
     
     @Override
-    public Marker bulkAddMarker(MarkerOptions markerOptions) {
+    public List<Marker> bulkAddMarker(List<MarkerOptions> markerOptions) {
         return markerManager.bulkAddMarker(markerOptions);
     }
 

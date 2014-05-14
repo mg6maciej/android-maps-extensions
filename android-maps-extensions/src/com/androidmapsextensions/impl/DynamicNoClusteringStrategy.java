@@ -64,8 +64,10 @@ class DynamicNoClusteringStrategy implements ClusteringStrategy {
         addMarker(marker);
     }
     @Override
-    public void onBulkAdd(DelegatingMarker marker) {
-    	onAdd(marker);
+    public void onBulkAdd(List<DelegatingMarker> marker) {
+    	for ( DelegatingMarker dm : marker ) {
+    		onAdd( dm );
+    	}
     }
 
     @Override

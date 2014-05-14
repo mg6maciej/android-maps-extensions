@@ -10,6 +10,8 @@
  */
 package ch.usi.inf.sape.hac;
 
+import android.util.Log;
+
 import ch.usi.inf.sape.hac.agglomeration.AgglomerationMethod;
 import ch.usi.inf.sape.hac.experiment.DissimilarityMeasure;
 import ch.usi.inf.sape.hac.experiment.Experiment;
@@ -68,20 +70,46 @@ public final class HierarchicalAgglomerativeClusterer {
     }    
     
     public void cluster(final ClusteringBuilder clusteringBuilder) {
-        final double[][] dissimilarityMatrix = computeDissimilarityMatrix();
-        final int nObservations = dissimilarityMatrix.length;
+        final int nObservations = experiment.getNumberOfObservations();
+        final float zoomStep = 0.5f;
         
         final boolean[] indexUsed = new boolean[nObservations];
         final int[] clusterCardinalities = new int[nObservations];
-        for (int i = 0; i<nObservations; i++) {
+        for ( int i = 0; i < nObservations; i++ ) {
             indexUsed[i] = true;
             clusterCardinalities[i] = 1;
         }
         
+        for ( float zoomLevel = 25; zoomLevel >= 1; zoomLevel -= zoomStep ) {
+        	double threshold = 3200 / Math.pow( 2, zoomLevel );
+        	// If two points are closer than this distance, cluster them
+        	// Use centroid for cluster positions
+        	double smallestDistance = Double.MAX_VALUE;
+            for ( int a = 0; a < nObservations; a++ ) {
+            	if ( ! indexUsed[ a ] ) {
+            		continue;
+            	} // sort the points by latitude for faster?
+            	for ( int b = a+1; b < nObservations; b++ ) {
+                	if ( ! indexUsed[ b ] ) {
+                		continue;
+                	}
+            		if ( agglomerationMethod.getLatDistance(a, b) > Math.min( smallestDistance, threshold ) ) {
+            			continue;
+            		}
+            		if ( agglomerationMethod.getLonDistance(a, b) > threshold ) {
+            			continue;
+            		}
+            		... find the smallest
+            	}
+            }
+        }
+        
+        
         // Perform nObservations-1 agglomerations
-        for (int a = 1; a<nObservations; a++) {
+        for ( int a = 1; a < nObservations; a++ ) {
+        	Log.e( "e", "a=" + a );
             // Determine the two most similar clusters, i and j (such that i<j)
-            final Pair pair = findMostSimilarClusters(dissimilarityMatrix, indexUsed);
+            final Pair pair = findMostSimilarClusters( dissimilarityMatrix, indexUsed );
             final int i = pair.getSmaller();
             final int j = pair.getLarger();
             final double d = dissimilarityMatrix[i][j];
@@ -96,19 +124,19 @@ public final class HierarchicalAgglomerativeClusterer {
             // cluster i becomes new cluster
             // (by agglomerating former clusters i and j)
             // update dissimilarityMatrix[i][*] and dissimilarityMatrix[*][i]
-            for (int k = 0; k<nObservations; k++) {
-                if ((k!=i)&&(k!=j)&&indexUsed[k]) {
+            for ( int k = 0; k < nObservations; k++ ) {
+                if ( (k != i)  &&  (k != j)  &&  indexUsed[k] ) {
                     final double dissimilarity = agglomerationMethod.computeDissimilarity(dissimilarityMatrix[i][k], dissimilarityMatrix[j][k],
                             dissimilarityMatrix[i][j], clusterCardinalities[i], clusterCardinalities[j], clusterCardinalities[k]);
                     dissimilarityMatrix[i][k] = dissimilarity;
                     dissimilarityMatrix[k][i] = dissimilarity;
                 }
             }
-            clusterCardinalities[i] = clusterCardinalities[i]+clusterCardinalities[j];
+            clusterCardinalities[i] = clusterCardinalities[i] + clusterCardinalities[j];
             
             // erase cluster j
             indexUsed[j] = false;
-            for (int k = 0; k<nObservations; k++) {
+            for ( int k = 0; k < nObservations; k++ ) {
                 dissimilarityMatrix[j][k] = Double.POSITIVE_INFINITY;
                 dissimilarityMatrix[k][j] = Double.POSITIVE_INFINITY;
             }
@@ -119,12 +147,13 @@ public final class HierarchicalAgglomerativeClusterer {
     }
     
     private double[][] computeDissimilarityMatrix() {
+    	Log.e("e","Computing dis matrix");
         final double[][] dissimilarityMatrix = new double[experiment.getNumberOfObservations()][experiment.getNumberOfObservations()];
         // fill diagonal
         for (int o = 0; o<dissimilarityMatrix.length; o++) {
             dissimilarityMatrix[o][o] = 0.0;
         }
-        // fill rest (only compute half, then mirror accross diagonal, assuming
+        // fill rest (only compute half, then mirror across diagonal, assuming
         // a symmetric dissimilarity measure)
         for (int o1 = 0; o1<dissimilarityMatrix.length; o1++) {
             for (int o2 = 0; o2<o1; o2++) {
@@ -133,16 +162,18 @@ public final class HierarchicalAgglomerativeClusterer {
                 dissimilarityMatrix[o2][o1] = dissimilarity;
             }
         }
+        
+        Log.e("e","Computed dis matrix");
         return dissimilarityMatrix;
     }
-
+    
     private static Pair findMostSimilarClusters(final double[][] dissimilarityMatrix, final boolean[] indexUsed) {
         final Pair mostSimilarPair = new Pair();
         double smallestDissimilarity = Double.POSITIVE_INFINITY;
-        for (int cluster = 0; cluster<dissimilarityMatrix.length; cluster++) {
-            if (indexUsed[cluster]) {
-                for (int neighbor = 0; neighbor<dissimilarityMatrix.length; neighbor++) {
-                    if (indexUsed[neighbor]&&dissimilarityMatrix[cluster][neighbor]<smallestDissimilarity&&cluster!=neighbor) {
+        for ( int cluster = 0; cluster < dissimilarityMatrix.length; cluster++ ) {
+            if ( indexUsed[cluster] ) {
+                for ( int neighbor = 0; neighbor < dissimilarityMatrix.length; neighbor++ ) {
+                    if ( indexUsed[neighbor]  &&  dissimilarityMatrix[cluster][neighbor] < smallestDissimilarity  &&  cluster != neighbor ) {
                         smallestDissimilarity = dissimilarityMatrix[cluster][neighbor];
                         mostSimilarPair.set(cluster, neighbor);
                     }

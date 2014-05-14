@@ -65,16 +65,25 @@ class MarkerManager implements OnMarkerCreateListener {
         return marker;
     }
     
-    public Marker bulkAddMarker(MarkerOptions markerOptions) {
-    	Log.e( "MarkerManager", "bulkAddMarker" + markerOptions );
-        boolean visible = markerOptions.isVisible();
-        markerOptions.visible(false);
-        DelegatingMarker marker = createMarker(markerOptions.real);
-        setExtendedOptions(marker, markerOptions);
-        clusteringStrategy.onBulkAdd(marker);
-        marker.setVisible(visible);
-        markerOptions.visible(visible);
-        return marker;
+    public List<Marker> bulkAddMarker( List<MarkerOptions> markerOptions ) {
+    	Log.e( "MarkerManager", "bulkAddMarker" + markerOptions + " strategy=" + clusteringStrategy );
+    	List<Marker> ret = new ArrayList<Marker>();
+    	
+    	for ( MarkerOptions mo : markerOptions ) {
+            boolean visible = mo.isVisible();
+            mo.visible(false);
+    		DelegatingMarker marker = createMarker( mo.real );
+    		setExtendedOptions( marker, mo );    		
+    		marker.setBulkVisible( visible );
+            mo.visible(visible);
+    		ret.add( marker );
+    	}
+    	
+    	@SuppressWarnings( "unchecked" )
+		List<DelegatingMarker> ldm = (List<DelegatingMarker>)(List<?>) ret;
+    	clusteringStrategy.onBulkAdd( ldm );
+    	
+    	return ret;
     }
     
     private void setExtendedOptions(DelegatingMarker marker, MarkerOptions markerOptions) {

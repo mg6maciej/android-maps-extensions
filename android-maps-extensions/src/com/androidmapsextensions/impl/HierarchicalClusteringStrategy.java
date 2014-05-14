@@ -5,6 +5,8 @@ import android.util.Log;
 import ch.usi.inf.sape.hac.HierarchicalAgglomerativeClusterer;
 import ch.usi.inf.sape.hac.agglomeration.AgglomerationMethod;
 import ch.usi.inf.sape.hac.agglomeration.CentroidLinkage;
+import ch.usi.inf.sape.hac.agglomeration.CompleteLinkage;
+import ch.usi.inf.sape.hac.agglomeration.MedianLinkage;
 import ch.usi.inf.sape.hac.dendrogram.Dendrogram;
 import ch.usi.inf.sape.hac.dendrogram.DendrogramBuilder;
 import ch.usi.inf.sape.hac.dendrogram.DendrogramNode;
@@ -68,15 +70,15 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
 		};
 		DissimilarityMeasure dissimilarityMeasure = new DissimilarityMeasure() {
 			private static final double EARTH_RADIUS_MILES = 3958.76;
+			// Approximation for small distances, but good enough
 			private double distanceMiles( double lat1d, double lon1d, double lat2d, double lon2d ) {
-				double dLat = Math.toRadians( lat2d - lat1d );
-				double dLon = Math.toRadians( lon2d - lon1d );
-				double lat1 = Math.toRadians( lat1d );
-				double lat2 = Math.toRadians( lat2d );
 				
-				double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-				double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-				double d = EARTH_RADIUS_MILES * c;
+				double avgLat = Math.toRadians( (lat1d+lat2d)/2 );
+				
+				double dx = Math.toRadians( lon2d - lon1d ) * Math.cos( avgLat );
+				double dy = Math.toRadians( lat2d - lat1d );
+				
+				double d = EARTH_RADIUS_MILES * Math.sqrt( dx*dx + dy*dy ); 
 				
 				return d;
 			}
@@ -94,11 +96,12 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
 				return distanceMiles( dm1.getPosition().latitude, dm1.getPosition().longitude, dm2.getPosition().latitude, dm2.getPosition().longitude );
 			}
 		};
-		AgglomerationMethod agglomerationMethod = new CentroidLinkage();
+		AgglomerationMethod agglomerationMethod = new CompleteLinkage();
 		DendrogramBuilder dendrogramBuilder = new DendrogramBuilder( experiment.getNumberOfObservations() );
 		HierarchicalAgglomerativeClusterer clusterer = new HierarchicalAgglomerativeClusterer( experiment, dissimilarityMeasure, agglomerationMethod );
 		clusterer.cluster( dendrogramBuilder );
 		dendrogram = dendrogramBuilder.getDendrogram();
+		Log.e("e","reComputingDendrogram DONE");
     }
     
     private void addToCluster( ClusterMarker cm, DendrogramNode node ) {
@@ -130,7 +133,7 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
     		if ( node.getRight() instanceof ObservationNode ) {
     			DelegatingMarker dm = fullMarkerList.get( ((ObservationNode) node.getRight()).getObservation() );
     			nearestMarkerDistance.put( dm, distance );
-    		}    		
+    		}
     		
     		if ( distance < threshold ) {
     			// Terminate here, create a new cluster containing all the lower ObservationNodes		
@@ -253,15 +256,24 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
         }
         addMarker(marker);
     }
-
+    
     @Override
-    public void onBulkAdd( DelegatingMarker marker ) {
-    	/*
-        if ( ! marker.isVisible() ) {
-            return;
-        }
-        fullMarkerList.add( marker );
-        */
+    public void onBulkAdd( List<DelegatingMarker> marker ) {
+    	Log.e("e","Hierarchical onBulkAdd");
+    	for ( DelegatingMarker m : marker ) {
+    		if ( m.isVisible() ) {    	
+    			fullMarkerList.add( m );
+    		}
+    	}
+        reComputeDendrogram();
+        if ( dendrogram == null )
+        	return;
+        
+		DendrogramNode node = dendrogram.getRoot();
+		dendrogram.dump();
+		evaluateNode( node, getThreshold(zoom) );
+		        
+        refresher.refreshAll();
     }
     
     private void addMarker( DelegatingMarker marker ) {
