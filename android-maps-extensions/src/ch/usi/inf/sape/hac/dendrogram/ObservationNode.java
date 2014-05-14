@@ -20,10 +20,11 @@ package ch.usi.inf.sape.hac.dendrogram;
 public final class ObservationNode implements DendrogramNode {
 
 	private final int observation;
-
+	private final double[] position;
 	
-	public ObservationNode(final int observation) {
+	public ObservationNode(final int observation, final double[] position) {
 		this.observation = observation;
+		this.position    = position;
 	}
 	
 	public final DendrogramNode getLeft() {
@@ -40,6 +41,11 @@ public final class ObservationNode implements DendrogramNode {
 	
 	public final int getObservation() {
 		return observation;
+	}
+
+	@Override
+	public double[] getPosition() {
+		return position;
 	}
 
 }

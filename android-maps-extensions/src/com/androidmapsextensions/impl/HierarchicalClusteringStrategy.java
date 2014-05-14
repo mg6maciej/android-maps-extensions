@@ -3,10 +3,7 @@ package com.androidmapsextensions.impl;
 import android.util.Log;
 
 import ch.usi.inf.sape.hac.HierarchicalAgglomerativeClusterer;
-import ch.usi.inf.sape.hac.agglomeration.AgglomerationMethod;
-import ch.usi.inf.sape.hac.agglomeration.CentroidLinkage;
-import ch.usi.inf.sape.hac.agglomeration.CompleteLinkage;
-import ch.usi.inf.sape.hac.agglomeration.MedianLinkage;
+import ch.usi.inf.sape.hac.MyDissimilarityMeasure;
 import ch.usi.inf.sape.hac.dendrogram.Dendrogram;
 import ch.usi.inf.sape.hac.dendrogram.DendrogramBuilder;
 import ch.usi.inf.sape.hac.dendrogram.DendrogramNode;
@@ -66,41 +63,39 @@ class HierarchicalClusteringStrategy implements ClusteringStrategy {
 			@Override
 			public int getNumberOfObservations() {
 				return fullMarkerList.size();
-			} 
+			}			
+		    public double[] getPosition( int observation ) {
+		    	DelegatingMarker pos = fullMarkerList.get( observation );
+		    	LatLng ll = pos.getPosition();
+		    	return new double[]{ ll.latitude, ll.longitude };
+			}
 		};
-		DissimilarityMeasure dissimilarityMeasure = new DissimilarityMeasure() {
+		MyDissimilarityMeasure dissimilarityMeasure = new MyDissimilarityMeasure() {
 			private static final double EARTH_RADIUS_MILES = 3958.76;
 			// Approximation for small distances, but good enough
-			private double distanceMiles( double lat1d, double lon1d, double lat2d, double lon2d ) {
+			@Override
+		    public double computeDissimilarity(Experiment experiment, int observation1, int observation2) {				
+				double [] pos1 = experiment.getPosition( observation1 );
+				double [] pos2 = experiment.getPosition( observation2 );
 				
-				double avgLat = Math.toRadians( (lat1d+lat2d)/2 );
+				return distanceMiles( pos1, pos2 );
+			}
+			public double distanceMiles( double[] pos1, double[] pos2 ) {
+				double avgLat = Math.toRadians( (pos1[0] + pos2[0])/2 );
 				
-				double dx = Math.toRadians( lon2d - lon1d ) * Math.cos( avgLat );
-				double dy = Math.toRadians( lat2d - lat1d );
+				double dx = Math.toRadians( pos2[1] - pos1[1] ) * Math.cos( avgLat );
+				double dy = Math.toRadians( pos2[0] - pos1[0] );
 				
 				double d = EARTH_RADIUS_MILES * Math.sqrt( dx*dx + dy*dy ); 
 				
 				return d;
 			}
-			@Override
-			public double computeDissimilarity( Experiment experiment, int observation1, int observation2 ) {
-				// Distance in miles between the two markers
-				DelegatingMarker dm1 = fullMarkerList.get( observation1 );
-				DelegatingMarker dm2 = fullMarkerList.get( observation2 );
-		        int clusterGroup1 = dm1.getClusterGroup();
-		        int clusterGroup2 = dm2.getClusterGroup();
-		        if ( clusterGroup1 < 0  ||  clusterGroup2 < 0 ) {
-		        	return Double.MAX_VALUE; // clusterGroup < 0 implies this marker is never clustered
-		        }
-		        
-				return distanceMiles( dm1.getPosition().latitude, dm1.getPosition().longitude, dm2.getPosition().latitude, dm2.getPosition().longitude );
-			}
 		};
-		AgglomerationMethod agglomerationMethod = new CompleteLinkage();
-		DendrogramBuilder dendrogramBuilder = new DendrogramBuilder( experiment.getNumberOfObservations() );
-		HierarchicalAgglomerativeClusterer clusterer = new HierarchicalAgglomerativeClusterer( experiment, dissimilarityMeasure, agglomerationMethod );
+		DendrogramBuilder dendrogramBuilder = new DendrogramBuilder( experiment );
+		
+		HierarchicalAgglomerativeClusterer clusterer = new HierarchicalAgglomerativeClusterer( experiment, dissimilarityMeasure );
 		clusterer.cluster( dendrogramBuilder );
-		dendrogram = dendrogramBuilder.getDendrogram();
+		dendrogram = dendrogramBuilder.getDendrogram();		
 		Log.e("e","reComputingDendrogram DONE");
     }
     

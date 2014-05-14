@@ -23,13 +23,23 @@ public final class MergeNode implements DendrogramNode {
 	private final DendrogramNode right;
 	private final double dissimilarity;
 	private final int observationCount;
+	private final double[] position;
 	
-	
-	public MergeNode( final DendrogramNode left, final DendrogramNode right, final double dissimilarity ) {
-		this.left  = left;
-		this.right = right;
-		this.dissimilarity = dissimilarity;
+	public MergeNode(final DendrogramNode left, final DendrogramNode right, double dissimilarity) {
+		this.left = left;
+		this.right = right;		
 		observationCount = left.getObservationCount() + right.getObservationCount();
+		
+		double[] leftPos  = left.getPosition();
+		double[] rightPos = right.getPosition();
+		// TODO
+		double newLat = ( leftPos[0]  * left.getObservationCount() +
+					      rightPos[0] * right.getObservationCount() ) / observationCount;
+		double newLon = ( leftPos[1]  * left.getObservationCount() +
+			      		  rightPos[1] * right.getObservationCount() ) / observationCount;
+		position = new double[]{ newLat, newLon };
+		
+		this.dissimilarity = dissimilarity;
 	}
 	
 	public int getObservationCount() {
@@ -48,4 +58,8 @@ public final class MergeNode implements DendrogramNode {
 		return dissimilarity;
 	}
 
+	@Override
+	public double[] getPosition() {
+		return position;
+	}
 }

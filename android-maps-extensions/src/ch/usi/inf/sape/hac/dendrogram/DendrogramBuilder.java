@@ -11,6 +11,7 @@
 package ch.usi.inf.sape.hac.dendrogram;
 
 import ch.usi.inf.sape.hac.ClusteringBuilder;
+import ch.usi.inf.sape.hac.experiment.Experiment;
 
 
 /**
@@ -20,29 +21,24 @@ import ch.usi.inf.sape.hac.ClusteringBuilder;
  * @author Matthias.Hauswirth@usi.ch
  */
 public final class DendrogramBuilder implements ClusteringBuilder {
-
-    private final DendrogramNode[] nodes;
+	
     private MergeNode lastMergeNode;
-
-
-    public DendrogramBuilder(final int nObservations) {
-        nodes = new DendrogramNode[nObservations];
-        for (int i = 0; i<nObservations; i++) {
-            nodes[i] = new ObservationNode(i);
-        }
+    private Experiment experiment;
+    
+    public DendrogramBuilder( Experiment experiment ) {
+    	this.experiment = experiment;    
     }
-
-    public final void merge(final int i, final int j, final double dissimilarity) {
-        final MergeNode node = new MergeNode(nodes[i], nodes[j], dissimilarity);
-        nodes[i] = node;
+    public final MergeNode merge(final DendrogramNode i, final DendrogramNode j, double dist) {
+        final MergeNode node = new MergeNode(i, j, dist);
         lastMergeNode = node;
+        return node;
     }
 
     public final Dendrogram getDendrogram() {
-        if (nodes.length==1) {
-            return new Dendrogram(nodes[0]);
+        if ( experiment.getNumberOfObservations() == 1 ) {
+            return new Dendrogram( new ObservationNode(0, experiment.getPosition( 0 ) ) );
         } else {
-            return new Dendrogram(lastMergeNode);
+            return new Dendrogram( lastMergeNode );
         }
     }
 

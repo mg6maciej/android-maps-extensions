@@ -12,9 +12,20 @@ package ch.usi.inf.sape.hac;
 
 import android.util.Log;
 
-import ch.usi.inf.sape.hac.agglomeration.AgglomerationMethod;
+import ch.usi.inf.sape.hac.dendrogram.DendrogramBuilder;
+import ch.usi.inf.sape.hac.dendrogram.DendrogramNode;
+import ch.usi.inf.sape.hac.dendrogram.MergeNode;
+import ch.usi.inf.sape.hac.dendrogram.ObservationNode;
 import ch.usi.inf.sape.hac.experiment.DissimilarityMeasure;
 import ch.usi.inf.sape.hac.experiment.Experiment;
+import edu.wlu.cs.levy.CG.KDTree;
+import edu.wlu.cs.levy.CG.KeyDuplicateException;
+import edu.wlu.cs.levy.CG.KeyMissingException;
+import edu.wlu.cs.levy.CG.KeySizeException;
+
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 
 /**
@@ -35,14 +46,11 @@ import ch.usi.inf.sape.hac.experiment.Experiment;
 public final class HierarchicalAgglomerativeClusterer {
 
     private Experiment experiment;
-    private DissimilarityMeasure dissimilarityMeasure;
-    private AgglomerationMethod agglomerationMethod;
-    
-    
-    public HierarchicalAgglomerativeClusterer(final Experiment experiment, final DissimilarityMeasure dissimilarityMeasure, final AgglomerationMethod agglomerationMethod) {
+    private MyDissimilarityMeasure dissimilarityMeasure;    
+        
+    public HierarchicalAgglomerativeClusterer(final Experiment experiment, final MyDissimilarityMeasure dissimilarityMeasure ) {
         this.experiment = experiment;
         this.dissimilarityMeasure = dissimilarityMeasure;
-        this.agglomerationMethod = agglomerationMethod;
     }
     
     public void setExperiment(final Experiment experiment) {
@@ -53,7 +61,7 @@ public final class HierarchicalAgglomerativeClusterer {
         return experiment;
     }
     
-    public void setDissimilarityMeasure(final DissimilarityMeasure dissimilarityMeasure) {
+    public void setDissimilarityMeasure(final MyDissimilarityMeasure dissimilarityMeasure) {
         this.dissimilarityMeasure = dissimilarityMeasure;
     }
 
@@ -61,148 +69,127 @@ public final class HierarchicalAgglomerativeClusterer {
         return dissimilarityMeasure;
     }
     
-    public void setAgglomerationMethod(final AgglomerationMethod agglomerationMethod) {
-        this.agglomerationMethod = agglomerationMethod;
-    }
-    
-    public AgglomerationMethod getAgglomerationMethod() {
-        return agglomerationMethod;
-    }    
-    
-    public void cluster(final ClusteringBuilder clusteringBuilder) {
-        final int nObservations = experiment.getNumberOfObservations();
-        final float zoomStep = 0.5f;
-        
-        final boolean[] indexUsed = new boolean[nObservations];
-        final int[] clusterCardinalities = new int[nObservations];
-        for ( int i = 0; i < nObservations; i++ ) {
-            indexUsed[i] = true;
-            clusterCardinalities[i] = 1;
-        }
-        
-        for ( float zoomLevel = 25; zoomLevel >= 1; zoomLevel -= zoomStep ) {
-        	double threshold = 3200 / Math.pow( 2, zoomLevel );
-        	// If two points are closer than this distance, cluster them
-        	// Use centroid for cluster positions
-        	double smallestDistance = Double.MAX_VALUE;
-            for ( int a = 0; a < nObservations; a++ ) {
-            	if ( ! indexUsed[ a ] ) {
-            		continue;
-            	} // sort the points by latitude for faster?
-            	for ( int b = a+1; b < nObservations; b++ ) {
-                	if ( ! indexUsed[ b ] ) {
-                		continue;
-                	}
-            		if ( agglomerationMethod.getLatDistance(a, b) > Math.min( smallestDistance, threshold ) ) {
-            			continue;
-            		}
-            		if ( agglomerationMethod.getLonDistance(a, b) > threshold ) {
-            			continue;
-            		}
-            		... find the smallest
-            	}
-            }
-        }
-        
-        
-        // Perform nObservations-1 agglomerations
-        for ( int a = 1; a < nObservations; a++ ) {
-        	Log.e( "e", "a=" + a );
-            // Determine the two most similar clusters, i and j (such that i<j)
-            final Pair pair = findMostSimilarClusters( dissimilarityMatrix, indexUsed );
-            final int i = pair.getSmaller();
-            final int j = pair.getLarger();
-            final double d = dissimilarityMatrix[i][j];
-            
-            /**
-            System.out.println("Agglomeration #"+a+
-                    ": merging clusters "+i+
-                    " (cardinality "+(clusterCardinalities[i])+") and "+j+
-                    " (cardinality "+(clusterCardinalities[j])+") with dissimilarity "+d);
-            **/
-            
-            // cluster i becomes new cluster
-            // (by agglomerating former clusters i and j)
-            // update dissimilarityMatrix[i][*] and dissimilarityMatrix[*][i]
-            for ( int k = 0; k < nObservations; k++ ) {
-                if ( (k != i)  &&  (k != j)  &&  indexUsed[k] ) {
-                    final double dissimilarity = agglomerationMethod.computeDissimilarity(dissimilarityMatrix[i][k], dissimilarityMatrix[j][k],
-                            dissimilarityMatrix[i][j], clusterCardinalities[i], clusterCardinalities[j], clusterCardinalities[k]);
-                    dissimilarityMatrix[i][k] = dissimilarity;
-                    dissimilarityMatrix[k][i] = dissimilarity;
-                }
-            }
-            clusterCardinalities[i] = clusterCardinalities[i] + clusterCardinalities[j];
-            
-            // erase cluster j
-            indexUsed[j] = false;
-            for ( int k = 0; k < nObservations; k++ ) {
-                dissimilarityMatrix[j][k] = Double.POSITIVE_INFINITY;
-                dissimilarityMatrix[k][j] = Double.POSITIVE_INFINITY;
-            }
-            
-            // update clustering
-            clusteringBuilder.merge(i, j, d);
-        }
-    }
-    
-    private double[][] computeDissimilarityMatrix() {
-    	Log.e("e","Computing dis matrix");
-        final double[][] dissimilarityMatrix = new double[experiment.getNumberOfObservations()][experiment.getNumberOfObservations()];
-        // fill diagonal
-        for (int o = 0; o<dissimilarityMatrix.length; o++) {
-            dissimilarityMatrix[o][o] = 0.0;
-        }
-        // fill rest (only compute half, then mirror across diagonal, assuming
-        // a symmetric dissimilarity measure)
-        for (int o1 = 0; o1<dissimilarityMatrix.length; o1++) {
-            for (int o2 = 0; o2<o1; o2++) {
-                final double dissimilarity = dissimilarityMeasure.computeDissimilarity(experiment, o1, o2);
-                dissimilarityMatrix[o1][o2] = dissimilarity;
-                dissimilarityMatrix[o2][o1] = dissimilarity;
-            }
-        }
-        
-        Log.e("e","Computed dis matrix");
-        return dissimilarityMatrix;
-    }
-    
-    private static Pair findMostSimilarClusters(final double[][] dissimilarityMatrix, final boolean[] indexUsed) {
-        final Pair mostSimilarPair = new Pair();
-        double smallestDissimilarity = Double.POSITIVE_INFINITY;
-        for ( int cluster = 0; cluster < dissimilarityMatrix.length; cluster++ ) {
-            if ( indexUsed[cluster] ) {
-                for ( int neighbor = 0; neighbor < dissimilarityMatrix.length; neighbor++ ) {
-                    if ( indexUsed[neighbor]  &&  dissimilarityMatrix[cluster][neighbor] < smallestDissimilarity  &&  cluster != neighbor ) {
-                        smallestDissimilarity = dissimilarityMatrix[cluster][neighbor];
-                        mostSimilarPair.set(cluster, neighbor);
-                    }
-                }
-            }
-        }
-        return mostSimilarPair;
+    private KDTree<DendrogramNode> kd;
+    public void cluster(final DendrogramBuilder clusteringBuilder) {
+    	// TODO - We cannot have duplicate keys in kdtree. Hence, first cluster all dupes.
+    	
+    	// Initialize the KD-tree
+    	kd = new KDTree<DendrogramNode>(2);
+    	try {
+    		for ( int i = 0; i < experiment.getNumberOfObservations(); ++i ) {    			
+    			double [] xyCoord = experiment.getPosition( i );
+    			Log.e( "e", "adding i=" + i + " x=" + xyCoord[0] + " y=" + xyCoord[1] );
+    			kd.insert( xyCoord, new ObservationNode(i, xyCoord) );
+    		}
+    	}    	
+		catch ( KeyDuplicateException e ) {			
+			e.printStackTrace();
+		}
+		catch ( KeySizeException e ) {
+			e.printStackTrace();
+		}
+    	
+    	// Initialize the min-heap    	
+    	SortedMap<Double,Pair> minHeap = new TreeMap<Double,Pair>();
+    	try {
+    		for ( int i = 0; i < experiment.getNumberOfObservations(); ++i ) {    			
+    			double [] pos = experiment.getPosition( i );
+    			DendrogramNode target = kd.search( pos );
+    			
+    			// Find the nearest observation to this observation, excluding itself
+    			DendrogramNode nearest = findNearest(target);    			
+    			
+    			double dist = dissimilarityMeasure.distanceMiles( pos, nearest.getPosition() );
+    			minHeap.put( dist, new Pair(target,nearest) );
+    		}
+    		//System.out.println( "MinHeap=" + minHeap );
+    	}
+    	catch ( KeySizeException e ) {
+    		e.printStackTrace();
+    	}
+    	
+    	try {
+    		while( kd.size() > 1 ) {
+    			Pair pair = minHeap.remove( minHeap.firstKey() );
+    			// Does kd contain pair.A ?
+    			double [] pos1 = pair.cluster1.getPosition();
+    			double [] pos2 = pair.cluster2.getPosition();
+    			DendrogramNode node1 = kd.search( pos1 );
+    			DendrogramNode node2 = kd.search( pos2 );
+    			if ( node1 == null ) { 
+    				// A was already clustered with somebody
+    			}
+    			else
+    			if ( node2 == null ) {
+    				// B is invalid, find new best match for A
+    				DendrogramNode nearest = findNearest( node1 );
+        			double dist = dissimilarityMeasure.distanceMiles( pos1, nearest.getPosition() );
+        			minHeap.put( dist, new Pair(node1, nearest) );
+    			} else {
+    				double dist = dissimilarityMeasure.distanceMiles( pos1, pos2 );
+    				MergeNode cluster = clusteringBuilder.merge( pair.cluster1, pair.cluster2, dist );
+    	    		//System.out.println( "Deleting keys " + pos1[0] + " " + pos1[1] );
+    				kd.delete( pos1 );
+    				//System.out.println( "TRee now " + kd.toString() );
+    				//System.out.println( "Deleting keys " + pos2[0] + " " + pos2[1] );
+    				kd.delete( pos2 );
+    				//System.out.println( "TRee now " + kd.toString() );
+        			kd.insert( cluster.getPosition(), cluster);
+        			
+        			if ( kd.size() <= 1 )
+        				break;
+        			
+    				DendrogramNode nearest = findNearest( cluster );
+        			double dist2 = dissimilarityMeasure.distanceMiles( cluster.getPosition(), nearest.getPosition() );
+        			minHeap.put( dist2, new Pair(cluster, nearest) );
+    			}
+    		}
+    	}
+		catch ( KeySizeException e ) {
+			e.printStackTrace();
+		}
+		catch ( KeyMissingException e ) {
+			e.printStackTrace();
+		}
+		catch ( KeyDuplicateException e ) {
+			e.printStackTrace();
+		}    
     }
 
-
+    // Find the nearest observation to this observation, excluding self
+    private DendrogramNode findNearest( DendrogramNode A ) {    	
+		try {
+			List<DendrogramNode> nearestList = kd.nearest( A.getPosition(), 2 );
+			/*
+			if ( nearestList.size() == 0 ) {
+				throw new IllegalStateException();
+			}
+			else
+			if ( nearestList.size() == 1 ) {
+				return nearestList.get(0);
+			}
+			*/
+	    	if ( nearestList.get(0).equals( A ) ) {
+	    		return nearestList.get(1);
+	    	} else {
+	    		return nearestList.get(0);
+	    	}
+		}
+		catch ( KeySizeException e ) {
+			e.printStackTrace();
+			return null;
+		}    			
+    }
+	
     private static final class Pair {
 
-        private int cluster1;
-        private int cluster2;
+        private DendrogramNode cluster1;
+        private DendrogramNode cluster2;
 
-
-        public final void set(final int cluster1, final int cluster2) {
+        public Pair (final DendrogramNode cluster1, final DendrogramNode cluster2) {
             this.cluster1 = cluster1;
             this.cluster2 = cluster2;
         }
-
-        public final int getLarger() {
-            return Math.max(cluster1, cluster2);
-        }
-
-        public final int getSmaller() {
-            return Math.min(cluster1, cluster2);
-        }
-
     }
 
 }

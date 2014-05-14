@@ -10,6 +10,9 @@
  */
 package ch.usi.inf.sape.hac;
 
+import ch.usi.inf.sape.hac.dendrogram.DendrogramNode;
+import ch.usi.inf.sape.hac.dendrogram.MergeNode;
+
 
 /**
  * HierarchicalAgglomerativeClusterer.cluster() takes a ClusteringBuilder as its argument,
@@ -25,6 +28,6 @@ public interface ClusteringBuilder {
      * @param j the larger of the two cluster indices
      * @param dissimilarity between the two merged clusters
      */
-    public void merge(int i, int j, double dissimilarity);
+    public MergeNode merge(DendrogramNode i, DendrogramNode j, double dist);
 
 }

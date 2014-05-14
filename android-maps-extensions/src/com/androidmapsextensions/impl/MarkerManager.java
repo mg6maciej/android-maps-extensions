@@ -66,7 +66,7 @@ class MarkerManager implements OnMarkerCreateListener {
     }
     
     public List<Marker> bulkAddMarker( List<MarkerOptions> markerOptions ) {
-    	Log.e( "MarkerManager", "bulkAddMarker" + markerOptions + " strategy=" + clusteringStrategy );
+    	//Log.e( "MarkerManager", "bulkAddMarker" + markerOptions + " strategy=" + clusteringStrategy );
     	List<Marker> ret = new ArrayList<Marker>();
     	
     	for ( MarkerOptions mo : markerOptions ) {

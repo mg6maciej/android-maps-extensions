@@ -19,5 +19,5 @@ package ch.usi.inf.sape.hac.experiment;
 public interface Experiment {
 
     public int getNumberOfObservations();
-
+    public double[] getPosition(int observation);
 }
