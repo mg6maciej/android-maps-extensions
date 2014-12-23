@@ -6,7 +6,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:1.0.0'
     }
 }
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
@@ -26,15 +26,6 @@ android {
         minSdkVersion 8
         targetSdkVersion 19
     }
-
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            res.srcDirs = ['res']
-        }
-    }
-
     dexOptions {
         preDexLibraries = !isTravis
     }
