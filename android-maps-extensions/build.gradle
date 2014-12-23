@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.android.tools.build:gradle:1.0.0'
     }
 }
 
@@ -23,7 +23,7 @@ def isTravis = "true".equals(System.getenv("TRAVIS"))
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '19.0.3'
+    buildToolsVersion '21.1.1'
 
     defaultConfig {
         minSdkVersion 8
@@ -61,7 +61,7 @@ if (!isTravis) {
 
     task sourcesJar(type: Jar) {
         classifier = 'sources'
-        from android.sourceSets.main.allSource
+        from android.sourceSets.main.java
     }
 
     artifacts {
@@ -120,12 +120,14 @@ if (!isTravis) {
 }
 
 android.libraryVariants.all { variant ->
-    variant.processManifest.doFirst {
-        File manifestFile = file("${buildDir}/exploded-aar/com.google.android.gms/play-services/4.3.23/AndroidManifest.xml")
-        if (manifestFile.exists()) {
-            String content = manifestFile.getText('UTF-8')
-            content = content.replaceAll(/minSdkVersion="9"/, 'minSdkVersion="8"')
-            manifestFile.write(content, 'UTF-8')
+    variant.outputs.each { output ->
+        output.processManifest.doLast {
+            File manifestFile = file("${buildDir}/intermediates/exploded-aar/com.google.android.gms/play-services/4.3.23/AndroidManifest.xml")
+            if (manifestFile.exists()) {
+                String content = manifestFile.getText('UTF-8')
+                content = content.replaceAll(/minSdkVersion="9"/, 'minSdkVersion="8"')
+                manifestFile.write(content, 'UTF-8')
+            }
         }
     }
 }
