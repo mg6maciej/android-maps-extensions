@@ -49,4 +49,20 @@ public class SupportMapFragment extends com.google.android.gms.maps.SupportMapFr
         }
         return map;
     }
+
+    public void getExtendedMapAsync(final OnMapReadyCallback callback) {
+        if (map != null) {
+            callback.onMapReady(map);
+        } else {
+            super.getMapAsync(new com.google.android.gms.maps.OnMapReadyCallback() {
+                @Override
+                public void onMapReady(com.google.android.gms.maps.GoogleMap realMap) {
+                    if (map == null) {
+                        map = ExtendedMapFactory.create(realMap, getActivity());
+                    }
+                    callback.onMapReady(map);
+                }
+            });
+        }
+    }
 }
