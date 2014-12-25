@@ -3,8 +3,6 @@
     android:versionCode="15"
     android:versionName="2.1.1-SNAPSHOT" >
 
-    <uses-sdk android:minSdkVersion="8" />
-
     <application />
 
 </manifest>
