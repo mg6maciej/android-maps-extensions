@@ -15,12 +15,12 @@
  */
 package com.androidmapsextensions;
 
+import android.content.Context;
 import android.os.Bundle;
 
-import com.androidmapsextensions.impl.ExtendedMapFactory;
 import com.google.android.gms.maps.GoogleMapOptions;
 
-public class MapFragment extends com.google.android.gms.maps.MapFragment {
+public class MapFragment extends com.google.android.gms.maps.MapFragment implements MapHolder.Delegate {
 
     // value taken from google-play-services.jar
     private static final String MAP_OPTIONS = "MapOptions";
@@ -38,31 +38,18 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment {
         return f;
     }
 
-    private GoogleMap map;
+    private final MapHolder mapHolder = new MapHolder(this);
 
     public GoogleMap getExtendedMap() {
-        if (map == null) {
-            com.google.android.gms.maps.GoogleMap realMap = super.getMap();
-            if (realMap != null) {
-                map = ExtendedMapFactory.create(realMap, getActivity());
-            }
-        }
-        return map;
+        return mapHolder.getExtendedMap();
     }
 
-    public void getExtendedMapAsync(final OnMapReadyCallback callback) {
-        if (map != null) {
-            callback.onMapReady(map);
-        } else {
-            super.getMapAsync(new com.google.android.gms.maps.OnMapReadyCallback() {
-                @Override
-                public void onMapReady(com.google.android.gms.maps.GoogleMap realMap) {
-                    if (map == null) {
-                        map = ExtendedMapFactory.create(realMap, getActivity());
-                    }
-                    callback.onMapReady(map);
-                }
-            });
-        }
+    public void getExtendedMapAsync(OnMapReadyCallback callback) {
+        mapHolder.getExtendedMapAsync(callback);
+    }
+
+    @Override
+    public Context getContext() {
+        return getActivity();
     }
 }
