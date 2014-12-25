@@ -22,7 +22,7 @@ tasks.withType(JavaCompile) {
 def isTravis = "true".equals(System.getenv("TRAVIS"))
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 21
     buildToolsVersion '21.1.1'
 
     defaultConfig {
