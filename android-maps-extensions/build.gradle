@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services:6.5.87'
+    compile 'com.google.android.gms:play-services-maps:6.5.87'
 }
 
 group = 'com.androidmapsextensions'
@@ -106,19 +106,6 @@ if (!isTravis) {
 
         pom.whenConfigured {
             pom -> pom.dependencies = []
-        }
-    }
-}
-
-android.libraryVariants.all { variant ->
-    variant.outputs.each { output ->
-        output.processManifest.doFirst {
-            File manifestFile = file("${buildDir}/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/AndroidManifest.xml")
-            if (manifestFile.exists()) {
-                String content = manifestFile.getText('UTF-8')
-                content = content.replaceAll(/minSdkVersion="9"/, 'minSdkVersion="8"')
-                manifestFile.write(content, 'UTF-8')
-            }
         }
     }
 }

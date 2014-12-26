@@ -33,7 +33,7 @@ android {
 
 dependencies {
     compile (project (':android-maps-extensions')) {
-        exclude module: 'play-services'
+        exclude module: 'play-services-maps'
     }
     compile 'com.google.android.gms:play-services:3.2.65'
     compile 'com.android.support:appcompat-v7:21.0.3'
