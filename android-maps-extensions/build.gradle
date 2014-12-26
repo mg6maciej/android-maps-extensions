@@ -1,19 +1,6 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
-    }
-}
-
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'signing'
-
-repositories {
-    jcenter()
-}
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
