@@ -85,7 +85,7 @@ if (!isTravis) {
                     name 'Maciej Górski'
                     id 'mg6maciej'
                     email 'maciek.gorski@gmail.com'
-                    url 'http://mg6.pl'
+                    url 'https://github.com/mg6maciej'
                 }
             }
 
@@ -99,8 +99,8 @@ if (!isTravis) {
 
             scm {
                 url 'https://github.com/mg6maciej/android-maps-extensions'
-                connection 'scm:git:https://github.com/mg6maciej/android-maps-extensions.git'
-                developerConnection 'scm:git:https://github.com/mg6maciej/android-maps-extensions.git'
+                connection 'scm:git:git@github.com:mg6maciej/android-maps-extensions.git'
+                developerConnection 'scm:git:git@github.com:mg6maciej/android-maps-extensions.git'
             }
         }
 
