@@ -4,7 +4,7 @@
     android:versionCode="15"
     android:versionName="2.1.1-SNAPSHOT">
 
-    <uses-sdk tools:overrideLibrary="com.google.android.gms.maps" />
+    <uses-sdk tools:overrideLibrary="com.google.android.gms, com.google.android.gms.maps" />
 
     <application />
 
