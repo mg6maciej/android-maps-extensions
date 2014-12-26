@@ -25,7 +25,7 @@ dependencies {
 }
 
 group = 'com.androidmapsextensions'
-version = '2.1.1-SNAPSHOT'
+version = '2.2.0'
 
 if (!isTravis) {
 
@@ -39,7 +39,7 @@ if (!isTravis) {
 
     task sourcesJar(type: Jar) {
         classifier = 'sources'
-        from android.sourceSets.main.java
+        from android.sourceSets.main.java.sourceFiles
     }
 
     artifacts {
