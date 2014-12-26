@@ -1,111 +1,98 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.+'
-    }
-}
-
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'signing'
-
-repositories {
-    mavenCentral()
-}
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+def isTravis = "true".equals(System.getenv("TRAVIS"))
+
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19'
+    compileSdkVersion 21
+    buildToolsVersion '21.1.2'
 
     defaultConfig {
         minSdkVersion 8
     }
-
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            res.srcDirs = ['res']
-        }
+    dexOptions {
+        preDexLibraries = !isTravis
     }
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services:4.1.32'
+    compile 'com.google.android.gms:play-services-maps:6.5.87'
 }
 
 group = 'com.androidmapsextensions'
-version = '2.1.0'
+version = '2.2.0'
 
-signing {
-    sign configurations.archives
-}
+if (!isTravis) {
 
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.allSource
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-uploadArchives.repositories.mavenDeployer {
-
-    beforeDeployment {
-        MavenDeployment deployment -> signing.signPom(deployment)
+    signing {
+        sign configurations.archives
     }
 
-    repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2') {
-        authentication(userName: sonatypeUserName, password: sonatypePassword)
-    }
-    snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots') {
-        authentication(userName: sonatypeUserName, password: sonatypePassword)
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
     }
 
-    pom.project {
-        name 'Android Maps Extensions'
-        description 'Library extending capabilities of Google Maps Android API v2'
-        inceptionYear '2013'
-        url 'http://AndroidMapsExtensions.com'
-        packaging 'aar'
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.sourceFiles
+    }
 
-        developers {
-            developer {
-                name 'Maciej Górski'
-                id 'mg6maciej'
-                email 'maciek.gorski@gmail.com'
-                url 'http://mg6.pl'
+    artifacts {
+        archives javadocJar
+        archives sourcesJar
+    }
+
+    uploadArchives.repositories.mavenDeployer {
+
+        beforeDeployment {
+            MavenDeployment deployment -> signing.signPom(deployment)
+        }
+
+        repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2') {
+            authentication(userName: sonatypeUserName, password: sonatypePassword)
+        }
+        snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots') {
+            authentication(userName: sonatypeUserName, password: sonatypePassword)
+        }
+
+        pom.project {
+            name 'Android Maps Extensions'
+            description 'Library extending capabilities of Google Maps Android API v2'
+            inceptionYear '2013'
+            url 'http://AndroidMapsExtensions.com'
+            packaging 'aar'
+
+            developers {
+                developer {
+                    name 'Maciej Górski'
+                    id 'mg6maciej'
+                    email 'maciek.gorski@gmail.com'
+                    url 'https://github.com/mg6maciej'
+                }
+            }
+
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+
+            scm {
+                url 'https://github.com/mg6maciej/android-maps-extensions'
+                connection 'scm:git:git@github.com:mg6maciej/android-maps-extensions.git'
+                developerConnection 'scm:git:git@github.com:mg6maciej/android-maps-extensions.git'
             }
         }
 
-        licenses {
-            license {
-                name 'The Apache Software License, Version 2.0'
-                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                distribution 'repo'
-            }
+        pom.whenConfigured {
+            pom -> pom.dependencies = []
         }
-
-        scm {
-            url 'https://github.com/mg6maciej/android-maps-extensions'
-            connection 'scm:git:https://github.com/mg6maciej/android-maps-extensions.git'
-            developerConnection 'scm:git:https://github.com/mg6maciej/android-maps-extensions.git'
-        }
-    }
-
-    pom.whenConfigured {
-        pom -> pom.dependencies = []
     }
 }

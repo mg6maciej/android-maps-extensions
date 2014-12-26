@@ -1,44 +1,28 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.+'
-    }
-}
-apply plugin: 'android'
-
-repositories {
-    mavenCentral()
-}
+apply plugin: 'com.android.application'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+def isTravis = "true".equals(System.getenv("TRAVIS"))
+
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19'
+    compileSdkVersion 21
+    buildToolsVersion '21.1.2'
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 19
+        targetSdkVersion 21
     }
-
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            res.srcDirs = ['res']
-        }
+    dexOptions {
+        preDexLibraries = !isTravis
     }
 }
 
 dependencies {
     compile (project (':android-maps-extensions')) {
-        exclude module: 'play-services'
+        exclude module: 'play-services-maps'
     }
     compile 'com.google.android.gms:play-services:3.2.65'
-    compile 'com.android.support:support-v4:19.0.1'
-    compile 'com.android.support:appcompat-v7:19.0.1'
+    compile 'com.android.support:appcompat-v7:21.0.3'
 }

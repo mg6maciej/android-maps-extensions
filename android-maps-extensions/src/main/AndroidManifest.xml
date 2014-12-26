@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.androidmapsextensions"
+    android:versionCode="16"
+    android:versionName="2.2.0">
+
+    <uses-sdk tools:overrideLibrary="com.google.android.gms, com.google.android.gms.maps" />
+
+    <application />
+
+</manifest>

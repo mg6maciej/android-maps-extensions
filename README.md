@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mg6maciej/android-maps-extensions.svg?branch=develop)](https://travis-ci.org/mg6maciej/android-maps-extensions)
+
 Android Maps Extensions
 =======================
 
@@ -8,6 +10,20 @@ it lacks commonly used patterns like marker clustering.
 This library aims to fill this gap by adding many useful features
 and improving on the responsiveness issues of the official Google library.  
 See [wiki](https://github.com/mg6maciej/android-maps-extensions/wiki) for more details.
+
+Usage
+=====
+
+You may use any version of [Google Play Services](https://developer.android.com/google/play-services/index.html) from 3.2.65 (the last working on Android API 8) or above.
+
+Gradle
+------
+```Groovy
+dependencies {
+    compile 'com.androidmapsextensions:android-maps-extensions:2.2.0'
+    compile 'com.google.android.gms:play-services-maps:6.5.87'
+}
+```
 
 Developed by
 ============
