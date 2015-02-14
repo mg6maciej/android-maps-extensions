@@ -3,6 +3,8 @@
 Android Maps Extensions
 =======================
 
+[![Join the chat at https://gitter.im/mg6maciej/android-maps-extensions](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mg6maciej/android-maps-extensions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Library extending capabilities of Google Maps Android API v2.  
 While [Google Maps Android API v2](https://developers.google.com/maps/documentation/android/)
 is a huge leap forward comapared to its predecessor,
