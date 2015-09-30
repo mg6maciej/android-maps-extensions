@@ -17,6 +17,9 @@ android {
     dexOptions {
         preDexLibraries = !isTravis
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
