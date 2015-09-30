@@ -10,7 +10,7 @@ def isTravis = "true".equals(System.getenv("TRAVIS"))
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '21.1.2'
+    buildToolsVersion '23.0.1'
 
     defaultConfig {
         minSdkVersion 8
