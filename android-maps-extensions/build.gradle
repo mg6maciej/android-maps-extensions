@@ -9,7 +9,7 @@ tasks.withType(JavaCompile) {
 def isTravis = "true".equals(System.getenv("TRAVIS"))
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 23
     buildToolsVersion '21.1.2'
 
     defaultConfig {
@@ -21,7 +21,7 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services-maps:6.5.87'
+    compile 'com.google.android.gms:play-services-maps:8.1.0'
 }
 
 group = 'com.androidmapsextensions'
