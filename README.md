@@ -3,6 +3,8 @@
 Android Maps Extensions
 =======================
 
+[![Join the chat at https://gitter.im/mg6maciej/android-maps-extensions](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mg6maciej/android-maps-extensions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Library extending capabilities of Google Maps Android API v2.  
 While [Google Maps Android API v2](https://developers.google.com/maps/documentation/android/)
 is a huge leap forward comapared to its predecessor,
@@ -20,8 +22,8 @@ Gradle
 ------
 ```Groovy
 dependencies {
-    compile 'com.androidmapsextensions:android-maps-extensions:2.2.0'
-    compile 'com.google.android.gms:play-services-maps:6.5.87'
+    compile 'com.androidmapsextensions:android-maps-extensions:2.2.1'
+    compile 'com.google.android.gms:play-services-maps:8.1.0'
 }
 ```
 
