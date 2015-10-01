@@ -268,7 +268,9 @@ class ClusterMarker implements Marker {
 
     @Override
     public void setIcon(BitmapDescriptor icon) {
-        throw new UnsupportedOperationException();
+        if (virtual != null) {
+            virtual.setIcon(icon);
+        }
     }
 
     @Override
