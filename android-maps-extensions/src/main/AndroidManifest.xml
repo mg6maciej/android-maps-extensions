@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.androidmapsextensions"
-    android:versionCode="17"
-    android:versionName="2.2.1-SNAPSHOT">
+    android:versionCode="18"
+    android:versionName="2.2.1">
 
     <uses-sdk tools:overrideLibrary="com.google.android.gms, com.google.android.gms.base, com.google.android.gms.maps" />
 
