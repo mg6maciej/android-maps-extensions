@@ -80,6 +80,7 @@ class DelegatingMarker implements Marker {
         return data;
     }
 
+    @SuppressWarnings("deprecation")
     @Deprecated
     @Override
     public String getId() {

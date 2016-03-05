@@ -231,7 +231,7 @@ class DelegatingGoogleMap implements GoogleMap {
     public void setClustering(ClusteringSettings clusteringSettings) {
         if (clusteringSettings != null && clusteringSettings.isEnabled()
                 && clusteringSettings.getClusterOptionsProvider() == null) {
-            clusteringSettings.clusterOptionsProvider(new DefaultClusterOptionsProvider(context.getResources()));
+            clusteringSettings.clusterOptionsProvider(new DefaultClusterOptionsProvider(context));
         }
         markerManager.setClustering(clusteringSettings);
     }

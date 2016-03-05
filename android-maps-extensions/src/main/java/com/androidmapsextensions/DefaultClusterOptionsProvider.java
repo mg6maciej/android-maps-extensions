@@ -15,6 +15,7 @@
  */
 package com.androidmapsextensions;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
@@ -22,6 +23,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.LruCache;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -44,17 +46,17 @@ public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
     private float shadowOffsetX;
     private float shadowOffsetY;
 
-    public DefaultClusterOptionsProvider(Resources resources) {
+    public DefaultClusterOptionsProvider(Context context) {
         colors = new int[]{
-                resources.getColor(R.color.ame_default_cluster_circle_color_small),
-                resources.getColor(R.color.ame_default_cluster_circle_color_medium),
-                resources.getColor(R.color.ame_default_cluster_circle_color_large),
-                resources.getColor(R.color.ame_default_cluster_circle_color_extra_large),
+                ContextCompat.getColor(context, R.color.ame_default_cluster_circle_color_small),
+                ContextCompat.getColor(context, R.color.ame_default_cluster_circle_color_medium),
+                ContextCompat.getColor(context, R.color.ame_default_cluster_circle_color_large),
+                ContextCompat.getColor(context, R.color.ame_default_cluster_circle_color_extra_large),
         };
-        circlePaint = createCirclePaint(resources);
-        circleShadowPaint = createCircleShadowPaint(resources);
-        textPaint = createTextPaint(resources);
-        textPadding = resources.getDimension(R.dimen.ame_default_cluster_text_padding);
+        circlePaint = createCirclePaint(context.getResources());
+        circleShadowPaint = createCircleShadowPaint(context);
+        textPaint = createTextPaint(context);
+        textPadding = context.getResources().getDimension(R.dimen.ame_default_cluster_text_padding);
     }
 
     private Paint createCirclePaint(Resources resources) {
@@ -67,30 +69,30 @@ public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
         return paint;
     }
 
-    private Paint createCircleShadowPaint(Resources resources) {
+    private Paint createCircleShadowPaint(Context context) {
         Paint paint = null;
-        float circleShadowBlurRadius = resources.getDimension(R.dimen.ame_default_cluster_circle_shadow_blur_radius);
+        float circleShadowBlurRadius = context.getResources().getDimension(R.dimen.ame_default_cluster_circle_shadow_blur_radius);
         if (circleShadowBlurRadius > 0.0f) {
             paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            float offsetX = resources.getDimension(R.dimen.ame_default_cluster_circle_shadow_offset_x);
-            float offsetY = resources.getDimension(R.dimen.ame_default_cluster_circle_shadow_offset_y);
-            int color = resources.getColor(R.color.ame_default_cluster_circle_shadow_color);
+            float offsetX = context.getResources().getDimension(R.dimen.ame_default_cluster_circle_shadow_offset_x);
+            float offsetY = context.getResources().getDimension(R.dimen.ame_default_cluster_circle_shadow_offset_y);
+            int color = ContextCompat.getColor(context, R.color.ame_default_cluster_circle_shadow_color);
             paint.setShadowLayer(circleShadowBlurRadius, offsetX, offsetY, color);
         }
         return paint;
     }
 
-    private Paint createTextPaint(Resources resources) {
+    private Paint createTextPaint(Context context) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(resources.getColor(R.color.ame_default_cluster_text_color));
-        shadowBlurRadius = resources.getDimension(R.dimen.ame_default_cluster_text_shadow_blur_radius);
+        paint.setColor(ContextCompat.getColor(context, R.color.ame_default_cluster_text_color));
+        shadowBlurRadius = context.getResources().getDimension(R.dimen.ame_default_cluster_text_shadow_blur_radius);
         if (shadowBlurRadius > 0.0f) {
-            shadowOffsetX = resources.getDimension(R.dimen.ame_default_cluster_text_shadow_offset_x);
-            shadowOffsetY = resources.getDimension(R.dimen.ame_default_cluster_text_shadow_offset_y);
-            int shadowColor = resources.getColor(R.color.ame_default_cluster_text_shadow_color);
+            shadowOffsetX = context.getResources().getDimension(R.dimen.ame_default_cluster_text_shadow_offset_x);
+            shadowOffsetY = context.getResources().getDimension(R.dimen.ame_default_cluster_text_shadow_offset_y);
+            int shadowColor = ContextCompat.getColor(context, R.color.ame_default_cluster_text_shadow_color);
             paint.setShadowLayer(shadowBlurRadius, shadowOffsetX, shadowOffsetY, shadowColor);
         }
-        paint.setTextSize(resources.getDimension(R.dimen.ame_default_cluster_text_size));
+        paint.setTextSize(context.getResources().getDimension(R.dimen.ame_default_cluster_text_size));
         paint.setTypeface(Typeface.DEFAULT_BOLD);
         return paint;
     }
