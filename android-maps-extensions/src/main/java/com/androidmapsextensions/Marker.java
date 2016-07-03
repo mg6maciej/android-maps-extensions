@@ -72,6 +72,8 @@ public interface Marker {
 
     String getTitle();
 
+    float getZIndex();
+
     void hideInfoWindow();
 
     /**
@@ -117,6 +119,8 @@ public interface Marker {
     void setTitle(String title);
 
     void setVisible(boolean visible);
+
+    void setZIndex(float zIndex);
 
     void showInfoWindow();
 }

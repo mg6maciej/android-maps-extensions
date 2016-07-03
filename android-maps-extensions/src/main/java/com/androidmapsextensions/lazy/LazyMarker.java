@@ -99,6 +99,14 @@ public class LazyMarker {
         }
     }
 
+    public float getZIndex() {
+        if (marker != null) {
+            return marker.getZIndex();
+        } else {
+            return markerOptions.getZIndex();
+        }
+    }
+
     public void hideInfoWindow() {
         if (marker != null) {
             marker.hideInfoWindow();
@@ -237,6 +245,14 @@ public class LazyMarker {
         }
     }
 
+    public void zIndex(float zIndex) {
+        if (marker != null) {
+            marker.setZIndex(zIndex);
+        } else {
+            markerOptions.zIndex(zIndex);
+        }
+    }
+
     public void showInfoWindow() {
         if (marker != null) {
             marker.showInfoWindow();
@@ -279,6 +295,7 @@ public class LazyMarker {
         copy.snippet(options.getSnippet());
         copy.title(options.getTitle());
         copy.visible(options.isVisible());
+        copy.zIndex(options.getZIndex());
         return copy;
     }
 }

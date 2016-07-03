@@ -191,6 +191,11 @@ class ClusterMarker implements Marker {
     }
 
     @Override
+    public float getZIndex() {
+        return 0;
+    }
+
+    @Override
     public void hideInfoWindow() {
         if (virtual != null) {
             virtual.hideInfoWindow();
@@ -300,6 +305,11 @@ class ClusterMarker implements Marker {
 
     @Override
     public void setVisible(boolean visible) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setZIndex(float zIndex) {
         throw new UnsupportedOperationException();
     }
 

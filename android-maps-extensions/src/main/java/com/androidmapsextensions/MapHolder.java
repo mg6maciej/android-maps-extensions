@@ -8,8 +8,6 @@ final class MapHolder {
 
     public interface Delegate {
 
-        com.google.android.gms.maps.GoogleMap getMap();
-
         void getMapAsync(com.google.android.gms.maps.OnMapReadyCallback callback);
 
         Context getContext();
@@ -20,16 +18,6 @@ final class MapHolder {
 
     public MapHolder(Delegate delegate) {
         this.delegate = delegate;
-    }
-
-    public GoogleMap getExtendedMap() {
-        if (map == null) {
-            com.google.android.gms.maps.GoogleMap realMap = delegate.getMap();
-            if (realMap != null) {
-                map = ExtendedMapFactory.create(realMap, delegate.getContext());
-            }
-        }
-        return map;
     }
 
     public void getExtendedMapAsync(final OnMapReadyCallback callback) {

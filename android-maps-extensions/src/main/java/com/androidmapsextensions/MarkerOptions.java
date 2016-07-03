@@ -102,6 +102,10 @@ public class MarkerOptions {
         return real.getTitle();
     }
 
+    public float getZIndex() {
+        return real.getZIndex();
+    }
+
     public MarkerOptions icon(BitmapDescriptor icon) {
         real.icon(icon);
         return this;
@@ -146,6 +150,11 @@ public class MarkerOptions {
 
     public MarkerOptions visible(boolean visible) {
         real.visible(visible);
+        return this;
+    }
+
+    public MarkerOptions zIndex(float zIndex) {
+        real.zIndex(zIndex);
         return this;
     }
 }

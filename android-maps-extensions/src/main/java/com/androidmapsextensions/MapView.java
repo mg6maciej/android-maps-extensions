@@ -40,10 +40,6 @@ public class MapView extends com.google.android.gms.maps.MapView implements MapH
         super(context, options);
     }
 
-    public GoogleMap getExtendedMap() {
-        return mapHolder.getExtendedMap();
-    }
-
     public void getExtendedMapAsync(OnMapReadyCallback callback) {
         mapHolder.getExtendedMapAsync(callback);
     }
