@@ -11,7 +11,7 @@ android {
     buildToolsVersion '23.0.1'
 
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion 9
         targetSdkVersion 23
     }
     dexOptions {
@@ -26,6 +26,6 @@ dependencies {
     compile (project (':android-maps-extensions')) {
         exclude module: 'play-services-maps'
     }
-    compile 'com.google.android.gms:play-services:3.2.65'
+    compile 'com.google.android.gms:play-services:9.2.0'
     compile 'com.android.support:appcompat-v7:23.0.1'
 }
