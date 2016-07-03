@@ -192,7 +192,7 @@ class ClusterMarker implements Marker {
 
     @Override
     public float getZIndex() {
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
