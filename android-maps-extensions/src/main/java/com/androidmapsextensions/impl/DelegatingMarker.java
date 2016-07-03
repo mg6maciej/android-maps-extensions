@@ -115,6 +115,11 @@ class DelegatingMarker implements Marker {
     }
 
     @Override
+    public float getZIndex() {
+        return real.getZIndex();
+    }
+
+    @Override
     public void hideInfoWindow() {
         real.hideInfoWindow();
     }
@@ -227,6 +232,11 @@ class DelegatingMarker implements Marker {
             this.visible = visible;
             manager.onVisibilityChangeRequest(this, visible);
         }
+    }
+
+    @Override
+    public void setZIndex(float zIndex) {
+        real.zIndex(zIndex);
     }
 
     @Override
