@@ -13,7 +13,7 @@ android {
     buildToolsVersion '23.0.1'
 
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion 9
     }
     dexOptions {
         preDexLibraries = !isTravis
@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services-maps:8.1.0'
+    compile 'com.google.android.gms:play-services-maps:9.2.0'
 }
 
 group = 'com.androidmapsextensions'
