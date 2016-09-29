@@ -33,6 +33,7 @@ public class ClusterOptions {
     private float infoWindowAnchorU = DEFAULT_INFO_WINDOW_ANCHOR_U;
     private float infoWindowAnchorV = DEFAULT_INFO_WINDOW_ANCHOR_V;
     private float rotation;
+    private float zIndex;
 
     public ClusterOptions alpha(float alpha) {
         this.alpha = alpha;
@@ -78,6 +79,10 @@ public class ClusterOptions {
         return rotation;
     }
 
+    public float getZIndex() {
+        return zIndex;
+    }
+
     public ClusterOptions icon(BitmapDescriptor icon) {
         this.icon = icon;
         return this;
@@ -95,6 +100,11 @@ public class ClusterOptions {
 
     public ClusterOptions rotation(float rotation) {
         this.rotation = rotation;
+        return this;
+    }
+
+    public ClusterOptions zIndex(float zIndex) {
+        this.zIndex = zIndex;
         return this;
     }
 }

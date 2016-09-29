@@ -192,7 +192,10 @@ class ClusterMarker implements Marker {
 
     @Override
     public float getZIndex() {
-        throw new UnsupportedOperationException();
+        if (virtual != null) {
+            return virtual.getZIndex();
+        }
+        return 0.0f;
     }
 
     @Override
@@ -310,7 +313,9 @@ class ClusterMarker implements Marker {
 
     @Override
     public void setZIndex(float zIndex) {
-        throw new UnsupportedOperationException();
+        if (virtual != null) {
+            virtual.setZIndex(zIndex);
+        }
     }
 
     @Override
