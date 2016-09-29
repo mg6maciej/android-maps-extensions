@@ -28,7 +28,7 @@ dependencies {
 }
 
 group = 'com.androidmapsextensions'
-version = '2.3.0'
+version = '2.3.1-SNAPSHOT'
 
 if (!isTravis) {
 
