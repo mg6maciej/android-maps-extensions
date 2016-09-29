@@ -143,6 +143,14 @@ public interface GoogleMap {
 
     void setOnCameraChangeListener(OnCameraChangeListener onCameraChangeListener);
 
+    void setOnCameraIdleListener(OnCameraIdleListener onCameraIdleListener);
+
+    void setOnCameraMoveCanceledListener(OnCameraMoveCanceledListener onCameraMoveCanceledListener);
+
+    void setOnCameraMoveListener(OnCameraMoveListener onCameraMoveListener);
+
+    void setOnCameraMoveStartedListener(OnCameraMoveStartedListener onCameraMoveStartedListener);
+
     void setOnCircleClickListener(OnCircleClickListener onCircleClickListener);
 
     void setOnGroundOverlayClickListener(OnGroundOverlayClickListener onGroundOverlayClickListener);
@@ -201,6 +209,34 @@ public interface GoogleMap {
 
         @Override
         void onCameraChange(CameraPosition cameraPosition);
+    }
+
+    interface OnCameraIdleListener extends com.google.android.gms.maps.GoogleMap.OnCameraIdleListener {
+
+        @Override
+        void onCameraIdle();
+    }
+
+    interface OnCameraMoveCanceledListener extends com.google.android.gms.maps.GoogleMap.OnCameraMoveCanceledListener {
+
+        @Override
+        void onCameraMoveCanceled();
+    }
+
+    interface OnCameraMoveListener extends com.google.android.gms.maps.GoogleMap.OnCameraMoveListener {
+
+        @Override
+        void onCameraMove();
+    }
+
+    interface OnCameraMoveStartedListener extends com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener {
+
+        int REASON_API_ANIMATION = com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_API_ANIMATION;
+        int REASON_DEVELOPER_ANIMATION = com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION;
+        int REASON_GESTURE = com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE;
+
+        @Override
+        void onCameraMoveStarted(int reason);
     }
 
     interface OnCircleClickListener {

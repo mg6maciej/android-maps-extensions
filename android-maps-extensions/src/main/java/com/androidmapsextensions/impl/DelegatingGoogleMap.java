@@ -288,6 +288,26 @@ class DelegatingGoogleMap implements GoogleMap {
     }
 
     @Override
+    public void setOnCameraIdleListener(OnCameraIdleListener onCameraIdleListener) {
+        real.setOnCameraIdleListener(onCameraIdleListener);
+    }
+
+    @Override
+    public void setOnCameraMoveCanceledListener(OnCameraMoveCanceledListener onCameraMoveCanceledListener) {
+        real.setOnCameraMoveCanceledListener(onCameraMoveCanceledListener);
+    }
+
+    @Override
+    public void setOnCameraMoveListener(OnCameraMoveListener onCameraMoveListener) {
+        real.setOnCameraMoveListener(onCameraMoveListener);
+    }
+
+    @Override
+    public void setOnCameraMoveStartedListener(OnCameraMoveStartedListener onCameraMoveStartedListener) {
+        real.setOnCameraMoveStartedListener(onCameraMoveStartedListener);
+    }
+
+    @Override
     public void setOnCircleClickListener(OnCircleClickListener onCircleClickListener) {
         circleManager.setOnCircleClickListener(onCircleClickListener);
     }

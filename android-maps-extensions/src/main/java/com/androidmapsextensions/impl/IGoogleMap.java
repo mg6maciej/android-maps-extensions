@@ -23,6 +23,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveCanceledListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener;
 import com.google.android.gms.maps.GoogleMap.OnCircleClickListener;
 import com.google.android.gms.maps.GoogleMap.OnGroundOverlayClickListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
@@ -121,6 +125,14 @@ interface IGoogleMap {
     void setMyLocationEnabled(boolean enabled);
 
     void setOnCameraChangeListener(OnCameraChangeListener listener);
+
+    void setOnCameraIdleListener(OnCameraIdleListener listener);
+
+    void setOnCameraMoveCanceledListener(OnCameraMoveCanceledListener listener);
+
+    void setOnCameraMoveListener(OnCameraMoveListener listener);
+
+    void setOnCameraMoveStartedListener(OnCameraMoveStartedListener listener);
 
     void setOnCircleClickListener(OnCircleClickListener listener);
 

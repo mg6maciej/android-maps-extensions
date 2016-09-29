@@ -23,6 +23,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveCanceledListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener;
 import com.google.android.gms.maps.GoogleMap.OnCircleClickListener;
 import com.google.android.gms.maps.GoogleMap.OnGroundOverlayClickListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
@@ -227,6 +231,26 @@ class GoogleMapWrapper implements IGoogleMap {
     @Override
     public final void setOnCameraChangeListener(OnCameraChangeListener listener) {
         map.setOnCameraChangeListener(listener);
+    }
+
+    @Override
+    public void setOnCameraIdleListener(OnCameraIdleListener listener) {
+        map.setOnCameraIdleListener(listener);
+    }
+
+    @Override
+    public void setOnCameraMoveCanceledListener(OnCameraMoveCanceledListener listener) {
+        map.setOnCameraMoveCanceledListener(listener);
+    }
+
+    @Override
+    public void setOnCameraMoveListener(OnCameraMoveListener listener) {
+        map.setOnCameraMoveListener(listener);
+    }
+
+    @Override
+    public void setOnCameraMoveStartedListener(OnCameraMoveStartedListener listener) {
+        map.setOnCameraMoveStartedListener(listener);
     }
 
     @Override
