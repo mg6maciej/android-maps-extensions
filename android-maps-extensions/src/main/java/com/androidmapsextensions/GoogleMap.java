@@ -26,6 +26,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 
 import java.util.List;
 
@@ -132,6 +133,8 @@ public interface GoogleMap {
     void setLatLngBoundsForCameraTarget(LatLngBounds latLngBounds);
 
     void setLocationSource(LocationSource locationSource);
+
+    boolean setMapStyle(MapStyleOptions mapStyleOptions);
 
     void setMapType(int mapType);
 

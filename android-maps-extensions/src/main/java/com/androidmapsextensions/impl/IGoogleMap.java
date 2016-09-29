@@ -48,6 +48,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
@@ -115,6 +116,8 @@ interface IGoogleMap {
     void setLatLngBoundsForCameraTarget(LatLngBounds bounds);
 
     void setLocationSource(LocationSource source);
+
+    boolean setMapStyle(MapStyleOptions mapStyleOptions);
 
     void setMapType(int type);
 

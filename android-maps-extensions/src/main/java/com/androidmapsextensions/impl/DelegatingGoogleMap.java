@@ -41,6 +41,7 @@ import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 
 import java.util.List;
 
@@ -260,6 +261,11 @@ class DelegatingGoogleMap implements GoogleMap {
     @Override
     public void setLocationSource(LocationSource locationSource) {
         real.setLocationSource(locationSource);
+    }
+
+    @Override
+    public boolean setMapStyle(MapStyleOptions mapStyleOptions) {
+        return real.setMapStyle(mapStyleOptions);
     }
 
     @Override
