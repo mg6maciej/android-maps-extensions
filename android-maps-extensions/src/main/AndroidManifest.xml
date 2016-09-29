@@ -4,7 +4,7 @@
     android:versionCode="19"
     android:versionName="2.2.2-SNAPSHOT">
 
-    <uses-sdk tools:overrideLibrary="com.google.android.gms, com.google.android.gms.base, com.google.android.gms.maps" />
+    <uses-sdk tools:overrideLibrary="com.google.android.gms, com.google.android.gms.base, com.google.android.gms.maps, com.google.android.gms.tasks" />
 
     <application />
 
