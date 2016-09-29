@@ -118,6 +118,8 @@ public interface GoogleMap {
 
     void moveCamera(CameraUpdate cameraUpdate);
 
+    void resetMinMaxZoomPreference();
+
     void setBuildingsEnabled(boolean buildingsEnabled);
 
     void setClustering(ClusteringSettings clusteringSettings);
@@ -129,6 +131,10 @@ public interface GoogleMap {
     void setLocationSource(LocationSource locationSource);
 
     void setMapType(int mapType);
+
+    void setMaxZoomPreference(float maxZoomPreference);
+
+    void setMinZoomPreference(float minZoomPreference);
 
     void setMyLocationEnabled(boolean myLocationEnabled);
 

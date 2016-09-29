@@ -97,6 +97,8 @@ interface IGoogleMap {
 
     boolean isTrafficEnabled();
 
+    void resetMinMaxZoomPreference();
+
     void moveCamera(CameraUpdate update);
 
     void setBuildingsEnabled(boolean enabled);
@@ -108,6 +110,10 @@ interface IGoogleMap {
     void setLocationSource(LocationSource source);
 
     void setMapType(int type);
+
+    void setMaxZoomPreference(float zoom);
+
+    void setMinZoomPreference(float zoom);
 
     void setMyLocationEnabled(boolean enabled);
 

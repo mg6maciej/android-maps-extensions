@@ -169,6 +169,11 @@ class GoogleMapWrapper implements IGoogleMap {
     }
 
     @Override
+    public void resetMinMaxZoomPreference() {
+        map.resetMinMaxZoomPreference();
+    }
+
+    @Override
     public final void moveCamera(CameraUpdate update) {
         map.moveCamera(update);
     }
@@ -196,6 +201,16 @@ class GoogleMapWrapper implements IGoogleMap {
     @Override
     public final void setMapType(int type) {
         map.setMapType(type);
+    }
+
+    @Override
+    public void setMaxZoomPreference(float zoom) {
+        map.setMaxZoomPreference(zoom);
+    }
+
+    @Override
+    public void setMinZoomPreference(float zoom) {
+        map.setMinZoomPreference(zoom);
     }
 
     @Override

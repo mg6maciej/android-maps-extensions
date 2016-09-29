@@ -223,6 +223,11 @@ class DelegatingGoogleMap implements GoogleMap {
     }
 
     @Override
+    public void resetMinMaxZoomPreference() {
+        real.resetMinMaxZoomPreference();
+    }
+
+    @Override
     public void setBuildingsEnabled(boolean buildingsEnabled) {
         real.setBuildingsEnabled(buildingsEnabled);
     }
@@ -254,6 +259,16 @@ class DelegatingGoogleMap implements GoogleMap {
     @Override
     public void setMapType(int mapType) {
         real.setMapType(mapType);
+    }
+
+    @Override
+    public void setMaxZoomPreference(float maxZoomPreference) {
+        real.setMaxZoomPreference(maxZoomPreference);
+    }
+
+    @Override
+    public void setMinZoomPreference(float minZoomPreference) {
+        real.setMinZoomPreference(minZoomPreference);
     }
 
     @Override
