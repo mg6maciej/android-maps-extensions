@@ -10,7 +10,7 @@ def isTravis = "true".equals(System.getenv("TRAVIS"))
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.1'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         minSdkVersion 8
@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services-maps:8.1.0'
+    compile 'com.google.android.gms:play-services-maps:9.2.0'
 }
 
 group = 'com.androidmapsextensions'
