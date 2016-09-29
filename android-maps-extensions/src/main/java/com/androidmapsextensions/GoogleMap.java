@@ -134,6 +134,10 @@ public interface GoogleMap {
 
     void setOnCameraChangeListener(OnCameraChangeListener onCameraChangeListener);
 
+    void setOnCircleClickListener(OnCircleClickListener onCircleClickListener);
+
+    void setOnGroundOverlayClickListener(OnGroundOverlayClickListener onGroundOverlayClickListener);
+
     void setOnInfoWindowClickListener(OnInfoWindowClickListener onInfoWindowClickListener);
 
     void setOnInfoWindowCloseListener(OnInfoWindowCloseListener onInfoWindowCloseListener);
@@ -153,6 +157,10 @@ public interface GoogleMap {
     void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
 
     void setOnMyLocationChangeListener(OnMyLocationChangeListener onMyLocationChangeListener);
+
+    void setOnPolygonClickListener(OnPolygonClickListener onPolygonClickListener);
+
+    void setOnPolylineClickListener(OnPolylineClickListener onPolylineClickListener);
 
     void setPadding(int left, int top, int right, int bottom);
 
@@ -184,6 +192,16 @@ public interface GoogleMap {
 
         @Override
         void onCameraChange(CameraPosition cameraPosition);
+    }
+
+    interface OnCircleClickListener {
+
+        void onCircleClick(Circle circle);
+    }
+
+    interface OnGroundOverlayClickListener {
+
+        void onGroundOverlayClick(GroundOverlay groundOverlay);
     }
 
     interface OnInfoWindowClickListener {
@@ -243,6 +261,16 @@ public interface GoogleMap {
 
         @Override
         void onMyLocationChange(Location location);
+    }
+
+    interface OnPolygonClickListener {
+
+        void onPolygonClick(Polygon polygon);
+    }
+
+    interface OnPolylineClickListener {
+
+        void onPolylineClick(Polyline polyline);
     }
 
     interface SnapshotReadyCallback extends com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback {

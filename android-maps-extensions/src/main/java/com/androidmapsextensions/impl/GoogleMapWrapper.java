@@ -23,6 +23,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnCircleClickListener;
+import com.google.android.gms.maps.GoogleMap.OnGroundOverlayClickListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowCloseListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener;
@@ -33,6 +35,8 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnPolygonClickListener;
+import com.google.android.gms.maps.GoogleMap.OnPolylineClickListener;
 import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.UiSettings;
@@ -205,6 +209,16 @@ class GoogleMapWrapper implements IGoogleMap {
     }
 
     @Override
+    public void setOnCircleClickListener(OnCircleClickListener listener) {
+        map.setOnCircleClickListener(listener);
+    }
+
+    @Override
+    public void setOnGroundOverlayClickListener(OnGroundOverlayClickListener listener) {
+        map.setOnGroundOverlayClickListener(listener);
+    }
+
+    @Override
     public final void setOnInfoWindowClickListener(OnInfoWindowClickListener listener) {
         map.setOnInfoWindowClickListener(listener);
     }
@@ -252,6 +266,16 @@ class GoogleMapWrapper implements IGoogleMap {
     @Override
     public final void setOnMyLocationChangeListener(OnMyLocationChangeListener listener) {
         map.setOnMyLocationChangeListener(listener);
+    }
+
+    @Override
+    public void setOnPolygonClickListener(OnPolygonClickListener listener) {
+        map.setOnPolygonClickListener(listener);
+    }
+
+    @Override
+    public void setOnPolylineClickListener(OnPolylineClickListener listener) {
+        map.setOnPolylineClickListener(listener);
     }
 
     @Override

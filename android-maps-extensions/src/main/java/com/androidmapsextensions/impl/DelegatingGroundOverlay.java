@@ -79,6 +79,11 @@ class DelegatingGroundOverlay implements GroundOverlay {
     }
 
     @Override
+    public boolean isClickable() {
+        return real.isClickable();
+    }
+
+    @Override
     public boolean isVisible() {
         return real.isVisible();
     }
@@ -92,6 +97,11 @@ class DelegatingGroundOverlay implements GroundOverlay {
     @Override
     public void setBearing(float bearing) {
         real.setBearing(bearing);
+    }
+
+    @Override
+    public void setClickable(boolean clickable) {
+        real.setClickable(clickable);
     }
 
     @Override

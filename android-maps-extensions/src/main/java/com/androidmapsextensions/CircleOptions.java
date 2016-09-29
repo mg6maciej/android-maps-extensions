@@ -27,6 +27,11 @@ public class CircleOptions {
         return this;
     }
 
+    public CircleOptions clickable(boolean clickable) {
+        real.clickable(clickable);
+        return this;
+    }
+
     public CircleOptions data(Object data) {
         this.data = data;
         return this;
@@ -63,6 +68,10 @@ public class CircleOptions {
 
     public float getZIndex() {
         return real.getZIndex();
+    }
+
+    public boolean isClickable() {
+        return real.isClickable();
     }
 
     public boolean isVisible() {

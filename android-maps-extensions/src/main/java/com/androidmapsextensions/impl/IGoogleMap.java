@@ -23,6 +23,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnCircleClickListener;
+import com.google.android.gms.maps.GoogleMap.OnGroundOverlayClickListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowCloseListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener;
@@ -32,6 +34,8 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnPolygonClickListener;
+import com.google.android.gms.maps.GoogleMap.OnPolylineClickListener;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -109,6 +113,10 @@ interface IGoogleMap {
 
     void setOnCameraChangeListener(OnCameraChangeListener listener);
 
+    void setOnCircleClickListener(OnCircleClickListener listener);
+
+    void setOnGroundOverlayClickListener(OnGroundOverlayClickListener listener);
+
     void setOnInfoWindowClickListener(OnInfoWindowClickListener listener);
 
     void setOnInfoWindowCloseListener(OnInfoWindowCloseListener listener);
@@ -128,6 +136,10 @@ interface IGoogleMap {
     void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
 
     void setOnMyLocationChangeListener(OnMyLocationChangeListener listener);
+
+    void setOnPolygonClickListener(OnPolygonClickListener listener);
+
+    void setOnPolylineClickListener(OnPolylineClickListener listener);
 
     void setPadding(int left, int top, int right, int bottom);
 

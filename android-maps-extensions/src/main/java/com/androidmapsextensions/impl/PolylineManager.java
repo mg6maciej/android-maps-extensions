@@ -15,6 +15,7 @@
  */
 package com.androidmapsextensions.impl;
 
+import com.androidmapsextensions.GoogleMap.OnPolylineClickListener;
 import com.androidmapsextensions.Polyline;
 import com.androidmapsextensions.PolylineOptions;
 
@@ -31,7 +32,7 @@ class PolylineManager {
 
     public PolylineManager(IGoogleMap factory) {
         this.factory = factory;
-        this.polylines = new HashMap<com.google.android.gms.maps.model.Polyline, Polyline>();
+        this.polylines = new HashMap<>();
     }
 
     public Polyline addPolyline(PolylineOptions polylineOptions) {
@@ -57,5 +58,27 @@ class PolylineManager {
 
     public void onRemove(com.google.android.gms.maps.model.Polyline real) {
         polylines.remove(real);
+    }
+
+    public void setOnPolylineClickListener(OnPolylineClickListener onPolylineClickListener) {
+        com.google.android.gms.maps.GoogleMap.OnPolylineClickListener realOnPolylineClickListener = null;
+        if (onPolylineClickListener != null) {
+            realOnPolylineClickListener = new DelegatingOnPolylineClickListener(onPolylineClickListener);
+        }
+        factory.setOnPolylineClickListener(realOnPolylineClickListener);
+    }
+
+    private class DelegatingOnPolylineClickListener implements com.google.android.gms.maps.GoogleMap.OnPolylineClickListener {
+
+        private final OnPolylineClickListener onPolylineClickListener;
+
+        public DelegatingOnPolylineClickListener(OnPolylineClickListener onPolylineClickListener) {
+            this.onPolylineClickListener = onPolylineClickListener;
+        }
+
+        @Override
+        public void onPolylineClick(com.google.android.gms.maps.model.Polyline polyline) {
+            onPolylineClickListener.onPolylineClick(polylines.get(polyline));
+        }
     }
 }

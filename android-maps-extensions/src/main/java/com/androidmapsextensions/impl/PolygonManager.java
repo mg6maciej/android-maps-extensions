@@ -15,6 +15,7 @@
  */
 package com.androidmapsextensions.impl;
 
+import com.androidmapsextensions.GoogleMap.OnPolygonClickListener;
 import com.androidmapsextensions.Polygon;
 import com.androidmapsextensions.PolygonOptions;
 
@@ -31,7 +32,7 @@ class PolygonManager {
 
     public PolygonManager(IGoogleMap factory) {
         this.factory = factory;
-        this.polygons = new HashMap<com.google.android.gms.maps.model.Polygon, Polygon>();
+        this.polygons = new HashMap<>();
     }
 
     public Polygon addPolygon(PolygonOptions polygonOptions) {
@@ -57,5 +58,27 @@ class PolygonManager {
 
     public void onRemove(com.google.android.gms.maps.model.Polygon real) {
         polygons.remove(real);
+    }
+
+    public void setOnPolygonClickListener(OnPolygonClickListener onPolygonClickListener) {
+        com.google.android.gms.maps.GoogleMap.OnPolygonClickListener realOnPolygonClickListener = null;
+        if (onPolygonClickListener != null) {
+            realOnPolygonClickListener = new DelegatingOnPolygonClickListener(onPolygonClickListener);
+        }
+        factory.setOnPolygonClickListener(realOnPolygonClickListener);
+    }
+
+    private class DelegatingOnPolygonClickListener implements com.google.android.gms.maps.GoogleMap.OnPolygonClickListener {
+
+        private final OnPolygonClickListener onPolygonClickListener;
+
+        public DelegatingOnPolygonClickListener(OnPolygonClickListener onPolygonClickListener) {
+            this.onPolygonClickListener = onPolygonClickListener;
+        }
+
+        @Override
+        public void onPolygonClick(com.google.android.gms.maps.model.Polygon polygon) {
+            onPolygonClickListener.onPolygonClick(polygons.get(polygon));
+        }
     }
 }

@@ -267,6 +267,16 @@ class DelegatingGoogleMap implements GoogleMap {
     }
 
     @Override
+    public void setOnCircleClickListener(OnCircleClickListener onCircleClickListener) {
+        circleManager.setOnCircleClickListener(onCircleClickListener);
+    }
+
+    @Override
+    public void setOnGroundOverlayClickListener(OnGroundOverlayClickListener onGroundOverlayClickListener) {
+        groundOverlayManager.setOnGroundOverlayClickListener(onGroundOverlayClickListener);
+    }
+
+    @Override
     public void setOnInfoWindowClickListener(OnInfoWindowClickListener onInfoWindowClickListener) {
         com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener realOnInfoWindowClickListener = null;
         if (onInfoWindowClickListener != null) {
@@ -330,6 +340,16 @@ class DelegatingGoogleMap implements GoogleMap {
     @Override
     public void setOnMyLocationChangeListener(OnMyLocationChangeListener onMyLocationChangeListener) {
         real.setOnMyLocationChangeListener(onMyLocationChangeListener);
+    }
+
+    @Override
+    public void setOnPolygonClickListener(OnPolygonClickListener onPolygonClickListener) {
+        polygonManager.setOnPolygonClickListener(onPolygonClickListener);
+    }
+
+    @Override
+    public void setOnPolylineClickListener(OnPolylineClickListener onPolylineClickListener) {
+        polylineManager.setOnPolylineClickListener(onPolylineClickListener);
     }
 
     @Override

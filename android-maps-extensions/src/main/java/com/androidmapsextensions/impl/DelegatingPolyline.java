@@ -64,6 +64,11 @@ class DelegatingPolyline implements Polyline {
     }
 
     @Override
+    public boolean isClickable() {
+        return real.isClickable();
+    }
+
+    @Override
     public boolean isGeodesic() {
         return real.isGeodesic();
     }
@@ -77,6 +82,11 @@ class DelegatingPolyline implements Polyline {
     public void remove() {
         manager.onRemove(real);
         real.remove();
+    }
+
+    @Override
+    public void setClickable(boolean clickable) {
+        real.setClickable(clickable);
     }
 
     @Override

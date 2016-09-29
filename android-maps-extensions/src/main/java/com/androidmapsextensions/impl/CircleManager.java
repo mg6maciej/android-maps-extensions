@@ -17,6 +17,7 @@ package com.androidmapsextensions.impl;
 
 import com.androidmapsextensions.Circle;
 import com.androidmapsextensions.CircleOptions;
+import com.androidmapsextensions.GoogleMap.OnCircleClickListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ class CircleManager {
 
     public CircleManager(IGoogleMap factory) {
         this.factory = factory;
-        this.circles = new HashMap<com.google.android.gms.maps.model.Circle, Circle>();
+        this.circles = new HashMap<>();
     }
 
     public Circle addCircle(CircleOptions circleOptions) {
@@ -57,5 +58,27 @@ class CircleManager {
 
     public void onRemove(com.google.android.gms.maps.model.Circle real) {
         circles.remove(real);
+    }
+
+    public void setOnCircleClickListener(OnCircleClickListener onCircleClickListener) {
+        com.google.android.gms.maps.GoogleMap.OnCircleClickListener realOnCircleClickListener = null;
+        if (onCircleClickListener != null) {
+            realOnCircleClickListener = new DelegatingOnCircleClickListener(onCircleClickListener);
+        }
+        factory.setOnCircleClickListener(realOnCircleClickListener);
+    }
+
+    private class DelegatingOnCircleClickListener implements com.google.android.gms.maps.GoogleMap.OnCircleClickListener {
+
+        private final OnCircleClickListener onCircleClickListener;
+
+        public DelegatingOnCircleClickListener(OnCircleClickListener onCircleClickListener) {
+            this.onCircleClickListener = onCircleClickListener;
+        }
+
+        @Override
+        public void onCircleClick(com.google.android.gms.maps.model.Circle circle) {
+            onCircleClickListener.onCircleClick(circles.get(circle));
+        }
     }
 }
