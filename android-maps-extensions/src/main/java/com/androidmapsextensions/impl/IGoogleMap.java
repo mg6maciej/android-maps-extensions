@@ -23,13 +23,24 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveCanceledListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener;
+import com.google.android.gms.maps.GoogleMap.OnCircleClickListener;
+import com.google.android.gms.maps.GoogleMap.OnGroundOverlayClickListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowCloseListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnPoiClickListener;
+import com.google.android.gms.maps.GoogleMap.OnPolygonClickListener;
+import com.google.android.gms.maps.GoogleMap.OnPolylineClickListener;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -37,6 +48,8 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
@@ -91,6 +104,8 @@ interface IGoogleMap {
 
     boolean isTrafficEnabled();
 
+    void resetMinMaxZoomPreference();
+
     void moveCamera(CameraUpdate update);
 
     void setBuildingsEnabled(boolean enabled);
@@ -99,15 +114,39 @@ interface IGoogleMap {
 
     void setInfoWindowAdapter(InfoWindowAdapter adapter);
 
+    void setLatLngBoundsForCameraTarget(LatLngBounds bounds);
+
     void setLocationSource(LocationSource source);
 
+    boolean setMapStyle(MapStyleOptions mapStyleOptions);
+
     void setMapType(int type);
+
+    void setMaxZoomPreference(float zoom);
+
+    void setMinZoomPreference(float zoom);
 
     void setMyLocationEnabled(boolean enabled);
 
     void setOnCameraChangeListener(OnCameraChangeListener listener);
 
+    void setOnCameraIdleListener(OnCameraIdleListener listener);
+
+    void setOnCameraMoveCanceledListener(OnCameraMoveCanceledListener listener);
+
+    void setOnCameraMoveListener(OnCameraMoveListener listener);
+
+    void setOnCameraMoveStartedListener(OnCameraMoveStartedListener listener);
+
+    void setOnCircleClickListener(OnCircleClickListener listener);
+
+    void setOnGroundOverlayClickListener(OnGroundOverlayClickListener listener);
+
     void setOnInfoWindowClickListener(OnInfoWindowClickListener listener);
+
+    void setOnInfoWindowCloseListener(OnInfoWindowCloseListener listener);
+
+    void setOnInfoWindowLongClickListener(OnInfoWindowLongClickListener listener);
 
     void setOnMapClickListener(OnMapClickListener listener);
 
@@ -122,6 +161,12 @@ interface IGoogleMap {
     void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
 
     void setOnMyLocationChangeListener(OnMyLocationChangeListener listener);
+
+    void setOnPoiClickListener(OnPoiClickListener listener);
+
+    void setOnPolygonClickListener(OnPolygonClickListener listener);
+
+    void setOnPolylineClickListener(OnPolylineClickListener listener);
 
     void setPadding(int left, int top, int right, int bottom);
 

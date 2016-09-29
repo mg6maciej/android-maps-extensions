@@ -81,6 +81,11 @@ class DelegatingCircle implements Circle {
     }
 
     @Override
+    public boolean isClickable() {
+        return real.isClickable();
+    }
+
+    @Override
     public boolean isVisible() {
         return real.isVisible();
     }
@@ -94,6 +99,11 @@ class DelegatingCircle implements Circle {
     @Override
     public void setCenter(LatLng center) {
         real.setCenter(center);
+    }
+
+    @Override
+    public void setClickable(boolean clickable) {
+        real.setClickable(clickable);
     }
 
     @Override

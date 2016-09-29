@@ -44,6 +44,10 @@ public class TileOverlayOptions {
         return real.getTileProvider();
     }
 
+    public float getTransparency() {
+        return real.getTransparency();
+    }
+
     public float getZIndex() {
         return real.getZIndex();
     }
@@ -54,6 +58,11 @@ public class TileOverlayOptions {
 
     public TileOverlayOptions tileProvider(TileProvider tileProvider) {
         real.tileProvider(tileProvider);
+        return this;
+    }
+
+    public TileOverlayOptions transparency(float transparency) {
+        real.transparency(transparency);
         return this;
     }
 

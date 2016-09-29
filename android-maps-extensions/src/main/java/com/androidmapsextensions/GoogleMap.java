@@ -25,6 +25,9 @@ import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
 
 import java.util.List;
 
@@ -118,6 +121,8 @@ public interface GoogleMap {
 
     void moveCamera(CameraUpdate cameraUpdate);
 
+    void resetMinMaxZoomPreference();
+
     void setBuildingsEnabled(boolean buildingsEnabled);
 
     void setClustering(ClusteringSettings clusteringSettings);
@@ -126,15 +131,39 @@ public interface GoogleMap {
 
     void setInfoWindowAdapter(InfoWindowAdapter infoWindowAdapter);
 
+    void setLatLngBoundsForCameraTarget(LatLngBounds latLngBounds);
+
     void setLocationSource(LocationSource locationSource);
 
+    boolean setMapStyle(MapStyleOptions mapStyleOptions);
+
     void setMapType(int mapType);
+
+    void setMaxZoomPreference(float maxZoomPreference);
+
+    void setMinZoomPreference(float minZoomPreference);
 
     void setMyLocationEnabled(boolean myLocationEnabled);
 
     void setOnCameraChangeListener(OnCameraChangeListener onCameraChangeListener);
 
+    void setOnCameraIdleListener(OnCameraIdleListener onCameraIdleListener);
+
+    void setOnCameraMoveCanceledListener(OnCameraMoveCanceledListener onCameraMoveCanceledListener);
+
+    void setOnCameraMoveListener(OnCameraMoveListener onCameraMoveListener);
+
+    void setOnCameraMoveStartedListener(OnCameraMoveStartedListener onCameraMoveStartedListener);
+
+    void setOnCircleClickListener(OnCircleClickListener onCircleClickListener);
+
+    void setOnGroundOverlayClickListener(OnGroundOverlayClickListener onGroundOverlayClickListener);
+
     void setOnInfoWindowClickListener(OnInfoWindowClickListener onInfoWindowClickListener);
+
+    void setOnInfoWindowCloseListener(OnInfoWindowCloseListener onInfoWindowCloseListener);
+
+    void setOnInfoWindowLongClickListener(OnInfoWindowLongClickListener onInfoWindowLongClickListener);
 
     void setOnMapClickListener(OnMapClickListener onMapClickListener);
 
@@ -149,6 +178,12 @@ public interface GoogleMap {
     void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
 
     void setOnMyLocationChangeListener(OnMyLocationChangeListener onMyLocationChangeListener);
+
+    void setOnPoiClickListener(OnPoiClickListener onPoiClickListener);
+
+    void setOnPolygonClickListener(OnPolygonClickListener onPolygonClickListener);
+
+    void setOnPolylineClickListener(OnPolylineClickListener onPolylineClickListener);
 
     void setPadding(int left, int top, int right, int bottom);
 
@@ -182,9 +217,57 @@ public interface GoogleMap {
         void onCameraChange(CameraPosition cameraPosition);
     }
 
+    interface OnCameraIdleListener extends com.google.android.gms.maps.GoogleMap.OnCameraIdleListener {
+
+        @Override
+        void onCameraIdle();
+    }
+
+    interface OnCameraMoveCanceledListener extends com.google.android.gms.maps.GoogleMap.OnCameraMoveCanceledListener {
+
+        @Override
+        void onCameraMoveCanceled();
+    }
+
+    interface OnCameraMoveListener extends com.google.android.gms.maps.GoogleMap.OnCameraMoveListener {
+
+        @Override
+        void onCameraMove();
+    }
+
+    interface OnCameraMoveStartedListener extends com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener {
+
+        int REASON_API_ANIMATION = com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_API_ANIMATION;
+        int REASON_DEVELOPER_ANIMATION = com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION;
+        int REASON_GESTURE = com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE;
+
+        @Override
+        void onCameraMoveStarted(int reason);
+    }
+
+    interface OnCircleClickListener {
+
+        void onCircleClick(Circle circle);
+    }
+
+    interface OnGroundOverlayClickListener {
+
+        void onGroundOverlayClick(GroundOverlay groundOverlay);
+    }
+
     interface OnInfoWindowClickListener {
 
         void onInfoWindowClick(Marker marker);
+    }
+
+    interface OnInfoWindowCloseListener {
+
+        void onInfoWindowClose(Marker marker);
+    }
+
+    interface OnInfoWindowLongClickListener {
+
+        void onInfoWindowLongClick(Marker marker);
     }
 
     interface OnMapClickListener extends com.google.android.gms.maps.GoogleMap.OnMapClickListener {
@@ -229,6 +312,22 @@ public interface GoogleMap {
 
         @Override
         void onMyLocationChange(Location location);
+    }
+
+    interface OnPoiClickListener extends com.google.android.gms.maps.GoogleMap.OnPoiClickListener {
+
+        @Override
+        void onPoiClick(PointOfInterest pointOfInterest);
+    }
+
+    interface OnPolygonClickListener {
+
+        void onPolygonClick(Polygon polygon);
+    }
+
+    interface OnPolylineClickListener {
+
+        void onPolylineClick(Polyline polyline);
     }
 
     interface SnapshotReadyCallback extends com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback {

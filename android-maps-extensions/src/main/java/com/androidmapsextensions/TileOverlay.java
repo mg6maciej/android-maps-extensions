@@ -28,6 +28,8 @@ public interface TileOverlay {
 
     float getZIndex();
 
+    float getTransparency();
+
     boolean isVisible();
 
     void remove();
@@ -35,6 +37,8 @@ public interface TileOverlay {
     void setData(Object data);
 
     void setFadeIn(boolean fadeIn);
+
+    void setTransparency(float transparency);
 
     void setVisible(boolean visible);
 

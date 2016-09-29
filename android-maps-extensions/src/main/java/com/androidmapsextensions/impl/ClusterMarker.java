@@ -185,9 +185,23 @@ class ClusterMarker implements Marker {
         return null;
     }
 
+    @Deprecated
+    @Override
+    public Object getTag() {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public String getTitle() {
         return null;
+    }
+
+    @Override
+    public float getZIndex() {
+        if (virtual != null) {
+            return virtual.getZIndex();
+        }
+        return 0.0f;
     }
 
     @Override
@@ -293,6 +307,12 @@ class ClusterMarker implements Marker {
         throw new UnsupportedOperationException();
     }
 
+    @Deprecated
+    @Override
+    public void setTag(Object tag) {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public void setTitle(String title) {
         throw new UnsupportedOperationException();
@@ -301,6 +321,13 @@ class ClusterMarker implements Marker {
     @Override
     public void setVisible(boolean visible) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setZIndex(float zIndex) {
+        if (virtual != null) {
+            virtual.setZIndex(zIndex);
+        }
     }
 
     @Override

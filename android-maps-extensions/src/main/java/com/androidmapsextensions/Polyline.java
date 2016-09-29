@@ -34,11 +34,15 @@ public interface Polyline {
 
     float getZIndex();
 
+    boolean isClickable();
+
     boolean isGeodesic();
 
     boolean isVisible();
 
     void remove();
+
+    void setClickable(boolean clickable);
 
     void setColor(int color);
 

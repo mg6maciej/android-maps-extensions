@@ -40,6 +40,8 @@ import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 
 import java.util.List;
 
@@ -223,6 +225,11 @@ class DelegatingGoogleMap implements GoogleMap {
     }
 
     @Override
+    public void resetMinMaxZoomPreference() {
+        real.resetMinMaxZoomPreference();
+    }
+
+    @Override
     public void setBuildingsEnabled(boolean buildingsEnabled) {
         real.setBuildingsEnabled(buildingsEnabled);
     }
@@ -247,13 +254,33 @@ class DelegatingGoogleMap implements GoogleMap {
     }
 
     @Override
+    public void setLatLngBoundsForCameraTarget(LatLngBounds latLngBounds) {
+        real.setLatLngBoundsForCameraTarget(latLngBounds);
+    }
+
+    @Override
     public void setLocationSource(LocationSource locationSource) {
         real.setLocationSource(locationSource);
     }
 
     @Override
+    public boolean setMapStyle(MapStyleOptions mapStyleOptions) {
+        return real.setMapStyle(mapStyleOptions);
+    }
+
+    @Override
     public void setMapType(int mapType) {
         real.setMapType(mapType);
+    }
+
+    @Override
+    public void setMaxZoomPreference(float maxZoomPreference) {
+        real.setMaxZoomPreference(maxZoomPreference);
+    }
+
+    @Override
+    public void setMinZoomPreference(float minZoomPreference) {
+        real.setMinZoomPreference(minZoomPreference);
     }
 
     @Override
@@ -267,12 +294,60 @@ class DelegatingGoogleMap implements GoogleMap {
     }
 
     @Override
+    public void setOnCameraIdleListener(OnCameraIdleListener onCameraIdleListener) {
+        real.setOnCameraIdleListener(onCameraIdleListener);
+    }
+
+    @Override
+    public void setOnCameraMoveCanceledListener(OnCameraMoveCanceledListener onCameraMoveCanceledListener) {
+        real.setOnCameraMoveCanceledListener(onCameraMoveCanceledListener);
+    }
+
+    @Override
+    public void setOnCameraMoveListener(OnCameraMoveListener onCameraMoveListener) {
+        real.setOnCameraMoveListener(onCameraMoveListener);
+    }
+
+    @Override
+    public void setOnCameraMoveStartedListener(OnCameraMoveStartedListener onCameraMoveStartedListener) {
+        real.setOnCameraMoveStartedListener(onCameraMoveStartedListener);
+    }
+
+    @Override
+    public void setOnCircleClickListener(OnCircleClickListener onCircleClickListener) {
+        circleManager.setOnCircleClickListener(onCircleClickListener);
+    }
+
+    @Override
+    public void setOnGroundOverlayClickListener(OnGroundOverlayClickListener onGroundOverlayClickListener) {
+        groundOverlayManager.setOnGroundOverlayClickListener(onGroundOverlayClickListener);
+    }
+
+    @Override
     public void setOnInfoWindowClickListener(OnInfoWindowClickListener onInfoWindowClickListener) {
         com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener realOnInfoWindowClickListener = null;
         if (onInfoWindowClickListener != null) {
             realOnInfoWindowClickListener = new DelegatingOnInfoWindowClickListener(onInfoWindowClickListener);
         }
         real.setOnInfoWindowClickListener(realOnInfoWindowClickListener);
+    }
+
+    @Override
+    public void setOnInfoWindowCloseListener(OnInfoWindowCloseListener onInfoWindowCloseListener) {
+        com.google.android.gms.maps.GoogleMap.OnInfoWindowCloseListener realOnInfoWindowCloseListener = null;
+        if (onInfoWindowCloseListener != null) {
+            realOnInfoWindowCloseListener = new DelegatingOnInfoWindowCloseListener(onInfoWindowCloseListener);
+        }
+        real.setOnInfoWindowCloseListener(realOnInfoWindowCloseListener);
+    }
+
+    @Override
+    public void setOnInfoWindowLongClickListener(OnInfoWindowLongClickListener onInfoWindowLongClickListener) {
+        com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener realOnInfoWindowLongClickListener = null;
+        if (onInfoWindowLongClickListener != null) {
+            realOnInfoWindowLongClickListener = new DelegatingOnInfoWindowLongClickListener(onInfoWindowLongClickListener);
+        }
+        real.setOnInfoWindowLongClickListener(realOnInfoWindowLongClickListener);
     }
 
     @Override
@@ -312,6 +387,21 @@ class DelegatingGoogleMap implements GoogleMap {
     @Override
     public void setOnMyLocationChangeListener(OnMyLocationChangeListener onMyLocationChangeListener) {
         real.setOnMyLocationChangeListener(onMyLocationChangeListener);
+    }
+
+    @Override
+    public void setOnPoiClickListener(OnPoiClickListener onPoiClickListener) {
+        real.setOnPoiClickListener(onPoiClickListener);
+    }
+
+    @Override
+    public void setOnPolygonClickListener(OnPolygonClickListener onPolygonClickListener) {
+        polygonManager.setOnPolygonClickListener(onPolygonClickListener);
+    }
+
+    @Override
+    public void setOnPolylineClickListener(OnPolylineClickListener onPolylineClickListener) {
+        polylineManager.setOnPolylineClickListener(onPolylineClickListener);
     }
 
     @Override
@@ -428,6 +518,34 @@ class DelegatingGoogleMap implements GoogleMap {
         @Override
         public void onInfoWindowClick(com.google.android.gms.maps.model.Marker marker) {
             onInfoWindowClickListener.onInfoWindowClick(markerManager.map(marker));
+        }
+    }
+
+    private class DelegatingOnInfoWindowCloseListener implements com.google.android.gms.maps.GoogleMap.OnInfoWindowCloseListener {
+
+        private final OnInfoWindowCloseListener onInfoWindowCloseListener;
+
+        public DelegatingOnInfoWindowCloseListener(OnInfoWindowCloseListener onInfoWindowCloseListener) {
+            this.onInfoWindowCloseListener = onInfoWindowCloseListener;
+        }
+
+        @Override
+        public void onInfoWindowClose(com.google.android.gms.maps.model.Marker marker) {
+            onInfoWindowCloseListener.onInfoWindowClose(markerManager.map(marker));
+        }
+    }
+
+    private class DelegatingOnInfoWindowLongClickListener implements com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener {
+
+        private final OnInfoWindowLongClickListener onInfoWindowLongClickListener;
+
+        public DelegatingOnInfoWindowLongClickListener(OnInfoWindowLongClickListener onInfoWindowLongClickListener) {
+            this.onInfoWindowLongClickListener = onInfoWindowLongClickListener;
+        }
+
+        @Override
+        public void onInfoWindowLongClick(com.google.android.gms.maps.model.Marker marker) {
+            onInfoWindowLongClickListener.onInfoWindowLongClick(markerManager.map(marker));
         }
     }
 

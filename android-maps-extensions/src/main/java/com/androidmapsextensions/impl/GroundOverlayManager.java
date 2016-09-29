@@ -15,6 +15,7 @@
  */
 package com.androidmapsextensions.impl;
 
+import com.androidmapsextensions.GoogleMap.OnGroundOverlayClickListener;
 import com.androidmapsextensions.GroundOverlay;
 import com.androidmapsextensions.GroundOverlayOptions;
 
@@ -31,7 +32,7 @@ class GroundOverlayManager {
 
     public GroundOverlayManager(IGoogleMap factory) {
         this.factory = factory;
-        this.groundOverlays = new HashMap<com.google.android.gms.maps.model.GroundOverlay, GroundOverlay>();
+        this.groundOverlays = new HashMap<>();
     }
 
     public GroundOverlay addGroundOverlay(GroundOverlayOptions groundOverlayOptions) {
@@ -57,5 +58,27 @@ class GroundOverlayManager {
 
     public void onRemove(com.google.android.gms.maps.model.GroundOverlay real) {
         groundOverlays.remove(real);
+    }
+
+    public void setOnGroundOverlayClickListener(OnGroundOverlayClickListener onGroundOverlayClickListener) {
+        com.google.android.gms.maps.GoogleMap.OnGroundOverlayClickListener realOnGroundOverlayClickListener = null;
+        if (onGroundOverlayClickListener != null) {
+            realOnGroundOverlayClickListener = new DelegatingOnGroundOverlayClickListener(onGroundOverlayClickListener);
+        }
+        factory.setOnGroundOverlayClickListener(realOnGroundOverlayClickListener);
+    }
+
+    private class DelegatingOnGroundOverlayClickListener implements com.google.android.gms.maps.GoogleMap.OnGroundOverlayClickListener {
+
+        private final OnGroundOverlayClickListener onGroundOverlayClickListener;
+
+        public DelegatingOnGroundOverlayClickListener(OnGroundOverlayClickListener onGroundOverlayClickListener) {
+            this.onGroundOverlayClickListener = onGroundOverlayClickListener;
+        }
+
+        @Override
+        public void onGroundOverlayClick(com.google.android.gms.maps.model.GroundOverlay groundOverlay) {
+            onGroundOverlayClickListener.onGroundOverlayClick(groundOverlays.get(groundOverlay));
+        }
     }
 }

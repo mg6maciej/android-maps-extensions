@@ -44,6 +44,11 @@ public class PolygonOptions {
         return this;
     }
 
+    public PolygonOptions clickable(boolean clickable) {
+        real.clickable(clickable);
+        return this;
+    }
+
     public PolygonOptions data(Object data) {
         this.data = data;
         return this;
@@ -85,6 +90,10 @@ public class PolygonOptions {
 
     public float getZIndex() {
         return real.getZIndex();
+    }
+
+    public boolean isClickable() {
+        return real.isClickable();
     }
 
     public boolean isGeodesic() {

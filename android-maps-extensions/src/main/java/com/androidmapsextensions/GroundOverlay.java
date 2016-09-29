@@ -40,11 +40,15 @@ public interface GroundOverlay {
 
     float getZIndex();
 
+    boolean isClickable();
+
     boolean isVisible();
 
     void remove();
 
     void setBearing(float bearing);
+
+    void setClickable(boolean clickable);
 
     void setData(Object data);
 

@@ -34,6 +34,11 @@ public class GroundOverlayOptions {
         return this;
     }
 
+    public GroundOverlayOptions clickable(boolean clickable) {
+        real.clickable(clickable);
+        return this;
+    }
+
     public GroundOverlayOptions data(Object data) {
         this.data = data;
         return this;
@@ -86,6 +91,10 @@ public class GroundOverlayOptions {
     public GroundOverlayOptions image(BitmapDescriptor image) {
         real.image(image);
         return this;
+    }
+
+    public boolean isClickable() {
+        return real.isClickable();
     }
 
     public boolean isVisible() {

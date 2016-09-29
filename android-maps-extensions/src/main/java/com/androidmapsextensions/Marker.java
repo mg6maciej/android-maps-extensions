@@ -70,7 +70,17 @@ public interface Marker {
 
     String getSnippet();
 
+    /**
+     * Calling this method forced marker to be created via Google Maps Android API
+     * and disables most of the optimizations when using clustering and addMarkersDynamically method.
+     * Use setData instead whenever possible.
+     */
+    @Deprecated
+    Object getTag();
+
     String getTitle();
+
+    float getZIndex();
 
     void hideInfoWindow();
 
@@ -114,9 +124,19 @@ public interface Marker {
 
     void setSnippet(String snippet);
 
+    /**
+     * Calling this method forced marker to be created via Google Maps Android API
+     * and disables most of the optimizations when using clustering and addMarkersDynamically method.
+     * Use setData instead whenever possible.
+     */
+    @Deprecated
+    void setTag(Object tag);
+
     void setTitle(String title);
 
     void setVisible(boolean visible);
+
+    void setZIndex(float zIndex);
 
     void showInfoWindow();
 }

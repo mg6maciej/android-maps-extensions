@@ -109,9 +109,20 @@ class DelegatingMarker implements Marker {
         return real.getSnippet();
     }
 
+    @Deprecated
+    @Override
+    public Object getTag() {
+        return real.getTag();
+    }
+
     @Override
     public String getTitle() {
         return real.getTitle();
+    }
+
+    @Override
+    public float getZIndex() {
+        return real.getZIndex();
     }
 
     @Override
@@ -216,6 +227,12 @@ class DelegatingMarker implements Marker {
         real.setSnippet(snippet);
     }
 
+    @Deprecated
+    @Override
+    public void setTag(Object tag) {
+        real.setTag(tag);
+    }
+
     @Override
     public void setTitle(String title) {
         real.setTitle(title);
@@ -227,6 +244,11 @@ class DelegatingMarker implements Marker {
             this.visible = visible;
             manager.onVisibilityChangeRequest(this, visible);
         }
+    }
+
+    @Override
+    public void setZIndex(float zIndex) {
+        real.zIndex(zIndex);
     }
 
     @Override

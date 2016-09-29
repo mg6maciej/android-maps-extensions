@@ -23,7 +23,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveCanceledListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveListener;
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener;
+import com.google.android.gms.maps.GoogleMap.OnCircleClickListener;
+import com.google.android.gms.maps.GoogleMap.OnGroundOverlayClickListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowCloseListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -31,6 +39,9 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnPoiClickListener;
+import com.google.android.gms.maps.GoogleMap.OnPolygonClickListener;
+import com.google.android.gms.maps.GoogleMap.OnPolylineClickListener;
 import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.UiSettings;
@@ -39,6 +50,8 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
@@ -163,6 +176,11 @@ class GoogleMapWrapper implements IGoogleMap {
     }
 
     @Override
+    public void resetMinMaxZoomPreference() {
+        map.resetMinMaxZoomPreference();
+    }
+
+    @Override
     public final void moveCamera(CameraUpdate update) {
         map.moveCamera(update);
     }
@@ -183,13 +201,33 @@ class GoogleMapWrapper implements IGoogleMap {
     }
 
     @Override
+    public void setLatLngBoundsForCameraTarget(LatLngBounds bounds) {
+        map.setLatLngBoundsForCameraTarget(bounds);
+    }
+
+    @Override
     public final void setLocationSource(LocationSource source) {
         map.setLocationSource(source);
     }
 
     @Override
+    public boolean setMapStyle(MapStyleOptions mapStyleOptions) {
+        return map.setMapStyle(mapStyleOptions);
+    }
+
+    @Override
     public final void setMapType(int type) {
         map.setMapType(type);
+    }
+
+    @Override
+    public void setMaxZoomPreference(float zoom) {
+        map.setMaxZoomPreference(zoom);
+    }
+
+    @Override
+    public void setMinZoomPreference(float zoom) {
+        map.setMinZoomPreference(zoom);
     }
 
     @Override
@@ -203,8 +241,48 @@ class GoogleMapWrapper implements IGoogleMap {
     }
 
     @Override
+    public void setOnCameraIdleListener(OnCameraIdleListener listener) {
+        map.setOnCameraIdleListener(listener);
+    }
+
+    @Override
+    public void setOnCameraMoveCanceledListener(OnCameraMoveCanceledListener listener) {
+        map.setOnCameraMoveCanceledListener(listener);
+    }
+
+    @Override
+    public void setOnCameraMoveListener(OnCameraMoveListener listener) {
+        map.setOnCameraMoveListener(listener);
+    }
+
+    @Override
+    public void setOnCameraMoveStartedListener(OnCameraMoveStartedListener listener) {
+        map.setOnCameraMoveStartedListener(listener);
+    }
+
+    @Override
+    public void setOnCircleClickListener(OnCircleClickListener listener) {
+        map.setOnCircleClickListener(listener);
+    }
+
+    @Override
+    public void setOnGroundOverlayClickListener(OnGroundOverlayClickListener listener) {
+        map.setOnGroundOverlayClickListener(listener);
+    }
+
+    @Override
     public final void setOnInfoWindowClickListener(OnInfoWindowClickListener listener) {
         map.setOnInfoWindowClickListener(listener);
+    }
+
+    @Override
+    public void setOnInfoWindowCloseListener(OnInfoWindowCloseListener listener) {
+        map.setOnInfoWindowCloseListener(listener);
+    }
+
+    @Override
+    public void setOnInfoWindowLongClickListener(OnInfoWindowLongClickListener listener) {
+        map.setOnInfoWindowLongClickListener(listener);
     }
 
     @Override
@@ -240,6 +318,21 @@ class GoogleMapWrapper implements IGoogleMap {
     @Override
     public final void setOnMyLocationChangeListener(OnMyLocationChangeListener listener) {
         map.setOnMyLocationChangeListener(listener);
+    }
+
+    @Override
+    public void setOnPoiClickListener(OnPoiClickListener listener) {
+        map.setOnPoiClickListener(listener);
+    }
+
+    @Override
+    public void setOnPolygonClickListener(OnPolygonClickListener listener) {
+        map.setOnPolygonClickListener(listener);
+    }
+
+    @Override
+    public void setOnPolylineClickListener(OnPolylineClickListener listener) {
+        map.setOnPolylineClickListener(listener);
     }
 
     @Override

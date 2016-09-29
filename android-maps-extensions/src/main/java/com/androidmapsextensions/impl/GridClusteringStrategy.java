@@ -34,6 +34,7 @@ import java.util.Map;
 class GridClusteringStrategy implements ClusteringStrategy {
 
     private static boolean GOOGLE_PLAY_SERVICES_4_0 = true;
+    private static boolean GOOGLE_PLAY_SERVICES_9_2 = true;
 
     private static final boolean DEBUG_GRID = false;
     private DebugHelper debugHelper;
@@ -446,6 +447,13 @@ class GridClusteringStrategy implements ClusteringStrategy {
         markerOptions.flat(opts.isFlat());
         markerOptions.infoWindowAnchor(opts.getInfoWindowAnchorU(), opts.getInfoWindowAnchorV());
         markerOptions.rotation(opts.getRotation());
+        if (GOOGLE_PLAY_SERVICES_9_2) {
+            try {
+                markerOptions.zIndex(opts.getZIndex());
+            } catch (NoSuchMethodError error) {
+                GOOGLE_PLAY_SERVICES_9_2 = false;
+            }
+        }
         return map.addMarker(markerOptions);
     }
 

@@ -38,11 +38,15 @@ public interface Circle {
 
     float getZIndex();
 
+    boolean isClickable();
+
     boolean isVisible();
 
     void remove();
 
     void setCenter(LatLng center);
+
+    void setClickable(boolean clickable);
 
     void setData(Object data);
 

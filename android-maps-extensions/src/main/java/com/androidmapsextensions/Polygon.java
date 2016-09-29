@@ -38,11 +38,15 @@ public interface Polygon {
 
     float getZIndex();
 
+    boolean isClickable();
+
     boolean isGeodesic();
 
     boolean isVisible();
 
     void remove();
+
+    void setClickable(boolean clickable);
 
     void setData(Object data);
 

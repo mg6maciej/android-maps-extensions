@@ -39,6 +39,11 @@ public class PolylineOptions {
         return this;
     }
 
+    public PolylineOptions clickable(boolean clickable) {
+        real.clickable(clickable);
+        return this;
+    }
+
     public PolylineOptions data(Object data) {
         this.data = data;
         return this;
@@ -72,6 +77,10 @@ public class PolylineOptions {
 
     public float getZIndex() {
         return real.getZIndex();
+    }
+
+    public boolean isClickable() {
+        return real.isClickable();
     }
 
     public boolean isGeodesic() {
