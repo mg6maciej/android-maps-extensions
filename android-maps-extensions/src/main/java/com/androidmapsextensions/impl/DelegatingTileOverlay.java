@@ -56,6 +56,11 @@ class DelegatingTileOverlay implements TileOverlay {
     }
 
     @Override
+    public float getTransparency() {
+        return real.getTransparency();
+    }
+
+    @Override
     public boolean isVisible() {
         return real.isVisible();
     }
@@ -74,6 +79,11 @@ class DelegatingTileOverlay implements TileOverlay {
     @Override
     public void setFadeIn(boolean fadeIn) {
         real.setFadeIn(fadeIn);
+    }
+
+    @Override
+    public void setTransparency(float transparency) {
+        real.setTransparency(transparency);
     }
 
     @Override
