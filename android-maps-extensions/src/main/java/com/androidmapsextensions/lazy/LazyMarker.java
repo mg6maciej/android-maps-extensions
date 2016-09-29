@@ -92,6 +92,12 @@ public class LazyMarker {
         }
     }
 
+    @Deprecated
+    public Object getTag() {
+        createMarker();
+        return marker.getTag();
+    }
+
     public String getTitle() {
         if (marker != null) {
             return marker.getTitle();
@@ -227,6 +233,12 @@ public class LazyMarker {
         } else {
             markerOptions.snippet(snippet);
         }
+    }
+
+    @Deprecated
+    public void setTag(Object tag) {
+        createMarker();
+        marker.setTag(tag);
     }
 
     public void setTitle(String title) {

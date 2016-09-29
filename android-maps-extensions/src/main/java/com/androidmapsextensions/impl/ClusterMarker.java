@@ -185,6 +185,12 @@ class ClusterMarker implements Marker {
         return null;
     }
 
+    @Deprecated
+    @Override
+    public Object getTag() {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public String getTitle() {
         return null;
@@ -298,6 +304,12 @@ class ClusterMarker implements Marker {
 
     @Override
     public void setSnippet(String snippet) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Deprecated
+    @Override
+    public void setTag(Object tag) {
         throw new UnsupportedOperationException();
     }
 

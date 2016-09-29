@@ -109,6 +109,12 @@ class DelegatingMarker implements Marker {
         return real.getSnippet();
     }
 
+    @Deprecated
+    @Override
+    public Object getTag() {
+        return real.getTag();
+    }
+
     @Override
     public String getTitle() {
         return real.getTitle();
@@ -219,6 +225,12 @@ class DelegatingMarker implements Marker {
     @Override
     public void setSnippet(String snippet) {
         real.setSnippet(snippet);
+    }
+
+    @Deprecated
+    @Override
+    public void setTag(Object tag) {
+        real.setTag(tag);
     }
 
     @Override
