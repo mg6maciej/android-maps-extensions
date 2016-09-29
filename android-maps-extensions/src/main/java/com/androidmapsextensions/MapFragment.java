@@ -40,6 +40,10 @@ public class MapFragment extends com.google.android.gms.maps.MapFragment impleme
 
     private final MapHolder mapHolder = new MapHolder(this);
 
+    public GoogleMap getExtendedMap() {
+        return mapHolder.getExtendedMap();
+    }
+
     public void getExtendedMapAsync(OnMapReadyCallback callback) {
         mapHolder.getExtendedMapAsync(callback);
     }

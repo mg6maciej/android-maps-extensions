@@ -22,7 +22,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import com.androidmapsextensions.GoogleMap;
-import com.androidmapsextensions.OnMapReadyCallback;
 import com.androidmapsextensions.SupportMapFragment;
 
 public abstract class BaseFragment extends Fragment {
@@ -58,14 +57,12 @@ public abstract class BaseFragment extends Fragment {
     }
 
     private void setUpMapIfNeeded() {
-
-        mapFragment.getExtendedMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                map = googleMap;
+        if (map == null) {
+            map = mapFragment.getExtendedMap();
+            if (map != null) {
                 setUpMap();
             }
-        });
+        }
     }
 
     protected abstract void setUpMap();

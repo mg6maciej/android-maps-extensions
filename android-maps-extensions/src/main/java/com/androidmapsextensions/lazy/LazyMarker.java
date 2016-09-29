@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class LazyMarker {
 
     private static boolean GOOGLE_PLAY_SERVICES_4_0 = true;
+    private static boolean GOOGLE_PLAY_SERVICES_9_2 = true;
 
     public interface OnMarkerCreateListener {
 
@@ -295,7 +296,13 @@ public class LazyMarker {
         copy.snippet(options.getSnippet());
         copy.title(options.getTitle());
         copy.visible(options.isVisible());
-        copy.zIndex(options.getZIndex());
+        if (GOOGLE_PLAY_SERVICES_9_2) {
+            try {
+                copy.zIndex(options.getZIndex());
+            } catch (NoSuchMethodError error) {
+                GOOGLE_PLAY_SERVICES_9_2 = false;
+            }
+        }
         return copy;
     }
 }
