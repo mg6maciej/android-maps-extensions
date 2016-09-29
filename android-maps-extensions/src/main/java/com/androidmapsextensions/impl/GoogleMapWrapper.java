@@ -39,6 +39,7 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnPoiClickListener;
 import com.google.android.gms.maps.GoogleMap.OnPolygonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnPolylineClickListener;
 import com.google.android.gms.maps.GoogleMap.SnapshotReadyCallback;
@@ -317,6 +318,11 @@ class GoogleMapWrapper implements IGoogleMap {
     @Override
     public final void setOnMyLocationChangeListener(OnMyLocationChangeListener listener) {
         map.setOnMyLocationChangeListener(listener);
+    }
+
+    @Override
+    public void setOnPoiClickListener(OnPoiClickListener listener) {
+        map.setOnPoiClickListener(listener);
     }
 
     @Override

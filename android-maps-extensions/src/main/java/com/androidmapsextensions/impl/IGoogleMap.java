@@ -38,6 +38,7 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnPoiClickListener;
 import com.google.android.gms.maps.GoogleMap.OnPolygonClickListener;
 import com.google.android.gms.maps.GoogleMap.OnPolylineClickListener;
 import com.google.android.gms.maps.LocationSource;
@@ -160,6 +161,8 @@ interface IGoogleMap {
     void setOnMyLocationButtonClickListener(OnMyLocationButtonClickListener listener);
 
     void setOnMyLocationChangeListener(OnMyLocationChangeListener listener);
+
+    void setOnPoiClickListener(OnPoiClickListener listener);
 
     void setOnPolygonClickListener(OnPolygonClickListener listener);
 

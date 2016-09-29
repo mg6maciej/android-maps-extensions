@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
 
 import java.util.List;
 
@@ -178,6 +179,8 @@ public interface GoogleMap {
 
     void setOnMyLocationChangeListener(OnMyLocationChangeListener onMyLocationChangeListener);
 
+    void setOnPoiClickListener(OnPoiClickListener onPoiClickListener);
+
     void setOnPolygonClickListener(OnPolygonClickListener onPolygonClickListener);
 
     void setOnPolylineClickListener(OnPolylineClickListener onPolylineClickListener);
@@ -309,6 +312,12 @@ public interface GoogleMap {
 
         @Override
         void onMyLocationChange(Location location);
+    }
+
+    interface OnPoiClickListener extends com.google.android.gms.maps.GoogleMap.OnPoiClickListener {
+
+        @Override
+        void onPoiClick(PointOfInterest pointOfInterest);
     }
 
     interface OnPolygonClickListener {

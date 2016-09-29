@@ -390,6 +390,11 @@ class DelegatingGoogleMap implements GoogleMap {
     }
 
     @Override
+    public void setOnPoiClickListener(OnPoiClickListener onPoiClickListener) {
+        real.setOnPoiClickListener(onPoiClickListener);
+    }
+
+    @Override
     public void setOnPolygonClickListener(OnPolygonClickListener onPolygonClickListener) {
         polygonManager.setOnPolygonClickListener(onPolygonClickListener);
     }
