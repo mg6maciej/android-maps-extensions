@@ -25,6 +25,7 @@ import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.List;
 
@@ -127,6 +128,8 @@ public interface GoogleMap {
     boolean setIndoorEnabled(boolean indoorEnabled);
 
     void setInfoWindowAdapter(InfoWindowAdapter infoWindowAdapter);
+
+    void setLatLngBoundsForCameraTarget(LatLngBounds latLngBounds);
 
     void setLocationSource(LocationSource locationSource);
 

@@ -40,6 +40,7 @@ import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.List;
 
@@ -249,6 +250,11 @@ class DelegatingGoogleMap implements GoogleMap {
     @Override
     public void setInfoWindowAdapter(final InfoWindowAdapter infoWindowAdapter) {
         this.infoWindowAdapter = infoWindowAdapter;
+    }
+
+    @Override
+    public void setLatLngBoundsForCameraTarget(LatLngBounds latLngBounds) {
+        real.setLatLngBoundsForCameraTarget(latLngBounds);
     }
 
     @Override
