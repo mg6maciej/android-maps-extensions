@@ -24,6 +24,8 @@ import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowCloseListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -205,6 +207,16 @@ class GoogleMapWrapper implements IGoogleMap {
     @Override
     public final void setOnInfoWindowClickListener(OnInfoWindowClickListener listener) {
         map.setOnInfoWindowClickListener(listener);
+    }
+
+    @Override
+    public void setOnInfoWindowCloseListener(OnInfoWindowCloseListener listener) {
+        map.setOnInfoWindowCloseListener(listener);
+    }
+
+    @Override
+    public void setOnInfoWindowLongClickListener(OnInfoWindowLongClickListener listener) {
+        map.setOnInfoWindowLongClickListener(listener);
     }
 
     @Override

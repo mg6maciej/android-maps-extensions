@@ -276,6 +276,24 @@ class DelegatingGoogleMap implements GoogleMap {
     }
 
     @Override
+    public void setOnInfoWindowCloseListener(OnInfoWindowCloseListener onInfoWindowCloseListener) {
+        com.google.android.gms.maps.GoogleMap.OnInfoWindowCloseListener realOnInfoWindowCloseListener = null;
+        if (onInfoWindowCloseListener != null) {
+            realOnInfoWindowCloseListener = new DelegatingOnInfoWindowCloseListener(onInfoWindowCloseListener);
+        }
+        real.setOnInfoWindowCloseListener(realOnInfoWindowCloseListener);
+    }
+
+    @Override
+    public void setOnInfoWindowLongClickListener(OnInfoWindowLongClickListener onInfoWindowLongClickListener) {
+        com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener realOnInfoWindowLongClickListener = null;
+        if (onInfoWindowLongClickListener != null) {
+            realOnInfoWindowLongClickListener = new DelegatingOnInfoWindowLongClickListener(onInfoWindowLongClickListener);
+        }
+        real.setOnInfoWindowLongClickListener(realOnInfoWindowLongClickListener);
+    }
+
+    @Override
     public void setOnMapClickListener(OnMapClickListener onMapClickListener) {
         real.setOnMapClickListener(onMapClickListener);
     }
@@ -428,6 +446,34 @@ class DelegatingGoogleMap implements GoogleMap {
         @Override
         public void onInfoWindowClick(com.google.android.gms.maps.model.Marker marker) {
             onInfoWindowClickListener.onInfoWindowClick(markerManager.map(marker));
+        }
+    }
+
+    private class DelegatingOnInfoWindowCloseListener implements com.google.android.gms.maps.GoogleMap.OnInfoWindowCloseListener {
+
+        private final OnInfoWindowCloseListener onInfoWindowCloseListener;
+
+        public DelegatingOnInfoWindowCloseListener(OnInfoWindowCloseListener onInfoWindowCloseListener) {
+            this.onInfoWindowCloseListener = onInfoWindowCloseListener;
+        }
+
+        @Override
+        public void onInfoWindowClose(com.google.android.gms.maps.model.Marker marker) {
+            onInfoWindowCloseListener.onInfoWindowClose(markerManager.map(marker));
+        }
+    }
+
+    private class DelegatingOnInfoWindowLongClickListener implements com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener {
+
+        private final OnInfoWindowLongClickListener onInfoWindowLongClickListener;
+
+        public DelegatingOnInfoWindowLongClickListener(OnInfoWindowLongClickListener onInfoWindowLongClickListener) {
+            this.onInfoWindowLongClickListener = onInfoWindowLongClickListener;
+        }
+
+        @Override
+        public void onInfoWindowLongClick(com.google.android.gms.maps.model.Marker marker) {
+            onInfoWindowLongClickListener.onInfoWindowLongClick(markerManager.map(marker));
         }
     }
 
