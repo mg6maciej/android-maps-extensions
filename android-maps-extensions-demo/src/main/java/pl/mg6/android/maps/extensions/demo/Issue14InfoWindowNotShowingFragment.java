@@ -33,10 +33,7 @@ public class Issue14InfoWindowNotShowingFragment extends BaseFragment {
 
     @Override
     protected void setUpMap() {
-        ClusteringSettings settings = new ClusteringSettings();
-        settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
-        map.setClustering(settings);
-
+        map.setClustering(new ClusteringSettings());
         MarkerOptions options = new MarkerOptions().position(new LatLng(0, 0)).title("title");
         map.addMarker(options).showInfoWindow();
     }

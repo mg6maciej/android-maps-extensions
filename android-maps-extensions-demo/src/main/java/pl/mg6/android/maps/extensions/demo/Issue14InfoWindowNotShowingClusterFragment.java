@@ -15,6 +15,7 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,10 +37,7 @@ public class Issue14InfoWindowNotShowingClusterFragment extends BaseFragment {
 
     @Override
     protected void setUpMap() {
-        ClusteringSettings settings = new ClusteringSettings();
-        settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
-        map.setClustering(settings);
-
+        map.setClustering(new ClusteringSettings());
         map.setInfoWindowAdapter(new InfoWindowAdapter() {
 
             @Override
@@ -50,12 +48,12 @@ public class Issue14InfoWindowNotShowingClusterFragment extends BaseFragment {
             @Override
             public View getInfoContents(Marker marker) {
                 TextView view = new TextView(getActivity());
+                view.setTextColor(Color.BLACK);
                 view.setText("info window");
                 return view;
             }
         });
-
-        MarkerOptions options = new MarkerOptions().position(new LatLng(0, 0)).title("title");
+        MarkerOptions options = new MarkerOptions().position(new LatLng(0, 0));
         map.addMarker(options);
         map.addMarker(options);
         map.getDisplayedMarkers().get(0).showInfoWindow();
