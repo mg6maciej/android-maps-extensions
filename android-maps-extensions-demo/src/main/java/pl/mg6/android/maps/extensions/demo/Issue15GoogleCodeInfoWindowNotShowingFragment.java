@@ -15,21 +15,17 @@
  */
 package pl.mg6.android.maps.extensions.demo;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.androidmapsextensions.ClusteringSettings;
-import com.androidmapsextensions.GoogleMap.InfoWindowAdapter;
-import com.androidmapsextensions.Marker;
 import com.androidmapsextensions.MarkerOptions;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Issue15InfoWindowNotShowingClusterFragment extends BaseFragment {
+public class Issue15GoogleCodeInfoWindowNotShowingFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,23 +35,7 @@ public class Issue15InfoWindowNotShowingClusterFragment extends BaseFragment {
     @Override
     protected void setUpMap() {
         map.setClustering(new ClusteringSettings().addMarkersDynamically(true));
-        map.setInfoWindowAdapter(new InfoWindowAdapter() {
-
-            @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                TextView view = new TextView(getActivity());
-                view.setTextColor(Color.BLACK);
-                view.setText("info window");
-                return view;
-            }
-        });
-        MarkerOptions options = new MarkerOptions().position(new LatLng(0, -90));
-        map.addMarker(options);
+        MarkerOptions options = new MarkerOptions().position(new LatLng(0, -90)).title("title");
         map.addMarker(options);
         new Handler().post(new Runnable() {
 

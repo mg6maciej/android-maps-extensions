@@ -24,7 +24,7 @@ import com.androidmapsextensions.ClusteringSettings;
 import com.androidmapsextensions.MarkerOptions;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Issue14InfoWindowNotShowingFragment extends BaseFragment {
+public class Issue14GoogleCodeInfoWindowNotShowingFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
