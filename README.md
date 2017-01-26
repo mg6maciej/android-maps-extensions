@@ -22,7 +22,7 @@ Gradle
 ------
 ```Groovy
 dependencies {
-    compile 'com.androidmapsextensions:android-maps-extensions:2.3.0'
+    compile 'com.androidmapsextensions:android-maps-extensions:2.3.1'
     compile 'com.google.android.gms:play-services-maps:9.6.1'
 }
 ```
