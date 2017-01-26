@@ -19,15 +19,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.androidmapsextensions.ClusteringSettings;
-import com.androidmapsextensions.GoogleMap.InfoWindowAdapter;
-import com.androidmapsextensions.Marker;
 import com.androidmapsextensions.MarkerOptions;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Issue14InfoWindowNotShowingClusterFragment extends BaseFragment {
+public class Issue14GoogleCodeInfoWindowNotShowingFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,28 +33,8 @@ public class Issue14InfoWindowNotShowingClusterFragment extends BaseFragment {
 
     @Override
     protected void setUpMap() {
-        ClusteringSettings settings = new ClusteringSettings();
-        settings.clusterOptionsProvider(new DemoClusterOptionsProvider(getResources()));
-        map.setClustering(settings);
-
-        map.setInfoWindowAdapter(new InfoWindowAdapter() {
-
-            @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                TextView view = new TextView(getActivity());
-                view.setText("info window");
-                return view;
-            }
-        });
-
+        map.setClustering(new ClusteringSettings());
         MarkerOptions options = new MarkerOptions().position(new LatLng(0, 0)).title("title");
-        map.addMarker(options);
-        map.addMarker(options);
-        map.getDisplayedMarkers().get(0).showInfoWindow();
+        map.addMarker(options).showInfoWindow();
     }
 }

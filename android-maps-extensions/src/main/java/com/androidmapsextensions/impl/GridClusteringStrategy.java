@@ -267,7 +267,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
         ClusterMarker cluster = markers.get(marker);
         if (cluster == null) {
             marker.forceShowInfoWindow();
-        } else if (cluster.getMarkersInternal().size() == 1) {
+        } else if (cluster.getMarkersInternal().size() < minMarkersCount) {
             cluster.refresh();
             marker.forceShowInfoWindow();
         }
