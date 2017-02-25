@@ -18,6 +18,9 @@ package com.androidmapsextensions.impl;
 import com.androidmapsextensions.Circle;
 import com.androidmapsextensions.utils.LatLngUtils;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
+
+import java.util.List;
 
 class DelegatingCircle implements Circle {
 
@@ -68,6 +71,11 @@ class DelegatingCircle implements Circle {
     @Override
     public int getStrokeColor() {
         return real.getStrokeColor();
+    }
+
+    @Override
+    public List<PatternItem> getStrokePattern() {
+        return real.getStrokePattern();
     }
 
     @Override
@@ -129,6 +137,11 @@ class DelegatingCircle implements Circle {
     @Override
     public void setStrokeColor(int strokeColor) {
         real.setStrokeColor(strokeColor);
+    }
+
+    @Override
+    public void setStrokePattern(List<PatternItem> strokePattern) {
+        real.setStrokePattern(strokePattern);
     }
 
     @Override
