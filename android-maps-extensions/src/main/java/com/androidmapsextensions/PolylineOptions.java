@@ -15,7 +15,9 @@
  */
 package com.androidmapsextensions;
 
+import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 
 import java.util.List;
 
@@ -44,13 +46,18 @@ public class PolylineOptions {
         return this;
     }
 
+    public PolylineOptions color(int color) {
+        real.color(color);
+        return this;
+    }
+
     public PolylineOptions data(Object data) {
         this.data = data;
         return this;
     }
 
-    public PolylineOptions color(int color) {
-        real.color(color);
+    public PolylineOptions endCap(Cap cap) {
+        real.endCap(cap);
         return this;
     }
 
@@ -67,8 +74,24 @@ public class PolylineOptions {
         return data;
     }
 
+    public Cap getEndCap() {
+        return real.getEndCap();
+    }
+
+    public int getJointType() {
+        return real.getJointType();
+    }
+
+    public List<PatternItem> getPattern() {
+        return real.getPattern();
+    }
+
     public List<LatLng> getPoints() {
         return real.getPoints();
+    }
+
+    public Cap getStartCap() {
+        return real.getStartCap();
     }
 
     public float getWidth() {
@@ -89,6 +112,21 @@ public class PolylineOptions {
 
     public boolean isVisible() {
         return real.isVisible();
+    }
+
+    public PolylineOptions jointType(int type) {
+        real.jointType(type);
+        return this;
+    }
+
+    public PolylineOptions pattern(List<PatternItem> pattern) {
+        real.pattern(pattern);
+        return this;
+    }
+
+    public PolylineOptions startCap(Cap cap) {
+        real.startCap(cap);
+        return this;
     }
 
     public PolylineOptions visible(boolean visible) {
