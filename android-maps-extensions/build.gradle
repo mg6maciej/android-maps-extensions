@@ -28,7 +28,7 @@ dependencies {
 }
 
 group = 'com.androidmapsextensions'
-version = '2.4.0'
+version = '2.4.1-SNAPSHOT'
 
 if (!isCI) {
 
