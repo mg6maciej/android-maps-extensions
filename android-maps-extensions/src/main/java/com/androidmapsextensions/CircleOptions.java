@@ -95,8 +95,8 @@ public class CircleOptions {
         return this;
     }
 
-    public CircleOptions strokePattern(List<PatternItem> strokePattern) {
-        real.strokePattern(strokePattern);
+    public CircleOptions strokePattern(List<PatternItem> pattern) {
+        real.strokePattern(pattern);
         return this;
     }
 

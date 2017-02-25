@@ -16,6 +16,7 @@
 package com.androidmapsextensions;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 
 import java.util.List;
 
@@ -33,6 +34,10 @@ public interface Polygon {
     List<LatLng> getPoints();
 
     int getStrokeColor();
+
+    int getStrokeJointType();
+
+    List<PatternItem> getStrokePattern();
 
     float getStrokeWidth();
 
@@ -61,6 +66,10 @@ public interface Polygon {
     void setPoints(List<LatLng> points);
 
     void setStrokeColor(int strokeColor);
+
+    void setStrokeJointType(int strokeJointType);
+
+    void setStrokePattern(List<PatternItem> strokePattern);
 
     void setStrokeWidth(float strokeWidth);
 
