@@ -34,6 +34,8 @@ public interface GroundOverlay {
 
     LatLng getPosition();
 
+    Object getTag();
+
     float getTransparency();
 
     float getWidth();
@@ -61,6 +63,8 @@ public interface GroundOverlay {
     void setPosition(LatLng position);
 
     void setPositionFromBounds(LatLngBounds bounds);
+
+    void setTag(Object tag);
 
     void setTransparency(float transparency);
 

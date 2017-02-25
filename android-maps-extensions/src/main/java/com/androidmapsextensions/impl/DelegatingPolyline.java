@@ -16,7 +16,9 @@
 package com.androidmapsextensions.impl;
 
 import com.androidmapsextensions.Polyline;
+import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 
 import java.util.List;
 
@@ -42,6 +44,11 @@ class DelegatingPolyline implements Polyline {
         return data;
     }
 
+    @Override
+    public Cap getEndCap() {
+        return real.getEndCap();
+    }
+
     @Deprecated
     @Override
     public String getId() {
@@ -49,8 +56,28 @@ class DelegatingPolyline implements Polyline {
     }
 
     @Override
+    public int getJointType() {
+        return real.getJointType();
+    }
+
+    @Override
+    public List<PatternItem> getPattern() {
+        return real.getPattern();
+    }
+
+    @Override
     public List<LatLng> getPoints() {
         return real.getPoints();
+    }
+
+    @Override
+    public Cap getStartCap() {
+        return real.getStartCap();
+    }
+
+    @Override
+    public Object getTag() {
+        return real.getTag();
     }
 
     @Override
@@ -100,13 +127,38 @@ class DelegatingPolyline implements Polyline {
     }
 
     @Override
+    public void setEndCap(Cap endCap) {
+        real.setEndCap(endCap);
+    }
+
+    @Override
     public void setGeodesic(boolean geodesic) {
         real.setGeodesic(geodesic);
     }
 
     @Override
+    public void setJointType(int jointType) {
+        real.setJointType(jointType);
+    }
+
+    @Override
+    public void setPattern(List<PatternItem> pattern) {
+        real.setPattern(pattern);
+    }
+
+    @Override
     public void setPoints(List<LatLng> points) {
         real.setPoints(points);
+    }
+
+    @Override
+    public void setStartCap(Cap startCap) {
+        real.setStartCap(startCap);
+    }
+
+    @Override
+    public void setTag(Object tag) {
+        real.setTag(tag);
     }
 
     @Override

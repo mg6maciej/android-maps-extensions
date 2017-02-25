@@ -15,7 +15,9 @@
  */
 package com.androidmapsextensions;
 
+import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 
 import java.util.List;
 
@@ -25,10 +27,20 @@ public interface Polyline {
 
     <T> T getData();
 
+    Cap getEndCap();
+
     @Deprecated
     String getId();
 
+    int getJointType();
+
+    List<PatternItem> getPattern();
+
     List<LatLng> getPoints();
+
+    Cap getStartCap();
+
+    Object getTag();
 
     float getWidth();
 
@@ -48,9 +60,19 @@ public interface Polyline {
 
     void setData(Object data);
 
+    void setEndCap(Cap endCap);
+
     void setGeodesic(boolean geodesic);
 
+    void setJointType(int jointType);
+
+    void setPattern(List<PatternItem> pattern);
+
     void setPoints(List<LatLng> points);
+
+    void setStartCap(Cap startCap);
+
+    void setTag(Object tag);
 
     void setVisible(boolean visible);
 

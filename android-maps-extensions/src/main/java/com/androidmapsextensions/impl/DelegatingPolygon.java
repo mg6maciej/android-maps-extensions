@@ -17,6 +17,7 @@ package com.androidmapsextensions.impl;
 
 import com.androidmapsextensions.Polygon;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 
 import java.util.List;
 
@@ -64,8 +65,23 @@ class DelegatingPolygon implements Polygon {
     }
 
     @Override
+    public int getStrokeJointType() {
+        return real.getStrokeJointType();
+    }
+
+    @Override
+    public List<PatternItem> getStrokePattern() {
+        return real.getStrokePattern();
+    }
+
+    @Override
     public float getStrokeWidth() {
         return real.getStrokeWidth();
+    }
+
+    @Override
+    public Object getTag() {
+        return real.getTag();
     }
 
     @Override
@@ -130,8 +146,23 @@ class DelegatingPolygon implements Polygon {
     }
 
     @Override
+    public void setStrokeJointType(int strokeJointType) {
+        real.setStrokeJointType(strokeJointType);
+    }
+
+    @Override
+    public void setStrokePattern(List<PatternItem> strokePattern) {
+        real.setStrokePattern(strokePattern);
+    }
+
+    @Override
     public void setStrokeWidth(float strokeWidth) {
         real.setStrokeWidth(strokeWidth);
+    }
+
+    @Override
+    public void setTag(Object tag) {
+        real.setTag(tag);
     }
 
     @Override

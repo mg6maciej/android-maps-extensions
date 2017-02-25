@@ -6,17 +6,17 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-def isTravis = "true".equals(System.getenv("TRAVIS"))
+def isCI = System.env.CI == "true"
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         minSdkVersion 8
     }
     dexOptions {
-        preDexLibraries = !isTravis
+        preDexLibraries = !isCI
     }
     lintOptions {
         abortOnError false
@@ -24,13 +24,13 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services-maps:9.6.1'
+    compile 'com.google.android.gms:play-services-maps:10.2.0'
 }
 
 group = 'com.androidmapsextensions'
-version = '2.3.1'
+version = '2.4.0'
 
-if (!isTravis) {
+if (!isCI) {
 
     signing {
         sign configurations.archives

@@ -16,6 +16,9 @@
 package com.androidmapsextensions;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
+
+import java.util.List;
 
 public class CircleOptions {
 
@@ -62,6 +65,10 @@ public class CircleOptions {
         return real.getStrokeColor();
     }
 
+    public List<PatternItem> getStrokePattern() {
+        return real.getStrokePattern();
+    }
+
     public float getStrokeWidth() {
         return real.getStrokeWidth();
     }
@@ -85,6 +92,11 @@ public class CircleOptions {
 
     public CircleOptions strokeColor(int color) {
         real.strokeColor(color);
+        return this;
+    }
+
+    public CircleOptions strokePattern(List<PatternItem> pattern) {
+        real.strokePattern(pattern);
         return this;
     }
 

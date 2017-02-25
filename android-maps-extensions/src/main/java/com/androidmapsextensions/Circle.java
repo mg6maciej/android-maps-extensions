@@ -16,6 +16,9 @@
 package com.androidmapsextensions;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
+
+import java.util.List;
 
 public interface Circle {
 
@@ -34,7 +37,11 @@ public interface Circle {
 
     int getStrokeColor();
 
+    List<PatternItem> getStrokePattern();
+
     float getStrokeWidth();
+
+    Object getTag();
 
     float getZIndex();
 
@@ -56,7 +63,11 @@ public interface Circle {
 
     void setStrokeColor(int strokeColor);
 
+    void setStrokePattern(List<PatternItem> strokePattern);
+
     void setStrokeWidth(float strokeWidth);
+
+    void setTag(Object tag);
 
     void setVisible(boolean visible);
 
