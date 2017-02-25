@@ -1,4 +1,6 @@
 language: android
+jdk: oraclejdk8
+
 android:
   components:
     - platform-tools
@@ -7,5 +9,3 @@ android:
     - android-23
     - extra-android-m2repository
     - extra-google-m2repository
-
-sudo: false
