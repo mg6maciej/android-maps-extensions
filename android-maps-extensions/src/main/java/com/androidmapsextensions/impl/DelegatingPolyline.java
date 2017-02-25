@@ -54,6 +54,11 @@ class DelegatingPolyline implements Polyline {
     }
 
     @Override
+    public Object getTag() {
+        return real.getTag();
+    }
+
+    @Override
     public float getWidth() {
         return real.getWidth();
     }
@@ -107,6 +112,11 @@ class DelegatingPolyline implements Polyline {
     @Override
     public void setPoints(List<LatLng> points) {
         real.setPoints(points);
+    }
+
+    @Override
+    public void setTag(Object tag) {
+        real.setTag(tag);
     }
 
     @Override

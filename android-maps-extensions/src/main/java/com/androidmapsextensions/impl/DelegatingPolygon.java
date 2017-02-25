@@ -69,6 +69,11 @@ class DelegatingPolygon implements Polygon {
     }
 
     @Override
+    public Object getTag() {
+        return real.getTag();
+    }
+
+    @Override
     public float getZIndex() {
         return real.getZIndex();
     }
@@ -132,6 +137,11 @@ class DelegatingPolygon implements Polygon {
     @Override
     public void setStrokeWidth(float strokeWidth) {
         real.setStrokeWidth(strokeWidth);
+    }
+
+    @Override
+    public void setTag(Object tag) {
+        real.setTag(tag);
     }
 
     @Override

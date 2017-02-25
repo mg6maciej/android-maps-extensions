@@ -64,6 +64,11 @@ class DelegatingGroundOverlay implements GroundOverlay {
     }
 
     @Override
+    public Object getTag() {
+        return real.getTag();
+    }
+
+    @Override
     public float getTransparency() {
         return real.getTransparency();
     }
@@ -132,6 +137,11 @@ class DelegatingGroundOverlay implements GroundOverlay {
     @Override
     public void setPositionFromBounds(LatLngBounds bounds) {
         real.setPositionFromBounds(bounds);
+    }
+
+    @Override
+    public void setTag(Object tag) {
+        real.setTag(tag);
     }
 
     @Override

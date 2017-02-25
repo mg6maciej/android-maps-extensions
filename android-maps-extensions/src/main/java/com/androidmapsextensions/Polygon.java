@@ -36,6 +36,8 @@ public interface Polygon {
 
     float getStrokeWidth();
 
+    Object getTag();
+
     float getZIndex();
 
     boolean isClickable();
@@ -61,6 +63,8 @@ public interface Polygon {
     void setStrokeColor(int strokeColor);
 
     void setStrokeWidth(float strokeWidth);
+
+    void setTag(Object tag);
 
     void setVisible(boolean visible);
 

@@ -36,6 +36,8 @@ public interface Circle {
 
     float getStrokeWidth();
 
+    Object getTag();
+
     float getZIndex();
 
     boolean isClickable();
@@ -57,6 +59,8 @@ public interface Circle {
     void setStrokeColor(int strokeColor);
 
     void setStrokeWidth(float strokeWidth);
+
+    void setTag(Object tag);
 
     void setVisible(boolean visible);
 

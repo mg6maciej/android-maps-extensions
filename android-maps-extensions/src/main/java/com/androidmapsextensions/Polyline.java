@@ -30,6 +30,8 @@ public interface Polyline {
 
     List<LatLng> getPoints();
 
+    Object getTag();
+
     float getWidth();
 
     float getZIndex();
@@ -51,6 +53,8 @@ public interface Polyline {
     void setGeodesic(boolean geodesic);
 
     void setPoints(List<LatLng> points);
+
+    void setTag(Object tag);
 
     void setVisible(boolean visible);
 
