@@ -8,13 +8,6 @@ tasks.withType(JavaCompile) {
 
 def isCI = System.env.CI == "true"
 
-ext {
-    localBuildToolsVersion = project.hasProperty("defaultBuildToolsVersion") ? defaultBuildToolsVersion : "25.0.2"
-    localCompileSdkVersion = project.hasProperty("defaultCompileSdkVersion") ? defaultCompileSdkVersion : 25
-    localMinSdkVersion = project.hasProperty("defaultMinSdkVersion") ? defaultMinSdkVersion : 8
-    playLibVersion = project.hasProperty("defaultPlayLibVersion") ? defaultPlayLibVersion : "10.2.4"
-}
-
 android {
     compileSdkVersion localCompileSdkVersion
     buildToolsVersion localBuildToolsVersion
@@ -31,7 +24,7 @@ android {
 }
 
 dependencies {
-    compile "com.google.android.gms:play-services-maps:${playLibVersion}"
+    compile "com.google.android.gms:play-services-maps:${playServicesVersion}"
 }
 
 group = 'com.androidmapsextensions'

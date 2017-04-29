@@ -6,12 +6,6 @@ tasks.withType(JavaCompile) {
 
 def isCI = System.env.CI == "true"
 
-ext {
-    localBuildToolsVersion = project.hasProperty("defaultBuildToolsVersion") ? defaultBuildToolsVersion : "25.0.2"
-    localCompileSdkVersion = project.hasProperty("defaultCompileSdkVersion") ? defaultCompileSdkVersion : 23
-    localMinSdkVersion = project.hasProperty("defaultMinSdkVersion") ? defaultMinSdkVersion : 8
-}
-
 android {
     compileSdkVersion localCompileSdkVersion
     buildToolsVersion localBuildToolsVersion
