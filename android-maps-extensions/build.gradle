@@ -8,12 +8,19 @@ tasks.withType(JavaCompile) {
 
 def isCI = System.env.CI == "true"
 
+ext {
+    localBuildToolsVersion = project.hasProperty("defaultBuildToolsVersion") ? defaultBuildToolsVersion : "25.0.2"
+    localCompileSdkVersion = project.hasProperty("defaultCompileSdkVersion") ? defaultCompileSdkVersion : 25
+    localMinSdkVersion = project.hasProperty("defaultMinSdkVersion") ? defaultMinSdkVersion : 8
+    playLibVersion = project.hasProperty("defaultPlayLibVersion") ? defaultPlayLibVersion : "10.2.4"
+}
+
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion localCompileSdkVersion
+    buildToolsVersion localBuildToolsVersion
 
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion localMinSdkVersion
     }
     dexOptions {
         preDexLibraries = !isCI
@@ -24,7 +31,7 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services-maps:10.2.0'
+    compile "com.google.android.gms:play-services-maps:${playLibVersion}"
 }
 
 group = 'com.androidmapsextensions'
