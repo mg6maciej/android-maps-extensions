@@ -8,6 +8,13 @@ tasks.withType(JavaCompile) {
 
 def isCI = System.env.CI == "true"
 
+ext {
+    localBuildToolsVersion = project.hasProperty("AME_BUILD_TOOLS_VERSION") ? AME_BUILD_TOOLS_VERSION : '25.0.2'
+    localCompileSdkVersion = project.hasProperty("AME_COMPILE_SDK_VERSION") ? AME_COMPILE_SDK_VERSION : 25
+    localMinSdkVersion = project.hasProperty("AME_MIN_SDK_VERSION") ? AME_MIN_SDK_VERSION : 8
+    playServicesVersion = project.hasProperty("AME_PLAY_SERVICES_VERSION") ? AME_PLAY_SERVICES_VERSION : '10.2.4'
+}
+
 android {
     compileSdkVersion localCompileSdkVersion
     buildToolsVersion localBuildToolsVersion
