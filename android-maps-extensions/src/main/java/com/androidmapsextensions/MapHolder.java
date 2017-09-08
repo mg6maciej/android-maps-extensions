@@ -8,6 +8,8 @@ import java.lang.reflect.Method;
 
 final class MapHolder {
 
+    private static final String ERROR_MESSAGE = "The version of Google Play Services you are using does not have `getMap` method. Please use `getExtendedMapAsync(OnMapReadyCallback)` instead of `getExtendedMap()`.";
+
     public interface Delegate {
 
         // This function no longer exist in new versions of Google Maps Android API v2,
@@ -36,7 +38,7 @@ final class MapHolder {
                     map = ExtendedMapFactory.create(realMap, delegate.getContext());
                 }
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException(ERROR_MESSAGE, e);
             }
         }
         return map;
