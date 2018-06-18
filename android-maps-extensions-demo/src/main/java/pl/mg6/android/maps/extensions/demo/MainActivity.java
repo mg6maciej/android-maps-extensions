@@ -16,11 +16,11 @@
 package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,7 +42,7 @@ public class MainActivity extends BaseActivity {
         initDrawerToggle();
 
         String[] screens = {"Demo", "Animate markers", "Cluster groups", "\"Declusterification\"",
-                "Grid clustering (dynamic)", "No clustering (dynamic)", "Grid clustering", "No clustering"};
+                "Grid clustering (dynamic)", "No clustering (dynamic)", "Grid clustering", "No clustering", "Clustering with animated markers"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, screens);
         ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(adapter);
@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity {
         });
         if (savedInstanceState == null) {
             if (GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(this)) {
-            	replaceMainFragment(new DemoFragment());
+                replaceMainFragment(new DemoFragment());
             }
         }
     }
@@ -70,6 +70,8 @@ public class MainActivity extends BaseActivity {
             replaceMainFragment(new ClusterGroupsFragment());
         } else if (position == 3) {
             replaceMainFragment(new DeclusterificationExampleFragment());
+        } else if (position == 8) {
+            replaceMainFragment(new AnimateAndClusterMarkersFragment());
         } else {
             int clusteringType;
             if (position == 4) {
