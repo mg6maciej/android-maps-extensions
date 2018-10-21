@@ -7,18 +7,16 @@ tasks.withType(JavaCompile) {
 def isCI = System.env.CI == "true"
 
 ext {
-    localBuildToolsVersion = project.hasProperty("AME_BUILD_TOOLS_VERSION") ? AME_BUILD_TOOLS_VERSION : '27.0.3'
     localCompileSdkVersion = project.hasProperty("AME_COMPILE_SDK_VERSION") ? AME_COMPILE_SDK_VERSION : 27
     localMinSdkVersion = project.hasProperty("AME_MIN_SDK_VERSION") ? AME_MIN_SDK_VERSION : 8
 }
 
 android {
     compileSdkVersion localCompileSdkVersion
-    buildToolsVersion localBuildToolsVersion
 
     defaultConfig {
         minSdkVersion localMinSdkVersion
-        targetSdkVersion 27
+        targetSdkVersion 28
     }
     dexOptions {
         preDexLibraries = !isCI
@@ -29,9 +27,9 @@ android {
 }
 
 dependencies {
-    compile (project (':android-maps-extensions')) {
+    implementation (project (':android-maps-extensions')) {
         exclude module: 'play-services-maps'
     }
-    compile 'com.google.android.gms:play-services:3.2.65'
-    compile 'com.android.support:appcompat-v7:23.4.0' // update to 27.1.1 requests for minsdk 14
+    implementation 'com.google.android.gms:play-services:3.2.65'
+    implementation 'com.android.support:appcompat-v7:23.4.0' // update to 27.1.1 requests for minsdk 14
 }
