@@ -17,6 +17,7 @@ package pl.mg6.android.maps.extensions.demo;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -67,10 +68,14 @@ public class GooglePlayServicesErrorDialogFragment extends DialogFragment {
         }
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle args = getArguments();
-        int status = args.getInt(KEY_STATUS);
+        int status = 0;
+        if (args != null) {
+            status = args.getInt(KEY_STATUS);
+        }
         return GooglePlayServicesUtil.getErrorDialog(status, getActivity(), 0);
     }
 }
