@@ -7,8 +7,8 @@ tasks.withType(JavaCompile) {
 def isCI = System.env.CI == "true"
 
 ext {
-    localCompileSdkVersion = project.hasProperty("AME_COMPILE_SDK_VERSION") ? AME_COMPILE_SDK_VERSION : 27
-    localMinSdkVersion = project.hasProperty("AME_MIN_SDK_VERSION") ? AME_MIN_SDK_VERSION : 8
+    localCompileSdkVersion = project.hasProperty("AME_COMPILE_SDK_VERSION") ? AME_COMPILE_SDK_VERSION : 28
+    localMinSdkVersion = project.hasProperty("AME_MIN_SDK_VERSION") ? AME_MIN_SDK_VERSION : 14
 }
 
 android {
@@ -30,6 +30,8 @@ dependencies {
     implementation (project (':android-maps-extensions')) {
         exclude module: 'play-services-maps'
     }
-    implementation 'com.google.android.gms:play-services:3.2.65'
-    implementation 'com.android.support:appcompat-v7:23.4.0' // update to 27.1.1 requests for minsdk 14
+    implementation('com.google.android.gms:play-services:3.2.65') {
+        exclude module: 'support-v4'
+    }
+    implementation 'com.android.support:appcompat-v7:28.0.0' // update to >= 27.1.1 requests for minsdk 14
 }
