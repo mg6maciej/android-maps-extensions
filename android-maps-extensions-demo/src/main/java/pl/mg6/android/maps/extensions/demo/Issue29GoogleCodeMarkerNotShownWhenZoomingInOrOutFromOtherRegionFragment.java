@@ -16,6 +16,7 @@
 package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class Issue29GoogleCodeMarkerNotShownWhenZoomingInOrOutFromOtherRegionFra
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.issue_29_btn).setOnClickListener(new View.OnClickListener() {
             @Override

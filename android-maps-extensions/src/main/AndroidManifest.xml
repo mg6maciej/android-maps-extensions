@@ -6,6 +6,9 @@
 
     <uses-sdk tools:overrideLibrary="com.google.android.gms, com.google.android.gms.base, com.google.android.gms.maps, com.google.android.gms.tasks" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATIONs" />
+
     <application />
 
 </manifest>

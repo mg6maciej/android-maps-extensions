@@ -41,14 +41,14 @@ public class DemoClusterOptionsProvider implements ClusterOptionsProvider {
     private static final int[] forCounts = {10, 100, 1000, 10000, Integer.MAX_VALUE};
 
     private Bitmap[] baseBitmaps;
-    private LruCache<Integer, BitmapDescriptor> cache = new LruCache<Integer, BitmapDescriptor>(128);
+    private LruCache<Integer, BitmapDescriptor> cache = new LruCache<>(128);
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Rect bounds = new Rect();
 
     private ClusterOptions clusterOptions = new ClusterOptions().anchor(0.5f, 0.5f);
 
-    public DemoClusterOptionsProvider(Resources resources) {
+    DemoClusterOptionsProvider(Resources resources) {
         baseBitmaps = new Bitmap[res.length];
         for (int i = 0; i < res.length; i++) {
             baseBitmaps[i] = BitmapFactory.decodeResource(resources, res[i]);
