@@ -16,11 +16,12 @@
 package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,7 +29,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -38,13 +39,13 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        drawerLayout = findViewById(R.id.drawer);
         initDrawerToggle();
 
         String[] screens = {"Demo", "Animate markers", "Cluster groups", "\"Declusterification\"",
                 "Grid clustering (dynamic)", "No clustering (dynamic)", "Grid clustering", "No clustering"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, screens);
-        ListView listView = (ListView) findViewById(R.id.list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, screens);
+        ListView listView = findViewById(R.id.list);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -56,7 +57,7 @@ public class MainActivity extends BaseActivity {
         });
         if (savedInstanceState == null) {
             if (GooglePlayServicesErrorDialogFragment.showDialogIfNotAvailable(this)) {
-            	replaceMainFragment(new DemoFragment());
+                replaceMainFragment(new DemoFragment());
             }
         }
     }
@@ -89,9 +90,11 @@ public class MainActivity extends BaseActivity {
 
     private void initDrawerToggle() {
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer);
-        drawerLayout.setDrawerListener(toggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        drawerLayout.addDrawerListener(toggle);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
     }
 
     @Override

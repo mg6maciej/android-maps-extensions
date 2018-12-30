@@ -16,6 +16,7 @@
 package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -30,7 +31,7 @@ public abstract class BaseFragment extends Fragment {
     protected GoogleMap map;
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         createMapFragmentIfNeeded();
     }

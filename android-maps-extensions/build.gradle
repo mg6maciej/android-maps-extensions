@@ -24,7 +24,7 @@ android {
         preDexLibraries = !isCI
     }
     lintOptions {
-        abortOnError false
+        abortOnError true
     }
 }
 

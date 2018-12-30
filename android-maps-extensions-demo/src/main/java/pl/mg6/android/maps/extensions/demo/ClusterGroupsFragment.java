@@ -16,6 +16,7 @@
 package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,7 @@ public class ClusterGroupsFragment extends BaseFragment {
     private static final int DYNAMIC_GROUP = ClusterGroup.FIRST_USER;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.simple_map, container, false);
     }
 
