@@ -17,6 +17,7 @@ package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +54,7 @@ public class LaunchTimeTestFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.launch_time_test, container, false);
     }
 
@@ -66,7 +67,10 @@ public class LaunchTimeTestFragment extends BaseFragment {
 
     @Override
     protected void setUpMap() {
-        int clusteringType = getArguments().getInt(EXTRA_CLUSTERING_TYPE, CLUSTERING_DISABLED);
+        int clusteringType = 0;
+        if (getArguments() != null) {
+            clusteringType = getArguments().getInt(EXTRA_CLUSTERING_TYPE, CLUSTERING_DISABLED);
+        }
 
         ClusteringSettings settings = new ClusteringSettings();
         switch (clusteringType) {
