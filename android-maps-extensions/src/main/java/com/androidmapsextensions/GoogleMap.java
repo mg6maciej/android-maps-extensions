@@ -195,6 +195,8 @@ public interface GoogleMap {
 
     void stopAnimation();
 
+    com.google.android.gms.maps.GoogleMap getOriginalMap();
+
     interface CancelableCallback extends com.google.android.gms.maps.GoogleMap.CancelableCallback {
 
         @Override
