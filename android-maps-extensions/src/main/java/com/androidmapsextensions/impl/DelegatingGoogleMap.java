@@ -430,6 +430,11 @@ class DelegatingGoogleMap implements GoogleMap {
     }
 
     @Override
+    public com.google.android.gms.maps.GoogleMap getOriginalMap() {
+        return real.getMap();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
