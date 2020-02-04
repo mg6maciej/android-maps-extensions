@@ -26,8 +26,7 @@ public class SupportMapFragment extends com.google.android.gms.maps.SupportMapFr
     private static final String MAP_OPTIONS = "MapOptions";
 
     public static SupportMapFragment newInstance() {
-        SupportMapFragment f = new SupportMapFragment();
-        return f;
+        return new SupportMapFragment();
     }
 
     public static SupportMapFragment newInstance(GoogleMapOptions options) {

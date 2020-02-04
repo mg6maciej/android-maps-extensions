@@ -30,8 +30,6 @@ dependencies {
     implementation (project (':android-maps-extensions')) {
         exclude module: 'play-services-maps'
     }
-    implementation('com.google.android.gms:play-services-maps:16.0.0') {
-        exclude module: 'support-v4'
-    }
-    implementation 'com.android.support:appcompat-v7:28.0.0' // update to >= 27.1.1 requests for minsdk 14
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 }

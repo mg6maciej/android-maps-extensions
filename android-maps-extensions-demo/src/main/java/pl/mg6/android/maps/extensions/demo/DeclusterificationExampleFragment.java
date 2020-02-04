@@ -17,7 +17,7 @@ package pl.mg6.android.maps.extensions.demo;
 
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +83,7 @@ public class DeclusterificationExampleFragment extends BaseFragment {
     private double calculateDistanceBetweenMarkers() {
         Projection projection = map.getProjection();
         Point point = projection.toScreenLocation(new LatLng(0.0, 0.0));
-        point.x += getResources().getDimensionPixelSize(R.dimen.distance_between_markers);
+        point.x += requireContext().getResources().getDimensionPixelSize(R.dimen.distance_between_markers);
         LatLng nextPosition = projection.fromScreenLocation(point);
         return nextPosition.longitude;
     }
