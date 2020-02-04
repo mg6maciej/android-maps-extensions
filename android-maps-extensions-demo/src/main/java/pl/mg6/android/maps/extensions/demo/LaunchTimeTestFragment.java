@@ -17,7 +17,7 @@ package pl.mg6.android.maps.extensions.demo;
 
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,19 +38,19 @@ public class LaunchTimeTestFragment extends BaseFragment {
     private static final String TAG = LaunchTimeTestFragment.class.getSimpleName();
 
     private static final String EXTRA_CLUSTERING_TYPE = "clusteringType";
-    public static final int CLUSTERING_DISABLED = 0;
-    public static final int CLUSTERING_DISABLED_DYNAMIC = 1;
-    public static final int CLUSTERING_ENABLED = 2;
-    public static final int CLUSTERING_ENABLED_DYNAMIC = 3;
+    static final int CLUSTERING_DISABLED = 0;
+    static final int CLUSTERING_DISABLED_DYNAMIC = 1;
+    static final int CLUSTERING_ENABLED = 2;
+    static final int CLUSTERING_ENABLED_DYNAMIC = 3;
 
     private static final int MARKERS_COUNT = 20000;
 
     static LaunchTimeTestFragment newInstance(int clusteringType) {
-        LaunchTimeTestFragment f = new LaunchTimeTestFragment();
+        LaunchTimeTestFragment launchTimeTestFragment = new LaunchTimeTestFragment();
         Bundle args = new Bundle();
         args.putInt(EXTRA_CLUSTERING_TYPE, clusteringType);
-        f.setArguments(args);
-        return f;
+        launchTimeTestFragment.setArguments(args);
+        return launchTimeTestFragment;
     }
 
     @Override
