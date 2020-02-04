@@ -15,6 +15,8 @@
  */
 package com.androidmapsextensions.impl;
 
+import androidx.annotation.Nullable;
+
 import com.androidmapsextensions.Circle;
 import com.androidmapsextensions.utils.LatLngUtils;
 import com.google.android.gms.maps.model.LatLng;
@@ -140,8 +142,8 @@ class DelegatingCircle implements Circle {
     }
 
     @Override
-    public void setStrokePattern(List<PatternItem> strokePattern) {
-        real.setStrokePattern(strokePattern);
+    public void setStrokePattern(@Nullable List<? extends PatternItem> strokePattern) {
+        real.setStrokePattern((List<PatternItem>) strokePattern);
     }
 
     @Override

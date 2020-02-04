@@ -50,7 +50,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
     private int oldZoom, zoom;
     private int[] visibleClusters = new int[4];
 
-    private Map<ClusterKey, ClusterMarker> clusters = new HashMap<ClusterKey, ClusterMarker>();
+    private Map<ClusterKey, ClusterMarker> clusters = new HashMap<>();
 
     private ClusterRefresher refresher;
     private ClusterOptionsProvider clusterOptionsProvider;
@@ -61,7 +61,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
         this.baseClusterSize = settings.getClusterSize();
         this.minMarkersCount = settings.getMinMarkersCount();
         this.map = map;
-        this.markers = new HashMap<DelegatingMarker, ClusterMarker>();
+        this.markers = new HashMap<>();
         this.refresher = refresher;
         this.zoom = Math.round(map.getCameraPosition().zoom);
         this.clusterSize = calculateClusterSize(zoom);
@@ -188,7 +188,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
 
     @Override
     public List<Marker> getDisplayedMarkers() {
-        List<Marker> displayedMarkers = new ArrayList<Marker>();
+        List<Marker> displayedMarkers = new ArrayList<>();
         for (ClusterMarker cluster : clusters.values()) {
             List<? extends Marker> clusterDisplayedMarkers = cluster.getDisplayedMarkers();
             if (clusterDisplayedMarkers != null) {
@@ -308,7 +308,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
     }
 
     private void splitClusters() {
-        Map<ClusterKey, ClusterMarker> newClusters = new HashMap<ClusterKey, ClusterMarker>();
+        Map<ClusterKey, ClusterMarker> newClusters = new HashMap<>();
         for (ClusterMarker cluster : clusters.values()) {
             List<DelegatingMarker> ms = cluster.getMarkersInternal();
             if (ms.isEmpty()) {
@@ -348,8 +348,8 @@ class GridClusteringStrategy implements ClusteringStrategy {
     }
 
     private void joinClusters() {
-        Map<ClusterKey, ClusterMarker> newClusters = new HashMap<ClusterKey, ClusterMarker>();
-        Map<ClusterKey, List<ClusterMarker>> oldClusters = new HashMap<ClusterKey, List<ClusterMarker>>();
+        Map<ClusterKey, ClusterMarker> newClusters = new HashMap<>();
+        Map<ClusterKey, List<ClusterMarker>> oldClusters = new HashMap<>();
         for (ClusterMarker cluster : clusters.values()) {
             List<DelegatingMarker> ms = cluster.getMarkersInternal();
             if (ms.isEmpty()) {
@@ -359,7 +359,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
             ClusterKey clusterId = calculateClusterKey(ms.get(0).getClusterGroup(), ms.get(0).getPosition());
             List<ClusterMarker> clusterList = oldClusters.get(clusterId);
             if (clusterList == null) {
-                clusterList = new ArrayList<ClusterMarker>();
+                clusterList = new ArrayList<>();
                 oldClusters.put(clusterId, clusterList);
             }
             clusterList.add(cluster);
@@ -489,10 +489,7 @@ class GridClusteringStrategy implements ClusteringStrategy {
             if (latitudeId != that.latitudeId) {
                 return false;
             }
-            if (longitudeId != that.longitudeId) {
-                return false;
-            }
-            return true;
+            return longitudeId == that.longitudeId;
         }
 
         @Override

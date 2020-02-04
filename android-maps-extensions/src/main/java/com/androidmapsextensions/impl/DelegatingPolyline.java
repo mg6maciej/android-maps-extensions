@@ -142,8 +142,8 @@ class DelegatingPolyline implements Polyline {
     }
 
     @Override
-    public void setPattern(List<PatternItem> pattern) {
-        real.setPattern(pattern);
+    public void setPattern(List<? extends PatternItem> pattern) {
+        real.setPattern((List<PatternItem>) pattern);
     }
 
     @Override

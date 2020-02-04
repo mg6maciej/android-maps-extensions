@@ -47,7 +47,7 @@ public class ClusterGroupsFragment extends BaseFragment {
     protected void setUpMap() {
         map.setClustering(new ClusteringSettings().clusterOptionsProvider(new ClusterOptionsProvider() {
             @Override
-            public ClusterOptions getClusterOptions(List<Marker> markers) {
+            public ClusterOptions getClusterOptions(List<? extends Marker> markers) {
                 float hue;
                 if (markers.get(0).getClusterGroup() == DYNAMIC_GROUP) {
                     hue = BitmapDescriptorFactory.HUE_ORANGE;
@@ -69,7 +69,7 @@ public class ClusterGroupsFragment extends BaseFragment {
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapClick(LatLng position) {
+            public void onMapClick(@NonNull LatLng position) {
                 single.setPosition(position);
             }
         });

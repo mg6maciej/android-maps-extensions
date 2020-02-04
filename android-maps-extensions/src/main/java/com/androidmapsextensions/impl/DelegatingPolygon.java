@@ -15,9 +15,12 @@
  */
 package com.androidmapsextensions.impl;
 
+import androidx.annotation.Nullable;
+
 import com.androidmapsextensions.Polygon;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PatternItem;
+
 
 import java.util.List;
 
@@ -151,8 +154,8 @@ class DelegatingPolygon implements Polygon {
     }
 
     @Override
-    public void setStrokePattern(List<PatternItem> strokePattern) {
-        real.setStrokePattern(strokePattern);
+    public void setStrokePattern(@Nullable List<? extends PatternItem> strokePattern) {
+        real.setStrokePattern((List<PatternItem>) strokePattern);
     }
 
     @Override
@@ -196,4 +199,5 @@ class DelegatingPolygon implements Polygon {
     public String toString() {
         return real.toString();
     }
+
 }

@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.androidmapsextensions.impl;
+package com.androidmapsextensions.impl
 
-import android.graphics.Point;
-
-import com.google.android.gms.maps.Projection;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.VisibleRegion;
+import android.graphics.Point
+import com.google.android.gms.maps.Projection
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.VisibleRegion
 
 //TODO: to be deleted when com.google.android.gms.maps.Projection becomes an interface
-interface IProjection {
-
-    LatLng fromScreenLocation(Point point);
-
-    VisibleRegion getVisibleRegion();
-
-    Point toScreenLocation(LatLng location);
-
-    Projection getProjection();
+internal interface IProjection {
+    fun fromScreenLocation(point: Point?): LatLng?
+    val visibleRegion: VisibleRegion?
+    fun toScreenLocation(location: LatLng?): Point?
+    val projection: Projection?
 }

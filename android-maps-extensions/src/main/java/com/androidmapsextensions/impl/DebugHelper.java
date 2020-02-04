@@ -26,7 +26,7 @@ import java.util.List;
 
 class DebugHelper {
 
-    private List<Polyline> gridLines = new ArrayList<Polyline>();
+    private List<Polyline> gridLines = new ArrayList<>();
 
     void drawDebugGrid(IGoogleMap map, double clusterSize) {
         cleanup();
