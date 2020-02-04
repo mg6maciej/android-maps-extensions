@@ -22,7 +22,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.support.v4.util.LruCache;
+import android.util.LruCache;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -31,7 +31,7 @@ import java.util.List;
 
 public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
 
-    private final LruCache<Integer, BitmapDescriptor> cache = new LruCache<Integer, BitmapDescriptor>(128);
+    private final LruCache<Integer, BitmapDescriptor> cache = new LruCache<>(128);
     private final ClusterOptions clusterOptions = new ClusterOptions().anchor(0.5f, 0.5f);
     private final int[] colors;
     private final Paint circlePaint;
