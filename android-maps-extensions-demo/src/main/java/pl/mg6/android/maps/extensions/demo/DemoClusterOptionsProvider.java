@@ -60,7 +60,7 @@ public class DemoClusterOptionsProvider implements ClusterOptionsProvider {
     }
 
     @Override
-    public ClusterOptions getClusterOptions(List<Marker> markers) {
+    public ClusterOptions getClusterOptions(List<? extends Marker> markers) {
 
         int markersCount = markers.size();
         BitmapDescriptor cachedIcon = cache.get(markersCount);

@@ -231,7 +231,7 @@ class DelegatingGoogleMap implements GoogleMap {
 
     @Override
     public void setBuildingsEnabled(boolean buildingsEnabled) {
-        real.setBuildingsEnabled(buildingsEnabled);
+        real.setTrafficEnabled(buildingsEnabled);
     }
 
     @Override

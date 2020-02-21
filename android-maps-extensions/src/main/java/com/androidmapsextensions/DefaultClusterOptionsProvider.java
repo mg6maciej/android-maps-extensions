@@ -24,6 +24,9 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.LruCache;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
@@ -40,7 +43,6 @@ public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
     private final Rect bounds = new Rect();
     private float blurRadius;
     private float textPadding;
-    private float shadowBlurRadius;
     private float shadowOffsetX;
     private float shadowOffsetY;
 
@@ -83,7 +85,7 @@ public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
     private Paint createTextPaint(Resources resources) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(resources.getColor(R.color.ame_default_cluster_text_color));
-        shadowBlurRadius = resources.getDimension(R.dimen.ame_default_cluster_text_shadow_blur_radius);
+        float shadowBlurRadius = resources.getDimension(R.dimen.ame_default_cluster_text_shadow_blur_radius);
         if (shadowBlurRadius > 0.0f) {
             shadowOffsetX = resources.getDimension(R.dimen.ame_default_cluster_text_shadow_offset_x);
             shadowOffsetY = resources.getDimension(R.dimen.ame_default_cluster_text_shadow_offset_y);
@@ -96,7 +98,7 @@ public class DefaultClusterOptionsProvider implements ClusterOptionsProvider {
     }
 
     @Override
-    public ClusterOptions getClusterOptions(List<Marker> markers) {
+    public ClusterOptions getClusterOptions(@Nullable List<? extends Marker> markers) {
         int count = markers.size();
         BitmapDescriptor icon = cache.get(count);
         if (icon == null) {

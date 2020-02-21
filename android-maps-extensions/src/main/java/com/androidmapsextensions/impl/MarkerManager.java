@@ -48,8 +48,8 @@ class MarkerManager implements OnMarkerCreateListener {
 
     public MarkerManager(IGoogleMap factory) {
         this.factory = factory;
-        this.markers = new HashMap<LazyMarker, DelegatingMarker>();
-        this.createdMarkers = new HashMap<com.google.android.gms.maps.model.Marker, LazyMarker>();
+        this.markers = new HashMap<>();
+        this.createdMarkers = new HashMap<>();
     }
 
     public Marker addMarker(MarkerOptions markerOptions) {
@@ -159,7 +159,7 @@ class MarkerManager implements OnMarkerCreateListener {
         if (!this.clusteringSettings.equals(clusteringSettings)) {
             this.clusteringSettings = clusteringSettings;
             clusteringStrategy.cleanup();
-            ArrayList<DelegatingMarker> list = new ArrayList<DelegatingMarker>(markers.values());
+            ArrayList<DelegatingMarker> list = new ArrayList<>(markers.values());
             if (clusteringSettings.isEnabled()) {
                 clusteringStrategy = new GridClusteringStrategy(clusteringSettings, factory, list, new ClusterRefresher());
             } else if (clusteringSettings.isAddMarkersDynamically()) {
@@ -189,7 +189,6 @@ class MarkerManager implements OnMarkerCreateListener {
 
     public DelegatingMarker mapToDelegatingMarker(com.google.android.gms.maps.model.Marker marker) {
         LazyMarker lazy = createdMarkers.get(marker);
-        DelegatingMarker delegating = markers.get(lazy);
-        return delegating;
+        return markers.get(lazy);
     }
 }

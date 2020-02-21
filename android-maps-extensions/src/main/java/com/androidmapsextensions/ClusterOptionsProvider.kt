@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.androidmapsextensions;
+package com.androidmapsextensions
 
-import java.util.List;
-
-public interface ClusterOptionsProvider {
-
-    ClusterOptions getClusterOptions(List<Marker> markers);
+interface ClusterOptionsProvider {
+    fun getClusterOptions(markers: List<Marker?>?): ClusterOptions?
 }

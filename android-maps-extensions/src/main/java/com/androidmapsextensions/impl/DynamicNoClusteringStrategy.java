@@ -28,7 +28,7 @@ import java.util.Set;
 class DynamicNoClusteringStrategy implements ClusteringStrategy {
 
     private IGoogleMap map;
-    private Set<DelegatingMarker> markers = new HashSet<DelegatingMarker>();
+    private Set<DelegatingMarker> markers = new HashSet<>();
     private LatLngBounds visibleRegionBounds;
 
     public DynamicNoClusteringStrategy(IGoogleMap map, List<DelegatingMarker> markers) {

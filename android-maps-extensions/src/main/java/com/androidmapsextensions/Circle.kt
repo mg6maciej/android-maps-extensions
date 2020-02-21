@@ -13,34 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.androidmapsextensions;
+package com.androidmapsextensions
 
-public interface TileOverlay {
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PatternItem
 
-    void clearTileCache();
+interface Circle {
+    operator fun contains(position: LatLng?): Boolean
+    var center: LatLng?
+    fun <T> getData(): T
+    var fillColor: Int
+    @get:Deprecated("")
+    val id: String?
 
-    <T> T getData();
-
-    boolean getFadeIn();
-
-    @Deprecated
-    String getId();
-
-    float getZIndex();
-
-    float getTransparency();
-
-    boolean isVisible();
-
-    void remove();
-
-    void setData(Object data);
-
-    void setFadeIn(boolean fadeIn);
-
-    void setTransparency(float transparency);
-
-    void setVisible(boolean visible);
-
-    void setZIndex(float zIndex);
+    var radius: Double
+    var strokeColor: Int
+    var strokePattern: List<PatternItem?>?
+    var strokeWidth: Float
+    var tag: Any?
+    var zIndex: Float
+    var isClickable: Boolean
+    var isVisible: Boolean
+    fun remove()
+    fun setData(data: Any?)
 }
