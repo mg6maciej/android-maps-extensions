@@ -23,7 +23,7 @@ interface Circle {
     var center: LatLng?
     fun <T> getData(): T
     var fillColor: Int
-    @get:Deprecated("")
+    @get:Deprecated("Who needs this ?")
     val id: String?
 
     var radius: Double
